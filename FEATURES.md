@@ -24,7 +24,13 @@
     - [ ] current container ID
     - [ ] the security protection
         - [ ] capability
+          - [x] show caps
+          - [x] show additional caps
+          - [ ] show danger caps
         - [ ] seccomp
+          - [x] whether kernel support
+          - [x] whether seccomp enabled
+          - [ ] the specific limit
         - [ ] LSM
         - [ ] cgroup
             - [ ] cgroup version

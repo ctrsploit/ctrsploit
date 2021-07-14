@@ -14,5 +14,6 @@ var Command = &cli.Command{
 		graphdriverCommand,
 		cgroupsCommand,
 		capabilityCommand,
+		seccompCommand,
 	},
 }
