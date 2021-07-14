@@ -131,7 +131,7 @@ The host path of container's rootfs: /var/lib/docker/devicemapper/mnt/1659264e84
 https://github.com/ssst0n3/ctrsploit/releases
 
 ## Todo List
-- [ ] env detect
+- [ ] information gather
     - [ ] whether in container
       - [ ] current container env
         - [ ] swarm
