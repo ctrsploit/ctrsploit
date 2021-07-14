@@ -16,5 +16,6 @@ var Command = &cli.Command{
 		capabilityCommand,
 		seccompCommand,
 		apparmorCommand,
+		fdiskCommand,
 	},
 }
