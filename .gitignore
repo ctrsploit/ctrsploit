@@ -1,6 +1,3 @@
 .idea
 bin
-cmd/ctrsploit/exploit/exploit_pro.go
-cmd/ctrsploit/exploit/cgroup_mount-bypass-cgroupv1-release_agent.go
-exploit/cgroup_mount-bypass-cgroupv1-release_agent
 cmd/tmp
