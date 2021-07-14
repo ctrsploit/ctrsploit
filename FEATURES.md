@@ -1,0 +1,56 @@
+# Features List
+
+- [ ] information gather
+    - [ ] whether in container
+        - [ ] current container env
+            - [ ] swarm
+            - [x] k8s
+                - [x] `ls -lah /var/run/secrets/kubernetes.io`
+                - [x] `cat /proc/self/mountinfo | grep hosts |grep pods`
+                - [x] `cat /proc/self/cgroup |grep kubepods`
+                - [x] `cat /etc/hostname`
+        - [ ] current cri
+            - [x] docker
+                - [x] `ls -lah /.dockerenv`
+                - [x] `head -n 1 /proc/self/mountinfo | grep docker`
+                - [x] `cat /proc/self/cgroup |grep docker`
+                - [x] `cat /proc/self/mountinfo | grep "hosts|hostname" |grep docker`
+                - [x] `cat /etc/hostname` // not convinced
+            - [ ] containerd
+            - [ ] ...
+    - [ ] current container software version
+        - [ ] cluster api: curl -k https://10.0.0.233:5443/apis/version.cce.io/v1beta1 --header "Authorization: Bearer
+          $token"
+    - [ ] current container ID
+    - [ ] the security protection
+        - [ ] capability
+        - [ ] seccomp
+        - [ ] LSM
+        - [ ] cgroup
+            - [ ] cgroup version
+                - [x] v1
+                - [x] v2
+    - [ ] block dev name
+        - [ ] /sys/block/nvme0n1
+    - [ ] the absolute path under host of container's rootfs
+        - [ ] docker
+        - [ ] k8s variant 1
+        - [ ] k8s variant 2
+    - [ ] openstack api accessibility
+    - [ ] graphdriver
+        - [x] overlay
+        - [x] devicemapper
+        - [ ] aufs
+- [ ] execute
+    - [ ] outside of container
+        - [ ] get docker credentials
+            - [ ] $HOME/.docker/config.json
+- [ ] exploit
+    - [ ] CVE-2019-16884
+    - [ ] CVE-2019-14271
+    - [ ] CVE-2021-21285
+    - [ ] mount dir->symlink->mount again escape
+    - [x] cgroupv1 notify_on_release escape
+        - [x] unknown rootfs support
+    - [x] cgroupv1 notify_on_release escape with unknown rootfs
+- [ ] auto exploit

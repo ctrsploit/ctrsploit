@@ -155,56 +155,5 @@ current process
 https://github.com/ssst0n3/ctrsploit/releases
 
 ## Todo List
-- [ ] 环境探测
-    - [ ] 当前是否处于容器环境内
-      - [ ] 当前集群环境
-        - [ ] swarm
-        - [x] k8s
-          - [x] `ls -lah /var/run/secrets/kubernetes.io`
-          - [x] `cat /proc/self/mountinfo | grep hosts |grep pods`
-          - [x] `cat /proc/self/cgroup |grep kubepods`
-          - [x] `cat /etc/hostname`
-      - [ ] 当前cri
-        - [x] docker
-          - [x] `ls -lah /.dockerenv`
-          - [x] `head -n 1 /proc/self/mountinfo | grep docker`
-          - [x] `cat /proc/self/cgroup |grep docker`
-          - [x] `cat /proc/self/mountinfo | grep "hosts|hostname" |grep docker`
-          - [x] `cat /etc/hostname` // not convinced
-        - [ ] containerd
-        - [ ] ...
-    - [ ] 当前容器版本探测
-      - [ ] cluster api: curl -k https://10.0.0.233:5443/apis/version.cce.io/v1beta1 --header "Authorization: Bearer $token"
-    - [ ] 当前容器完整ID
-    - [ ] 安全机制开启情况
-        - [ ] 当前容器capability
-        - [ ] 是否开启seccomp
-        - [ ] 是否开启LSM
-        - [ ] cgroup
-            - [ ] cgroup version
-                - [x] v1
-                - [x] v2
-    - [ ] block dev name
-        - [ ] /sys/block/nvme0n1
-    - [ ] 容器rootfs在宿主机的绝对路径
-        - [ ] docker
-        - [ ] k8s variant 1
-        - [ ] k8s variant 2
-    - [ ] openstack api accessibility
-    - [ ] graphdriver
-        - [x] overlay
-        - [x] devicemapper
-        - [ ] aufs
-- [ ] execute
-    - [ ] outside of container
-        - [ ] get docker credentials
-            - [ ] $HOME/.docker/config.json
-- [ ] exploit
-    - [ ] CVE-2019-16884
-    - [ ] CVE-2019-14271
-    - [ ] CVE-2021-21285  
-    - [ ] 挂载目录->软链接->再次挂载 逃逸
-    - [x] cgroupv1 notify_on_release escape
-        - [x] unknown rootfs support 
-    - [x] cgroupv1 notify_on_release escape with unknown rootfs
-- [ ] auto exploit
+
+参见 [FEATURES.md](./FEATURES.md)

