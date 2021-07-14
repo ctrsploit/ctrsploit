@@ -1,4 +1,4 @@
-package where
+package env
 
 import (
 	"ctrsploit/log"
@@ -7,7 +7,7 @@ import (
 	"fmt"
 )
 
-const CommandName = "where"
+const CommandWhereName = "where"
 
 func Docker() (err error) {
 	d := where.Docker{}

@@ -1,4 +1,4 @@
-package graphdriver
+package env
 
 import (
 	"ctrsploit/log"
@@ -9,7 +9,7 @@ import (
 	"github.com/fatih/color"
 )
 
-const CommandName = "graphdriver"
+const CommandGraphdriverName = "graphdriver"
 
 func Overlay() (err error) {
 	o := &overlay.Overlay{}

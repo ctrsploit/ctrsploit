@@ -1,16 +1,16 @@
 package env
 
 import (
-	"ctrsploit/env/cgroups"
+	"ctrsploit/env"
 	"github.com/urfave/cli/v2"
 )
 
 var cgroupsCommand = &cli.Command{
-	Name:    cgroups.CommandName,
+	Name:    env.CommandCgroupsName,
 	Aliases: []string{"c"},
 	Usage:   "gather cgroup information",
 	Action: func(context *cli.Context) (err error) {
-		err = cgroups.Version()
+		err = env.Version()
 		if err != nil {
 			return
 		}

@@ -1,4 +1,4 @@
-package cgroups
+package env
 
 import (
 	"ctrsploit/log"
@@ -7,7 +7,7 @@ import (
 	"fmt"
 )
 
-const CommandName = "cgroups"
+const CommandCgroupsName = "cgroups"
 
 func Version() (err error) {
 	info := fmt.Sprintf("===========Cgroups=========\n")

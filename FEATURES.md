@@ -32,10 +32,10 @@
           - [x] whether seccomp enabled
           - [ ] the specific limit
         - [ ] LSM
-          - [ ] apparmor
+          - [x] apparmor
           - [ ] selinux
         - [ ] cgroup
-            - [ ] cgroup version
+            - [x] cgroup version
                 - [x] v1
                 - [x] v2
     - [ ] block dev name

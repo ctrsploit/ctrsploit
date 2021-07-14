@@ -1,4 +1,4 @@
-package capability
+package env
 
 import (
 	"ctrsploit/log"
@@ -11,8 +11,8 @@ import (
 )
 
 const (
-	CommandName  = "capability"
-	standardCaps = 0xa80425fb
+	CommandCapabilityName = "capability"
+	standardCaps          = 0xa80425fb
 )
 
 func getInfoFromCaps(caps uint64) (info string) {

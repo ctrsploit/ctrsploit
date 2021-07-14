@@ -1,16 +1,16 @@
 package env
 
 import (
-	"ctrsploit/env/seccomp"
+	"ctrsploit/env"
 	"github.com/urfave/cli/v2"
 )
 
 var seccompCommand = &cli.Command{
-	Name:    seccomp.CommandName,
+	Name:    env.CommandSeccompName,
 	Aliases: []string{"s"},
 	Usage:   "show the seccomp info",
 	Action: func(context *cli.Context) (err error) {
-		err = seccomp.Seccomp()
+		err = env.Seccomp()
 		if err != nil {
 			return
 		}

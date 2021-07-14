@@ -1,4 +1,4 @@
-package seccomp
+package env
 
 import (
 	"ctrsploit/log"
@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	CommandName = "seccomp"
+	CommandSeccompName = "seccomp"
 )
 
 // Seccomp

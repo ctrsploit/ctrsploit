@@ -1,4 +1,4 @@
-package env
+package noused
 
 import "ctrsploit/test/config"
 

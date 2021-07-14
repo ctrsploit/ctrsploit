@@ -1,4 +1,4 @@
-package env
+package noused
 
 import (
 	"github.com/ssst0n3/awesome_libs/awesome_error"

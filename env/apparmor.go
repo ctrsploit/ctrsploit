@@ -1,4 +1,4 @@
-package apparmor
+package env
 
 import (
 	"ctrsploit/log"
@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	CommandName = "apparmor"
+	CommandApparmorName = "apparmor"
 )
 
 func Apparmor() (err error) {
