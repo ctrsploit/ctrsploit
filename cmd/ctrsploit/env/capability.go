@@ -8,9 +8,9 @@ import (
 var capabilityCommand = &cli.Command{
 	Name:    capability.CommandName,
 	Aliases: []string{"cap"},
-	Usage:   "show the capability of pid 1",
+	Usage:   "show the capability of pid 1 and current process",
 	Action: func(context *cli.Context) (err error) {
-		err = capability.GetPid1Capability()
+		err = capability.Capability()
 		if err != nil {
 			return
 		}

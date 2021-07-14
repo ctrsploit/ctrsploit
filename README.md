@@ -116,6 +116,7 @@ is cgroupv1: ✘
 is cgroupv2: ✔ 
 ```
 
+graph driver
 ```
 root@ctr:/# ./ctrsploit env g
 INFO[0000] ===========Overlay=========
@@ -125,6 +126,31 @@ DeviceMapper enabled: true
 DeviceMapper used: true
 The number of devicemapper used in running container: 11 ( =(count(running containers)+1) )
 The host path of container's rootfs: /var/lib/docker/devicemapper/mnt/1659264e845b55b8c9ec42034d7d2dcc23159ebd06f3c69983e764f26eab9721/rootfs 
+```
+
+capability
+```
+root@ctr:/# ./ctrsploit env cap
+INFO[0000] ===========Capability=========
+pid 1
+[caps]
+0xa82425fb != default(0xa80425fb)
+
+[parsed]
+[CAP_CHOWN CAP_DAC_OVERRIDE CAP_FOWNER CAP_FSETID CAP_KILL CAP_SETGID CAP_SETUID CAP_SETPCAP CAP_NET_BIND_SERVICE CAP_NET_RAW CAP_SYS_CHROOT CAP_SYS_ADMIN CAP_MKNOD CAP_AUDIT_WRITE CAP_SETFCAP]
+
+[Additional Capabilities]
+["CAP_SYS_ADMIN"]
+
+current process
+[caps]
+0xa82425fb != default(0xa80425fb)
+
+[parsed]
+[CAP_CHOWN CAP_DAC_OVERRIDE CAP_FOWNER CAP_FSETID CAP_KILL CAP_SETGID CAP_SETUID CAP_SETPCAP CAP_NET_BIND_SERVICE CAP_NET_RAW CAP_SYS_CHROOT CAP_SYS_ADMIN CAP_MKNOD CAP_AUDIT_WRITE CAP_SETFCAP]
+
+[Additional Capabilities]
+["CAP_SYS_ADMIN"]
 ```
 
 ## pre-built release
