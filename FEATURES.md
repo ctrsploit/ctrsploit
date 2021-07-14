@@ -32,6 +32,8 @@
           - [x] whether seccomp enabled
           - [ ] the specific limit
         - [ ] LSM
+          - [ ] apparmor
+          - [ ] selinux
         - [ ] cgroup
             - [ ] cgroup version
                 - [x] v1

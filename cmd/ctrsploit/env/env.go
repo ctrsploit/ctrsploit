@@ -15,5 +15,6 @@ var Command = &cli.Command{
 		cgroupsCommand,
 		capabilityCommand,
 		seccompCommand,
+		apparmorCommand,
 	},
 }
