@@ -8,9 +8,12 @@ import (
 var fdiskCommand = &cli.Command{
 	Name:    env.CommandFdiskName,
 	Aliases: []string{"f"},
-	Usage:   "like linux command fdisk -l",
+	Usage:   "like linux command fdisk or lsblk // TODO",
 	Action: func(context *cli.Context) (err error) {
-		env.Fdisk()
+		err = env.Fdisk()
+		if err != nil {
+			return
+		}
 		return
 	},
 }
