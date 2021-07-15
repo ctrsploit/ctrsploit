@@ -10,7 +10,7 @@ import (
 const (
 	dirSysModuleApparmor         = "/sys/module/apparmor/parameters"
 	PathSysModuleApparmorEnabled = dirSysModuleApparmor + "/enabled"
-	PathSysModuleApparmorMode = dirSysModuleApparmor + "/mode"
+	PathSysModuleApparmorMode    = dirSysModuleApparmor + "/mode"
 )
 
 /*
@@ -30,6 +30,9 @@ func Mode() (mode string, err error) {
 func IsSupport() (support bool) {
 	content, err := ioutil.ReadFile(PathSysModuleApparmorEnabled)
 	if err != nil {
+		if strings.Contains(err.Error(), "no such file or directory") { // not found means not support
+			return
+		}
 		awesome_error.CheckErr(err)
 		return
 	}
