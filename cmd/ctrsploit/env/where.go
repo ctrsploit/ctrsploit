@@ -1,20 +1,20 @@
 package env
 
 import (
-	"ctrsploit/env"
+	"ctrsploit/env/where"
 	"github.com/urfave/cli/v2"
 )
 
 var whereCommand = &cli.Command{
-	Name:    env.CommandWhereName,
+	Name:    where.CommandWhereName,
 	Aliases: []string{"w"},
 	Usage:   "detect whether you are in the container, and which type of the container",
 	Action: func(context *cli.Context) (err error) {
-		err = env.Docker()
+		err = where.Docker()
 		if err != nil {
 			return
 		}
-		err = env.K8s()
+		err = where.K8s()
 		if err != nil {
 			return
 		}

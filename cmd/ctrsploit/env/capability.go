@@ -1,16 +1,16 @@
 package env
 
 import (
-	"ctrsploit/env"
+	"ctrsploit/env/capability"
 	"github.com/urfave/cli/v2"
 )
 
 var capabilityCommand = &cli.Command{
-	Name:    env.CommandCapabilityName,
+	Name:    capability.CommandCapabilityName,
 	Aliases: []string{"cap"},
 	Usage:   "show the capability of pid 1 and current process",
 	Action: func(context *cli.Context) (err error) {
-		err = env.Capability()
+		err = capability.Capability()
 		if err != nil {
 			return
 		}

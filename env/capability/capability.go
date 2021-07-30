@@ -1,4 +1,4 @@
-package env
+package capability
 
 import (
 	"ctrsploit/log"

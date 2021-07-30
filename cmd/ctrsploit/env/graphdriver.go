@@ -1,20 +1,20 @@
 package env
 
 import (
-	"ctrsploit/env"
+	"ctrsploit/env/graphdriver"
 	"github.com/urfave/cli/v2"
 )
 
 var graphdriverCommand = &cli.Command{
-	Name:    env.CommandGraphdriverName,
+	Name:    graphdriver.CommandGraphdriverName,
 	Aliases: []string{"g"},
 	Usage:   "detect graphdriver type and extend information",
 	Action: func(context *cli.Context) (err error) {
-		err = env.Overlay()
+		err = graphdriver.Overlay()
 		if err != nil {
 			return
 		}
-		err = env.DeviceMapper()
+		err = graphdriver.DeviceMapper()
 		if err != nil {
 			return
 		}

