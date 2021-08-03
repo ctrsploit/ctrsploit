@@ -106,19 +106,19 @@ root@ctr # ./ctrsploit e ra -c "cat /etc/hostname"
 
 ### env
 
-| command | alias | description |
+| 子命令 | 简写 | 描述 |
 | --- | --- | --- |
-| [where](./env/where/README.md) | w | detect whether you are in the container, and which type of the container |
-| [graphdriver](./env/graphdriver/README.md) | g | detect graphdriver type and extend information |
-| [cgroups](./env/cgroups/README.md) | c | gather cgroup information |
-| [capability](./env/capability/README.md) | cap | show the capability of pid 1 and current process |
-| seccomp | s | show the seccomp info |
-| apparmor | a | show the apparmor info |
+| [where](./env/where/README.md) | w | 检测你是否在容器内，在何种类型的容器内 |
+| [graphdriver](./env/graphdriver/README.md) | g | 检测graphdriver类型和扩展信息 |
+| [cgroups](./env/cgroups/README.md) | c | 收集cgroup信息 |
+| [capability](./env/capability/README.md) | cap | 显示pid为1的进程和当前进程的capability |
+| seccomp | s | 显示seccomp信息 |
+| apparmor | a | 显示apparmor信息 |
 
 ### exploit
 
 | exploit | 缩写 | 简述 |
 | --- | --- | --- |
-| [cgroupv1-release_agent](./exploit/cgroupv1-release_agent/README.md) | ra | escape tech by using the notify_on_release of cgroup v1 |
-| [cgroupv1-release_agent-unknown_rootfs](./exploit/cgroupv1-release_agent-unknown_rootfs/README.md) | ra3 | escape tech by using the notify_on_release of cgroup v1 without known rootfs |
-| [cve-2021-22555](./exploit/CVE-2021-22555/README.md) | 22555 | escape tech by using the CVE-2021-22555 |
+| [cgroupv1-release_agent](./exploit/cgroupv1-release_agent/README.md) | ra | 利用cgroup v1的notify_on_release功能的逃逸技术 |
+| [cgroupv1-release_agent-unknown_rootfs](./exploit/cgroupv1-release_agent-unknown_rootfs/README.md) | ra3 | 在不知道rootfs在宿主机路径时，利用cgroup v1的notify_on_release功能的逃逸技术 |
+| [cve-2021-22555](./exploit/CVE-2021-22555/README.md) | 22555 | 利用CVE-2021-22555的逃逸技术 |
