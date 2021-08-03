@@ -1,5 +1,6 @@
 # HOW TO CONTRIBUTE
 ## 1. fork a repository
+Fork the github.com/ctrsploit/ctrsploit
 
 ## 2. git clone the repository you forked
 eg.
@@ -15,4 +16,5 @@ git commit -m "ssst0n3's dryrun"
 git push
 ```
 
-## 4. pull a merge request
+## 4. pull request
+Click the button 'Compare & pull request'
