@@ -10,6 +10,29 @@ https://github.com/ctrsploit/ctrsploit/releases
 
 ### Quick-Start
 
+```
+wget -O ctrsploit https://github.com/ctrsploit/ctrsploit/releases/download/v0.4/ctrsploit_linux_amd64 && chmod +x ctrsploit
+./ctrsploit --help
+NAME:
+   ctrsploit - A penetration toolkit for container environment
+
+ctrsploit is a command line ... //TODO
+
+
+USAGE:
+   ctrsploit [global options] command [command options] [arguments...]
+
+COMMANDS:
+   auto, a     auto gathering information, and detect vuls, and exploit // TODO
+   exploit, e  run a exploit
+   env, e      gather information // TODO
+   help, h     Shows a list of commands or help for one command
+
+GLOBAL OPTIONS:
+   --lang value  language for the greeting (default: "english")
+   --help, -h    show help (default: false)
+```
+
 ### 信息收集
 
 usage
@@ -99,32 +122,3 @@ root@ctr # ./ctrsploit e ra -c "cat /etc/hostname"
 | [cgroupv1-release_agent](./exploit/cgroupv1-release_agent/README.md) | ra | escape tech by using the notify_on_release of cgroup v1 |
 | [cgroupv1-release_agent-unknown_rootfs](./exploit/cgroupv1-release_agent-unknown_rootfs/README.md) | ra3 | escape tech by using the notify_on_release of cgroup v1 without known rootfs |
 | [cve-2021-22555](./exploit/CVE-2021-22555/README.md) | 22555 | escape tech by using the CVE-2021-22555 |
-
-### Help
-
-```
-wget -O ctrsploit https://github.com/ctrsploit/ctrsploit/releases/download/v0.4/ctrsploit_linux_amd64 && chmod +x ctrsploit
-./ctrsploit --help
-NAME:
-   ctrsploit - A penetration toolkit for container environment
-
-ctrsploit is a command line ... //TODO
-
-
-USAGE:
-   ctrsploit [global options] command [command options] [arguments...]
-
-COMMANDS:
-   auto, a     auto gathering information, and detect vuls, and exploit // TODO
-   exploit, e  run a exploit
-   env, e      gather information // TODO
-   help, h     Shows a list of commands or help for one command
-
-GLOBAL OPTIONS:
-   --lang value  language for the greeting (default: "english")
-   --help, -h    show help (default: false)
-```
-
-## Todo List
-
-参见 [FEATURES.md](./FEATURES.md)
