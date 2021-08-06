@@ -2,6 +2,9 @@
 
 [中文文档](./README-ZH.md)
 
+## Why ctrsploit
+see [here](https://github.com/ctrsploit/ctrsploit/discussions/11)
+
 ## Pre-Built Release
 
 https://github.com/ctrsploit/ctrsploit/releases

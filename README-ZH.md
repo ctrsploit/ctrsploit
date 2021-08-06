@@ -2,6 +2,9 @@
 
 [English Version](./README.md)
 
+## 为什么我们需要ctrsploit
+[这里](https://github.com/ctrsploit/ctrsploit/discussions/11)有详细解释
+
 ## Pre-Built Release
 
 https://github.com/ctrsploit/ctrsploit/releases
