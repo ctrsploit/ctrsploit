@@ -1,9 +1,9 @@
 package capability
 
 import (
-	"ctrsploit/log"
-	"ctrsploit/pkg/capability"
-	"ctrsploit/util"
+	"github.com/ctrsploit/ctrsploit/log"
+	"github.com/ctrsploit/ctrsploit/pkg/capability"
+	"github.com/ctrsploit/ctrsploit/util"
 	"fmt"
 	"github.com/containerd/containerd/pkg/cap"
 	"github.com/fatih/color"

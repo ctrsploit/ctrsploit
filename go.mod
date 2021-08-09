@@ -1,4 +1,4 @@
-module ctrsploit
+module github.com/ctrsploit/ctrsploit
 
 go 1.16
 

@@ -1,9 +1,9 @@
 package main
 
 import (
-	"ctrsploit/cmd/ctrsploit/env"
-	"ctrsploit/cmd/ctrsploit/exploit"
-	"ctrsploit/log"
+	"github.com/ctrsploit/ctrsploit/cmd/ctrsploit/env"
+	"github.com/ctrsploit/ctrsploit/cmd/ctrsploit/exploit"
+	"github.com/ctrsploit/ctrsploit/log"
 	"github.com/docker/docker/pkg/reexec"
 	"github.com/sirupsen/logrus"
 	"github.com/ssst0n3/awesome_libs/awesome_error"

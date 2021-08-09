@@ -1,7 +1,7 @@
 package noused
 
 import (
-	"ctrsploit/util"
+	"github.com/ctrsploit/ctrsploit/util"
 	"errors"
 	"fmt"
 	"github.com/ssst0n3/awesome_libs/awesome_error"

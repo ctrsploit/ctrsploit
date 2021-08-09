@@ -1,9 +1,9 @@
 package where
 
 import (
-	"ctrsploit/log"
-	"ctrsploit/pkg/where"
-	"ctrsploit/util"
+	"github.com/ctrsploit/ctrsploit/log"
+	"github.com/ctrsploit/ctrsploit/pkg/where"
+	"github.com/ctrsploit/ctrsploit/util"
 	"fmt"
 )
 

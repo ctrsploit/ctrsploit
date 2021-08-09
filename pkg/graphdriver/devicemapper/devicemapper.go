@@ -3,8 +3,8 @@ package devicemapper
 // TODO: move to dir pkg/graphdriver/
 
 import (
-	"ctrsploit/pkg/module"
-	"ctrsploit/pkg/mountinfo"
+	"github.com/ctrsploit/ctrsploit/pkg/module"
+	"github.com/ctrsploit/ctrsploit/pkg/mountinfo"
 	"fmt"
 	"github.com/ssst0n3/awesome_libs/awesome_error"
 	"io/ioutil"

@@ -1,7 +1,7 @@
 package noused
 
 import (
-	"ctrsploit/test/config"
+	"github.com/ctrsploit/ctrsploit/test/config"
 	"github.com/ssst0n3/awesome_libs/log"
 	"github.com/stretchr/testify/assert"
 	"testing"

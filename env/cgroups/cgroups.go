@@ -1,9 +1,9 @@
 package cgroups
 
 import (
-	"ctrsploit/log"
-	"ctrsploit/pkg/cgroup"
-	"ctrsploit/util"
+	"github.com/ctrsploit/ctrsploit/log"
+	"github.com/ctrsploit/ctrsploit/pkg/cgroup"
+	"github.com/ctrsploit/ctrsploit/util"
 	"fmt"
 )
 

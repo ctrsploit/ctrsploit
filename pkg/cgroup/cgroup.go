@@ -1,7 +1,7 @@
 package cgroup
 
 import (
-	"ctrsploit/log"
+	"github.com/ctrsploit/ctrsploit/log"
 	"github.com/opencontainers/runc/libcontainer/cgroups"
 	"github.com/ssst0n3/awesome_libs/awesome_error"
 	"golang.org/x/sys/unix"

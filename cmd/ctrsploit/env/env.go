@@ -1,7 +1,7 @@
 package env
 
 import (
-	"ctrsploit/env"
+	"github.com/ctrsploit/ctrsploit/env"
 	"github.com/urfave/cli/v2"
 )
 

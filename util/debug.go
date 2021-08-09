@@ -1,7 +1,7 @@
 package util
 
 import (
-	"ctrsploit/log"
+	"github.com/ctrsploit/ctrsploit/log"
 	"github.com/sirupsen/logrus"
 	log2 "github.com/ssst0n3/awesome_libs/log"
 )
