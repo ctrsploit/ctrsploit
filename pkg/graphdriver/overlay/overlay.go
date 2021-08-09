@@ -1,8 +1,8 @@
 package overlay
 
 import (
-	"ctrsploit/pkg/module"
-	"ctrsploit/pkg/mountinfo"
+	"github.com/ctrsploit/ctrsploit/pkg/module"
+	"github.com/ctrsploit/ctrsploit/pkg/mountinfo"
 	"errors"
 	"fmt"
 	"github.com/ssst0n3/awesome_libs/awesome_error"

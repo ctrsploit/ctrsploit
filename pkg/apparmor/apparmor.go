@@ -1,7 +1,7 @@
 package apparmor
 
 import (
-	"ctrsploit/pkg/lsm"
+	"github.com/ctrsploit/ctrsploit/pkg/lsm"
 	"github.com/ssst0n3/awesome_libs/awesome_error"
 	"io/ioutil"
 	"strings"

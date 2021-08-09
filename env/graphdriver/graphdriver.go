@@ -1,10 +1,10 @@
 package graphdriver
 
 import (
-	"ctrsploit/log"
-	"ctrsploit/pkg/graphdriver/devicemapper"
-	"ctrsploit/pkg/graphdriver/overlay"
-	"ctrsploit/util"
+	"github.com/ctrsploit/ctrsploit/log"
+	"github.com/ctrsploit/ctrsploit/pkg/graphdriver/devicemapper"
+	"github.com/ctrsploit/ctrsploit/pkg/graphdriver/overlay"
+	"github.com/ctrsploit/ctrsploit/util"
 	"fmt"
 	"github.com/fatih/color"
 )

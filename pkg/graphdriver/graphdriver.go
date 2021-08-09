@@ -1,9 +1,9 @@
 package graphdriver
 
 import (
-	"ctrsploit/pkg/graphdriver/devicemapper"
-	"ctrsploit/pkg/graphdriver/overlay"
-	"ctrsploit/pkg/mountinfo"
+	"github.com/ctrsploit/ctrsploit/pkg/graphdriver/devicemapper"
+	"github.com/ctrsploit/ctrsploit/pkg/graphdriver/overlay"
+	"github.com/ctrsploit/ctrsploit/pkg/mountinfo"
 )
 
 type Interface interface {

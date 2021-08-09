@@ -2,9 +2,9 @@ package where
 
 import (
 	"bytes"
-	"ctrsploit/pkg/graphdriver"
-	"ctrsploit/pkg/mountinfo"
-	"ctrsploit/util"
+	"github.com/ctrsploit/ctrsploit/pkg/graphdriver"
+	"github.com/ctrsploit/ctrsploit/pkg/mountinfo"
+	"github.com/ctrsploit/ctrsploit/util"
 	"github.com/ssst0n3/awesome_libs/awesome_error"
 	"io/ioutil"
 	"os"

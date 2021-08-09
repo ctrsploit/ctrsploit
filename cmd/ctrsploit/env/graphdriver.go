@@ -1,7 +1,7 @@
 package env
 
 import (
-	"ctrsploit/env/graphdriver"
+	"github.com/ctrsploit/ctrsploit/env/graphdriver"
 	"github.com/urfave/cli/v2"
 )
 

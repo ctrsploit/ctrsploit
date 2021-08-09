@@ -1,7 +1,7 @@
 package where
 
 import (
-	"ctrsploit/test/config"
+	"github.com/ctrsploit/ctrsploit/test/config"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )

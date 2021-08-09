@@ -1,7 +1,7 @@
 package main
 
 import (
-	"ctrsploit/auto"
+	"github.com/ctrsploit/ctrsploit/auto"
 	"github.com/urfave/cli/v2"
 )
 

@@ -1,10 +1,10 @@
 package env
 
 import (
-	"ctrsploit/log"
-	"ctrsploit/pkg/apparmor"
-	"ctrsploit/pkg/lsm"
-	"ctrsploit/util"
+	"github.com/ctrsploit/ctrsploit/log"
+	"github.com/ctrsploit/ctrsploit/pkg/apparmor"
+	"github.com/ctrsploit/ctrsploit/pkg/lsm"
+	"github.com/ctrsploit/ctrsploit/util"
 	"github.com/fatih/color"
 )
 
