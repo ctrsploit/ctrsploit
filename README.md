@@ -111,10 +111,10 @@ root@ctr # ./ctrsploit e ra -c "cat /etc/hostname"
 
 | command | alias | description |
 | --- | --- | --- |
-| [where](./env/where/README.md) | w | detect whether you are in the container, and which type of the container |
-| [graphdriver](./env/graphdriver/README.md) | g | detect graphdriver type and extend information |
-| [cgroups](./env/cgroups/README.md) | c | gather cgroup information |
-| [capability](./env/capability/README.md) | cap | show the capability of pid 1 and current process |
+| [where](./env/where) | w | detect whether you are in the container, and which type of the container |
+| [graphdriver](./env/graphdriver) | g | detect graphdriver type and extend information |
+| [cgroups](./env/cgroups) | c | gather cgroup information |
+| [capability](./env/capability) | cap | show the capability of pid 1 and current process |
 | seccomp | s | show the seccomp info |
 | apparmor | a | show the apparmor info |
 
@@ -122,6 +122,6 @@ root@ctr # ./ctrsploit e ra -c "cat /etc/hostname"
 
 | exploit | alias | description |
 | --- | --- | --- |
-| [cgroupv1-release_agent](./exploit/cgroupv1-release_agent/README.md) | ra | escape tech by using the notify_on_release of cgroup v1 |
-| [cgroupv1-release_agent-unknown_rootfs](./exploit/cgroupv1-release_agent-unknown_rootfs/README.md) | ra3 | escape tech by using the notify_on_release of cgroup v1 without known rootfs |
-| [cve-2021-22555](./exploit/CVE-2021-22555/README.md) | 22555 | escape tech by using the CVE-2021-22555 |
+| [cgroupv1-release_agent](./exploit/cgroupv1-release_agent) | ra | escape tech by using the notify_on_release of cgroup v1 |
+| [cgroupv1-release_agent-unknown_rootfs](./exploit/cgroupv1-release_agent-unknown_rootfs) | ra3 | escape tech by using the notify_on_release of cgroup v1 without known rootfs |
+| [cve-2021-22555](./exploit/CVE-2021-22555) | 22555 | escape tech by using the CVE-2021-22555 |
