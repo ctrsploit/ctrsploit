@@ -115,8 +115,8 @@ root@ctr # ./ctrsploit e ra -c "cat /etc/hostname"
 | [graphdriver](./env/graphdriver) | g | detect graphdriver type and extend information |
 | [cgroups](./env/cgroups) | c | gather cgroup information |
 | [capability](./env/capability) | cap | show the capability of pid 1 and current process |
-| seccomp | s | show the seccomp info |
-| apparmor | a | show the apparmor info |
+| [seccomp](./env/seccomp) | s | show the seccomp info |
+| [apparmor](./env/apparmor) | a | show the apparmor info |
 
 ### exploit
 

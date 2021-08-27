@@ -1,4 +1,4 @@
-package env
+package apparmor
 
 import (
 	"github.com/ctrsploit/ctrsploit/log"

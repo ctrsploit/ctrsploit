@@ -115,8 +115,8 @@ root@ctr # ./ctrsploit e ra -c "cat /etc/hostname"
 | [graphdriver](./env/graphdriver) | g | 检测graphdriver类型和扩展信息 |
 | [cgroups](./env/cgroups) | c | 收集cgroup信息 |
 | [capability](./env/capability) | cap | 显示pid为1的进程和当前进程的capability |
-| seccomp | s | 显示seccomp信息 |
-| apparmor | a | 显示apparmor信息 |
+| [seccomp](./env/seccomp) | s | 显示seccomp信息 |
+| [apparmor](./env/apparmor) | a | 显示apparmor信息 |
 
 ### exploit
 

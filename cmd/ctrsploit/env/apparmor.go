@@ -1,18 +1,18 @@
 package env
 
 import (
-	"github.com/ctrsploit/ctrsploit/env"
+	"github.com/ctrsploit/ctrsploit/env/apparmor"
 	"github.com/ssst0n3/awesome_libs/log"
 	"github.com/urfave/cli/v2"
 )
 
 var apparmorCommand = &cli.Command{
-	Name:    env.CommandApparmorName,
+	Name:    apparmor.CommandApparmorName,
 	Aliases: []string{"a"},
 	Usage:   "show the apparmor info",
 	Action: func(context *cli.Context) (err error) {
 		log.Logger.Debug("")
-		err = env.Apparmor()
+		err = apparmor.Apparmor()
 		if err != nil {
 			return
 		}
