@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/ctrsploit/ctrsploit/cmd/ctrsploit/env"
 	"github.com/ctrsploit/ctrsploit/cmd/ctrsploit/exploit"
+	"github.com/ctrsploit/ctrsploit/cmd/ctrsploit/helper"
 	"github.com/ctrsploit/ctrsploit/log"
 	"github.com/docker/docker/pkg/reexec"
 	"github.com/sirupsen/logrus"
@@ -28,8 +29,9 @@ func main() {
 		Usage: usage,
 		Commands: []*cli.Command{
 			autoCommand,
-			exploit.ExploitCommand,
+			exploit.Command,
 			env.Command,
+			helper.Command,
 		},
 		Flags: []cli.Flag{
 			&cli.StringFlag{
