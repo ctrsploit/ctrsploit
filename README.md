@@ -124,4 +124,4 @@ root@ctr # ./ctrsploit e ra -c "cat /etc/hostname"
 | --- | --- | --- |
 | [cgroupv1-release_agent](./exploit/cgroupv1-release_agent) | ra | escape tech by using the notify_on_release of cgroup v1 |
 | [cgroupv1-release_agent-unknown_rootfs](./exploit/cgroupv1-release_agent-unknown_rootfs) | ra3 | escape tech by using the notify_on_release of cgroup v1 without known rootfs |
-| [cve-2021-22555](./exploit/CVE-2021-22555) | 22555 | escape tech by using the CVE-2021-22555 |
+| [cve-2021-22555_ubuntu18.04](./exploit/CVE-2021-22555_ubuntu18.04) | 22555 | escape tech by using the CVE-2021-22555 (ubuntu18.04) |
