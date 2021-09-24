@@ -124,4 +124,4 @@ root@ctr # ./ctrsploit e ra -c "cat /etc/hostname"
 | --- | --- | --- |
 | [cgroupv1-release_agent](./exploit/cgroupv1-release_agent) | ra | 利用cgroup v1的notify_on_release功能的逃逸技术 |
 | [cgroupv1-release_agent-unknown_rootfs](./exploit/cgroupv1-release_agent-unknown_rootfs) | ra3 | 在不知道rootfs在宿主机路径时，利用cgroup v1的notify_on_release功能的逃逸技术 |
-| [cve-2021-22555](./exploit/CVE-2021-22555) | 22555 | 利用CVE-2021-22555的逃逸技术 |
+| [cve-2021-22555_ubuntu18.04](./exploit/CVE-2021-22555_ubuntu18.04) | 22555 | 利用CVE-2021-22555的逃逸技术 (ubuntu18.04) |
