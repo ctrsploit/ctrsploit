@@ -2,6 +2,8 @@
 
 [English Version](./README.md)
 
+ctrsploit 读作container sploit
+
 ## 为什么我们需要ctrsploit
 [这里](https://github.com/ctrsploit/ctrsploit/discussions/11)有详细解释
 
@@ -77,7 +79,7 @@ cgroup contains 'kubepods': ✘
 => is in k8s: ✘ 
 ```
 
-### run a exploit
+### 漏洞利用
 
 ```
 root@2aa13a052102:/# ./ctrsploit e
@@ -105,7 +107,7 @@ root@ctr # wget -O ctrsploit https://github.com/ctrsploit/ctrsploit/releases/dow
 root@ctr # ./ctrsploit e ra -c "cat /etc/hostname"
 ```
 
-## Details
+## 详细信息
 
 ### env
 

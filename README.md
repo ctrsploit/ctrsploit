@@ -2,6 +2,8 @@
 
 [中文文档](./README-ZH.md)
 
+ctrsploit [kənˈteɪnər splɔɪt]
+
 ## Why ctrsploit
 see [here](https://github.com/ctrsploit/ctrsploit/discussions/11)
 
