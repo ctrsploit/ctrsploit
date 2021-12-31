@@ -7,8 +7,8 @@ import (
 )
 
 func TestCheckFileExists(t *testing.T) {
-	assert.True(t, CheckFileExists("/etc/passwd"))
-	assert.False(t, CheckFileExists("/not_exists"))
+	assert.True(t, CheckPathExists("/etc/passwd"))
+	assert.False(t, CheckPathExists("/not_exists"))
 }
 
 func TestReadIntFromFile(t *testing.T) {

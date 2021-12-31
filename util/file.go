@@ -8,7 +8,7 @@ import (
 	"strconv"
 )
 
-func CheckFileExists(path string) bool {
+func CheckPathExists(path string) bool {
 	_, err := os.Lstat(path)
 	return !os.IsNotExist(err)
 }

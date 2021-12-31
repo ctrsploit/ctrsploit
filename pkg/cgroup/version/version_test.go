@@ -1,4 +1,4 @@
-package cgroup
+package version
 
 import (
 	"github.com/ssst0n3/awesome_libs/log"
