@@ -18,7 +18,7 @@ const (
 )
 
 const (
-	unifiedMountpoint = "/sys/fs/cgroup"
+	UnifiedMountpoint = "/sys/fs/cgroup"
 )
 
 //IsCgroupV2BorrowedFromRunc https://github.com/opencontainers/runc/blob/3f2f06dfe1b3289b01daa531964b4f0af49cdf2d/docs/cgroup-v2.md#am-i-using-cgroup-v2
@@ -27,7 +27,7 @@ func IsCgroupV2BorrowedFromRunc() bool {
 }
 
 func getStatfs() (st unix.Statfs_t, err error) {
-	err = unix.Statfs(unifiedMountpoint, &st)
+	err = unix.Statfs(UnifiedMountpoint, &st)
 	if err != nil {
 		// TODO: userns not found?
 		awesome_error.CheckErr(err)
@@ -50,14 +50,14 @@ func IsCgroupV1() bool {
 	var st, pst unix.Stat_t
 
 	// (1) it should be a directory...
-	err := unix.Lstat(unifiedMountpoint, &st)
+	err := unix.Lstat(UnifiedMountpoint, &st)
 	if err != nil || st.Mode&unix.S_IFDIR == 0 {
 		awesome_error.CheckWarning(err)
 		return false
 	}
 
 	// (2) ... and a mount point ...
-	err = unix.Lstat(filepath.Dir(unifiedMountpoint), &pst)
+	err = unix.Lstat(filepath.Dir(UnifiedMountpoint), &pst)
 	if err != nil {
 		awesome_error.CheckWarning(err)
 		return false
@@ -70,14 +70,14 @@ func IsCgroupV1() bool {
 
 	// (3) ... of 'tmpfs' fs type.
 	var fst unix.Statfs_t
-	err = unix.Statfs(unifiedMountpoint, &fst)
+	err = unix.Statfs(UnifiedMountpoint, &fst)
 	if err != nil || fst.Type != unix.TMPFS_MAGIC {
 		awesome_error.CheckWarning(err)
 		return false
 	}
 
 	// (4) it should have at least 1 entry ...
-	dir, err := os.Open(unifiedMountpoint)
+	dir, err := os.Open(UnifiedMountpoint)
 	if err != nil {
 		awesome_error.CheckWarning(err)
 		return false
@@ -91,7 +91,7 @@ func IsCgroupV1() bool {
 		return false
 	}
 	// ... which is a cgroup mount point.
-	err = unix.Statfs(filepath.Join(unifiedMountpoint, names[0]), &fst)
+	err = unix.Statfs(filepath.Join(UnifiedMountpoint, names[0]), &fst)
 	if err != nil || fst.Type != unix.CGROUP_SUPER_MAGIC {
 		awesome_error.CheckWarning(err)
 		return false
