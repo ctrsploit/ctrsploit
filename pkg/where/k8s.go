@@ -27,7 +27,7 @@ type K8s struct {
 }
 
 func (k *K8s) CheckDirSecretsExists() {
-	k.DirSecretsExists = util.CheckFileExists(PathDirSecretsExists)
+	k.DirSecretsExists = util.CheckPathExists(PathDirSecretsExists)
 }
 
 func (k *K8s) CheckHostsMountSourceContainsPods() (err error) {

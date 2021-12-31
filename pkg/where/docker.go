@@ -26,7 +26,7 @@ type Docker struct {
 }
 
 func (d *Docker) CheckDockerEnvExists() {
-	d.DockerEnvFileExists = util.CheckFileExists("/.dockerenv")
+	d.DockerEnvFileExists = util.CheckPathExists("/.dockerenv")
 }
 
 // CheckMountInfo rootfs contains "docker"
