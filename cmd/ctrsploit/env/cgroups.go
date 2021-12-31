@@ -14,6 +14,10 @@ var cgroupsCommand = &cli.Command{
 		if err != nil {
 			return
 		}
+		err = cgroups.ListSubsystems()
+		if err != nil {
+			return
+		}
 		return
 	},
 }
