@@ -46,8 +46,8 @@ func main() {
 			},
 		},
 		Before: func(context *cli.Context) (err error) {
-			awesome_error.Default = exporter.GetAwesomeError(log.Logger)
 			debug := context.Bool("debug")
+			awesome_error.Default = exporter.GetAwesomeError(log.Logger, debug)
 			if !debug {
 				log2.Logger.SetOutput(ioutil.Discard)
 			} else {
