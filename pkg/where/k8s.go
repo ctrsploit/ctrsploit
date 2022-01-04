@@ -77,12 +77,11 @@ func (k *K8s) IsIn() (in bool, err error) {
 		in = true
 	}
 
-	err = k.CheckHostsMountSourceContainsPods()
-	if err != nil {
-		return
-	}
-	if k.HostsMountSourceContainsPods {
-		in = true
+	// don't care this error in production mode
+	if k.CheckHostsMountSourceContainsPods() == nil {
+		if k.HostsMountSourceContainsPods {
+			in = true
+		}
 	}
 
 	err = k.CheckCgroup()

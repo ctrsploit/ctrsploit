@@ -6,7 +6,7 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-var apparmorCommand = &cli.Command{
+var ApparmorCommand = &cli.Command{
 	Name:    apparmor.CommandApparmorName,
 	Aliases: []string{"a"},
 	Usage:   "show the apparmor info",
