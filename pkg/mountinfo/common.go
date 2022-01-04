@@ -22,6 +22,7 @@ func GetMountByMountpoint(mountpoint string) (info *mountinfo.Info, err error) {
 	}
 	if len(mounts) != 1 {
 		err = fmt.Errorf("there're more or less than one rootfs mount point: %+v", mounts)
+		awesome_error.CheckDebug(err)
 		return
 	}
 	info = mounts[0]

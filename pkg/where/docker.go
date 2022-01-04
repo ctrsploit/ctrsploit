@@ -79,12 +79,11 @@ func (d *Docker) IsIn() (in bool, err error) {
 		in = true
 	}
 
-	err = d.CheckMountInfo()
-	if err != nil {
-		return
-	}
-	if d.RootfsContainsDocker {
-		in = true
+	// don't care this error in production mode
+	if d.CheckMountInfo() == nil {
+		if d.RootfsContainsDocker {
+			in = true
+		}
 	}
 
 	err = d.CheckCgroup()
@@ -95,12 +94,11 @@ func (d *Docker) IsIn() (in bool, err error) {
 		in = true
 	}
 
-	err = d.CheckHostsMountSourceContainsDocker()
-	if err != nil {
-		return
-	}
-	if d.HostsMountSourceContainsDocker {
-		in = true
+	// don't care this error in production mode
+	if d.CheckHostsMountSourceContainsDocker() == nil {
+		if d.HostsMountSourceContainsDocker {
+			in = true
+		}
 	}
 
 	err = d.CheckHostnameMatchPattern()

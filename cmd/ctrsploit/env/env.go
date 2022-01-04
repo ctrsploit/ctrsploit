@@ -10,12 +10,12 @@ var Command = &cli.Command{
 	//Aliases: []string{"e"},
 	Usage: "gather information",
 	Subcommands: []*cli.Command{
-		whereCommand,
+		WhereCommand,
 		graphdriverCommand,
-		cgroupsCommand,
+		CgroupsCommand,
 		capabilityCommand,
-		seccompCommand,
-		apparmorCommand,
+		SeccompCommand,
+		ApparmorCommand,
 		fdiskCommand,
 	},
 }

@@ -5,7 +5,7 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-var whereCommand = &cli.Command{
+var WhereCommand = &cli.Command{
 	Name:    where.CommandWhereName,
 	Aliases: []string{"w"},
 	Usage:   "detect whether you are in the container, and which type of the container",
