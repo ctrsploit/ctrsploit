@@ -2,7 +2,6 @@ package cgroups
 
 import (
 	"fmt"
-	"github.com/ctrsploit/ctrsploit/log"
 	v1 "github.com/ctrsploit/ctrsploit/pkg/cgroup/v1"
 	"github.com/ctrsploit/ctrsploit/pkg/cgroup/version"
 )
@@ -14,7 +13,7 @@ func ListSubsystems() (err error) {
 		if err != nil {
 			return err
 		}
-		info := fmt.Sprintf("------sub systems-------\n%+q", subsystemsSupport)
+		info := fmt.Sprintf("\n------sub systems-------\n%+q", subsystemsSupport)
 		var topLevelSubsystems []string
 		for _, subsystem := range subsystemsSupport {
 			top, err := c.IsTop(version.UnifiedMountpoint, subsystem)
@@ -25,8 +24,8 @@ func ListSubsystems() (err error) {
 				topLevelSubsystems = append(topLevelSubsystems, subsystem)
 			}
 		}
-		info += fmt.Sprintf("\n--------top level subsystem----------\n%+q", topLevelSubsystems)
-		log.Logger.Info(info)
+		info += fmt.Sprintf("\n\n--------top level subsystem----------\n%+q", topLevelSubsystems)
+		fmt.Println(info)
 	}
 	return
 }
