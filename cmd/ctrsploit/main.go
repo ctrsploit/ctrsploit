@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/ctrsploit/ctrsploit/cmd/ctrsploit/checksec"
 	"github.com/ctrsploit/ctrsploit/cmd/ctrsploit/env"
 	"github.com/ctrsploit/ctrsploit/cmd/ctrsploit/exploit"
 	"github.com/ctrsploit/ctrsploit/cmd/ctrsploit/helper"
@@ -31,6 +32,7 @@ func main() {
 			autoCommand,
 			exploit.Command,
 			env.Command,
+			checksec.Command,
 			helper.Command,
 		},
 		Flags: []cli.Flag{
