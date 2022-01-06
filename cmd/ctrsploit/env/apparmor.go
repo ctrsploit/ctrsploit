@@ -6,8 +6,12 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
+const (
+	CommandNameApparmor = "apparmor"
+)
+
 var ApparmorCommand = &cli.Command{
-	Name:    apparmor.CommandApparmorName,
+	Name:    CommandNameApparmor,
 	Aliases: []string{"a"},
 	Usage:   "show the apparmor info",
 	Action: func(context *cli.Context) (err error) {
