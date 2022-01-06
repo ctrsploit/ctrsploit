@@ -2,7 +2,6 @@ package seccomp
 
 import (
 	"fmt"
-	"github.com/ctrsploit/ctrsploit/log"
 	"github.com/ctrsploit/ctrsploit/pkg/seccomp"
 	"github.com/ctrsploit/ctrsploit/util"
 	"github.com/ssst0n3/awesome_libs/awesome_error"
@@ -38,6 +37,6 @@ func Seccomp() (err error) {
 		}
 		info += fmt.Sprintf("\nseccomp mode: %v", seccompModeString)
 	}
-	log.Logger.Info(info)
+	fmt.Printf("%s\n\n", info)
 	return
 }
