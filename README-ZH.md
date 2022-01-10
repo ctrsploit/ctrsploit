@@ -107,6 +107,30 @@ root@ctr # wget -O ctrsploit https://github.com/ctrsploit/ctrsploit/releases/dow
 root@ctr # ./ctrsploit e ra -c "cat /etc/hostname"
 ```
 
+### 安全检查
+在容器内执行`ctrsploit checksec`或执行单独的二进制文件`checksec`
+
+```
+[root@ctr ~]# /checksec_linux_amd64 
+===========Seccomp=========
+kernel supported: ✔
+seccomp enabled in current container: ✘
+
+===========Apparmor=========
+Kernel Supported: ✘
+Container Enabled: ✘
+
+===========Cgroups=========
+is cgroupv1: ✔
+is cgroupv2: ✘
+
+------sub systems-------
+["perf_event" "memory" "net_cls" "cpuset" "blkio" "hugetlb" "files" "cpu" "cpuacct" "pids" "rdma" "freezer" "devices" "net_prio"]
+
+--------top level subsystem----------
+["rdma"
+```
+
 ## 详细信息
 
 ### env
@@ -132,3 +156,6 @@ root@ctr # ./ctrsploit e ra -c "cat /etc/hostname"
 | helper | 缩写 | description |
 | --- | --- | --- |
 | [cve-2021-3493](./helper/cve-2021-3493) | ubuntu-overlayfs-pe,3493 | Ubuntu OverlayFS 本地提权 |
+
+### checksec
+在容器内执行`ctrsploit checksec`或执行单独的二进制文件`checksec`

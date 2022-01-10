@@ -107,6 +107,30 @@ root@ctr # wget -O ctrsploit https://github.com/ctrsploit/ctrsploit/releases/dow
 root@ctr # ./ctrsploit e ra -c "cat /etc/hostname"
 ```
 
+### check security
+Just execute `ctrsploit checksec` or standalone binary file `checksec` in the container.
+
+```
+[root@ctr ~]# /checksec_linux_amd64 
+===========Seccomp=========
+kernel supported: ✔
+seccomp enabled in current container: ✘
+
+===========Apparmor=========
+Kernel Supported: ✘
+Container Enabled: ✘
+
+===========Cgroups=========
+is cgroupv1: ✔
+is cgroupv2: ✘
+
+------sub systems-------
+["perf_event" "memory" "net_cls" "cpuset" "blkio" "hugetlb" "files" "cpu" "cpuacct" "pids" "rdma" "freezer" "devices" "net_prio"]
+
+--------top level subsystem----------
+["rdma"
+```
+
 ## Details
 
 ### env
@@ -132,3 +156,6 @@ root@ctr # ./ctrsploit e ra -c "cat /etc/hostname"
 | helper | alias | description |
 | --- | --- | --- |
 | [cve-2021-3493](./helper/cve-2021-3493) | ubuntu-overlayfs-pe,3493 | Ubuntu OverlayFS Local Privesc |
+
+### checksec
+Just execute `ctrsploit checksec` or standalone binary file `checksec`.
