@@ -9,6 +9,7 @@ require (
 	github.com/docker/docker v20.10.7+incompatible
 	github.com/fatih/color v1.7.0
 	github.com/google/cadvisor v0.40.0
+	github.com/google/uuid v1.2.0
 	github.com/moby/sys/mountinfo v0.4.1
 	github.com/opencontainers/runc v1.0.0-rc95
 	github.com/pkg/errors v0.9.1
