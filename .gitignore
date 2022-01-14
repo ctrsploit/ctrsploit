@@ -1,3 +1,4 @@
 .idea
 bin
 cmd/tmp
+test/test_data/k8s/kubeconfig.json
