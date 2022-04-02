@@ -16,6 +16,7 @@ var Command = &cli.Command{
 		capabilityCommand,
 		SeccompCommand,
 		ApparmorCommand,
+		SelinuxCommand,
 		fdiskCommand,
 	},
 }
