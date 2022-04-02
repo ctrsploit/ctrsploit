@@ -43,5 +43,5 @@ func IsSupport() (support bool) {
 }
 
 func IsEnabled() bool {
-	return IsSupport() && lsm.IsEnabled()
+	return IsSupport() && lsm.IsConfined()
 }

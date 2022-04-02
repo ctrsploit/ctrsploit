@@ -1,14 +1,37 @@
 package lsm
 
 import (
+	"github.com/ctrsploit/ctrsploit/log"
 	"github.com/ssst0n3/awesome_libs/awesome_error"
 	"io/ioutil"
+	"os"
 	"strings"
 )
 
 const (
-	PathAttrCurrent = "/proc/self/attr/current"
+	PathAttrCurrent        = "/proc/self/attr/current"
+	KernelSupported        = 1
+	KernelSupportedNot     = 0
+	KernelSupportedUnknown = -1
 )
+
+/*
+IsKernelSupported
+Only useful under the host
+*/
+func IsKernelSupported(module string) (supported int) {
+	// https://www.kernel.org/doc/html/v4.16/admin-guide/LSM/index.html
+	content, err := ioutil.ReadFile("/sys/kernel/security/lsm")
+	if err != nil {
+		if os.IsNotExist(err) {
+			// means inside the ctr
+			supported = KernelSupportedUnknown
+		}
+	} else {
+		log.Logger.Debug(content)
+	}
+	return
+}
 
 func Current() (current string, err error) {
 	content, err := ioutil.ReadFile(PathAttrCurrent)
@@ -20,7 +43,7 @@ func Current() (current string, err error) {
 	return
 }
 
-func IsEnabled() bool {
+func IsConfined() bool {
 	current, err := Current()
 	if err != nil {
 		return false
