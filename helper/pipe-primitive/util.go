@@ -1,4 +1,4 @@
-package splice
+package pipe_primitive
 
 import (
 	"github.com/ssst0n3/awesome_libs/awesome_error"
