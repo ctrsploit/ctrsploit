@@ -5,7 +5,7 @@ package dirty_pipe
 import (
 	"errors"
 	"fmt"
-	"github.com/ctrsploit/ctrsploit/helper/splice"
+	"github.com/ctrsploit/ctrsploit/helper/pipe-primitive"
 	"github.com/ssst0n3/awesome_libs/awesome_error"
 	"golang.org/x/sys/unix"
 	"os"
@@ -15,17 +15,21 @@ import (
 const PageSize = 4096
 
 func init() {
-	splice.ReexecRegister(DirtyPipe{})
+	pipe_primitive.ReexecRegister(DirtyPipe{})
 }
 
 type DirtyPipe struct {
 }
 
-func (s DirtyPipe) GetExpName() string {
+func (p DirtyPipe) GetExpName() string {
 	return "dirty-pipe"
 }
 
-func (s DirtyPipe) Write(filepath string, offset int64, content []byte) (err error) {
+func (p DirtyPipe) MinOffset() int64 {
+	return 1
+}
+
+func (p DirtyPipe) Write(filepath string, offset int64, content []byte) (err error) {
 	f, err := checkArgs(filepath, offset, content)
 	if err != nil {
 		return

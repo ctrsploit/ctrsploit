@@ -1,4 +1,4 @@
-package splice
+package pipe_primitive
 
 import (
 	"github.com/stretchr/testify/assert"
