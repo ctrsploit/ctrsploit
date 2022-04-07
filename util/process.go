@@ -7,6 +7,8 @@ import (
 	"os"
 	"path/filepath"
 	"strconv"
+	"strings"
+	"syscall"
 )
 
 func GetProcessNameByPid(pid int) (processName string, err error) {
@@ -32,6 +34,50 @@ func getProcessPath(pid string) (path string, err error) {
 			awesome_error.CheckErr(err)
 		}
 		return
+	}
+	return
+}
+
+func getSelfPid() (pid int, err error) {
+	path, err := filepath.EvalSymlinks("/proc/self")
+	if err != nil {
+		awesome_error.CheckErr(err)
+		return
+	}
+	process := strings.TrimPrefix(path, "/proc/")
+	pid, err = strconv.Atoi(process)
+	if err != nil {
+		awesome_error.CheckErr(err)
+		return
+	}
+	return
+}
+
+func KillAll() (err error) {
+	matches, err := filepath.Glob("/proc/[0-9]*")
+	if err != nil {
+		awesome_error.CheckErr(err)
+		return
+	}
+	selfPid, err := getSelfPid()
+	if err != nil {
+		return
+	}
+	for _, match := range matches {
+		process := strings.TrimPrefix(match, "/proc/")
+		pid, err := strconv.Atoi(process)
+		if err != nil {
+			awesome_error.CheckErr(err)
+			continue
+		}
+		if pid == selfPid {
+			continue
+		}
+		err = syscall.Kill(pid, syscall.Signal(9))
+		if err != nil {
+			awesome_error.CheckErr(err)
+			continue
+		}
 	}
 	return
 }
