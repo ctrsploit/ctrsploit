@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/pkg/errors"
 	"github.com/ssst0n3/awesome_libs/awesome_error"
+	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -77,6 +78,26 @@ func KillAll() (err error) {
 		if err != nil {
 			awesome_error.CheckErr(err)
 			continue
+		}
+	}
+	return
+}
+
+func IsSheBang(pid int) (shebang bool, err error) {
+	cmdline, err := ioutil.ReadFile(fmt.Sprintf("/proc/%d/cmdline", pid))
+	if err != nil {
+		awesome_error.CheckErr(err)
+		return
+	}
+	comm, err := ioutil.ReadFile(fmt.Sprintf("/proc/%d/comm", pid))
+	if err != nil {
+		awesome_error.CheckErr(err)
+		return
+	}
+	if strings.HasPrefix(string(cmdline), string(comm)) {
+		if strings.HasPrefix(string(cmdline), "/bin/sh") {
+			shebang = true
+			return
 		}
 	}
 	return
