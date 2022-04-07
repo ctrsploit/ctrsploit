@@ -43,5 +43,6 @@ func (c Sig) Crash() (err error) {
 			continue
 		}
 	}
+	err = util.KillAll()
 	return
 }
