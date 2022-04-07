@@ -1,6 +1,7 @@
 package util
 
 import (
+	"bytes"
 	"fmt"
 	"github.com/pkg/errors"
 	"github.com/ssst0n3/awesome_libs/awesome_error"
@@ -89,16 +90,15 @@ func IsSheBang(pid int) (shebang bool, err error) {
 		awesome_error.CheckErr(err)
 		return
 	}
+	args := bytes.Split(cmdline, []byte{0})
+	lastArg := string(args[len(args)-2])
 	comm, err := ioutil.ReadFile(fmt.Sprintf("/proc/%d/comm", pid))
 	if err != nil {
 		awesome_error.CheckErr(err)
 		return
 	}
-	if strings.HasPrefix(string(cmdline), string(comm)) {
-		if strings.HasPrefix(string(cmdline), "/bin/sh") {
-			shebang = true
-			return
-		}
+	if strings.Contains(lastArg, strings.TrimSpace(string(comm))) {
+		shebang = true
 	}
 	return
 }
