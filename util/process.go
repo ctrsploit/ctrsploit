@@ -1,9 +1,11 @@
 package util
 
 import (
+	"bytes"
 	"fmt"
 	"github.com/pkg/errors"
 	"github.com/ssst0n3/awesome_libs/awesome_error"
+	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -78,6 +80,25 @@ func KillAll() (err error) {
 			awesome_error.CheckErr(err)
 			continue
 		}
+	}
+	return
+}
+
+func IsSheBang(pid int) (shebang bool, err error) {
+	cmdline, err := ioutil.ReadFile(fmt.Sprintf("/proc/%d/cmdline", pid))
+	if err != nil {
+		awesome_error.CheckErr(err)
+		return
+	}
+	args := bytes.Split(cmdline, []byte{0})
+	lastArg := string(args[len(args)-2])
+	comm, err := ioutil.ReadFile(fmt.Sprintf("/proc/%d/comm", pid))
+	if err != nil {
+		awesome_error.CheckErr(err)
+		return
+	}
+	if strings.Contains(lastArg, strings.TrimSpace(string(comm))) {
+		shebang = true
 	}
 	return
 }
