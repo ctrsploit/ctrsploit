@@ -15,11 +15,11 @@ RUN go install github.com/mitchellh/gox@v1.0.1
 ADD . $PROJECTPATH
 
 RUN chmod +x $PROJECTPATH/build/build.sh
-RUN ln -s $PROJECTPATH/build/build.sh /usr/local/bin/build_cmd
+RUN ln -s $PROJECTPATH/build/build.sh /usr/local/bin/build_ctrsploit
 
 # get ready for building ctrsploit
 WORKDIR $PROJECTPATH
 
 ENTRYPOINT ["sh", "-c"]
-CMD ["build_cmd"]
-# after enter the docker, run build_binary to get binary
+CMD ["build_ctrsploit"]
+# enter the docker, run "build_ctrsploit" to build the ctrsploit binary files
