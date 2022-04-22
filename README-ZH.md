@@ -11,6 +11,25 @@ ctrsploit 读作container sploit
 
 https://github.com/ctrsploit/ctrsploit/releases
 
+## Build by yourself
+### 使用容器编译所需的二进制
+```bash
+git clone https://github.com/ctrsploit/ctrsploit.git
+cd ctrsploit
+docker build . -t ctrsploit_builder
+chmod +x build/build.sh  
+# 自动构建
+docker run -v $(pwd):/ctrsploit --rm ctrsploit_builder 
+```
+或者手动参与
+```
+...
+docker run -it -v $(pwd):/ctrsploit --rm ctrsploit_builder /bin/sh
+build_ctrsploit
+```
+
+备注：如需修改目标平台，请修改build/build.sh中命令中的OS/arch参数字符串，-osarch="linux/amd64"
+
 ## Usage
 
 ### Quick-Start
