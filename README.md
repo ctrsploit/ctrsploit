@@ -11,24 +11,17 @@ see [here](https://github.com/ctrsploit/ctrsploit/discussions/11)
 
 https://github.com/ctrsploit/ctrsploit/releases
 
-## Build by yourself
-### Build the target binary with Docker container toolkit
+## Self Build
+### Build in Container
 ```bash
-git clone https://github.com/ctrsploit/ctrsploit.git
-cd ctrsploit
-docker build . -t ctrsploit_builder
-chmod +x build/build.sh  
-# auto build
-docker run -v $(pwd):/ctrsploit --rm ctrsploit_builder 
-```
-or you can do it manually
-```
-...
-docker run -it -v $(pwd):/ctrsploit --rm ctrsploit_builder /bin/sh
-build_ctrsploit
+make binary && ls -lah bin/release
 ```
 
-Note：To modify the target platform, modify the OS/arch parameter string in the build/build.sh file, e.g. -osarch="linux/amd64"
+### Build in Local
+
+```
+make build-ctrsploit
+```
 
 ## Usage
 
