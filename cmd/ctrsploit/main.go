@@ -34,6 +34,7 @@ func main() {
 			env.Command,
 			checksec.Command,
 			helper.Command,
+			versionCommand,
 		},
 		Flags: []cli.Flag{
 			&cli.StringFlag{
