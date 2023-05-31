@@ -12,7 +12,7 @@ import (
 	"github.com/ssst0n3/awesome_libs/awesome_error/exporter"
 	log2 "github.com/ssst0n3/awesome_libs/log"
 	"github.com/urfave/cli/v2"
-	"io/ioutil"
+	"io"
 	"os"
 )
 
@@ -29,10 +29,10 @@ func main() {
 		Name:  "ctrsploit",
 		Usage: usage,
 		Commands: []*cli.Command{
-			autoCommand,
-			exploit.Command,
 			env.Command,
+			exploit.Command,
 			checksec.Command,
+			autoCommand,
 			helper.Command,
 			versionCommand,
 		},
@@ -52,7 +52,7 @@ func main() {
 			debug := context.Bool("debug")
 			awesome_error.Default = exporter.GetAwesomeError(log.Logger, debug)
 			if !debug {
-				log2.Logger.SetOutput(ioutil.Discard)
+				log2.Logger.SetOutput(io.Discard)
 			} else {
 				log.Logger.Level = logrus.DebugLevel
 				log.Logger.SetReportCaller(true)

@@ -10,7 +10,6 @@ require (
 	github.com/fatih/color v1.7.0
 	github.com/google/cadvisor v0.40.0
 	github.com/google/uuid v1.2.0
-	github.com/mitchellh/gox v1.0.1 // indirect
 	github.com/moby/sys/mountinfo v0.4.1
 	github.com/opencontainers/runc v1.0.0-rc95
 	github.com/opencontainers/selinux v1.8.0
