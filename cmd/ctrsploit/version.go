@@ -9,7 +9,7 @@ import (
 var versionCommand = &cli.Command{
 	Name:    "version",
 	Aliases: []string{},
-	Usage:   "Show the ctrsploit version information",
+	Usage:   "Show the sploit version information",
 	Action: func(context *cli.Context) error {
 		fmt.Println(version.DefaultVer())
 		return nil
