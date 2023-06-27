@@ -25,11 +25,11 @@ type BaseVulnerability struct {
 	ExploitablePrerequisites prerequisite.Prerequisites `json:"-"`
 }
 
-func (v BaseVulnerability) Info() {
+func (v *BaseVulnerability) Info() {
 	log.Logger.Info(v.Description)
 }
 
-func (v BaseVulnerability) CheckSec() (vulnerabilityExists bool, err error) {
+func (v *BaseVulnerability) CheckSec() (vulnerabilityExists bool, err error) {
 	vulnerabilityExists, err = v.CheckSecPrerequisites.Satisfied()
 	if err != nil {
 		return
@@ -39,11 +39,11 @@ func (v BaseVulnerability) CheckSec() (vulnerabilityExists bool, err error) {
 	return
 }
 
-func (v BaseVulnerability) Output() {
+func (v *BaseVulnerability) Output() {
 
 }
 
-func (v BaseVulnerability) Exploitable(vulnerabilityExists bool) (satisfied bool, err error) {
+func (v *BaseVulnerability) Exploitable(vulnerabilityExists bool) (satisfied bool, err error) {
 	prerequisiteVulnerabilityExists := prerequisite.VulnerabilityExists(vulnerabilityExists)
 	v.ExploitablePrerequisites = append([]prerequisite.Interface{prerequisiteVulnerabilityExists}, v.ExploitablePrerequisites...)
 	satisfied, err = v.ExploitablePrerequisites.Satisfied()

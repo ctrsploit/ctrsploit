@@ -15,11 +15,11 @@ var (
 			Name:        "cap_sys_admin",
 			Description: "Container can be escaped when has cap_sys_admin and use cgroups v1",
 			CheckSecPrerequisites: prerequisite.Prerequisites{
-				prerequisite.ContainsCapSysAdmin,
+				&prerequisite.ContainsCapSysAdmin,
 			},
 			ExploitablePrerequisites: prerequisite.Prerequisites{
-				prerequisite.MustBeRootToWriteReleaseAgent,
-				prerequisite.UsingCgroupsV1,
+				&prerequisite.MustBeRootToWriteReleaseAgent,
+				&prerequisite.UsingCgroupsV1,
 			},
 		},
 	}

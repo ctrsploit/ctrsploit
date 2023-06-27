@@ -13,7 +13,7 @@ var UsingCgroupsV1 = Cgroups{
 	},
 }
 
-func (p Cgroups) Check() (err error) {
+func (p *Cgroups) Check() (err error) {
 	p.Satisfied = version.IsCgroupV1()
 	return
 }
