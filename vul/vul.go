@@ -19,7 +19,7 @@ type Vulnerability interface {
 type BaseVulnerability struct {
 	Name                     string                     `json:"name"`
 	Description              string                     `json:"description"`
-	VulnerabilityExists      bool                       `json:"vulnerabilityExists"`
+	VulnerabilityExists      bool                       `json:"vulnerability_exists"`
 	CheckSecHaveRan          bool                       `json:"-"`
 	CheckSecPrerequisites    prerequisite.Prerequisites `json:"-"`
 	ExploitablePrerequisites prerequisite.Prerequisites `json:"-"`
