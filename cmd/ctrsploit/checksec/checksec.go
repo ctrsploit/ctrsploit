@@ -57,7 +57,7 @@ var Command = &cli.Command{
 		//	return
 		//}
 		vulnerabilities := vul.Vulnerabilities{
-			vul.SysadminCgroupV1,
+			&vul.SysadminCgroupV1,
 		}
 		for _, v := range vulnerabilities {
 			_, err = v.CheckSec()

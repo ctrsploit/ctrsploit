@@ -19,7 +19,7 @@ var ContainsCapSysAdmin = Capability{
 	},
 }
 
-func (p Capability) Check() (err error) {
+func (p *Capability) Check() (err error) {
 	caps, err := capability.GetPid1Capability()
 	if err != nil {
 		return

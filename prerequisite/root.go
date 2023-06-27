@@ -27,7 +27,7 @@ var MustBeRootToWriteReleaseAgent = UserMustBe{
 	},
 }
 
-func (p UserMustBe) Check() (err error) {
+func (p *UserMustBe) Check() (err error) {
 	current, err := user.Current()
 	if err != nil {
 		awesome_error.CheckErr(err)
