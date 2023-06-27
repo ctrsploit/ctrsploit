@@ -42,18 +42,23 @@ func (p BasePrerequisite) GetSatisfied() bool {
 
 // Output print prerequisite with colorful; should be used after p.Check().
 func (p BasePrerequisite) Output() {
-	if true {
-		log.Logger.Infof(
-			"%s %s: %s",
-			util.TitleWithBgWhiteBold(p.Name),
-			util.ColorfulTickOrBallot(p.Satisfied),
-			p.Info,
-		)
+	jsonOutput := true
+	if jsonOutput {
+
 	} else {
-		log.Logger.Infof(
-			"%s %t: %s",
-			p.Name, p.Satisfied, p.Info,
-		)
+		if true {
+			log.Logger.Infof(
+				"%s %s: %s",
+				util.TitleWithBgWhiteBold(p.Name),
+				util.ColorfulTickOrBallot(p.Satisfied),
+				p.Info,
+			)
+		} else {
+			log.Logger.Infof(
+				"%s %t: %s",
+				p.Name, p.Satisfied, p.Info,
+			)
+		}
 	}
 	return
 }

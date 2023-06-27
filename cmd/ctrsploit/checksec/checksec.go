@@ -2,8 +2,8 @@ package checksec
 
 import (
 	"github.com/ctrsploit/ctrsploit/cmd/ctrsploit/env"
-	"github.com/ctrsploit/ctrsploit/env/auto"
 	"github.com/ctrsploit/ctrsploit/log"
+	"github.com/ctrsploit/ctrsploit/vul"
 	"github.com/sirupsen/logrus"
 	"github.com/ssst0n3/awesome_libs/awesome_error"
 	"github.com/ssst0n3/awesome_libs/awesome_error/exporter"
@@ -51,7 +51,24 @@ var Command = &cli.Command{
 		}
 		return
 	},
-	Action: func(context *cli.Context) error {
-		return auto.Auto()
+	Action: func(context *cli.Context) (err error) {
+		//err = auto.Auto()
+		//if err != nil {
+		//	return
+		//}
+		vulnerabilities := vul.Vulnerabilities{
+			vul.SysadminCgroupV1,
+		}
+		for _, v := range vulnerabilities {
+			_, err = v.CheckSec()
+			if err != nil {
+				return
+			}
+		}
+		err = vulnerabilities.Output()
+		if err != nil {
+			return
+		}
+		return
 	},
 }
