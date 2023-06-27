@@ -13,12 +13,16 @@ type Vulnerability interface {
 	// will be called automatically before Exploit()
 	Exploitable(vulnerabilityExists bool) (bool, error)
 	Exploit()
+	Output()
 }
 
 type BaseVulnerability struct {
-	Description              string
-	CheckSecPrerequisites    prerequisite.Prerequisites
-	ExploitablePrerequisites prerequisite.Prerequisites
+	Name                     string                     `json:"name"`
+	Description              string                     `json:"description"`
+	VulnerabilityExists      bool                       `json:"vulnerabilityExists"`
+	CheckSecHaveRan          bool                       `json:"-"`
+	CheckSecPrerequisites    prerequisite.Prerequisites `json:"-"`
+	ExploitablePrerequisites prerequisite.Prerequisites `json:"-"`
 }
 
 func (v BaseVulnerability) Info() {
@@ -30,7 +34,13 @@ func (v BaseVulnerability) CheckSec() (vulnerabilityExists bool, err error) {
 	if err != nil {
 		return
 	}
+	v.VulnerabilityExists = vulnerabilityExists
+	v.CheckSecHaveRan = true
 	return
+}
+
+func (v BaseVulnerability) Output() {
+
 }
 
 func (v BaseVulnerability) Exploitable(vulnerabilityExists bool) (satisfied bool, err error) {
