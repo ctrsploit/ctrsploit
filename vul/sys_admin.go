@@ -12,6 +12,7 @@ type Sysadmin struct {
 var (
 	SysadminCgroupV1 = Sysadmin{
 		BaseVulnerability: BaseVulnerability{
+			Name:        "cap_sys_admin",
 			Description: "Container can be escaped when has cap_sys_admin and use cgroups v1",
 			CheckSecPrerequisites: prerequisite.Prerequisites{
 				prerequisite.ContainsCapSysAdmin,
