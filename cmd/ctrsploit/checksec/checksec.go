@@ -22,6 +22,7 @@ var Command = &cli.Command{
 		env.SeccompCommand,
 		env.ApparmorCommand,
 		env.CgroupsCommand,
+		env.NamespaceCommand,
 	},
 	Flags: []cli.Flag{
 		&cli.StringFlag{
