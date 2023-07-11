@@ -18,5 +18,6 @@ var Command = &cli.Command{
 		ApparmorCommand,
 		SelinuxCommand,
 		fdiskCommand,
+		kernelCommand,
 	},
 }
