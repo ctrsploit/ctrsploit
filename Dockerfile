@@ -13,12 +13,14 @@ RUN sed -ri "s/(httpredir|deb).debian.org/${APT_MIRROR:-deb.debian.org}/g" /etc/
  && cat /etc/apt/sources.list
 
 FROM base AS gox
+ARG GOPROXY
 RUN --mount=type=cache,target=/root/.cache/go-build \
     --mount=type=cache,target=/go/pkg/mod \
-        GOBIN=/build/ GO111MODULE=on go install github.com/mitchellh/gox@latest \
+        GOBIN=/build/ GO111MODULE=on GOPROXY=${GOPROXY} go install github.com/mitchellh/gox@latest \
      && /build/gox --help
 
 FROM base AS build-env
+ARG GOPROXY
 WORKDIR /root/ctrsploit
 COPY --from=gox /build/ /usr/local/bin/
 RUN --mount=type=cache,sharing=locked,id=moby-build-aptlib,target=/var/lib/apt \
@@ -29,7 +31,7 @@ RUN --mount=type=bind,target=.,rw \
     --mount=type=cache,target=/root/.cache/go-build,id=ctrsploit-build \
     --mount=type=cache,target=/go/pkg/mod,id=ctrsploit-mod \
     --mount=type=tmpfs,target=/go/src/ \
-    go mod download
+    GOPROXY=${GOPROXY} go mod download
 
 FROM build-env AS build
 RUN --mount=type=bind,target=.,rw \
@@ -47,3 +49,5 @@ FROM scratch AS binary
 COPY --from=build /build /
 
 FROM build-env AS shell
+ARG GOPROXY
+ENV GOPROXY=${GOPROXY}
