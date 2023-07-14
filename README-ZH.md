@@ -14,6 +14,8 @@ https://github.com/ctrsploit/ctrsploit/releases
 ## 手动编译
 ### 容器编译
 ```bash
+export APT_MIRROR=repo.huaweicloud.com
+export GOPROXY=https://goproxy.cn,https://goproxy.io,direct
 make binary && ls -lah bin/release
 ```
 
