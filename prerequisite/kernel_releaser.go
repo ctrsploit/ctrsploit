@@ -1,6 +1,10 @@
 package prerequisite
 
-import "strings"
+import (
+	"github.com/ctrsploit/ctrsploit/log"
+	"github.com/ctrsploit/ctrsploit/pkg/kernel/uname"
+	"strings"
+)
 
 type KernelReleaser struct {
 	ExpectedReleaser string
@@ -18,8 +22,11 @@ var (
 )
 
 func (p *KernelReleaser) Check() (err error) {
-	// TODO: get kernel release: uname -r
-	release := "xxx"
-	p.Satisfied = strings.Contains(release, p.ExpectedReleaser)
+	u, err := uname.All()
+	if err != nil {
+		return
+	}
+	log.Logger.Debugf("uname: %s", u)
+	p.Satisfied = strings.Contains(u, p.ExpectedReleaser)
 	return
 }
