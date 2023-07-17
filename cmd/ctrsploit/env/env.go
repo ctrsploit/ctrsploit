@@ -19,5 +19,6 @@ var Command = &cli.Command{
 		SelinuxCommand,
 		fdiskCommand,
 		kernelCommand,
+		NamespaceCommand,
 	},
 }
