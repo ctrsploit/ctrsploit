@@ -147,14 +147,15 @@ is cgroupv2: ✘
 
 ### env
 
-| command | alias | description |
-| --- | --- | --- |
-| [where](./env/where) | w | detect whether you are in the container, and which type of the container |
-| [graphdriver](./env/graphdriver) | g | detect graphdriver type and extend information |
-| [cgroups](./env/cgroups) | c | gather cgroup information |
-| [capability](./env/capability) | cap | show the capability of pid 1 and current process |
-| [seccomp](./env/seccomp) | s | show the seccomp info |
-| [apparmor](./env/apparmor) | a | show the apparmor info |
+| command                          | alias | description                                                              |
+|----------------------------------|-------|--------------------------------------------------------------------------|
+| [where](./env/where)             | w     | detect whether you are in the container, and which type of the container |
+| [graphdriver](./env/graphdriver) | g     | detect graphdriver type and extend information                           |
+| [cgroups](./env/cgroups)         | c     | gather cgroup information                                                |
+| [capability](./env/capability)   | cap   | show the capability of pid 1 and current process                         |
+| [seccomp](./env/seccomp)         | s     | show the seccomp info                                                    |
+| [apparmor](./env/apparmor)       | a     | show the apparmor info                                                   |
+| [namespace](./env/namespace)     | n, ns | check namespace is host ns                                               |
 
 ### exploit
 
