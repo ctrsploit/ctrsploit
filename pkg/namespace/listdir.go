@@ -20,7 +20,7 @@ var (
 )
 
 // ListNamespaceDir return map[namespace]ino by reading /proc/<PID>/ns
-func ListNamespaceDir(path string) (namespaceInoMap map[string]int, err error) {
+func ListNamespaceDir(path string) (namespaceInoMap map[string]int, names []string, err error) {
 	namespaceInoMap = make(map[string]int)
 	entries, err := os.ReadDir(path)
 	if err != nil {
@@ -38,6 +38,7 @@ func ListNamespaceDir(path string) (namespaceInoMap map[string]int, err error) {
 		var number int
 		number, err = strconv.Atoi(inodeNumber)
 		namespaceInoMap[entry.Name()] = number
+		names = append(names, entry.Name())
 	}
 	return
 }

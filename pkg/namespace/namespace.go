@@ -11,13 +11,6 @@ type Namespace struct {
 }
 
 const (
-	TypeNamespaceLevelUnknown = iota
-	TypeNamespaceLevelBoot
-	TypeNamespaceLevelChild
-	TypeNamespaceLevelHost = TypeNamespaceLevelBoot
-)
-
-const (
 	TypeNamespaceTypeUnknown = iota
 	TypeNamespaceTypeIPC
 	TypeNamespaceTypeUTS
@@ -42,21 +35,37 @@ const (
 	// ProcMountInitIno mount init ns create once procfs mounted
 	ProcMountInitIno = ProcDynamicFirst
 	// LinuxKitNetNsInitIno not sure, just use in practice
-	LinuxKitNetNsInitIno = ProcDynamicFirst
+	LinuxKitNetNsInitIno   = ProcDynamicFirst
+	LinuxKitMountNsInitIno = ProcDynamicFirst + 1
+)
+
+const (
+	NameCGroup          = "cgroup"
+	NameIpc             = "ipc"
+	NameMnt             = "mnt"
+	NameNet             = "net"
+	NamePid             = "pid"
+	NamePidForChildren  = "pid_for_children"
+	NameUser            = "user"
+	NameUts             = "uts"
+	NameTime            = "time"
+	NameTimeForChildren = "time_for_children"
 )
 
 var (
 	TypeMap = map[string]int{
-		"cgroup":            TypeNamespaceTypeCGroup,
-		"ipc":               TypeNamespaceTypeIPC,
-		"mnt":               TypeNamespaceTypeMount,
-		"net":               TypeNamespaceTypeNetwork,
-		"pid":               TypeNamespaceTypePid,
-		"pid_for_children":  TypeNamespaceTypePid,
-		"user":              TypeNamespaceTypeUser,
-		"uts":               TypeNamespaceTypeUTS,
-		"time":              TypeNamespaceTypeTime,
-		"time_for_children": TypeNamespaceTypeTime,
+		NameCGroup: TypeNamespaceTypeCGroup,
+		NameIpc:    TypeNamespaceTypeIPC,
+		NameMnt:    TypeNamespaceTypeMount,
+		NameNet:    TypeNamespaceTypeNetwork,
+		NamePid:    TypeNamespaceTypePid,
+		// TODO: not sure pid_for_children is same as pid?
+		NamePidForChildren: TypeNamespaceTypePid,
+		NameUser:           TypeNamespaceTypeUser,
+		NameUts:            TypeNamespaceTypeUTS,
+		NameTime:           TypeNamespaceTypeTime,
+		// TODO: not sure time_for_children is same as time?
+		NameTimeForChildren: TypeNamespaceTypeTime,
 	}
 	InitInoMap = map[int]int{
 		TypeNamespaceTypeCGroup:  ProcCGroupInitIno,
@@ -70,13 +79,14 @@ var (
 	}
 )
 
-func ParseNamespaces() (namespaces []Namespace, err error) {
+func ParseNamespaces() (namespaces []Namespace, names []string, err error) {
 	proc := "/proc/self/ns"
-	namespaceInoMap, err := ListNamespaceDir(proc)
+	namespaceInoMap, names, err := ListNamespaceDir(proc)
 	if err != nil {
 		return
 	}
-	for name, ino := range namespaceInoMap {
+	for _, name := range names {
+		ino := namespaceInoMap[name]
 		namespace := Namespace{
 			Name:            name,
 			Path:            filepath.Join(proc, name),
