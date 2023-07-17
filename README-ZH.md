@@ -149,14 +149,15 @@ is cgroupv2: ✘
 
 ### env
 
-| 子命令 | 简写 | 描述 |
-| --- | --- | --- |
-| [where](./env/where) | w | 检测你是否在容器内，在何种类型的容器内 |
-| [graphdriver](./env/graphdriver) | g | 检测graphdriver类型和扩展信息 |
-| [cgroups](./env/cgroups) | c | 收集cgroup信息 |
-| [capability](./env/capability) | cap | 显示pid为1的进程和当前进程的capability |
-| [seccomp](./env/seccomp) | s | 显示seccomp信息 |
-| [apparmor](./env/apparmor) | a | 显示apparmor信息 |
+| 子命令                              | 简写    | 描述                         |
+|----------------------------------|-------|----------------------------|
+| [where](./env/where)             | w     | 检测你是否在容器内，在何种类型的容器内        |
+| [graphdriver](./env/graphdriver) | g     | 检测graphdriver类型和扩展信息       |
+| [cgroups](./env/cgroups)         | c     | 收集cgroup信息                 |
+| [capability](./env/capability)   | cap   | 显示pid为1的进程和当前进程的capability |
+| [seccomp](./env/seccomp)         | s     | 显示seccomp信息                |
+| [apparmor](./env/apparmor)       | a     | 显示apparmor信息               |
+| [namespace](./env/namespace)     | n, ns | check namespace is host ns |
 
 ### exploit
 

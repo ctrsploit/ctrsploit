@@ -2,6 +2,14 @@
 
 ## namespace level check
 
+These commands below are same:
+
+```
+$ ctrsploit env namespace
+$ ctrsploit checksec namespace
+$ checksec namespace
+```
+
 ### Test Environment 2: MacBookPro
 
 ```
