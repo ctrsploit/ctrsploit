@@ -16,6 +16,7 @@ var (
 		"acpi",
 		"kcore",
 		"timer_list",
+		"asound",
 	}
 )
 
@@ -43,7 +44,7 @@ func ListNamespaceDir(path string) (namespaceInoMap map[string]int, names []stri
 	return
 }
 
-// ReadInodeNumberMapUnderProc return map[path]ino by walk procfs, pass number dir
+// ReadInodeNumberMapUnderProc return map[path]ino by walk procfs, pass /proc/pid dir
 func ReadInodeNumberMapUnderProc(proc string) (inoMap map[string]int, err error) {
 	inoMap = make(map[string]int)
 	err = filepath.Walk(proc, func(path string, info fs.FileInfo, err error) error {
@@ -55,8 +56,12 @@ func ReadInodeNumberMapUnderProc(proc string) (inoMap map[string]int, err error)
 		}
 		for _, p := range maskOrReadonlyPath {
 			if path == filepath.Join(proc, p) {
-				return nil
+				return filepath.SkipDir
 			}
+		}
+		// pass net->self, self->pid ...
+		if info.Mode() == fs.ModeSymlink {
+			return filepath.SkipDir
 		}
 		if _, err := strconv.Atoi(info.Name()); filepath.Join(proc, info.Name()) == path && err == nil {
 			return filepath.SkipDir
@@ -80,6 +85,7 @@ func ReadInodeNumberListUnderProc(proc string) (inoList []int, err error) {
 	if err != nil {
 		return
 	}
+	// log.Logger.Debugf("ino map under /proc: %+v", inoMap)
 	for _, ino := range inoMap {
 		inoList = append(inoList, ino)
 	}
