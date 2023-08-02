@@ -25,6 +25,8 @@ Click the button 'Compare & pull request'
 
 ### 2.1 Build in Container
 ```bash
+export APT_MIRROR=repo.huaweicloud.com
+export GOPROXY=https://goproxy.io,https://goproxy.cn,direct
 make binary && ls -lah bin/release
 ```
 
