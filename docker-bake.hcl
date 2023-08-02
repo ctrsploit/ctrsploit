@@ -3,6 +3,11 @@ variable "APT_MIRROR" {
 #  default = "repo.huaweicloud.com"
 }
 
+variable "GOPROXY" {
+  default = "https://goproxy.io,https://goproxy.cn,direct"
+  #  default = "repo.huaweicloud.com"
+}
+
 group "default" {
   targets = ["binary"]
 }
@@ -10,6 +15,7 @@ group "default" {
 target "_common" {
   args = {
     APT_MIRROR = APT_MIRROR
+    GOPROXY = GOPROXY
   }
 }
 
