@@ -40,6 +40,7 @@ func (i *InoArbitrator) init() (err error) {
 	i.MinIno = inoList[0]
 	i.MaxIno = inoList[len(inoList)-1]
 	log.Logger.Debugf("min ino: %d, max ino: %d", i.MinIno, i.MaxIno)
+	//log.Logger.Debugf("inoList: %+v", i.InoList)
 	return
 }
 
@@ -47,6 +48,7 @@ func (i *InoArbitrator) GuessNetworkNamespaceInitialIno() (initialIno int) {
 	for index, ino := range i.InoList[1:] {
 		if ino-i.InoList[index] >= 3 {
 			initialIno = i.InoList[index] + 2
+			log.Logger.Debugf("InoList[%d]=%d, InoList[%d]=%d", index+1, ino, index, i.InoList[index])
 			log.Logger.Debugf("network ns initial ino maybe: %d", initialIno)
 			return
 		}
