@@ -39,6 +39,7 @@ func (i *InoArbitrator) init() (err error) {
 	i.InoList = inoList
 	i.MinIno = inoList[0]
 	i.MaxIno = inoList[len(inoList)-1]
+	log.Logger.Debugf("min ino: %d, max ino: %d", i.MinIno, i.MaxIno)
 	return
 }
 
@@ -104,18 +105,9 @@ func (i *InoArbitrator) Arbitrate(ns Namespace) (namespaceLevel Level, err error
 			// network namespace:
 			//	linuxkit: 0xF0000000
 			//	normal:
-			// 		verify1: not between (minIno, maxIno) => child
-			//		verify2: first two hole => host
-			// verify1
-			isHostNamespace = i.IsNetworkNamespaceInoBetweenProcInoList(ns)
-			if isHostNamespace {
-				// verify2: if failed, just warning
-				isHostNamespaceGuess := i.IsNetworkNamespaceInoBetweenTwoAdjacentMissingIno(ns)
-				if !isHostNamespaceGuess {
-					log.Logger.Warningf("ino BetweenProcInoList but not BetweenTwoAdjacentMissingIno")
-					break
-				}
-			}
+			//		verify: first two hole => host
+			// verify
+			isHostNamespace = i.IsNetworkNamespaceInoBetweenTwoAdjacentMissingIno(ns)
 		case TypeNamespaceTypeCGroup:
 			// cgroups namespace:
 			//     kernel not supports => host
