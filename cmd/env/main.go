@@ -1,18 +1,18 @@
 package main
 
 import (
-	"github.com/ctrsploit/ctrsploit/cmd/ctrsploit/checksec"
+	"github.com/ctrsploit/ctrsploit/cmd/ctrsploit/env"
 	"github.com/ctrsploit/ctrsploit/internal"
 	"github.com/ssst0n3/awesome_libs/awesome_error"
 	"os"
 )
 
 const (
-	name = `ctrsploit/checksec`
+	name = `ctrsploit/env`
 )
 
 func main() {
-	app := internal.Command2App(checksec.Command)
+	app := internal.Command2App(env.Command)
 	app.Name = name
 	err := app.Run(os.Args)
 	if err != nil {
