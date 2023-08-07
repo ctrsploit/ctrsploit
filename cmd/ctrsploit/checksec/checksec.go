@@ -59,6 +59,7 @@ var Command = &cli.Command{
 		//}
 		vulnerabilities := vul.Vulnerabilities{
 			&vul.SysadminCgroupV1,
+			&vul.NetworkNamespaceHostLevel,
 		}
 		for _, v := range vulnerabilities {
 			_, err = v.CheckSec()

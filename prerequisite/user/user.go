@@ -1,6 +1,7 @@
-package prerequisite
+package user
 
 import (
+	"github.com/ctrsploit/ctrsploit/prerequisite"
 	"github.com/ssst0n3/awesome_libs/awesome_error"
 	"os/user"
 	"strconv"
@@ -8,12 +9,12 @@ import (
 
 type UserMustBe struct {
 	ExpectedUser uint
-	BasePrerequisite
+	prerequisite.BasePrerequisite
 }
 
 var MustBeRoot = UserMustBe{
 	ExpectedUser: 0,
-	BasePrerequisite: BasePrerequisite{
+	BasePrerequisite: prerequisite.BasePrerequisite{
 		Name: "root",
 		Info: "Current user must be root",
 	},
@@ -21,7 +22,7 @@ var MustBeRoot = UserMustBe{
 
 var MustBeRootToWriteReleaseAgent = UserMustBe{
 	ExpectedUser: MustBeRoot.ExpectedUser,
-	BasePrerequisite: BasePrerequisite{
+	BasePrerequisite: prerequisite.BasePrerequisite{
 		Name: MustBeRoot.Name,
 		Info: "Current user must be root to write release_agent",
 	},

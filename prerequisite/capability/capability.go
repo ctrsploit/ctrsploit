@@ -1,19 +1,20 @@
-package prerequisite
+package capability
 
 import (
 	"github.com/containerd/containerd/pkg/cap"
 	"github.com/ctrsploit/ctrsploit/pkg/capability"
+	"github.com/ctrsploit/ctrsploit/prerequisite"
 	"github.com/ssst0n3/awesome_libs/slice"
 )
 
 type Capability struct {
 	ExpectedCapability string
-	BasePrerequisite
+	prerequisite.BasePrerequisite
 }
 
 var ContainsCapSysAdmin = Capability{
 	ExpectedCapability: "CAP_SYS_ADMIN",
-	BasePrerequisite: BasePrerequisite{
+	BasePrerequisite: prerequisite.BasePrerequisite{
 		Name: "CAP_SYS_ADMIN",
 		Info: "Container with cap_sys_admin is dangerous",
 	},

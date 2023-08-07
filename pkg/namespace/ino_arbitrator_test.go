@@ -20,7 +20,7 @@ func TestInoArbitrator_IsNetworkNamespaceInoBetweenProcInoList(t *testing.T) {
 	netns := Namespace{
 		Name:        "net",
 		Path:        "/proc/self/ns/net",
-		Type:        TypeNamespaceTypeNetwork,
+		Type:        TypeNetwork,
 		InodeNumber: 4026532726,
 	}
 	host := inoArbitrator.IsNetworkNamespaceInoBetweenProcInoList(netns)
@@ -42,7 +42,7 @@ func TestInoArbitrator_IsNetworkNamespaceInoBetweenTwoAdjacentMissingIno(t *test
 	netns := Namespace{
 		Name:        "net",
 		Path:        "/proc/self/ns/net",
-		Type:        TypeNamespaceTypeNetwork,
+		Type:        TypeNetwork,
 		InodeNumber: 4026532726,
 	}
 	host := inoArbitrator.IsNetworkNamespaceInoBetweenTwoAdjacentMissingIno(netns)

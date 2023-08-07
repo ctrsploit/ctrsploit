@@ -3,6 +3,7 @@ package namespace
 import (
 	"github.com/ctrsploit/ctrsploit/log"
 	"github.com/ctrsploit/ctrsploit/prerequisite"
+	"github.com/ctrsploit/ctrsploit/prerequisite/kernel"
 	"github.com/pkg/errors"
 	"github.com/ssst0n3/awesome_libs/awesome_error"
 	"sort"
@@ -83,16 +84,16 @@ func (i *InoArbitrator) IsNetworkNamespaceInoBetweenProcInoList(ns Namespace) (i
 func (i *InoArbitrator) Arbitrate(ns Namespace) (namespaceLevel Level, err error) {
 	var isHostNamespace, normal bool
 	// linuxkit
-	err = prerequisite.KernelReleasedByLinuxkit.Check()
+	err = kernel.ReleasedByLinuxkit.Check()
 	if err != nil {
 		return
 	}
-	if prerequisite.KernelReleasedByLinuxkit.Satisfied {
+	if kernel.ReleasedByLinuxkit.Satisfied {
 		switch ns.Type {
-		case TypeNamespaceTypeNetwork:
+		case TypeNetwork:
 			isHostNamespace = LinuxKitNetNsInitIno == ns.InodeNumber
 			break
-		case TypeNamespaceTypeMount:
+		case TypeMount:
 			isHostNamespace = LinuxKitMountNsInitIno == ns.InodeNumber
 			break
 		default:
@@ -103,52 +104,52 @@ func (i *InoArbitrator) Arbitrate(ns Namespace) (namespaceLevel Level, err error
 	}
 	if normal {
 		switch ns.Type {
-		case TypeNamespaceTypeNetwork:
+		case TypeNetwork:
 			// network namespace:
 			//	linuxkit: 0xF0000000
 			//	normal:
 			//		verify: first two hole => host
 			// verify
 			isHostNamespace = i.IsNetworkNamespaceInoBetweenTwoAdjacentMissingIno(ns)
-		case TypeNamespaceTypeCGroup:
+		case TypeCGroup:
 			// cgroups namespace:
 			//     kernel not supports => host
 			//     otherwise, compare with initIno
-			err = prerequisite.KernelSupportsCgroupNamespace.Check()
+			err = kernel.SupportsCgroupNamespace.Check()
 			if err != nil {
 				return
 			}
-			log.Logger.Debugf("kernel supports cgroup ns: %t\n", prerequisite.KernelSupportsCgroupNamespace.Satisfied)
-			if prerequisite.KernelSupportsCgroupNamespace.Satisfied {
+			log.Logger.Debugf("kernel supports cgroup ns: %t\n", kernel.SupportsCgroupNamespace.Satisfied)
+			if kernel.SupportsCgroupNamespace.Satisfied {
 				isHostNamespace = ns.InodeNumber == ns.InitInodeNumber
 			} else {
 				// kernel not supports <=> host ns
 				isHostNamespace = true
 			}
-		case TypeNamespaceTypeTime:
+		case TypeTime:
 			// time namespace:
 			//     kernel not supports => host
 			//     otherwise, compare with initIno
-			err = prerequisite.KernelSupportsTimeNamespace.Check()
+			err = kernel.SupportsTimeNamespace.Check()
 			if err != nil {
 				return
 			}
-			if prerequisite.KernelSupportsTimeNamespace.Satisfied {
+			if kernel.SupportsTimeNamespace.Satisfied {
 				isHostNamespace = ns.InodeNumber == ns.InitInodeNumber
 			} else {
 				// kernel not supports <=> host ns
 				isHostNamespace = true
 			}
-		case TypeNamespaceTypeIPC, TypeNamespaceTypeUTS, TypeNamespaceTypeUser, TypeNamespaceTypePid, TypeNamespaceTypeMount:
+		case TypeIPC, TypeUTS, TypeUser, TypePid, TypeMount:
 			isHostNamespace = ns.InodeNumber == ns.InitInodeNumber
 		default:
 			log.Logger.Warningf("%s has an unknown namespace level: %+v\n", ns.Name, ns)
 		}
 	}
 	if isHostNamespace {
-		namespaceLevel = TypeNamespaceLevelHost
+		namespaceLevel = LevelHost
 	} else {
-		namespaceLevel = TypeNamespaceLevelChild
+		namespaceLevel = LevelChild
 	}
 	return
 }

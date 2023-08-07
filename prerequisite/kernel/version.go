@@ -1,36 +1,37 @@
-package prerequisite
+package kernel
 
 import (
 	"github.com/ctrsploit/ctrsploit/log"
 	"github.com/ctrsploit/ctrsploit/pkg/kernel/uname"
+	"github.com/ctrsploit/ctrsploit/prerequisite"
 )
 
-type KernelVersion struct {
+type Version struct {
 	ExpectedMinVersion string
 	ExpectedMaxVersion string
-	BasePrerequisite
+	prerequisite.BasePrerequisite
 }
 
 var (
-	KernelSupportsCgroupNamespace = KernelVersion{
+	SupportsCgroupNamespace = Version{
 		ExpectedMinVersion: "4.6",
 		ExpectedMaxVersion: "",
-		BasePrerequisite: BasePrerequisite{
+		BasePrerequisite: prerequisite.BasePrerequisite{
 			Name: "Kernel Supports Cgroup namespace",
 			Info: "kernel version >= v4.6",
 		},
 	}
-	KernelSupportsTimeNamespace = KernelVersion{
+	SupportsTimeNamespace = Version{
 		ExpectedMinVersion: "5.6",
 		ExpectedMaxVersion: "",
-		BasePrerequisite: BasePrerequisite{
+		BasePrerequisite: prerequisite.BasePrerequisite{
 			Name: "Kernel Supports Time namespace",
 			Info: "kernel version >= v5.6",
 		},
 	}
 )
 
-func (p *KernelVersion) check(version string) (satisfied bool) {
+func (p *Version) check(version string) (satisfied bool) {
 	satisfied = true
 	if p.ExpectedMinVersion != "" {
 		satisfied = satisfied && (p.ExpectedMinVersion < version || uname.VersionEqual(p.ExpectedMinVersion, version))
@@ -42,7 +43,7 @@ func (p *KernelVersion) check(version string) (satisfied bool) {
 	return
 }
 
-func (p *KernelVersion) Check() (err error) {
+func (p *Version) Check() (err error) {
 	version, err := uname.Release()
 	if err != nil {
 		return

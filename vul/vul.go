@@ -3,6 +3,7 @@ package vul
 import (
 	"github.com/ctrsploit/ctrsploit/log"
 	"github.com/ctrsploit/ctrsploit/prerequisite"
+	"github.com/ctrsploit/ctrsploit/prerequisite/vulnerability"
 )
 
 type Vulnerability interface {
@@ -44,7 +45,7 @@ func (v *BaseVulnerability) Output() {
 }
 
 func (v *BaseVulnerability) Exploitable(vulnerabilityExists bool) (satisfied bool, err error) {
-	prerequisiteVulnerabilityExists := prerequisite.VulnerabilityExists(vulnerabilityExists)
+	prerequisiteVulnerabilityExists := vulnerability.Exists(vulnerabilityExists)
 	v.ExploitablePrerequisites = append([]prerequisite.Interface{prerequisiteVulnerabilityExists}, v.ExploitablePrerequisites...)
 	satisfied, err = v.ExploitablePrerequisites.Satisfied()
 	if err != nil {

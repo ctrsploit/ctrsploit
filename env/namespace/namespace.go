@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/ctrsploit/ctrsploit/log"
 	"github.com/ctrsploit/ctrsploit/pkg/namespace"
-	"github.com/ctrsploit/ctrsploit/prerequisite"
+	"github.com/ctrsploit/ctrsploit/prerequisite/kernel"
 	"github.com/ctrsploit/ctrsploit/util"
 )
 
@@ -31,20 +31,20 @@ func CheckCurrentNamespaceLevel(ns string) (err error) {
 			// maybe kernel not support
 			switch ns {
 			case namespace.NameTime, namespace.NameTimeForChildren:
-				err := prerequisite.KernelSupportsTimeNamespace.Check()
+				err := kernel.SupportsTimeNamespace.Check()
 				if err != nil {
 					break
 				}
-				if !prerequisite.KernelSupportsTimeNamespace.Satisfied {
-					level = namespace.TypeNamespaceLevelHost
+				if !kernel.SupportsTimeNamespace.Satisfied {
+					level = namespace.LevelHost
 				}
 			case namespace.NameCGroup:
-				err := prerequisite.KernelSupportsCgroupNamespace.Check()
+				err := kernel.SupportsCgroupNamespace.Check()
 				if err != nil {
 					break
 				}
-				if !prerequisite.KernelSupportsCgroupNamespace.Satisfied {
-					level = namespace.TypeNamespaceLevelHost
+				if !kernel.SupportsCgroupNamespace.Satisfied {
+					level = namespace.LevelHost
 				}
 			}
 		}
@@ -55,13 +55,13 @@ func CheckCurrentNamespaceLevel(ns string) (err error) {
 }
 
 func CheckNamespaceValid(ns string) (valid bool) {
-	_, valid = namespace.TypeMap[ns]
+	_, valid = namespace.MapName2Type[ns]
 	return
 }
 
 func OutputNamespaceLevelColorfully(name string, level namespace.Level, padding bool) {
 	var out string
-	if level == namespace.TypeNamespaceLevelHost {
+	if level == namespace.LevelHost {
 		out = util.Danger(level.String())
 	} else {
 		out = util.Success(level.String())
