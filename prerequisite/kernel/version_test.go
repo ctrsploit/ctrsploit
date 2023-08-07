@@ -1,6 +1,7 @@
-package prerequisite
+package kernel
 
 import (
+	"github.com/ctrsploit/ctrsploit/prerequisite"
 	"testing"
 )
 
@@ -8,7 +9,7 @@ func TestKernelVersion_check(t *testing.T) {
 	type fields struct {
 		ExpectedMinVersion string
 		ExpectedMaxVersion string
-		BasePrerequisite   BasePrerequisite
+		BasePrerequisite   prerequisite.BasePrerequisite
 	}
 	tests := []struct {
 		name          string
@@ -46,7 +47,7 @@ func TestKernelVersion_check(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			p := &KernelVersion{
+			p := &Version{
 				ExpectedMinVersion: tt.fields.ExpectedMinVersion,
 				ExpectedMaxVersion: tt.fields.ExpectedMaxVersion,
 				BasePrerequisite:   tt.fields.BasePrerequisite,

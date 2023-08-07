@@ -1,27 +1,28 @@
-package prerequisite
+package kernel
 
 import (
 	"github.com/ctrsploit/ctrsploit/log"
 	"github.com/ctrsploit/ctrsploit/pkg/kernel/uname"
+	"github.com/ctrsploit/ctrsploit/prerequisite"
 	"strings"
 )
 
-type KernelReleaser struct {
+type Releaser struct {
 	ExpectedReleaser string
-	BasePrerequisite
+	prerequisite.BasePrerequisite
 }
 
 var (
-	KernelReleasedByLinuxkit = KernelReleaser{
+	ReleasedByLinuxkit = Releaser{
 		ExpectedReleaser: "linuxkit",
-		BasePrerequisite: BasePrerequisite{
+		BasePrerequisite: prerequisite.BasePrerequisite{
 			Name: "linuxkit kernel",
 			Info: "kernel released by linuxkit",
 		},
 	}
 )
 
-func (p *KernelReleaser) Check() (err error) {
+func (p *Releaser) Check() (err error) {
 	u, err := uname.All()
 	if err != nil {
 		return
