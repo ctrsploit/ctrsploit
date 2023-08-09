@@ -66,6 +66,10 @@ func (i *InoArbitrator) IsNetworkNamespaceInoBetweenTwoAdjacentMissingIno(ns Nam
 	if initialIno == 0 {
 		return
 	}
+	if ns.InodeNumber < i.MinIno {
+		is = true
+		return
+	}
 	is = initialIno == ns.InodeNumber
 	return
 }
