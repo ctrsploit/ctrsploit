@@ -8,6 +8,6 @@ assignees: ssst0n3
 ---
 
 - [ ] version/VERSION update to vx.x.x
-- [ ] version/VERSION update to vx.x.x-dev
 - [ ] document
 - [ ] release page
+- [ ] version/VERSION update to vx.x.x-dev
