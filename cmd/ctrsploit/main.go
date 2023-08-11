@@ -6,6 +6,7 @@ import (
 	"github.com/ctrsploit/ctrsploit/cmd/ctrsploit/exploit"
 	"github.com/ctrsploit/ctrsploit/cmd/ctrsploit/helper"
 	"github.com/ctrsploit/ctrsploit/log"
+	"github.com/ctrsploit/ctrsploit/version"
 	"github.com/docker/docker/pkg/reexec"
 	"github.com/sirupsen/logrus"
 	"github.com/ssst0n3/awesome_libs/awesome_error"
@@ -34,7 +35,7 @@ func main() {
 			checksec.Command,
 			autoCommand,
 			helper.Command,
-			versionCommand,
+			version.Command,
 		},
 		Flags: []cli.Flag{
 			&cli.StringFlag{

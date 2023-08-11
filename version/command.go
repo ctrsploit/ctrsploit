@@ -1,17 +1,16 @@
-package main
+package version
 
 import (
 	"fmt"
-	"github.com/ctrsploit/ctrsploit/version"
 	"github.com/urfave/cli/v2"
 )
 
-var versionCommand = &cli.Command{
+var Command = &cli.Command{
 	Name:    "version",
 	Aliases: []string{},
 	Usage:   "Show the sploit version information",
 	Action: func(context *cli.Context) error {
-		fmt.Println(version.DefaultVer())
+		fmt.Println(DefaultVer())
 		return nil
 	},
 }
