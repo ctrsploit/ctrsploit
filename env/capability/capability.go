@@ -11,8 +11,9 @@ import (
 )
 
 const (
-	CommandCapabilityName = "capability"
-	standardCaps          = 0xa80425fb
+	CommandCapabilityName        = "capability"
+	standardCaps          uint64 = 0xa80425fb
+	PRIVILEGED_CAPS       uint64 = 0x3fffffffff
 )
 
 func getInfoFromCaps(caps uint64) (info string) {
@@ -35,10 +36,17 @@ func getInfoFromCaps(caps uint64) (info string) {
 		"title_caps_parsed": util.TitleWithFgWhiteBoldUnderline("[parsed]"),
 		"caps_parsed":       capsParsed,
 	})
+
 	if caps != standardCaps {
-		capsDiff, _ := cap.FromBitmap(caps - standardCaps)
+		capsDiff, _ := cap.FromBitmap(caps & (^standardCaps))
 		info += "\n" + util.TitleWithFgWhiteBoldUnderline("[Additional Capabilities]")
 		info += color.HiRedString(fmt.Sprintf("\n%q", capsDiff))
+	}
+	
+	// Checking for a privileged container
+	if caps & (^PRIVILEGED_CAPS) != 0 {
+		info += "\n" + util.TitleWithFgWhiteBoldUnderline("[Privileged]")
+		info += color.HiRedString("\nWARNING: Possible Privileged Container Found!")
 	}
 
 	return
