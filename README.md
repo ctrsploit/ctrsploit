@@ -5,6 +5,7 @@
 ctrsploit [kənˈteɪnər splɔɪt]
 
 ## Why ctrsploit
+
 see [here](https://github.com/ctrsploit/ctrsploit/discussions/11)
 
 ## Pre-Built Release
@@ -12,7 +13,9 @@ see [here](https://github.com/ctrsploit/ctrsploit/discussions/11)
 https://github.com/ctrsploit/ctrsploit/releases
 
 ## Self Build
+
 ### Build in Container
+
 ```bash
 make binary && ls -lah bin/release
 ```
@@ -63,10 +66,18 @@ USAGE:
    ctrsploit env command [command options] [arguments...]
 
 COMMANDS:
-   where, w        detect whether you are in the container, and which type of the container
-   graphdriver, g  detect graphdriver type and extend information
-   cgroups, c      gather cgroup information
-   help, h         Shows a list of commands or help for one command
+   auto              auto
+   where, w          detect whether you are in the container, and which type of the container
+   graphdriver, g    detect graphdriver type and extend information
+   cgroups, c        gather cgroup information
+   capability, cap   show the capability of pid 1 and current process
+   seccomp, s        show the seccomp info
+   apparmor, a       show the apparmor info
+   selinux, se       show the selinux info
+   fdisk, f          like linux command fdisk or lsblk // TODO
+   kernel, k         collect kernel environment information
+   namespace, n, ns  check namespace is host ns
+   help, h           Shows a list of commands or help for one command
 
 OPTIONS:
    --help, -h  show help (default: false)
@@ -120,6 +131,7 @@ root@ctr # ./ctrsploit e ra -c "cat /etc/hostname"
 ```
 
 ### check security
+
 Just execute `ctrsploit checksec` or standalone binary file `checksec` in the container.
 
 ```
@@ -149,6 +161,7 @@ is cgroupv2: ✘
 
 | command                          | alias | description                                                              |
 |----------------------------------|-------|--------------------------------------------------------------------------|
+| [auto](./env/auto)               |       | auto gather environment information                                      |
 | [where](./env/where)             | w     | detect whether you are in the container, and which type of the container |
 | [graphdriver](./env/graphdriver) | g     | detect graphdriver type and extend information                           |
 | [cgroups](./env/cgroups)         | c     | gather cgroup information                                                |
@@ -159,16 +172,18 @@ is cgroupv2: ✘
 
 ### exploit
 
-| exploit | alias | description |
-| --- | --- | --- |
-| [cgroupv1-release_agent](./exploit/cgroupv1-release_agent) | ra | escape tech by using the notify_on_release of cgroup v1 |
-| [cgroupv1-release_agent-unknown_rootfs](./exploit/cgroupv1-release_agent-unknown_rootfs) | ra3 | escape tech by using the notify_on_release of cgroup v1 without known rootfs |
-| [cve-2021-22555_ubuntu18.04](./exploit/CVE-2021-22555_ubuntu18.04) | 22555 | escape tech by using the CVE-2021-22555 (ubuntu18.04) |
+| exploit                                                                                  | alias | description                                                                  |
+|------------------------------------------------------------------------------------------|-------|------------------------------------------------------------------------------|
+| [cgroupv1-release_agent](./exploit/cgroupv1-release_agent)                               | ra    | escape tech by using the notify_on_release of cgroup v1                      |
+| [cgroupv1-release_agent-unknown_rootfs](./exploit/cgroupv1-release_agent-unknown_rootfs) | ra3   | escape tech by using the notify_on_release of cgroup v1 without known rootfs |
+| [cve-2021-22555_ubuntu18.04](./exploit/CVE-2021-22555_ubuntu18.04)                       | 22555 | escape tech by using the CVE-2021-22555 (ubuntu18.04)                        |
 
 ### helper
-| helper | alias | description |
-| --- | --- | --- |
+
+| helper                                  | alias                    | description                    |
+|-----------------------------------------|--------------------------|--------------------------------|
 | [cve-2021-3493](./helper/cve-2021-3493) | ubuntu-overlayfs-pe,3493 | Ubuntu OverlayFS Local Privesc |
 
 ### checksec
+
 Just execute `ctrsploit checksec` or standalone binary file `checksec`.
