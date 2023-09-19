@@ -3,7 +3,6 @@ package capability
 import (
 	"fmt"
 	"github.com/containerd/containerd/pkg/cap"
-	"github.com/ctrsploit/ctrsploit/log"
 	"github.com/ctrsploit/ctrsploit/pkg/capability"
 	"github.com/ctrsploit/ctrsploit/util"
 	"github.com/fatih/color"
@@ -66,6 +65,6 @@ func Capability() (err error) {
 		}
 		info += "\n" + util.TitleWithBgWhiteBold("current process") + getInfoFromCaps(caps)
 	}
-	log.Logger.Info(info)
+	fmt.Printf("%s\n\n", info)
 	return
 }

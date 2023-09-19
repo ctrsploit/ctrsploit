@@ -51,6 +51,7 @@ func CheckCurrentNamespaceLevel(ns string) (err error) {
 		log.Logger.Debugf("%s: %+v \n", ns, level)
 		OutputNamespaceLevelColorfully(ns, level, false)
 	}
+	fmt.Println()
 	return
 }
 

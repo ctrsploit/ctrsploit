@@ -12,6 +12,6 @@ func Version() (err error) {
 	info := fmt.Sprintf("===========Cgroups=========\n")
 	info += fmt.Sprintf("is cgroupv1: %v\n", util.ColorfulTickOrBallot(version.IsCgroupV1()))
 	info += fmt.Sprintf("is cgroupv2: %v", util.ColorfulTickOrBallot(version.IsCgroupV2()))
-	fmt.Println(info)
+	fmt.Printf("%s\n\n", info)
 	return
 }

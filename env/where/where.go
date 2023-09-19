@@ -1,10 +1,9 @@
 package where
 
 import (
-	"github.com/ctrsploit/ctrsploit/log"
+	"fmt"
 	"github.com/ctrsploit/ctrsploit/pkg/where"
 	"github.com/ctrsploit/ctrsploit/util"
-	"fmt"
 )
 
 const CommandWhereName = "where"
@@ -24,7 +23,7 @@ func Docker() (err error) {
 	info += fmt.Sprintf("\nthe mount source of /etc/hosts contains 'docker': %v", util.ColorfulTickOrBallot(d.HostsMountSourceContainsDocker))
 	info += fmt.Sprintf("\nhostname match regex ^[0-9a-f]{12}$: %v", util.ColorfulTickOrBallot(d.HostnameMatchPattern))
 	info += fmt.Sprintf("\n=> is in docker: %v", util.ColorfulTickOrBallot(in))
-	log.Logger.Info(info)
+	fmt.Printf("%s\n\n", info)
 	return
 }
 
@@ -42,6 +41,6 @@ func K8s() (err error) {
 	info += fmt.Sprintf("\nthe mount source of /etc/hosts contains 'pods': %s", util.ColorfulTickOrBallot(k.HostsMountSourceContainsPods))
 	info += fmt.Sprintf("\ncgroup contains 'kubepods': %v", util.ColorfulTickOrBallot(k.CgroupContainsKubepods))
 	info += fmt.Sprintf("\n=> is in k8s: %v", util.ColorfulTickOrBallot(in))
-	log.Logger.Info(info)
+	fmt.Printf("%s\n\n", info)
 	return
 }

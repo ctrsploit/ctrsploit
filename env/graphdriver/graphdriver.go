@@ -1,11 +1,10 @@
 package graphdriver
 
 import (
-	"github.com/ctrsploit/ctrsploit/log"
+	"fmt"
 	"github.com/ctrsploit/ctrsploit/pkg/graphdriver/devicemapper"
 	"github.com/ctrsploit/ctrsploit/pkg/graphdriver/overlay"
 	"github.com/ctrsploit/ctrsploit/util"
-	"fmt"
 	"github.com/fatih/color"
 )
 
@@ -17,18 +16,17 @@ func Overlay() (err error) {
 	if err != nil {
 		return
 	}
-	info := fmt.Sprintf("===========Overlay=========\nOverlay enabled: %v\n", util.ColorfulTickOrBallot(o.Loaded))
+	info := fmt.Sprintf("===========Overlay=========\nOverlay enabled: %v", util.ColorfulTickOrBallot(o.Loaded))
 	if o.Loaded {
-		info += fmt.Sprintf("Overlay used: %v\n", util.ColorfulTickOrBallot(o.Used))
+		info += fmt.Sprintf("\nOverlay used: %v", util.ColorfulTickOrBallot(o.Used))
 		if o.Used {
-			info += fmt.Sprintf("The number of overlayfs mounted: %v (equal to the number of containers)", color.HiGreenString(fmt.Sprintf("%d", o.Number)))
+			info += fmt.Sprintf("\nThe number of overlayfs mounted: %v (equal to the number of containers)", color.HiGreenString(fmt.Sprintf("%d", o.Number)))
 			if len(o.HostPath) > 0 {
 				info += fmt.Sprintf("\nThe host path of container's rootfs: %s", color.HiGreenString(o.HostPath))
 			}
-			info += "\n"
 		}
 	}
-	log.Logger.Info(info)
+	fmt.Printf("%s\n\n", info)
 	return
 }
 
@@ -38,20 +36,19 @@ func DeviceMapper() (err error) {
 	if err != nil {
 		return
 	}
-	info := fmt.Sprintf("===========DeviceMapper=========\nDeviceMapper enabled: %v\n", util.ColorfulTickOrBallot(d.Loaded))
+	info := fmt.Sprintf("===========DeviceMapper=========\nDeviceMapper enabled: %v", util.ColorfulTickOrBallot(d.Loaded))
 	if d.Loaded {
-		info += fmt.Sprintf("DeviceMapper used: %v\n", util.ColorfulTickOrBallot(d.Used))
+		info += fmt.Sprintf("\nDeviceMapper used: %v", util.ColorfulTickOrBallot(d.Used))
 		if d.Used {
-			info += fmt.Sprintf("The number of devicemapper used in running container: %v", color.HiGreenString(fmt.Sprintf("%d", d.NumberOfDmUsedInRunningContainer)))
+			info += fmt.Sprintf("\nThe number of devicemapper used in running container: %v", color.HiGreenString(fmt.Sprintf("%d", d.NumberOfDmUsedInRunningContainer)))
 			if d.NumberOfDmUsedInRunningContainer > 0 {
 				info += " ( =(count(running containers)+1) )"
 				if len(d.HostPath) > 0 {
 					info += fmt.Sprintf("\nThe host path of container's rootfs: %s", color.HiGreenString(d.HostPath))
 				}
 			}
-			info += "\n"
 		}
 	}
-	log.Logger.Info(info)
+	fmt.Printf("%s\n\n", info)
 	return
 }
