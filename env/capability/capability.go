@@ -25,11 +25,7 @@ func getInfoFromCaps(caps uint64) (info string) {
 	}
 	info += awesome_libs.Format(`
 {.title_caps}
-{.caps}
-
-{.title_caps_parsed}
-{.caps_parsed}
-`, awesome_libs.Dict{
+{.caps}`, awesome_libs.Dict{
 		"title_caps":        util.TitleWithFgWhiteBoldUnderline("[caps]"),
 		"caps":              fmt.Sprintf("0x%x%s", caps, standard),
 		"title_caps_parsed": util.TitleWithFgWhiteBoldUnderline("[parsed]"),
