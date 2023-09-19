@@ -22,7 +22,7 @@ func ListSubsystems() (err error) {
 			}
 		}
 		info += fmt.Sprintf("\n\n--------top level subsystem----------\n%+q", topLevelSubsystems)
-		fmt.Println(info)
+		fmt.Printf("%s\n\n", info)
 	}
 	return
 }

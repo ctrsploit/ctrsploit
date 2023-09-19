@@ -10,6 +10,7 @@ var Command = &cli.Command{
 	Aliases: []string{"e"},
 	Usage:   "gather information",
 	Subcommands: []*cli.Command{
+		AutoCommand,
 		WhereCommand,
 		graphdriverCommand,
 		CgroupsCommand,
