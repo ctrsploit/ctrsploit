@@ -23,8 +23,8 @@ FROM base AS build-env
 ARG GOPROXY
 WORKDIR /root/ctrsploit
 COPY --from=gox /build/ /usr/local/bin/
-RUN --mount=type=cache,sharing=locked,id=moby-build-aptlib,target=/var/lib/apt \
-    --mount=type=cache,sharing=locked,id=moby-build-aptcache,target=/var/cache/apt \
+RUN --mount=type=cache,sharing=locked,id=ctrsploit-build-aptlib,target=/var/lib/apt \
+    --mount=type=cache,sharing=locked,id=ctrsploit-build-aptcache,target=/var/cache/apt \
         apt update && apt install -y \
             upx
 RUN --mount=type=bind,target=.,rw \

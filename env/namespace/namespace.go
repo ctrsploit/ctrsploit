@@ -55,11 +55,6 @@ func CheckCurrentNamespaceLevel(ns string) (err error) {
 	return
 }
 
-func CheckNamespaceValid(ns string) (valid bool) {
-	_, valid = namespace.MapName2Type[ns]
-	return
-}
-
 func OutputNamespaceLevelColorfully(name string, level namespace.Level, padding bool) {
 	var out string
 	if level == namespace.LevelHost {

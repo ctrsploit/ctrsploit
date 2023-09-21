@@ -3,6 +3,7 @@ package env
 import (
 	"github.com/ctrsploit/ctrsploit/env/namespace"
 	"github.com/ctrsploit/ctrsploit/log"
+	namespace2 "github.com/ctrsploit/ctrsploit/pkg/namespace"
 	"github.com/urfave/cli/v2"
 )
 
@@ -16,7 +17,7 @@ var NamespaceCommand = &cli.Command{
 			ns = context.Args().First()
 		}
 		log.Logger.Debugf("namespace = %s\n", ns)
-		if namespace.CheckNamespaceValid(ns) {
+		if namespace2.CheckNamespaceValid(ns) {
 			context.App.Metadata["namespace"] = ns
 		}
 		return

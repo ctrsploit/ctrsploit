@@ -1,6 +1,10 @@
 package namespace
 
-import "github.com/pkg/errors"
+import (
+	"fmt"
+	"github.com/pkg/errors"
+	"github.com/ssst0n3/awesome_libs/awesome_error"
+)
 
 type Arbitrator interface {
 	Arbitrate(namespace Namespace) (namespaceLevel Level, err error)
@@ -45,5 +49,29 @@ func CheckNamespaceLevel(arbitrator Arbitrator) (result map[string]Level, names 
 	} else {
 		err = ErrPrerequisiteNotSatisfied
 	}
+	return
+}
+
+func GetNamespaceLevel(arbitrator Arbitrator, ns string) (level Level, err error) {
+	if !CheckNamespaceValid(ns) {
+		err = fmt.Errorf("ns %s not valid", ns)
+		awesome_error.CheckWarning(err)
+		return
+	}
+	namespaceLevels, _, err := CheckNamespaceLevel(arbitrator)
+	if err != nil {
+		return
+	}
+	level, ok := namespaceLevels[ns]
+	if !ok {
+		err = fmt.Errorf("ns %s not support", ns)
+		awesome_error.CheckWarning(err)
+		return
+	}
+	return
+}
+
+func CheckNamespaceValid(ns string) (valid bool) {
+	_, valid = MapName2Type[ns]
 	return
 }
