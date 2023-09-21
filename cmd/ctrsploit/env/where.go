@@ -10,6 +10,10 @@ var WhereCommand = &cli.Command{
 	Aliases: []string{"w"},
 	Usage:   "detect whether you are in the container, and which type of the container",
 	Action: func(context *cli.Context) (err error) {
+		err = where.Container()
+		if err != nil {
+			return
+		}
 		err = where.Docker()
 		if err != nil {
 			return

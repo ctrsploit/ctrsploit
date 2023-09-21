@@ -12,6 +12,7 @@ import (
 )
 
 func Auto() (err error) {
+	_ = where.Container()
 	_ = where.Docker()
 	_ = where.K8s()
 	_ = apparmor.Apparmor()

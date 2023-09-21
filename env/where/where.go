@@ -8,6 +8,20 @@ import (
 
 const CommandWhereName = "where"
 
+func Container() (err error) {
+	c := where.Container{}
+	container, err := c.IsIn()
+	if err != nil {
+		return
+	}
+	info := "===========Container========="
+	info += "\nIs in Container: "
+	info += util.ColorfulTickOrBallot(container)
+	info += "\n\n"
+	fmt.Printf(info)
+	return
+}
+
 func Docker() (err error) {
 	d := where.Docker{}
 	in, err := d.IsIn()
