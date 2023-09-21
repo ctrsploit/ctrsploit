@@ -2,7 +2,7 @@ package namespace
 
 import (
 	"fmt"
-	"github.com/ctrsploit/ctrsploit/log"
+	"github.com/ctrsploit/ctrsploit/internal/log"
 	"github.com/ctrsploit/ctrsploit/pkg/namespace"
 	"github.com/ctrsploit/ctrsploit/prerequisite/kernel"
 	"github.com/ctrsploit/ctrsploit/util"

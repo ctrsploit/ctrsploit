@@ -1,7 +1,7 @@
 package prerequisite
 
 import (
-	"github.com/ctrsploit/ctrsploit/log"
+	"github.com/ctrsploit/ctrsploit/internal/log"
 	"github.com/ctrsploit/ctrsploit/util"
 )
 

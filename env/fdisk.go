@@ -1,10 +1,10 @@
 package env
 
 import (
-	"github.com/ctrsploit/ctrsploit/log"
+	"fmt"
+	"github.com/ctrsploit/ctrsploit/internal/log"
 	"github.com/ctrsploit/ctrsploit/pkg/block"
 	"github.com/ctrsploit/ctrsploit/util"
-	"fmt"
 	"github.com/ssst0n3/awesome_libs"
 	"github.com/ssst0n3/awesome_libs/awesome_error"
 )

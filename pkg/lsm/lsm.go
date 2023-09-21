@@ -1,7 +1,7 @@
 package lsm
 
 import (
-	"github.com/ctrsploit/ctrsploit/log"
+	"github.com/ctrsploit/ctrsploit/internal/log"
 	"github.com/ssst0n3/awesome_libs/awesome_error"
 	"io/ioutil"
 	"os"

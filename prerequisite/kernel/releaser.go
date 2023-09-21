@@ -1,7 +1,7 @@
 package kernel
 
 import (
-	"github.com/ctrsploit/ctrsploit/log"
+	"github.com/ctrsploit/ctrsploit/internal/log"
 	"github.com/ctrsploit/ctrsploit/pkg/kernel/uname"
 	"github.com/ctrsploit/ctrsploit/prerequisite"
 	"strings"

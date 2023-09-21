@@ -1,7 +1,7 @@
 package namespace
 
 import (
-	"github.com/ctrsploit/ctrsploit/log"
+	"github.com/ctrsploit/ctrsploit/internal/log"
 	"github.com/ctrsploit/ctrsploit/prerequisite"
 	"github.com/ctrsploit/ctrsploit/prerequisite/kernel"
 	"github.com/pkg/errors"

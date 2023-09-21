@@ -5,7 +5,7 @@ import (
 	"github.com/ctrsploit/ctrsploit/cmd/ctrsploit/env"
 	"github.com/ctrsploit/ctrsploit/cmd/ctrsploit/exploit"
 	"github.com/ctrsploit/ctrsploit/cmd/ctrsploit/helper"
-	"github.com/ctrsploit/ctrsploit/log"
+	"github.com/ctrsploit/ctrsploit/internal/log"
 	"github.com/ctrsploit/ctrsploit/version"
 	"github.com/docker/docker/pkg/reexec"
 	"github.com/sirupsen/logrus"
