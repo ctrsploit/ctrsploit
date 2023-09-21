@@ -2,7 +2,7 @@ package checksec
 
 import (
 	"github.com/ctrsploit/ctrsploit/cmd/ctrsploit/env"
-	"github.com/ctrsploit/ctrsploit/log"
+	"github.com/ctrsploit/ctrsploit/internal/log"
 	"github.com/ctrsploit/ctrsploit/vul"
 	"github.com/sirupsen/logrus"
 	"github.com/ssst0n3/awesome_libs/awesome_error"

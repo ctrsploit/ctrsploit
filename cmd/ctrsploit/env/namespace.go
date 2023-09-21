@@ -2,7 +2,7 @@ package env
 
 import (
 	"github.com/ctrsploit/ctrsploit/env/namespace"
-	"github.com/ctrsploit/ctrsploit/log"
+	"github.com/ctrsploit/ctrsploit/internal/log"
 	namespace2 "github.com/ctrsploit/ctrsploit/pkg/namespace"
 	"github.com/urfave/cli/v2"
 )

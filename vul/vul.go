@@ -1,7 +1,7 @@
 package vul
 
 import (
-	"github.com/ctrsploit/ctrsploit/log"
+	"github.com/ctrsploit/ctrsploit/internal/log"
 	"github.com/ctrsploit/ctrsploit/prerequisite"
 	"github.com/ctrsploit/ctrsploit/prerequisite/vulnerability"
 )
