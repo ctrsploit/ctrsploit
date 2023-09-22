@@ -3,9 +3,8 @@ package capability
 import (
 	"fmt"
 	"github.com/containerd/containerd/pkg/cap"
+	"github.com/ctrsploit/ctrsploit/internal/colorful"
 	"github.com/ctrsploit/ctrsploit/pkg/capability"
-	"github.com/ctrsploit/ctrsploit/util"
-	"github.com/fatih/color"
 	"github.com/ssst0n3/awesome_libs"
 )
 
@@ -15,56 +14,65 @@ const (
 	PRIVILEGED_CAPS       uint64 = 0x3fffffffff
 )
 
-func getInfoFromCaps(caps uint64) (info string) {
-	capsParsed, _ := cap.FromBitmap(caps)
-	standard := "default(0xa80425fb)"
-	if caps == standardCaps {
-		standard = color.HiGreenString(" = ") + standard
-	} else {
-		standard = color.HiRedString(" != ") + standard
-	}
-	info += awesome_libs.Format(`
-{.title_caps}
-{.caps}`, awesome_libs.Dict{
-		"title_caps":        util.TitleWithFgWhiteBoldUnderline("[caps]"),
-		"caps":              fmt.Sprintf("0x%x%s", caps, standard),
-		"title_caps_parsed": util.TitleWithFgWhiteBoldUnderline("[parsed]"),
-		"caps_parsed":       capsParsed,
-	})
+var (
+	tpl = `
+===========Capability(process 1)===========
+{.pid1}
+===========Capability(process current)===========
+{.current}`
+	tplCaps = `[Capabilities]
+{.caps} {.equal} 0xa80425fb(docker's default caps)
+{.diff}`
+	tplDiff = `[Additional Capabilities]
+{.diff}
+`
+)
 
+func getInfoFromCaps(caps uint64) (info string) {
+	equal := colorful.Safe("=")
+	if caps != standardCaps {
+		equal = colorful.Danger("!=")
+	}
+	diff := ""
 	if caps != standardCaps {
 		capsDiff, _ := cap.FromBitmap(caps & (^standardCaps))
-		info += "\n" + util.TitleWithFgWhiteBoldUnderline("[Additional Capabilities]")
-		info += color.HiRedString(fmt.Sprintf("\n%q", capsDiff))
+		diff = awesome_libs.Format(tplDiff, awesome_libs.Dict{
+			"diff": colorful.Danger(fmt.Sprintf("\n%q", capsDiff)),
+		})
 	}
-	
+	info = awesome_libs.Format(tplCaps, awesome_libs.Dict{
+		"caps":  fmt.Sprintf("0x%x", caps),
+		"equal": equal,
+		"diff":  diff,
+	})
+
 	// Checking for a privileged container
-	if caps & PRIVILEGED_CAPS == PRIVILEGED_CAPS {
-		info += "\n" + util.TitleWithFgWhiteBoldUnderline("[Privileged]")
-		info += color.HiRedString("\nWARNING: Possible Privileged Container Found!")
+	if caps&PRIVILEGED_CAPS == PRIVILEGED_CAPS {
+		info += "\n" + colorful.Title("[Privileged]")
+		info += colorful.Danger("\nWARNING: Possible Privileged Container Found!\n")
 	}
 
 	return
 }
 
 func Capability() (err error) {
-	info := "===========Capability========="
-	{ // for pid 1
-		caps, err := capability.GetPid1Capability()
-		if err != nil {
-			return err
-		}
-		info += "\n" + util.TitleWithBgWhiteBold("pid 1") + getInfoFromCaps(caps)
+	caps, err := capability.GetPid1Capability()
+	if err != nil {
+		return err
 	}
-	info += "\n"
-	{
-		// for current process
-		caps, err := capability.GetCurrentCapability()
-		if err != nil {
-			return err
-		}
-		info += "\n" + util.TitleWithBgWhiteBold("current process") + getInfoFromCaps(caps)
+	pid1 := getInfoFromCaps(caps)
+
+	caps, err = capability.GetCurrentCapability()
+	if err != nil {
+		return err
 	}
-	fmt.Printf("%s\n\n", info)
+	current := getInfoFromCaps(caps)
+
+	info := awesome_libs.Format(tpl, awesome_libs.Dict{
+		"pid1":    pid1,
+		"current": current,
+	})
+
+	print(info)
 	return
 }
