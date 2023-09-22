@@ -37,7 +37,7 @@ func getInfoFromCaps(caps uint64) (info string) {
 	if caps != standardCaps {
 		capsDiff, _ := cap.FromBitmap(caps & (^standardCaps))
 		diff = awesome_libs.Format(tplDiff, awesome_libs.Dict{
-			"diff": colorful.Danger(fmt.Sprintf("\n%q", capsDiff)),
+			"diff": colorful.Danger(fmt.Sprintf("%q", capsDiff)),
 		})
 	}
 	info = awesome_libs.Format(tplCaps, awesome_libs.Dict{

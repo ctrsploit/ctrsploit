@@ -87,19 +87,26 @@ where
 
 ```
 root@ctr:/# ./ctrsploit  env  w
-INFO[0000] ===========Docker=========
-.dockerenv exists: ✔
-rootfs contains 'docker': ✔
-cgroup contains 'docker': ✘
-the mount source of /etc/hosts contains 'docker': ✔
-hostname match regex ^[0-9a-f]{12}$: ✔
-=> is in docker: ✔ 
-INFO[0000] ===========k8s=========
-/var/run/secrets/kubernetes.io exists: ✘
-hostname match k8s pattern: ✘
-the mount source of /etc/hosts contains 'pods': ✘
-cgroup contains 'kubepods': ✘
-=> is in k8s: ✘ 
+
+===========Container===========
+[Y]  Is in Container
+
+===========Docker===========
+[Y]  .dockerenv exists
+[N]  rootfs contains 'docker'   
+[N]  cgroups contains 'docker'
+[Y]  the mount source of /etc/hosts contains 'docker'   
+[Y]  hostname match regex ^[0-9a-f]12$
+---
+[Y]  => Is in docker
+
+===========k8s===========
+[N]  /var/run/secrets/kubernetes.io exists
+[N]  hostname match k8s pattern
+[N]  the mount source of /etc/hosts contains 'pods'
+[N]  contains 'kubepods'
+---
+[N]  => is in k8s
 ```
 
 ### run a exploit

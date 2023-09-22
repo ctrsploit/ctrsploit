@@ -3,56 +3,61 @@
 ```
 $ docker run -ti -v $(pwd):/ctrsploit --cap-add cap_sys_admin ubuntu bash
 root@08e2905722f1:/# cd /ctrsploit/bin/release/
-root@08e2905722f1:/ctrsploit/bin/release# ./env_linux_amd64 auto
-===========Docker=========
-.dockerenv exists: ✔
-rootfs contains 'docker': ✘
-cgroup contains 'docker': ✘
-the mount source of /etc/hosts contains 'docker': ✔
-hostname match regex ^[0-9a-f]{12}$: ✔
-=> is in docker: ✔
+root@08e2905722f1:/ctrsploit/bin/release# ./env_linux_amd64 --colorful auto
 
-===========k8s=========
-/var/run/secrets/kubernetes.io exists: ✘
-hostname match k8s pattern: ✘
-the mount source of /etc/hosts contains 'pods': ✘
-cgroup contains 'kubepods': ✘
-=> is in k8s: ✘
+===========Container===========
+✔  Is in Container
 
-===========Apparmor=========
-Kernel Supported: ✘
-Container Enabled: ✘
+===========Docker===========
+✔  .dockerenv exists
+✘  rootfs contains 'docker'     
+✘  cgroups contains 'docker'
+✔  the mount source of /etc/hosts contains 'docker'     
+✔  hostname match regex ^[0-9a-f]12$
+---
+✔  => Is in docker
 
-===========SELinux=========
-Enabled: ✘
-mode: disabled
-SELinux filesystem mount point: 
+===========k8s===========
+✘  /var/run/secrets/kubernetes.io exists
+✘  hostname match k8s pattern
+✘  the mount source of /etc/hosts contains 'pods'
+✘  contains 'kubepods'
+---
+✘  => is in k8s
 
-===========Capability=========
-pid 1
-[caps]
-0xa82425fb != default(0xa80425fb)
+===========Apparmor===========
+✘  Kernel Supported
+✘  Container Enabled
+
+===========SELinux===========
+✘  Enabled
+
+===========Capability(process 1)===========
+[Capabilities]
+0xa82425fb != 0xa80425fb(docker's default caps)
 [Additional Capabilities]
 ["CAP_SYS_ADMIN"]
 
-current process
-[caps]
-0xa82425fb != default(0xa80425fb)
+===========Capability(process current)===========
+[Capabilities]
+0xa82425fb != 0xa80425fb(docker's default caps)
 [Additional Capabilities]
+
 ["CAP_SYS_ADMIN"]
 
-===========Cgroups=========
-is cgroupv1: ✘
-is cgroupv2: ✔
+===========Cgroups===========
+✘  cgroups v1
+✔  cgroups v2
 
-===========Overlay=========
-Overlay enabled: ✘
 
-===========DeviceMapper=========
-DeviceMapper enabled: ✔
-DeviceMapper used: ✘
+===========Overlay===========
+✘  Enabled
 
-========namespace level=======
+===========DeviceMapper===========
+✔  Enabled
+✘  Used
+
+===========namespace level===========
 cgroup:              child
 ipc:                 child
 mnt:                 child
@@ -64,10 +69,9 @@ time_for_children:   host
 user:                host
 uts:                 child
 
-===========Seccomp=========
-kernel supported: ✔
-seccomp enabled in current container: ✔
-seccomp mode: filter
-
-
+===========Seccomp===========
+✔  Kernel Supported
+✔  Container Enabled
+---
+mode:   filter
 ```
