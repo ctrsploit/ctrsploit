@@ -2,8 +2,11 @@ package util
 
 import "github.com/fatih/color"
 
-const tick = "✔"
-const ballot = "✘"
+// const tick = "✔"
+const tick = "[Y] \xe2\x9c\x93"
+
+// const ballot = "✘"
+const ballot = "[N] \xf0\x90\x84\x82"
 
 var (
 	fgWhiteBoldUnderlineTitle = color.New(color.FgWhite, color.Underline, color.Bold)
