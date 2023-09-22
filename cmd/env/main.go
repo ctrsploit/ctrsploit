@@ -12,8 +12,9 @@ const (
 )
 
 func main() {
-	app := internal.Command2App(env.Command)
+	app := internal.Command2App(env.Command, true)
 	app.Name = name
+	internal.InstallGlobalFlags(app)
 	err := app.Run(os.Args)
 	if err != nil {
 		awesome_error.CheckFatal(err)

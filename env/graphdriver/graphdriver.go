@@ -2,13 +2,27 @@ package graphdriver
 
 import (
 	"fmt"
+	"github.com/ctrsploit/ctrsploit/internal/colorful"
 	"github.com/ctrsploit/ctrsploit/pkg/graphdriver/devicemapper"
 	"github.com/ctrsploit/ctrsploit/pkg/graphdriver/overlay"
-	"github.com/ctrsploit/ctrsploit/util"
-	"github.com/fatih/color"
+	"github.com/ssst0n3/awesome_libs"
 )
 
 const CommandGraphdriverName = "graphdriver"
+
+var (
+	tplOverlay = `
+===========Overlay===========
+{.enabled}  Enabled
+{.used}`
+	tplOverlayUsed = `{.used}  Used
+{.details}`
+	tplOverlayDetails = `The number of overlayfs mounted(equal to the number of containers)
+{.number}
+The host path of container's rootfs:
+{.host}
+`
+)
 
 func Overlay() (err error) {
 	o := &overlay.Overlay{}
@@ -16,19 +30,41 @@ func Overlay() (err error) {
 	if err != nil {
 		return
 	}
-	info := fmt.Sprintf("===========Overlay=========\nOverlay enabled: %v", util.ColorfulTickOrBallot(o.Loaded))
+	used := ""
 	if o.Loaded {
-		info += fmt.Sprintf("\nOverlay used: %v", util.ColorfulTickOrBallot(o.Used))
+		details := ""
 		if o.Used {
-			info += fmt.Sprintf("\nThe number of overlayfs mounted: %v (equal to the number of containers)", color.HiGreenString(fmt.Sprintf("%d", o.Number)))
-			if len(o.HostPath) > 0 {
-				info += fmt.Sprintf("\nThe host path of container's rootfs: %s", color.HiGreenString(o.HostPath))
-			}
+			details = awesome_libs.Format(tplOverlayDetails, awesome_libs.Dict{
+				"number": colorful.Safe(fmt.Sprintf("%d", o.Number)),
+				"host":   colorful.Safe(o.HostPath),
+			})
 		}
+		used = awesome_libs.Format(tplOverlayUsed, awesome_libs.Dict{
+			"used":    colorful.TickOrBallot(o.Used),
+			"details": details,
+		})
 	}
-	fmt.Printf("%s\n\n", info)
+	info := awesome_libs.Format(tplOverlay, awesome_libs.Dict{
+		"enabled": colorful.TickOrBallot(o.Loaded),
+		"used":    used,
+	})
+	print(info)
 	return
 }
+
+var (
+	tplDeviceMapper = `
+===========DeviceMapper===========
+{.enabled}  Enabled
+{.used}`
+	tplDeviceMapperUsed = `{.used}  Used
+{.details}`
+	tplDeviceMapperDetails = `The number of devicemapper used in running container:
+{.number}
+The host path of container's rootfs:
+{.host}
+`
+)
 
 func DeviceMapper() (err error) {
 	d := &devicemapper.DeviceMapper{}
@@ -36,19 +72,24 @@ func DeviceMapper() (err error) {
 	if err != nil {
 		return
 	}
-	info := fmt.Sprintf("===========DeviceMapper=========\nDeviceMapper enabled: %v", util.ColorfulTickOrBallot(d.Loaded))
+	used := ""
 	if d.Loaded {
-		info += fmt.Sprintf("\nDeviceMapper used: %v", util.ColorfulTickOrBallot(d.Used))
+		details := ""
 		if d.Used {
-			info += fmt.Sprintf("\nThe number of devicemapper used in running container: %v", color.HiGreenString(fmt.Sprintf("%d", d.NumberOfDmUsedInRunningContainer)))
-			if d.NumberOfDmUsedInRunningContainer > 0 {
-				info += " ( =(count(running containers)+1) )"
-				if len(d.HostPath) > 0 {
-					info += fmt.Sprintf("\nThe host path of container's rootfs: %s", color.HiGreenString(d.HostPath))
-				}
-			}
+			details = awesome_libs.Format(tplOverlayDetails, awesome_libs.Dict{
+				"number": colorful.Safe(fmt.Sprintf("%d", d.NumberOfDmUsedInRunningContainer)),
+				"host":   colorful.Safe(d.HostPath),
+			})
 		}
+		used = awesome_libs.Format(tplDeviceMapperUsed, awesome_libs.Dict{
+			"used":    colorful.TickOrBallot(d.Used),
+			"details": details,
+		})
 	}
-	fmt.Printf("%s\n\n", info)
+	info := awesome_libs.Format(tplDeviceMapper, awesome_libs.Dict{
+		"enabled": colorful.TickOrBallot(d.Loaded),
+		"used":    used,
+	})
+	print(info)
 	return
 }

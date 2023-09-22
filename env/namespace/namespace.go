@@ -2,13 +2,20 @@ package namespace
 
 import (
 	"fmt"
+	"github.com/ctrsploit/ctrsploit/internal/colorful"
 	"github.com/ctrsploit/ctrsploit/internal/log"
 	"github.com/ctrsploit/ctrsploit/pkg/namespace"
 	"github.com/ctrsploit/ctrsploit/prerequisite/kernel"
-	"github.com/ctrsploit/ctrsploit/util"
+	"github.com/ssst0n3/awesome_libs"
 )
 
 const CommandName = "namespace"
+
+var (
+	tplNamespace = `
+===========namespace level===========
+{.out}`
+)
 
 func CheckCurrentNamespaceLevel(ns string) (err error) {
 	arbitrator, err := namespace.NewInoArbitrator()
@@ -20,11 +27,15 @@ func CheckCurrentNamespaceLevel(ns string) (err error) {
 		return
 	}
 	if ns == "" {
-		fmt.Printf("========namespace level=======\n")
+		out := ""
 		for _, name := range names {
 			level := namespaceLevels[name]
-			OutputNamespaceLevelColorfully(name, level, true)
+			out += outputNamespaceLevelColorfully(name, level, true)
 		}
+		info := awesome_libs.Format(tplNamespace, awesome_libs.Dict{
+			"out": out,
+		})
+		print(info)
 	} else {
 		level, ok := namespaceLevels[ns]
 		if !ok {
@@ -50,21 +61,26 @@ func CheckCurrentNamespaceLevel(ns string) (err error) {
 		}
 		log.Logger.Debugf("%s: %+v \n", ns, level)
 		OutputNamespaceLevelColorfully(ns, level, false)
+		fmt.Println()
 	}
-	fmt.Println()
+	return
+}
+
+func outputNamespaceLevelColorfully(name string, level namespace.Level, padding bool) (info string) {
+	var out string
+	if level == namespace.LevelHost {
+		out = colorful.Danger(level.String())
+	} else {
+		out = colorful.Safe(level.String())
+	}
+	if padding {
+		info = fmt.Sprintf("%-20s %s\n", name+":", out)
+	} else {
+		info = fmt.Sprintf("%s: %s\n", name, out)
+	}
 	return
 }
 
 func OutputNamespaceLevelColorfully(name string, level namespace.Level, padding bool) {
-	var out string
-	if level == namespace.LevelHost {
-		out = util.Danger(level.String())
-	} else {
-		out = util.Success(level.String())
-	}
-	if padding {
-		fmt.Printf("%-20s %s\n", name+":", out)
-	} else {
-		fmt.Printf("%s: %s\n", name, out)
-	}
+	print(outputNamespaceLevelColorfully(name, level, padding))
 }

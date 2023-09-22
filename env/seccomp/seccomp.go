@@ -1,9 +1,9 @@
 package seccomp
 
 import (
-	"fmt"
+	"github.com/ctrsploit/ctrsploit/internal/colorful"
 	"github.com/ctrsploit/ctrsploit/pkg/seccomp"
-	"github.com/ctrsploit/ctrsploit/util"
+	"github.com/ssst0n3/awesome_libs"
 	"github.com/ssst0n3/awesome_libs/awesome_error"
 )
 
@@ -11,17 +11,40 @@ const (
 	CommandSeccompName = "seccomp"
 )
 
+var (
+	tpl = `
+===========Seccomp===========
+{.supported}  Kernel Supported
+{.enabled}  Container Enabled
+{.details}
+`
+	tplDetails = `---
+mode:	{.mode}`
+)
+
 // Seccomp
 // reference: https://lwn.net/Articles/656307/
 func Seccomp() (err error) {
 	seccompMode, _, err := seccomp.GetStatus()
 	awesome_error.CheckFatal(err)
-	info := "===========Seccomp========="
-	info += fmt.Sprintf("\nkernel supported: %v", util.ColorfulTickOrBallot(seccomp.CheckSupported()))
-	info += fmt.Sprintf("\nseccomp enabled in current container: %v", util.ColorfulTickOrBallot(seccompMode > 0))
+	details := ""
 	if seccompMode > 0 {
-		var seccompModeString string
-		switch seccompMode {
+		details = awesome_libs.Format(tplDetails, awesome_libs.Dict{
+			"mode": TranslateMode(seccompMode),
+		})
+	}
+	info := awesome_libs.Format(tpl, awesome_libs.Dict{
+		"supported": colorful.TickOrBallot(seccomp.CheckSupported()),
+		"enabled":   colorful.TickOrBallot(seccompMode > 0),
+		"details":   details,
+	})
+	print(info)
+	return
+}
+
+func TranslateMode(mode int) (seccompModeString string) {
+	if mode > 0 {
+		switch mode {
 		case 1:
 			// The first version of seccomp was merged in 2005 into Linux 2.6.12.
 			// It was enabled by writing a "1" to /proc/PID/seccomp.
@@ -35,8 +58,6 @@ func Seccomp() (err error) {
 			// processes can specify which system calls are permitted.
 			seccompModeString = "filter"
 		}
-		info += fmt.Sprintf("\nseccomp mode: %v", seccompModeString)
 	}
-	fmt.Printf("%s\n\n", info)
 	return
 }

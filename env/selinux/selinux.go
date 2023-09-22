@@ -1,18 +1,35 @@
 package selinux
 
 import (
-	"fmt"
+	"github.com/ctrsploit/ctrsploit/internal/colorful"
 	"github.com/ctrsploit/ctrsploit/pkg/selinux"
-	"github.com/ctrsploit/ctrsploit/util"
+	"github.com/ssst0n3/awesome_libs"
+)
+
+var (
+	tplSelinux = `
+===========SELinux===========
+{.enabled}  Enabled
+{.details}`
+	tplSelinuxDetails = `---
+Mode:			{.mode}
+mount point:	{.mount}
+`
 )
 
 func Selinux() (err error) {
-	info := "===========SELinux========="
-	info += fmt.Sprintf("\nEnabled: %s", util.ColorfulTickOrBallot(selinux.IsEnabled()))
-	mode := selinux.Translate(selinux.Mode())
-	info += fmt.Sprintf("\nmode: %v", mode)
-	mountPoint := selinux.GetSelinuxMountPoint()
-	info += fmt.Sprintf("\nSELinux filesystem mount point: %v", mountPoint)
-	fmt.Printf("%s\n\n", info)
+	details := ""
+	enabled := selinux.IsEnabled()
+	if enabled {
+		details = awesome_libs.Format(tplSelinuxDetails, awesome_libs.Dict{
+			"mode":  selinux.Translate(selinux.Mode()),
+			"mount": selinux.GetSelinuxMountPoint(),
+		})
+	}
+	info := awesome_libs.Format(tplSelinux, awesome_libs.Dict{
+		"enabled": colorful.TickOrBallot(enabled),
+		"details": details,
+	})
+	print(info)
 	return
 }

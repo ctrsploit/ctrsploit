@@ -1,30 +1,46 @@
 package apparmor
 
 import (
-	"fmt"
+	"github.com/ctrsploit/ctrsploit/internal/colorful"
 	"github.com/ctrsploit/ctrsploit/pkg/apparmor"
 	"github.com/ctrsploit/ctrsploit/pkg/lsm"
-	"github.com/ctrsploit/ctrsploit/util"
-	"github.com/fatih/color"
+	"github.com/ssst0n3/awesome_libs"
+)
+
+var (
+	tplApparmor = `
+===========Apparmor===========
+{.kernel}  Kernel Supported
+{.container}  Container Enabled
+{.details}`
+	tplApparmorDetails = `---
+Profile:	{.profile}
+Mode:		{.mode}
+`
 )
 
 func Apparmor() (err error) {
-	info := "===========Apparmor========="
-	info += fmt.Sprintf("\nKernel Supported: %s", util.ColorfulTickOrBallot(apparmor.IsSupport()))
+	details := ""
 	enabled := apparmor.IsEnabled()
-	info += fmt.Sprintf("\nContainer Enabled: %s", util.ColorfulTickOrBallot(enabled))
 	if enabled {
 		current, err := lsm.Current()
 		if err != nil {
 			return err
 		}
-		info += "\nApparmor Profile: " + color.HiGreenString(current)
 		mode, err := apparmor.Mode()
 		if err != nil {
 			return err
 		}
-		info += "\nApparmor Mode: " + color.HiGreenString(mode)
+		details = awesome_libs.Format(tplApparmorDetails, awesome_libs.Dict{
+			"profile": colorful.Safe(current),
+			"mode":    colorful.Safe(mode),
+		})
 	}
-	fmt.Printf("%s\n\n", info)
+	info := awesome_libs.Format(tplApparmor, awesome_libs.Dict{
+		"kernel":    colorful.TickOrBallot(apparmor.IsSupport()),
+		"container": colorful.TickOrBallot(enabled),
+		"details":   details,
+	})
+	print(info)
 	return
 }

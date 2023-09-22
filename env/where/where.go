@@ -1,24 +1,49 @@
 package where
 
 import (
-	"fmt"
+	"github.com/ctrsploit/ctrsploit/internal/colorful"
 	"github.com/ctrsploit/ctrsploit/pkg/where"
-	"github.com/ctrsploit/ctrsploit/util"
+	"github.com/ssst0n3/awesome_libs"
 )
 
 const CommandWhereName = "where"
 
+const (
+	tplInContainer = `
+===========Container===========
+{.in}  Is in Container
+`
+	tplInDocker = `
+===========Docker===========
+{.dockerenv}  .dockerenv exists
+{.rootfs}  rootfs contains 'docker'	
+{.cgroups}  cgroups contains 'docker'
+{.hosts}  the mount source of /etc/hosts contains 'docker'	
+{.hostname}  hostname match regex ^[0-9a-f]{12}$
+---
+{.in}  => Is in docker
+`
+	tplInK8s = `
+===========k8s===========
+{.secret}  {.secret_path} exists
+{.hostname}  hostname match k8s pattern
+{.hosts}  the mount source of /etc/hosts contains 'pods'
+{.cgroups}  contains 'kubepods'
+---
+{.in}  => is in k8s
+`
+)
+
 func Container() (err error) {
 	c := where.Container{}
-	container, err := c.IsIn()
+	in, err := c.IsIn()
 	if err != nil {
 		return
 	}
-	info := "===========Container========="
-	info += "\nIs in Container: "
-	info += util.ColorfulTickOrBallot(container)
-	info += "\n\n"
-	fmt.Printf(info)
+	info := awesome_libs.Format(tplInContainer, awesome_libs.Dict{
+		"in": colorful.TickOrBallot(in),
+	})
+	print(info)
 	return
 }
 
@@ -28,16 +53,15 @@ func Docker() (err error) {
 	if err != nil {
 		return
 	}
-	info := "===========Docker========="
-
-	info += "\n.dockerenv exists: "
-	info += util.ColorfulTickOrBallot(d.DockerEnvFileExists)
-	info += fmt.Sprintf("\nrootfs contains 'docker': %v", util.ColorfulTickOrBallot(d.RootfsContainsDocker))
-	info += fmt.Sprintf("\ncgroup contains 'docker': %v", util.ColorfulTickOrBallot(d.CgroupContainsDocker))
-	info += fmt.Sprintf("\nthe mount source of /etc/hosts contains 'docker': %v", util.ColorfulTickOrBallot(d.HostsMountSourceContainsDocker))
-	info += fmt.Sprintf("\nhostname match regex ^[0-9a-f]{12}$: %v", util.ColorfulTickOrBallot(d.HostnameMatchPattern))
-	info += fmt.Sprintf("\n=> is in docker: %v", util.ColorfulTickOrBallot(in))
-	fmt.Printf("%s\n\n", info)
+	info := awesome_libs.Format(tplInDocker, awesome_libs.Dict{
+		"dockerenv": colorful.TickOrBallot(d.DockerEnvFileExists),
+		"rootfs":    colorful.TickOrBallot(d.RootfsContainsDocker),
+		"cgroups":   colorful.TickOrBallot(d.CgroupContainsDocker),
+		"hosts":     colorful.TickOrBallot(d.HostsMountSourceContainsDocker),
+		"hostname":  colorful.TickOrBallot(d.HostnameMatchPattern),
+		"in":        colorful.TickOrBallot(in),
+	})
+	print(info)
 	return
 }
 
@@ -47,14 +71,14 @@ func K8s() (err error) {
 	if err != nil {
 		return
 	}
-	info := "===========k8s========="
-
-	info += fmt.Sprintf("\n%s exists: ", where.PathDirSecretsExists)
-	info += util.ColorfulTickOrBallot(k.DirSecretsExists)
-	info += fmt.Sprintf("\nhostname match k8s pattern: %s", util.ColorfulTickOrBallot(k.HostnameMatchPattern))
-	info += fmt.Sprintf("\nthe mount source of /etc/hosts contains 'pods': %s", util.ColorfulTickOrBallot(k.HostsMountSourceContainsPods))
-	info += fmt.Sprintf("\ncgroup contains 'kubepods': %v", util.ColorfulTickOrBallot(k.CgroupContainsKubepods))
-	info += fmt.Sprintf("\n=> is in k8s: %v", util.ColorfulTickOrBallot(in))
-	fmt.Printf("%s\n\n", info)
+	info := awesome_libs.Format(tplInK8s, awesome_libs.Dict{
+		"secret":      colorful.TickOrBallot(k.DirSecretsExists),
+		"secret_path": where.PathDirSecretsExists,
+		"hostname":    colorful.TickOrBallot(k.HostnameMatchPattern),
+		"hosts":       colorful.TickOrBallot(k.HostsMountSourceContainsPods),
+		"cgroups":     colorful.TickOrBallot(k.CgroupContainsKubepods),
+		"in":          colorful.TickOrBallot(in),
+	})
+	print(info)
 	return
 }

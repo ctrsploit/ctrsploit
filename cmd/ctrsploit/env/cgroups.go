@@ -10,11 +10,7 @@ var CgroupsCommand = &cli.Command{
 	Aliases: []string{"c"},
 	Usage:   "gather cgroup information",
 	Action: func(context *cli.Context) (err error) {
-		err = cgroups.Version()
-		if err != nil {
-			return
-		}
-		err = cgroups.ListSubsystems()
+		err = cgroups.Cgroups()
 		if err != nil {
 			return
 		}
