@@ -5,7 +5,7 @@ go 1.16
 require (
 	github.com/containerd/cgroups v1.0.1
 	github.com/containerd/containerd v1.5.2
-	github.com/ctrsploit/sploit-spec v0.2.2-0.20230926081645-1cd9d4b762bb
+	github.com/ctrsploit/sploit-spec v0.3.0
 	github.com/davecgh/go-spew v1.1.1
 	github.com/docker/docker v20.10.7+incompatible
 	github.com/fatih/color v1.15.0

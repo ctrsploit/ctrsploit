@@ -1,8 +1,8 @@
 package prerequisite
 
 import (
-	"github.com/ctrsploit/ctrsploit/internal/colorful"
 	"github.com/ctrsploit/ctrsploit/internal/log"
+	"github.com/ctrsploit/sploit-spec/pkg/colorful"
 )
 
 type Interface interface {
@@ -50,7 +50,7 @@ func (p BasePrerequisite) Output() {
 			log.Logger.Infof(
 				"%s %s: %s",
 				colorful.Title(p.Name),
-				colorful.TickOrBallot(p.Satisfied),
+				colorful.Bool(colorful.O, p.Satisfied),
 				p.Info,
 			)
 		} else {
