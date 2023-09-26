@@ -27,7 +27,7 @@ var NamespaceCommand = &cli.Command{
 		if !ok {
 			ns = ""
 		}
-		err = namespace.CheckCurrentNamespaceLevel(ns.(string))
+		err = namespace.CurrentNamespaceLevel(ns.(string))
 		if err != nil {
 			return
 		}

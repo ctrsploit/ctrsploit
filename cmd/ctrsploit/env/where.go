@@ -6,7 +6,7 @@ import (
 )
 
 var WhereCommand = &cli.Command{
-	Name:    where.CommandWhereName,
+	Name:    where.CommandName,
 	Aliases: []string{"w"},
 	Usage:   "detect whether you are in the container, and which type of the container",
 	Action: func(context *cli.Context) (err error) {

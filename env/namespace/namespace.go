@@ -2,40 +2,61 @@ package namespace
 
 import (
 	"fmt"
-	"github.com/ctrsploit/ctrsploit/internal/colorful"
+	"github.com/ctrsploit/ctrsploit/internal"
 	"github.com/ctrsploit/ctrsploit/internal/log"
 	"github.com/ctrsploit/ctrsploit/pkg/namespace"
 	"github.com/ctrsploit/ctrsploit/prerequisite/kernel"
-	"github.com/ssst0n3/awesome_libs"
+	"github.com/ctrsploit/sploit-spec/pkg/result"
+	"github.com/ctrsploit/sploit-spec/pkg/result/item"
 )
 
 const CommandName = "namespace"
 
-var (
-	tplNamespace = `
-===========namespace level===========
-{.out}`
-)
+type Result struct {
+	Name   result.Title
+	Levels []item.Short `json:"levels"`
+}
 
-func CheckCurrentNamespaceLevel(ns string) (err error) {
+func (r Result) String() (s string) {
+	s += internal.Print(r.Name)
+	for _, l := range r.Levels {
+		s += internal.Print(l)
+	}
+	return
+}
+
+func getNamespaceLevels() (namespaceLevels map[string]namespace.Level, names []string, err error) {
 	arbitrator, err := namespace.NewInoArbitrator()
 	if err != nil {
 		return
 	}
-	namespaceLevels, names, err := namespace.CheckNamespaceLevel(arbitrator)
+	namespaceLevels, names, err = namespace.CheckNamespaceLevel(arbitrator)
+	if err != nil {
+		return
+	}
+	return
+}
+
+func CurrentNamespaceLevel(ns string) (err error) {
+	r := Result{
+		Name: result.Title{
+			Name: "Namespace Level",
+		},
+		Levels: []item.Short{},
+	}
+	namespaceLevels, names, err := getNamespaceLevels()
 	if err != nil {
 		return
 	}
 	if ns == "" {
-		out := ""
 		for _, name := range names {
 			level := namespaceLevels[name]
-			out += outputNamespaceLevelColorfully(name, level, true)
+			r.Levels = append(r.Levels, item.Short{
+				Name:        name,
+				Description: "",
+				Result:      level.String(),
+			})
 		}
-		info := awesome_libs.Format(tplNamespace, awesome_libs.Dict{
-			"out": out,
-		})
-		print(info)
 	} else {
 		level, ok := namespaceLevels[ns]
 		if !ok {
@@ -60,27 +81,12 @@ func CheckCurrentNamespaceLevel(ns string) (err error) {
 			}
 		}
 		log.Logger.Debugf("%s: %+v \n", ns, level)
-		OutputNamespaceLevelColorfully(ns, level, false)
-		fmt.Println()
+		r.Levels = append(r.Levels, item.Short{
+			Name:        ns,
+			Description: "",
+			Result:      level.String(),
+		})
 	}
+	fmt.Println(r)
 	return
-}
-
-func outputNamespaceLevelColorfully(name string, level namespace.Level, padding bool) (info string) {
-	var out string
-	if level == namespace.LevelHost {
-		out = colorful.Danger(level.String())
-	} else {
-		out = colorful.Safe(level.String())
-	}
-	if padding {
-		info = fmt.Sprintf("%-20s %s\n", name+":", out)
-	} else {
-		info = fmt.Sprintf("%s: %s\n", name, out)
-	}
-	return
-}
-
-func OutputNamespaceLevelColorfully(name string, level namespace.Level, padding bool) {
-	print(outputNamespaceLevelColorfully(name, level, padding))
 }

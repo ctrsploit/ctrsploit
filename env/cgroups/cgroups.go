@@ -2,41 +2,48 @@ package cgroups
 
 import (
 	"fmt"
-	"github.com/ctrsploit/ctrsploit/internal/colorful"
+	"github.com/ctrsploit/ctrsploit/internal"
 	v1 "github.com/ctrsploit/ctrsploit/pkg/cgroup/v1"
 	"github.com/ctrsploit/ctrsploit/pkg/cgroup/version"
-	"github.com/ssst0n3/awesome_libs"
+	"github.com/ctrsploit/sploit-spec/pkg/result"
+	"github.com/ctrsploit/sploit-spec/pkg/result/item"
 	"reflect"
 )
 
 const CommandCgroupsName = "cgroups"
 
-var (
-	tplCgroups = `
-===========Cgroups===========
-{.version}
-{.sub}
-`
-	tplVersion = `{.v1}  cgroups v1
-{.v2}  cgroups v2`
-	tplSubsystem = `---
-sub systems:
-{.subsystem}
-top level subsystems:
-{.top}`
-)
+type Result struct {
+	Name result.Title
+	V1   item.Bool `json:"v1"`
+	V2   item.Bool `json:"v2"`
+	Sub  item.Long `json:"sub"`
+	Top  item.Long `json:"top"`
+}
 
-func versionInfo() (info string) {
-	info = awesome_libs.Format(tplVersion, awesome_libs.Dict{
-		"v1": colorful.TickOrBallot(version.IsCgroupV1()),
-		"v2": colorful.TickOrBallot(version.IsCgroupV2()),
-	})
+func (r Result) String() (s string) {
+	s += internal.Print(r.Name, r.V1, r.V2)
+	if r.V1.Result {
+		s += internal.Print(r.Sub, r.Top)
+	}
 	return
 }
 
-func listSubsystems() (info string, err error) {
-	if !version.IsCgroupV1() {
-		return
+func Cgroups() (err error) {
+	r := Result{
+		Name: result.Title{
+			Name: "CGroups",
+		},
+		V1: item.Bool{
+			Name:        "v1",
+			Description: "",
+			Result:      version.IsCgroupV1(),
+		},
+		V2: item.Bool{
+			Name:        "v2",
+			Description: "",
+			Result:      version.IsCgroupV2(),
+		},
+		Top: item.Long{},
 	}
 	c := v1.CgroupV1{}
 	subsystemsSupport, err := c.ListSubsystems("/proc/1/cgroup")
@@ -49,22 +56,18 @@ func listSubsystems() (info string, err error) {
 			topLevelSubsystems = append(topLevelSubsystems, subsystemName)
 		}
 	}
-	info = awesome_libs.Format(tplSubsystem, awesome_libs.Dict{
-		"subsystem": fmt.Sprintf("%+q", reflect.ValueOf(subsystemsSupport).MapKeys()),
-		"top":       fmt.Sprintf("%+q", topLevelSubsystems),
-	})
-	return
-}
-
-func Cgroups() (err error) {
-	sub, err := listSubsystems()
-	if err != nil {
-		return
+	if r.V1.Result {
+		r.Sub = item.Long{
+			Name:        "sub systems",
+			Description: "",
+			Result:      fmt.Sprintf("%+q", reflect.ValueOf(subsystemsSupport).MapKeys()),
+		}
+		r.Top = item.Long{
+			Name:        "top level subsystems",
+			Description: "",
+			Result:      fmt.Sprintf("%+q", topLevelSubsystems),
+		}
 	}
-	info := awesome_libs.Format(tplCgroups, awesome_libs.Dict{
-		"version": versionInfo(),
-		"sub":     sub,
-	})
-	print(info)
+	fmt.Println(r)
 	return
 }

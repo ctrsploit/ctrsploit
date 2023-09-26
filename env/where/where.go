@@ -1,38 +1,29 @@
 package where
 
 import (
-	"github.com/ctrsploit/ctrsploit/internal/colorful"
+	"fmt"
+	"github.com/ctrsploit/ctrsploit/internal"
 	"github.com/ctrsploit/ctrsploit/pkg/where"
-	"github.com/ssst0n3/awesome_libs"
+	"github.com/ctrsploit/sploit-spec/pkg/result"
+	"github.com/ctrsploit/sploit-spec/pkg/result/item"
 )
 
-const CommandWhereName = "where"
+const CommandName = "where"
 
-const (
-	tplInContainer = `
-===========Container===========
-{.in}  Is in Container
-`
-	tplInDocker = `
-===========Docker===========
-{.dockerenv}  .dockerenv exists
-{.rootfs}  rootfs contains 'docker'	
-{.cgroups}  cgroups contains 'docker'
-{.hosts}  the mount source of /etc/hosts contains 'docker'	
-{.hostname}  hostname match regex ^[0-9a-f]{12}$
----
-{.in}  => Is in docker
-`
-	tplInK8s = `
-===========k8s===========
-{.secret}  {.secret_path} exists
-{.hostname}  hostname match k8s pattern
-{.hosts}  the mount source of /etc/hosts contains 'pods'
-{.cgroups}  contains 'kubepods'
----
-{.in}  => is in k8s
-`
-)
+type Result struct {
+	Name  result.Title
+	Rules []item.Bool `json:"rules"`
+	In    item.Bool   `json:"in"`
+}
+
+func (r Result) String() (s string) {
+	s += internal.Print(r.Name)
+	for _, r := range r.Rules {
+		s += internal.Print(r)
+	}
+	s += internal.Print(r.In)
+	return
+}
 
 func Container() (err error) {
 	c := where.Container{}
@@ -40,10 +31,18 @@ func Container() (err error) {
 	if err != nil {
 		return
 	}
-	info := awesome_libs.Format(tplInContainer, awesome_libs.Dict{
-		"in": colorful.TickOrBallot(in),
-	})
-	print(info)
+
+	r := Result{
+		Name: result.Title{
+			Name: "Container",
+		},
+		In: item.Bool{
+			Name:        "Is in Container",
+			Description: "",
+			Result:      in,
+		},
+	}
+	fmt.Println(r)
 	return
 }
 
@@ -53,15 +52,44 @@ func Docker() (err error) {
 	if err != nil {
 		return
 	}
-	info := awesome_libs.Format(tplInDocker, awesome_libs.Dict{
-		"dockerenv": colorful.TickOrBallot(d.DockerEnvFileExists),
-		"rootfs":    colorful.TickOrBallot(d.RootfsContainsDocker),
-		"cgroups":   colorful.TickOrBallot(d.CgroupContainsDocker),
-		"hosts":     colorful.TickOrBallot(d.HostsMountSourceContainsDocker),
-		"hostname":  colorful.TickOrBallot(d.HostnameMatchPattern),
-		"in":        colorful.TickOrBallot(in),
-	})
-	print(info)
+	r := Result{
+		Name: result.Title{
+			Name: "Docker",
+		},
+		Rules: []item.Bool{
+			{
+				Name:        "dockerenv",
+				Description: ".dockerenv exists",
+				Result:      d.DockerEnvFileExists,
+			},
+			{
+				Name:        "rootfs",
+				Description: "rootfs contains 'docker'",
+				Result:      d.RootfsContainsDocker,
+			},
+			{
+				Name:        "cgroups",
+				Description: "cgroups contains 'docker'",
+				Result:      d.CgroupContainsDocker,
+			},
+			{
+				Name:        "hosts",
+				Description: "the mount source of /etc/hosts contains 'docker'",
+				Result:      d.HostsMountSourceContainsDocker,
+			},
+			{
+				Name:        "hostname",
+				Description: "hostname match regex ^[0-9a-f]{12}$",
+				Result:      d.HostnameMatchPattern,
+			},
+		},
+		In: item.Bool{
+			Name:        "Is in docker",
+			Description: "",
+			Result:      in,
+		},
+	}
+	fmt.Println(r)
 	return
 }
 
@@ -71,14 +99,39 @@ func K8s() (err error) {
 	if err != nil {
 		return
 	}
-	info := awesome_libs.Format(tplInK8s, awesome_libs.Dict{
-		"secret":      colorful.TickOrBallot(k.DirSecretsExists),
-		"secret_path": where.PathDirSecretsExists,
-		"hostname":    colorful.TickOrBallot(k.HostnameMatchPattern),
-		"hosts":       colorful.TickOrBallot(k.HostsMountSourceContainsPods),
-		"cgroups":     colorful.TickOrBallot(k.CgroupContainsKubepods),
-		"in":          colorful.TickOrBallot(in),
-	})
-	print(info)
+
+	r := Result{
+		Name: result.Title{
+			Name: "K8S",
+		},
+		Rules: []item.Bool{
+			{
+				Name:        "secret",
+				Description: fmt.Sprintf("secret path %s exists", where.PathDirSecrets),
+				Result:      k.DirSecretsExists,
+			},
+			{
+				Name:        "hostname",
+				Description: "hostname match k8s pattern",
+				Result:      k.HostnameMatchPattern,
+			},
+			{
+				Name:        "hosts",
+				Description: "the mount source of /etc/hosts contains 'pods'",
+				Result:      k.HostsMountSourceContainsPods,
+			},
+			{
+				Name:        "cgroups",
+				Description: "cgroups contains 'kubepods'",
+				Result:      k.CgroupContainsKubepods,
+			},
+		},
+		In: item.Bool{
+			Name:        "is in k8s",
+			Description: "",
+			Result:      in,
+		},
+	}
+	fmt.Println(r)
 	return
 }

@@ -3,55 +3,63 @@ package capability
 import (
 	"fmt"
 	"github.com/containerd/containerd/pkg/cap"
-	"github.com/ctrsploit/ctrsploit/internal/colorful"
+	"github.com/ctrsploit/ctrsploit/internal"
 	"github.com/ctrsploit/ctrsploit/pkg/capability"
-	"github.com/ssst0n3/awesome_libs"
+	"github.com/ctrsploit/sploit-spec/pkg/colorful"
+	"github.com/ctrsploit/sploit-spec/pkg/result"
+	"github.com/ctrsploit/sploit-spec/pkg/result/item"
 )
 
 const (
 	CommandCapabilityName        = "capability"
 	standardCaps          uint64 = 0xa80425fb
-	PRIVILEGED_CAPS       uint64 = 0x3fffffffff
 )
 
-var (
-	tpl = `
-===========Capability(process 1)===========
-{.pid1}
-===========Capability(process current)===========
-{.current}`
-	tplCaps = `[Capabilities]
-{.caps} {.equal} 0xa80425fb(docker's default caps)
-{.diff}`
-	tplDiff = `[Additional Capabilities]
-{.diff}
-`
-)
+type Cap struct {
+	Capabilities item.Long `json:"capabilities"`
+	Equal        item.Bool `json:"equal"`
+	Additional   item.Long `json:"additional"`
+}
 
-func getInfoFromCaps(caps uint64) (info string) {
-	equal := colorful.Safe("=")
-	if caps != standardCaps {
-		equal = colorful.Danger("!=")
+type Caps struct {
+	Name    result.Title
+	Pid1    Cap `json:"pid1"`
+	Current Cap `json:"current"`
+}
+
+func (c Cap) String() (s string) {
+	s += internal.Print(c.Capabilities, c.Equal)
+	if !c.Equal.Result {
+		s += internal.Print(c.Additional)
 	}
-	diff := ""
+	return
+}
+
+func (c Caps) String() (s string) {
+	s += internal.Print(c.Name)
+	s += c.Pid1.String() + "\n"
+	s += c.Current.String() + "\n"
+	return
+}
+
+func getInfoFromCaps(caps uint64, subtitle string) (c Cap) {
+	c.Capabilities = item.Long{
+		Name:   fmt.Sprintf("[Capabilities (%s)]", subtitle),
+		Result: fmt.Sprintf("0x%x", caps),
+	}
+	c.Equal = item.Bool{
+		Name:        "Equal to Docker's Default capability",
+		Description: fmt.Sprintf("0x%x", caps),
+		Result:      caps == standardCaps,
+	}
 	if caps != standardCaps {
 		capsDiff, _ := cap.FromBitmap(caps & (^standardCaps))
-		diff = awesome_libs.Format(tplDiff, awesome_libs.Dict{
-			"diff": colorful.Danger(fmt.Sprintf("%q", capsDiff)),
-		})
+		c.Additional = item.Long{
+			Name:        "[Additional]",
+			Description: "",
+			Result:      colorful.O.Danger(fmt.Sprintf("%q", capsDiff)),
+		}
 	}
-	info = awesome_libs.Format(tplCaps, awesome_libs.Dict{
-		"caps":  fmt.Sprintf("0x%x", caps),
-		"equal": equal,
-		"diff":  diff,
-	})
-
-	// Checking for a privileged container
-	if caps&PRIVILEGED_CAPS == PRIVILEGED_CAPS {
-		info += "\n" + colorful.Title("[Privileged]")
-		info += colorful.Danger("\nWARNING: Possible Privileged Container Found!\n")
-	}
-
 	return
 }
 
@@ -60,19 +68,21 @@ func Capability() (err error) {
 	if err != nil {
 		return err
 	}
-	pid1 := getInfoFromCaps(caps)
+	pid1 := getInfoFromCaps(caps, "pid1")
 
 	caps, err = capability.GetCurrentCapability()
 	if err != nil {
 		return err
 	}
-	current := getInfoFromCaps(caps)
+	current := getInfoFromCaps(caps, "current")
 
-	info := awesome_libs.Format(tpl, awesome_libs.Dict{
-		"pid1":    pid1,
-		"current": current,
-	})
-
-	print(info)
+	c := Caps{
+		Name: result.Title{
+			Name: "Capability",
+		},
+		Pid1:    pid1,
+		Current: current,
+	}
+	fmt.Println(c)
 	return
 }
