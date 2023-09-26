@@ -47,17 +47,7 @@ func (o *Overlay) IsEnabled() (enabled bool, err error) {
 		enabled = o.Loaded
 		return
 	}
-	o.Number, err = module.RefCount("overlay")
-	if err != nil {
-		if os.IsNotExist(err) {
-			enabled = false
-			err = nil
-		} else {
-			awesome_error.CheckErr(err)
-		}
-		return
-	}
-	enabled = o.Number >= 0
+	enabled, err = module.Loaded("overlay")
 	return
 }
 
