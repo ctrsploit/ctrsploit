@@ -8,10 +8,6 @@ import (
 var Printer = printer.GetPrinter(printer.TypeText)
 
 func Print(printers ...printer.Printer) (s string) {
-	for _, i := range printers {
-		if !i.IsEmpty() {
-			s += Printer(i) + "\n"
-		}
-	}
+	s = printer.Print(Printer, printers...)
 	return
 }

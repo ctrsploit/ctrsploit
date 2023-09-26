@@ -6,6 +6,7 @@ import (
 	"github.com/ctrsploit/ctrsploit/internal/log"
 	"github.com/ctrsploit/ctrsploit/pkg/namespace"
 	"github.com/ctrsploit/ctrsploit/prerequisite/kernel"
+	"github.com/ctrsploit/sploit-spec/pkg/colorful"
 	"github.com/ctrsploit/sploit-spec/pkg/result"
 	"github.com/ctrsploit/sploit-spec/pkg/result/item"
 )
@@ -37,6 +38,18 @@ func getNamespaceLevels() (namespaceLevels map[string]namespace.Level, names []s
 	return
 }
 
+func level2result(name string, level namespace.Level) item.Short {
+	levelResult := level.String()
+	if levelResult == "host" {
+		levelResult = colorful.O.Danger(levelResult)
+	}
+	return item.Short{
+		Name:        name,
+		Description: "",
+		Result:      levelResult,
+	}
+}
+
 func CurrentNamespaceLevel(ns string) (err error) {
 	r := Result{
 		Name: result.Title{
@@ -51,11 +64,7 @@ func CurrentNamespaceLevel(ns string) (err error) {
 	if ns == "" {
 		for _, name := range names {
 			level := namespaceLevels[name]
-			r.Levels = append(r.Levels, item.Short{
-				Name:        name,
-				Description: "",
-				Result:      level.String(),
-			})
+			r.Levels = append(r.Levels, level2result(name, level))
 		}
 	} else {
 		level, ok := namespaceLevels[ns]
@@ -81,11 +90,7 @@ func CurrentNamespaceLevel(ns string) (err error) {
 			}
 		}
 		log.Logger.Debugf("%s: %+v \n", ns, level)
-		r.Levels = append(r.Levels, item.Short{
-			Name:        ns,
-			Description: "",
-			Result:      level.String(),
-		})
+		r.Levels = append(r.Levels, level2result(ns, level))
 	}
 	fmt.Println(r)
 	return
