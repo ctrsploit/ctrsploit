@@ -1,27 +1,47 @@
 package apparmor
 
 import (
-	"github.com/ctrsploit/ctrsploit/internal/colorful"
+	"fmt"
+	"github.com/ctrsploit/ctrsploit/internal"
 	"github.com/ctrsploit/ctrsploit/pkg/apparmor"
 	"github.com/ctrsploit/ctrsploit/pkg/lsm"
-	"github.com/ssst0n3/awesome_libs"
+	"github.com/ctrsploit/sploit-spec/pkg/result"
+	"github.com/ctrsploit/sploit-spec/pkg/result/item"
 )
 
-var (
-	tplApparmor = `
-===========Apparmor===========
-{.kernel}  Kernel Supported
-{.container}  Container Enabled
-{.details}`
-	tplApparmorDetails = `---
-Profile:	{.profile}
-Mode:		{.mode}
-`
-)
+type Result struct {
+	Name      result.Title
+	Kernel    item.Bool  `json:"kernel"`
+	Container item.Bool  `json:"container"`
+	Profile   item.Short `json:"profile"`
+	Mode      item.Short `json:"mode"`
+}
+
+func (r Result) String() (s string) {
+	s += internal.Print(r.Name, r.Kernel, r.Container)
+	if r.Container.Result {
+		s += internal.Print(r.Profile, r.Mode)
+	}
+	return s
+}
 
 func Apparmor() (err error) {
-	details := ""
 	enabled := apparmor.IsEnabled()
+	r := Result{
+		Name: result.Title{
+			Name: "AppArmor",
+		},
+		Kernel: item.Bool{
+			Name:        "Kernel Supported",
+			Description: "Kernel enabled apparmor module",
+			Result:      apparmor.IsSupport(),
+		},
+		Container: item.Bool{
+			Name:        "Container Enabled",
+			Description: "Current container enabled apparmor",
+			Result:      enabled,
+		},
+	}
 	if enabled {
 		current, err := lsm.Current()
 		if err != nil {
@@ -31,16 +51,17 @@ func Apparmor() (err error) {
 		if err != nil {
 			return err
 		}
-		details = awesome_libs.Format(tplApparmorDetails, awesome_libs.Dict{
-			"profile": colorful.Safe(current),
-			"mode":    colorful.Safe(mode),
-		})
+		r.Profile = item.Short{
+			Name:        "Profile",
+			Description: "",
+			Result:      current,
+		}
+		r.Mode = item.Short{
+			Name:        "Mode",
+			Description: "",
+			Result:      mode,
+		}
 	}
-	info := awesome_libs.Format(tplApparmor, awesome_libs.Dict{
-		"kernel":    colorful.TickOrBallot(apparmor.IsSupport()),
-		"container": colorful.TickOrBallot(enabled),
-		"details":   details,
-	})
-	print(info)
+	fmt.Println(r)
 	return
 }

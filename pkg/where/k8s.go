@@ -12,7 +12,7 @@ import (
 )
 
 const (
-	PathDirSecretsExists = "/var/run/secrets/kubernetes.io"
+	PathDirSecrets = "/var/run/secrets/kubernetes.io"
 	// PatternHostname a DNS-1123 subdomain must consist of lower case alphanumeric characters, '-' or '.',
 	// and must start and end with an alphanumeric character (e.g. 'example.com',
 	// regex used for validation is '[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*')
@@ -27,7 +27,7 @@ type K8s struct {
 }
 
 func (k *K8s) CheckDirSecretsExists() {
-	k.DirSecretsExists = util.CheckPathExists(PathDirSecretsExists)
+	k.DirSecretsExists = util.CheckPathExists(PathDirSecrets)
 }
 
 func (k *K8s) CheckHostsMountSourceContainsPods() (err error) {

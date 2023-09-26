@@ -1,25 +1,18 @@
 # env/capability
 
 ```
-root@ctr:/# ./ctrsploit env cap
-INFO[0000] ===========Capability=========
-pid 1
-[caps]
-0xa82425fb != default(0xa80425fb)
-
-[parsed]
-[CAP_CHOWN CAP_DAC_OVERRIDE CAP_FOWNER CAP_FSETID CAP_KILL CAP_SETGID CAP_SETUID CAP_SETPCAP CAP_NET_BIND_SERVICE CAP_NET_RAW CAP_SYS_CHROOT CAP_SYS_ADMIN CAP_MKNOD CAP_AUDIT_WRITE CAP_SETFCAP]
-
-[Additional Capabilities]
+root@32a6a37bda2e:/ctrsploit/bin/release# ./env_linux_amd64 --colorful capability
+===========Capability===========
+[Capabilities (pid1)]   
+0xa82425fb
+✘  Equal to Docker's Default capability # 0xa82425fb
+[Additional]    
 ["CAP_SYS_ADMIN"]
 
-current process
-[caps]
-0xa82425fb != default(0xa80425fb)
-
-[parsed]
-[CAP_CHOWN CAP_DAC_OVERRIDE CAP_FOWNER CAP_FSETID CAP_KILL CAP_SETGID CAP_SETUID CAP_SETPCAP CAP_NET_BIND_SERVICE CAP_NET_RAW CAP_SYS_CHROOT CAP_SYS_ADMIN CAP_MKNOD CAP_AUDIT_WRITE CAP_SETFCAP]
-
-[Additional Capabilities]
+[Capabilities (current)]        
+0xa82425fb
+✘  Equal to Docker's Default capability # 0xa82425fb
+[Additional]    
 ["CAP_SYS_ADMIN"]
+
 ```

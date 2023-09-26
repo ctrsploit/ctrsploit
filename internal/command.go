@@ -1,9 +1,10 @@
 package internal
 
 import (
-	"github.com/ctrsploit/ctrsploit/internal/colorful"
 	"github.com/ctrsploit/ctrsploit/internal/log"
 	"github.com/ctrsploit/ctrsploit/version"
+	"github.com/ctrsploit/sploit-spec/pkg/colorful"
+	"github.com/ctrsploit/sploit-spec/pkg/printer"
 	"github.com/sirupsen/logrus"
 	"github.com/ssst0n3/awesome_libs/awesome_error"
 	"github.com/ssst0n3/awesome_libs/awesome_error/exporter"
@@ -74,6 +75,7 @@ func InstallGlobalFlagColorfulFlag(app *cli.App) {
 		flag := ctx.Bool("colorful")
 		if flag {
 			colorful.O = colorful.Colorful{}
+			Printer = printer.GetPrinter(printer.TypeColorful)
 		}
 		return
 	}

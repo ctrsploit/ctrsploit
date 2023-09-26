@@ -6,7 +6,7 @@ import (
 )
 
 var SeccompCommand = &cli.Command{
-	Name:    seccomp.CommandSeccompName,
+	Name:    seccomp.CommandName,
 	Aliases: []string{"s"},
 	Usage:   "show the seccomp info",
 	Action: func(context *cli.Context) (err error) {

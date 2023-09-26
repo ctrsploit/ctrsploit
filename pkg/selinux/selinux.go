@@ -4,22 +4,26 @@ import (
 	"github.com/opencontainers/selinux/go-selinux"
 )
 
+type TypeMode int
+
+func (m TypeMode) String() (mode string) {
+	switch m {
+	case -1:
+		mode = "disabled"
+	case 0:
+		mode = "permissive"
+	case 1:
+		mode = "enforcing"
+	default:
+		mode = "unknown"
+	}
+	return
+}
+
 func IsEnabled() bool {
 	return selinux.GetEnabled()
 }
 
-func Mode() int {
-	return selinux.EnforceMode()
-}
-
-func Translate(mode int) (str string) {
-	switch mode {
-	case -1:
-		str = "disabled"
-	case 0:
-		str = "permissive"
-	case 1:
-		str = "enforcing"
-	}
-	return
+func Mode() TypeMode {
+	return TypeMode(selinux.EnforceMode())
 }

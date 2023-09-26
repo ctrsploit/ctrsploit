@@ -6,7 +6,7 @@ import (
 )
 
 var graphdriverCommand = &cli.Command{
-	Name:    graphdriver.CommandGraphdriverName,
+	Name:    graphdriver.CommandName,
 	Aliases: []string{"g"},
 	Usage:   "detect graphdriver type and extend information",
 	Action: func(context *cli.Context) (err error) {

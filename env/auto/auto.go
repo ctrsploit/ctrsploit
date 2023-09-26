@@ -21,7 +21,7 @@ func Auto() (err error) {
 	_ = cgroups.Cgroups()
 	_ = graphdriver.Overlay()
 	_ = graphdriver.DeviceMapper()
-	_ = namespace.CheckCurrentNamespaceLevel("")
+	_ = namespace.CurrentNamespaceLevel("")
 	_ = seccomp.Seccomp()
 	return
 }

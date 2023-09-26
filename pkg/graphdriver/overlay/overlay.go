@@ -1,10 +1,10 @@
 package overlay
 
 import (
-	"github.com/ctrsploit/ctrsploit/pkg/module"
-	"github.com/ctrsploit/ctrsploit/pkg/mountinfo"
 	"errors"
 	"fmt"
+	"github.com/ctrsploit/ctrsploit/pkg/module"
+	"github.com/ctrsploit/ctrsploit/pkg/mountinfo"
 	"github.com/ssst0n3/awesome_libs/awesome_error"
 	"os"
 	"regexp"
@@ -15,7 +15,7 @@ import (
 type Overlay struct {
 	AlreadyInit bool
 	Loaded      bool
-	Number      int  // the number of overlays mounted
+	number      int  // the number of overlays mounted
 	Used        bool // the host path of container's rootfs
 	HostPath    string
 }
@@ -71,9 +71,21 @@ func (o *Overlay) IsUsed() (used bool, err error) {
 		return
 	}
 	if loaded {
-		if o.Number > 0 {
-			used = true
+		o.number, err = module.RefCount("overlay")
+		if err != nil {
+			if os.IsNotExist(err) {
+				mount, e := mountinfo.RootMount()
+				err = e
+				if err != nil {
+					return
+				}
+				used = mountinfo.IsOverlay(mount)
+			} else {
+				awesome_error.CheckErr(err)
+			}
+			return
 		}
+		used = o.number >= 0
 	}
 	return
 }
@@ -107,5 +119,23 @@ func (o *Overlay) HostPathOfCtrRootfs() (host string, err error) {
 		}
 		host = matches[1] + "/merged"
 	}
+	return
+}
+
+func (o *Overlay) Number() (number int, err error) {
+	if o.AlreadyInit {
+		number = o.number
+		return
+	}
+	o.number, err = module.RefCount("overlay")
+	if err != nil {
+		if os.IsNotExist(err) {
+			err = nil
+		} else {
+			awesome_error.CheckErr(err)
+		}
+		return
+	}
+	number = o.number
 	return
 }

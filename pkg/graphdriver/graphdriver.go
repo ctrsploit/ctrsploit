@@ -7,9 +7,11 @@ import (
 )
 
 type Interface interface {
+	Init() (err error)
 	IsEnabled() (enabled bool, err error)
 	IsUsed() (used bool, err error)
 	HostPathOfCtrRootfs() (host string, err error)
+	Number() (number int, err error)
 }
 
 type Type int
