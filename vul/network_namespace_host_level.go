@@ -12,7 +12,7 @@ type networkNamespaceHostLevel struct {
 var (
 	NetworkNamespaceHostLevel = networkNamespaceHostLevel{
 		BaseVulnerability{
-			Name:        "network_namespace_host_level",
+			Name:        "host_net_ns",
 			Description: "The network namespace of the host is shared",
 			CheckSecPrerequisites: prerequisite.Prerequisites{
 				&namespace.NetworkNamespaceLevelHost,

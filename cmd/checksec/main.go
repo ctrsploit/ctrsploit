@@ -12,7 +12,7 @@ const (
 )
 
 func main() {
-	app := internal.Command2App(checksec.Command, true)
+	app := internal.Command2App(checksec.Command)
 	app.Name = name
 	internal.InstallGlobalFlags(app)
 	err := app.Run(os.Args)
