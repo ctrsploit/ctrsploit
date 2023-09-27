@@ -10,7 +10,7 @@ const (
 )
 
 var (
-	AutoCommand = &cli.Command{
+	Auto = &cli.Command{
 		Name:  CommandNameAuto,
 		Usage: "auto",
 		Action: func(context *cli.Context) (err error) {

@@ -87,7 +87,7 @@ func InstallGlobalFlags(app *cli.App) {
 	InstallGlobalFlagColorfulFlag(app)
 }
 
-func Command2App(command *cli.Command, installGlobalFlags bool) (app *cli.App) {
+func Command2App(command *cli.Command) (app *cli.App) {
 	return &cli.App{
 		Name:     command.Name,
 		Usage:    command.Usage,
