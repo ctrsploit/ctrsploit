@@ -31,26 +31,31 @@ make build-ctrsploit
 ### Quick-Start
 
 ```
-wget -O ctrsploit https://github.com/ctrsploit/ctrsploit/releases/download/v0.4/ctrsploit_linux_amd64 && chmod +x ctrsploit
-./ctrsploit --help
+wget -O ctrsploit https://github.com/ctrsploit/ctrsploit/releases/download/v0.5.12/ctrsploit_linux_amd64 && chmod +x ctrsploit
 NAME:
    ctrsploit - A penetration toolkit for container environment
 
-ctrsploit is a command line ... //TODO
+               ctrsploit is a command line ... //TODO
 
 
 USAGE:
    ctrsploit [global options] command [command options] [arguments...]
 
 COMMANDS:
-   auto, a     auto gathering information, and detect vuls, and exploit // TODO
-   exploit, e  run a exploit
-   env, e      gather information // TODO
-   help, h     Shows a list of commands or help for one command
+   auto, a      auto gathering information, detect vulnerabilities and run exploits
+   env, e       gather information
+   exploit, x   run a exploit
+   checksec, c  check security inside a container
+   helper, he   some helper commands such as local privilege escalation
+   version      Show the sploit version information
+   help, h      Shows a list of commands or help for one command
 
 GLOBAL OPTIONS:
-   --lang value  language for the greeting (default: "english")
-   --help, -h    show help (default: false)
+   --debug         Output information for helping debugging sploit (default: false)
+   --experimental  enable experimental feature (default: false)
+   --colorful      output colorfully (default: false)
+   --json          output in json format (default: false)
+   --help, -h      show help
 ```
 
 ### gather information
@@ -80,7 +85,7 @@ COMMANDS:
    help, h           Shows a list of commands or help for one command
 
 OPTIONS:
-   --help, -h  show help (default: false)
+   --help, -h  show help
 ```
 
 where
@@ -112,7 +117,7 @@ root@ctr:/# ./ctrsploit  env  w
 ### run a exploit
 
 ```
-root@2aa13a052102:/# ./ctrsploit e
+root@2aa13a052102:/# ./ctrsploit exploit
 NAME:
    ctrsploit exploit - run a exploit
 
@@ -142,24 +147,10 @@ root@ctr # ./ctrsploit e ra -c "cat /etc/hostname"
 Just execute `ctrsploit checksec` or standalone binary file `checksec` in the container.
 
 ```
-[root@ctr ~]# /checksec_linux_amd64 
-===========Seccomp=========
-kernel supported: ✔
-seccomp enabled in current container: ✘
-
-===========Apparmor=========
-Kernel Supported: ✘
-Container Enabled: ✘
-
-===========Cgroups=========
-is cgroupv1: ✔
-is cgroupv2: ✘
-
-------sub systems-------
-["perf_event" "memory" "net_cls" "cpuset" "blkio" "hugetlb" "files" "cpu" "cpuacct" "pids" "rdma" "freezer" "devices" "net_prio"]
-
---------top level subsystem----------
-["rdma"
+./checksec_linux_amd64 auto
+[N]  cap_sys_admin      # Container can be escaped when has cap_sys_admin and use cgroups v1
+[N]  host_net_ns        # The network namespace of the host is shared
+...
 ```
 
 ## Details
