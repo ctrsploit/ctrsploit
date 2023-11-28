@@ -2,10 +2,9 @@ package where
 
 import (
 	"bytes"
+	"github.com/ctrsploit/ctrsploit/internal"
 	"github.com/ctrsploit/ctrsploit/pkg/mountinfo"
-	"github.com/ctrsploit/ctrsploit/util"
 	"github.com/ssst0n3/awesome_libs/awesome_error"
-	"io/ioutil"
 	"os"
 	"regexp"
 	"strings"
@@ -27,7 +26,7 @@ type K8s struct {
 }
 
 func (k *K8s) CheckDirSecretsExists() {
-	k.DirSecretsExists = util.CheckPathExists(PathDirSecrets)
+	k.DirSecretsExists = internal.CheckPathExists(PathDirSecrets)
 }
 
 func (k *K8s) CheckHostsMountSourceContainsPods() (err error) {
@@ -40,7 +39,7 @@ func (k *K8s) CheckHostsMountSourceContainsPods() (err error) {
 }
 
 func (k *K8s) CheckCgroup() (err error) {
-	content, err := ioutil.ReadFile("/proc/self/cgroup")
+	content, err := os.ReadFile("/proc/self/cgroup")
 	if err != nil {
 		awesome_error.CheckErr(err)
 		return

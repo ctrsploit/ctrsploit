@@ -1,8 +1,9 @@
-package util
+package internal
 
 import "reflect"
 
-func ReverseMapO(m map[interface{}]interface{}) (r map[interface{}]interface{}) {
+// ReverseMapOld returns limited type
+func ReverseMapOld(m map[interface{}]interface{}) (r map[interface{}]interface{}) {
 	r = make(map[interface{}]interface{}, len(m))
 	for k, v := range m {
 		r[v] = k

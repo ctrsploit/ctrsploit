@@ -2,11 +2,11 @@ package namespace
 
 import (
 	"fmt"
-	"github.com/ctrsploit/ctrsploit/internal"
-	"github.com/ctrsploit/ctrsploit/internal/log"
 	"github.com/ctrsploit/ctrsploit/pkg/namespace"
 	"github.com/ctrsploit/ctrsploit/prerequisite/kernel"
 	"github.com/ctrsploit/sploit-spec/pkg/colorful"
+	"github.com/ctrsploit/sploit-spec/pkg/log"
+	"github.com/ctrsploit/sploit-spec/pkg/printer"
 	"github.com/ctrsploit/sploit-spec/pkg/result"
 	"github.com/ctrsploit/sploit-spec/pkg/result/item"
 )
@@ -14,16 +14,8 @@ import (
 const CommandName = "namespace"
 
 type Result struct {
-	Name   result.Title
+	Name   result.Title `json:"name"`
 	Levels []item.Short `json:"levels"`
-}
-
-func (r Result) String() (s string) {
-	s += internal.Print(r.Name)
-	for _, l := range r.Levels {
-		s += internal.Print(l)
-	}
-	return
 }
 
 func getNamespaceLevels() (namespaceLevels map[string]namespace.Level, names []string, err error) {
@@ -92,6 +84,6 @@ func CurrentNamespaceLevel(ns string) (err error) {
 		log.Logger.Debugf("%s: %+v \n", ns, level)
 		r.Levels = append(r.Levels, level2result(ns, level))
 	}
-	fmt.Println(r)
+	fmt.Println(printer.Printer.Print(r))
 	return
 }

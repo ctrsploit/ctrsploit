@@ -10,11 +10,7 @@ var graphdriverCommand = &cli.Command{
 	Aliases: []string{"g"},
 	Usage:   "detect graphdriver type and extend information",
 	Action: func(context *cli.Context) (err error) {
-		err = graphdriver.Overlay()
-		if err != nil {
-			return
-		}
-		err = graphdriver.DeviceMapper()
+		err = graphdriver.GraphDrivers()
 		if err != nil {
 			return
 		}

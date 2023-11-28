@@ -3,9 +3,9 @@ package capability
 import (
 	"fmt"
 	"github.com/containerd/containerd/pkg/cap"
-	"github.com/ctrsploit/ctrsploit/internal"
 	"github.com/ctrsploit/ctrsploit/pkg/capability"
 	"github.com/ctrsploit/sploit-spec/pkg/colorful"
+	"github.com/ctrsploit/sploit-spec/pkg/printer"
 	"github.com/ctrsploit/sploit-spec/pkg/result"
 	"github.com/ctrsploit/sploit-spec/pkg/result/item"
 )
@@ -16,41 +16,30 @@ const (
 )
 
 type Cap struct {
-	Capabilities item.Long `json:"capabilities"`
-	Equal        item.Bool `json:"equal"`
-	Additional   item.Long `json:"additional"`
+	SubTitle     result.SubTitle `json:"-"`
+	Capabilities item.Short      `json:"capabilities"`
+	NotDefault   item.Bool       `json:"not_default"`
+	Additional   item.Long       `json:"additional"`
 }
 
 type Caps struct {
-	Name    result.Title
-	Pid1    Cap `json:"pid1"`
-	Current Cap `json:"current"`
-}
-
-func (c Cap) String() (s string) {
-	s += internal.Print(c.Capabilities, c.Equal)
-	if !c.Equal.Result {
-		s += internal.Print(c.Additional)
-	}
-	return
-}
-
-func (c Caps) String() (s string) {
-	s += internal.Print(c.Name)
-	s += c.Pid1.String() + "\n"
-	s += c.Current.String() + "\n"
-	return
+	Name    result.Title `json:"name"`
+	Pid1    Cap          `json:"pid1"`
+	Current Cap          `json:"current"`
 }
 
 func getInfoFromCaps(caps uint64, subtitle string) (c Cap) {
-	c.Capabilities = item.Long{
-		Name:   fmt.Sprintf("[Capabilities (%s)]", subtitle),
+	c.SubTitle = result.SubTitle{
+		Name: subtitle,
+	}
+	c.Capabilities = item.Short{
+		Name:   "capabilities",
 		Result: fmt.Sprintf("0x%x", caps),
 	}
-	c.Equal = item.Bool{
-		Name:        "Equal to Docker's Default capability",
+	c.NotDefault = item.Bool{
+		Name:        fmt.Sprintf("Not Equal to Docker's Default Capability (0x%x)", standardCaps),
 		Description: fmt.Sprintf("0x%x", caps),
-		Result:      caps == standardCaps,
+		Result:      caps != standardCaps,
 	}
 	if caps != standardCaps {
 		capsDiff, _ := cap.FromBitmap(caps & (^standardCaps))
@@ -83,6 +72,6 @@ func Capability() (err error) {
 		Pid1:    pid1,
 		Current: current,
 	}
-	fmt.Println(c)
+	fmt.Println(printer.Printer.PrintDropAfterFalse(c))
 	return
 }

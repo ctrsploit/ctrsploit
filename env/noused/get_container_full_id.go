@@ -1,15 +1,15 @@
 package noused
 
 import (
-	"github.com/ctrsploit/ctrsploit/util"
 	"errors"
 	"fmt"
+	"github.com/ctrsploit/ctrsploit/internal"
 	"github.com/ssst0n3/awesome_libs/awesome_error"
 	"strings"
 )
 
 func GetContainerFullId() (ID string, err error) {
-	cgroups, err := util.ParseCgroup("/proc/self/cgroup")
+	cgroups, err := internal.ParseCgroup("/proc/self/cgroup")
 	if err != nil {
 		return
 	}

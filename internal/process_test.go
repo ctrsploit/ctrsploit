@@ -1,8 +1,7 @@
-package util
+package internal
 
 import (
 	"github.com/stretchr/testify/assert"
-	"io/ioutil"
 	"os"
 	"os/exec"
 	"testing"
@@ -21,7 +20,7 @@ func TestGetProcessNameByPid(t *testing.T) {
 func TestIsSheBang(t *testing.T) {
 	shebang := "/tmp/ctrsploit_shebang"
 	assert.NoError(t, os.Remove(shebang))
-	assert.NoError(t, ioutil.WriteFile(shebang, []byte("#!/bin/bash\nsleep 10"), 0755))
+	assert.NoError(t, os.WriteFile(shebang, []byte("#!/bin/bash\nsleep 10"), 0755))
 	cmd := exec.Command("/bin/bash", "-c", shebang)
 	assert.NoError(t, cmd.Start())
 	time.Sleep(time.Second)

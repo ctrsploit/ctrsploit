@@ -1,7 +1,7 @@
 package namespace
 
 import (
-	"github.com/ctrsploit/ctrsploit/internal/log"
+	"github.com/ctrsploit/sploit-spec/pkg/log"
 	"github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/assert"
 	"os"

@@ -274,3 +274,67 @@ uts: host
 root@075b5ad696af:/ctrsploit# ./checksec_linux_amd64 namespace uts
 uts: child
 ```
+
+
+### json format
+
+```
+root@4fe779fc104c:~/ctrsploit/bin/release# ./env_linux_amd64 --json namespace | jq
+{
+  "name": {
+    "name": "Namespace Level"
+  },
+  "levels": [
+    {
+      "name": "cgroup",
+      "description": "",
+      "result": "child"
+    },
+    {
+      "name": "ipc",
+      "description": "",
+      "result": "child"
+    },
+    {
+      "name": "mnt",
+      "description": "",
+      "result": "child"
+    },
+    {
+      "name": "net",
+      "description": "",
+      "result": "child"
+    },
+    {
+      "name": "pid",
+      "description": "",
+      "result": "child"
+    },
+    {
+      "name": "pid_for_children",
+      "description": "",
+      "result": "child"
+    },
+    {
+      "name": "time",
+      "description": "",
+      "result": "host"
+    },
+    {
+      "name": "time_for_children",
+      "description": "",
+      "result": "host"
+    },
+    {
+      "name": "user",
+      "description": "",
+      "result": "host"
+    },
+    {
+      "name": "uts",
+      "description": "",
+      "result": "child"
+    }
+  ]
+}
+```

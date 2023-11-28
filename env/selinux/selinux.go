@@ -2,25 +2,17 @@ package selinux
 
 import (
 	"fmt"
-	"github.com/ctrsploit/ctrsploit/internal"
 	"github.com/ctrsploit/ctrsploit/pkg/selinux"
+	"github.com/ctrsploit/sploit-spec/pkg/printer"
 	"github.com/ctrsploit/sploit-spec/pkg/result"
 	"github.com/ctrsploit/sploit-spec/pkg/result/item"
 )
 
 type Result struct {
-	Name       result.Title
-	Enabled    item.Bool  `json:"enabled"`
-	Mode       item.Short `json:"mode"`
-	MountPoint item.Short `json:"mount_point"`
-}
-
-func (r Result) String() (s string) {
-	s += internal.Print(r.Name, r.Enabled)
-	if r.Enabled.Result {
-		s += internal.Print(r.Mode, r.MountPoint)
-	}
-	return
+	Name       result.Title `json:"name"`
+	Enabled    item.Bool    `json:"enabled"`
+	Mode       item.Short   `json:"mode"`
+	MountPoint item.Short   `json:"mount_point"`
 }
 
 func Selinux() (err error) {
@@ -46,6 +38,6 @@ func Selinux() (err error) {
 			Result:      selinux.GetSelinuxMountPoint(),
 		}
 	}
-	fmt.Println(r)
+	fmt.Println(printer.Printer.Print(r))
 	return
 }

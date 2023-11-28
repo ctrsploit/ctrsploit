@@ -2,27 +2,19 @@ package apparmor
 
 import (
 	"fmt"
-	"github.com/ctrsploit/ctrsploit/internal"
 	"github.com/ctrsploit/ctrsploit/pkg/apparmor"
 	"github.com/ctrsploit/ctrsploit/pkg/lsm"
+	"github.com/ctrsploit/sploit-spec/pkg/printer"
 	"github.com/ctrsploit/sploit-spec/pkg/result"
 	"github.com/ctrsploit/sploit-spec/pkg/result/item"
 )
 
 type Result struct {
-	Name      result.Title
-	Kernel    item.Bool  `json:"kernel"`
-	Container item.Bool  `json:"container"`
-	Profile   item.Short `json:"profile"`
-	Mode      item.Short `json:"mode"`
-}
-
-func (r Result) String() (s string) {
-	s += internal.Print(r.Name, r.Kernel, r.Container)
-	if r.Container.Result {
-		s += internal.Print(r.Profile, r.Mode)
-	}
-	return s
+	Name      result.Title `json:"name"`
+	Kernel    item.Bool    `json:"kernel"`
+	Container item.Bool    `json:"container"`
+	Profile   item.Short   `json:"profile"`
+	Mode      item.Short   `json:"mode"`
 }
 
 func Apparmor() (err error) {
@@ -62,6 +54,6 @@ func Apparmor() (err error) {
 			Result:      mode,
 		}
 	}
-	fmt.Println(r)
+	fmt.Println(printer.Printer.PrintDropAfterFalse(r))
 	return
 }

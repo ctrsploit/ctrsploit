@@ -2,7 +2,7 @@
 
 [English Version](./README.md)
 
-ctrsploit 读作container sploit
+ctrsploit 读作container sploit , 遵循 [sploit-spec](https://github.com/ctrsploit/sploit-spec) v0.4.3
 
 ## 为什么我们需要ctrsploit
 

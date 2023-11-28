@@ -3,7 +3,7 @@ package namespace
 import (
 	"fmt"
 	"github.com/ctrsploit/ctrsploit/pkg/namespace"
-	"github.com/ctrsploit/ctrsploit/prerequisite"
+	"github.com/ctrsploit/sploit-spec/pkg/prerequisite"
 	"github.com/ssst0n3/awesome_libs/awesome_error"
 )
 
@@ -25,6 +25,10 @@ var (
 )
 
 func (p *Namespace) Check() (err error) {
+	err = p.BasePrerequisite.Check()
+	if err != nil {
+		return
+	}
 	arbitrator, err := namespace.NewInoArbitrator()
 	if err != nil {
 		return

@@ -3,7 +3,7 @@ package capability
 import (
 	"github.com/containerd/containerd/pkg/cap"
 	"github.com/ctrsploit/ctrsploit/pkg/capability"
-	"github.com/ctrsploit/ctrsploit/prerequisite"
+	"github.com/ctrsploit/sploit-spec/pkg/prerequisite"
 	"github.com/ssst0n3/awesome_libs/slice"
 )
 
@@ -21,6 +21,10 @@ var ContainsCapSysAdmin = Capability{
 }
 
 func (p *Capability) Check() (err error) {
+	err = p.BasePrerequisite.Check()
+	if err != nil {
+		return
+	}
 	caps, err := capability.GetPid1Capability()
 	if err != nil {
 		return

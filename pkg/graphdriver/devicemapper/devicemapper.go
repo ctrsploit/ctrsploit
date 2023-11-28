@@ -3,11 +3,10 @@ package devicemapper
 // TODO: move to dir pkg/graphdriver/
 
 import (
+	"fmt"
 	"github.com/ctrsploit/ctrsploit/pkg/module"
 	"github.com/ctrsploit/ctrsploit/pkg/mountinfo"
-	"fmt"
 	"github.com/ssst0n3/awesome_libs/awesome_error"
-	"io/ioutil"
 	"os"
 	"regexp"
 	"strings"
@@ -69,7 +68,7 @@ func (d *DeviceMapper) IsEnabled() (enabled bool, err error) {
 		enabled = true
 		return enabled, err
 	}
-	content, err := ioutil.ReadFile(ProcDevices)
+	content, err := os.ReadFile(ProcDevices)
 	if err != nil {
 		awesome_error.CheckErr(err)
 		return enabled, err
