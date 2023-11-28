@@ -33,34 +33,32 @@ make build-ctrsploit
 ### Quick-Start
 
 ```
-wget -O ctrsploit https://github.com/ctrsploit/ctrsploit/releases/download/v0.4/ctrsploit_linux_amd64 && chmod +x ctrsploit
+wget -O ctrsploit https://github.com/ctrsploit/ctrsploit/releases/download/v0.5.12/ctrsploit_linux_amd64 && chmod +x ctrsploit
 ./ctrsploit --help
 NAME:
    ctrsploit - A penetration toolkit for container environment
 
-ctrsploit is a command line ... //TODO
+               ctrsploit is a command line ... //TODO
 
 
 USAGE:
    ctrsploit [global options] command [command options] [arguments...]
 
 COMMANDS:
-   auto              auto
-   where, w          detect whether you are in the container, and which type of the container
-   graphdriver, g    detect graphdriver type and extend information
-   cgroups, c        gather cgroup information
-   capability, cap   show the capability of pid 1 and current process
-   seccomp, s        show the seccomp info
-   apparmor, a       show the apparmor info
-   selinux, se       show the selinux info
-   fdisk, f          like linux command fdisk or lsblk // TODO
-   kernel, k         collect kernel environment information
-   namespace, n, ns  check namespace is host ns
-   help, h           Shows a list of commands or help for one command
+   auto, a      auto gathering information, detect vulnerabilities and run exploits
+   env, e       gather information
+   exploit, x   run a exploit
+   checksec, c  check security inside a container
+   helper, he   some helper commands such as local privilege escalation
+   version      Show the sploit version information
+   help, h      Shows a list of commands or help for one command
 
 GLOBAL OPTIONS:
-   --lang value  language for the greeting (default: "english")
-   --help, -h    show help (default: false)
+   --debug         Output information for helping debugging sploit (default: false)
+   --experimental  enable experimental feature (default: false)
+   --colorful      output colorfully (default: false)
+   --json          output in json format (default: false)
+   --help, -h      show help
 ```
 
 ### 信息收集
@@ -76,13 +74,21 @@ USAGE:
    ctrsploit env command [command options] [arguments...]
 
 COMMANDS:
-   where, w        detect whether you are in the container, and which type of the container
-   graphdriver, g  detect graphdriver type and extend information
-   cgroups, c      gather cgroup information
-   help, h         Shows a list of commands or help for one command
+   auto              auto
+   where, w          detect whether you are in the container, and which type of the container
+   graphdriver, g    detect graphdriver type and extend information
+   cgroups, c        gather cgroup information
+   capability, cap   show the capability of pid 1 and current process
+   seccomp, s        show the seccomp info
+   apparmor, a       show the apparmor info
+   selinux, se       show the selinux info
+   fdisk, f          like linux command fdisk or lsblk // TODO
+   kernel, k         collect kernel environment information
+   namespace, n, ns  check namespace is host ns
+   help, h           Shows a list of commands or help for one command
 
 OPTIONS:
-   --help, -h  show help (default: false)
+   --help, -h  show help
 ```
 
 查看当前是否在容器内，在何容器内：
@@ -144,24 +150,10 @@ root@ctr # ./ctrsploit e ra -c "cat /etc/hostname"
 在容器内执行`ctrsploit checksec`或执行单独的二进制文件`checksec`
 
 ```
-[root@ctr ~]# /checksec_linux_amd64 
-===========Seccomp=========
-kernel supported: ✔
-seccomp enabled in current container: ✘
-
-===========Apparmor=========
-Kernel Supported: ✘
-Container Enabled: ✘
-
-===========Cgroups=========
-is cgroupv1: ✔
-is cgroupv2: ✘
-
-------sub systems-------
-["perf_event" "memory" "net_cls" "cpuset" "blkio" "hugetlb" "files" "cpu" "cpuacct" "pids" "rdma" "freezer" "devices" "net_prio"]
-
---------top level subsystem----------
-["rdma"
+./checksec_linux_amd64 auto
+[N]  cap_sys_admin      # Container can be escaped when has cap_sys_admin and use cgroups v1
+[N]  host_net_ns        # The network namespace of the host is shared
+...
 ```
 
 ## 详细信息
