@@ -2,8 +2,8 @@ package seccomp
 
 import (
 	"fmt"
-	"github.com/ctrsploit/ctrsploit/internal"
 	"github.com/ctrsploit/ctrsploit/pkg/seccomp"
+	"github.com/ctrsploit/sploit-spec/pkg/printer"
 	"github.com/ctrsploit/sploit-spec/pkg/result"
 	"github.com/ctrsploit/sploit-spec/pkg/result/item"
 	"github.com/ssst0n3/awesome_libs/awesome_error"
@@ -14,18 +14,10 @@ const (
 )
 
 type Result struct {
-	Name      result.Title
-	Kernel    item.Bool  `json:"kernel"`
-	Container item.Bool  `json:"container"`
-	Mode      item.Short `json:"mode"`
-}
-
-func (r Result) String() (s string) {
-	s += internal.Print(r.Name, r.Kernel, r.Container)
-	if r.Container.Result {
-		s += internal.Print(r.Mode)
-	}
-	return
+	Name      result.Title `json:"name"`
+	Kernel    item.Bool    `json:"kernel"`
+	Container item.Bool    `json:"container"`
+	Mode      item.Short   `json:"mode"`
 }
 
 // Seccomp
@@ -53,6 +45,6 @@ func Seccomp() (err error) {
 			Result:      seccompMode.String(),
 		},
 	}
-	fmt.Println(r)
+	fmt.Println(printer.Printer.Print(r))
 	return
 }

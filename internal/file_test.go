@@ -1,8 +1,8 @@
-package util
+package internal
 
 import (
 	"github.com/stretchr/testify/assert"
-	"io/ioutil"
+	"os"
 	"testing"
 )
 
@@ -18,9 +18,9 @@ func TestReadIntFromFile(t *testing.T) {
 }
 
 func TestReplaceContent(t *testing.T) {
-	assert.NoError(t, ioutil.WriteFile("/tmp/replace_test", []byte("source"), 0755))
+	assert.NoError(t, os.WriteFile("/tmp/replace_test", []byte("source"), 0755))
 	assert.NoError(t, ReplaceContent("/tmp/replace_test", []byte("source"), []byte("dest")))
-	content, err := ioutil.ReadFile("/tmp/replace_test")
+	content, err := os.ReadFile("/tmp/replace_test")
 	assert.NoError(t, err)
 	assert.Equal(t, []byte("dest"), content)
 }

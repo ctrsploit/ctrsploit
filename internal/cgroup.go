@@ -1,9 +1,9 @@
-package util
+package internal
 
 import (
 	"bytes"
 	"github.com/ssst0n3/awesome_libs/awesome_error"
-	"io/ioutil"
+	"os"
 )
 
 type Cgroup struct {
@@ -13,7 +13,7 @@ type Cgroup struct {
 }
 
 func ParseCgroup(filepath string) (cgroups []Cgroup, err error) {
-	content, err := ioutil.ReadFile(filepath)
+	content, err := os.ReadFile(filepath)
 	if err != nil {
 		awesome_error.CheckErr(err)
 		return

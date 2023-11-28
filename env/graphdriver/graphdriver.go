@@ -2,10 +2,10 @@ package graphdriver
 
 import (
 	"fmt"
-	"github.com/ctrsploit/ctrsploit/internal"
 	"github.com/ctrsploit/ctrsploit/pkg/graphdriver"
 	"github.com/ctrsploit/ctrsploit/pkg/graphdriver/devicemapper"
 	"github.com/ctrsploit/ctrsploit/pkg/graphdriver/overlay"
+	"github.com/ctrsploit/sploit-spec/pkg/printer"
 	"github.com/ctrsploit/sploit-spec/pkg/result"
 	"github.com/ctrsploit/sploit-spec/pkg/result/item"
 )
@@ -13,33 +13,49 @@ import (
 const CommandName = "graphdriver"
 
 type Result struct {
-	Name     result.Title
-	Enabled  item.Bool `json:"enabled"`
-	Used     item.Bool `json:"used"`
-	Number   item.Long `json:"number"`
-	HostPath item.Long `json:"host_path"`
-}
-
-func (r Result) String() (s string) {
-	s += internal.Print(r.Name, r.Enabled)
-	if r.Enabled.Result {
-		s += internal.Print(r.Used)
-		if r.Used.Result {
-			s += internal.Print(r.Number, r.HostPath)
-		}
-	}
-	return
+	Name     result.Title `json:"name"`
+	Enabled  item.Bool    `json:"enabled"`
+	Used     item.Bool    `json:"used"`
+	Number   item.Long    `json:"number"`
+	HostPath item.Long    `json:"host_path"`
 }
 
 func Overlay() (err error) {
-	return graphDriver("Overlay", &overlay.Overlay{})
+	r, err := graphDriver("Overlay", &overlay.Overlay{})
+	if err != nil {
+		return
+	}
+	fmt.Println(printer.Printer.Print(r))
+	return
 }
 
 func DeviceMapper() (err error) {
-	return graphDriver("DeviceMapper", &devicemapper.DeviceMapper{})
+	r, err := graphDriver("DeviceMapper", &devicemapper.DeviceMapper{})
+	if err != nil {
+		return
+	}
+	fmt.Println(printer.Printer.Print(r))
+	return
 }
 
-func graphDriver(name string, g graphdriver.Interface) (err error) {
+func GraphDrivers() (err error) {
+	o, err := graphDriver("Overlay", &overlay.Overlay{})
+	if err != nil {
+		return
+	}
+	d, err := graphDriver("DeviceMapper", &devicemapper.DeviceMapper{})
+	if err != nil {
+		return
+	}
+	r := map[string]Result{
+		"overlay":      o,
+		"devicemapper": d,
+	}
+	fmt.Println(printer.Printer.Print(r))
+	return
+}
+
+func graphDriver(name string, g graphdriver.Interface) (r Result, err error) {
 	err = g.Init()
 	if err != nil {
 		return
@@ -50,7 +66,7 @@ func graphDriver(name string, g graphdriver.Interface) (err error) {
 		return
 	}
 
-	r := Result{
+	r = Result{
 		Name: result.Title{
 			Name: name,
 		},
@@ -99,6 +115,5 @@ func graphDriver(name string, g graphdriver.Interface) (err error) {
 		}
 	}
 
-	fmt.Println(r)
 	return
 }

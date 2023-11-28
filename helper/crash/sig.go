@@ -1,7 +1,7 @@
 package crash
 
 import (
-	"github.com/ctrsploit/ctrsploit/util"
+	"github.com/ctrsploit/ctrsploit/internal"
 	"github.com/pkg/errors"
 	"github.com/ssst0n3/awesome_libs/awesome_error"
 	"os"
@@ -21,7 +21,7 @@ func NewSig() Sig {
 }
 
 func (c Sig) Valid() (valid bool, err error) {
-	processName, err := util.GetProcessNameByPid(1)
+	processName, err := internal.GetProcessNameByPid(1)
 	if err != nil {
 		if errors.Is(err, os.ErrPermission) || errors.Is(err, os.ErrNotExist) {
 			valid = false
@@ -43,6 +43,6 @@ func (c Sig) Crash() (err error) {
 			continue
 		}
 	}
-	err = util.KillAll()
+	err = internal.KillAll()
 	return
 }

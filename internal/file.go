@@ -1,9 +1,8 @@
-package util
+package internal
 
 import (
 	"bytes"
 	"github.com/ssst0n3/awesome_libs/awesome_error"
-	"io/ioutil"
 	"os"
 	"strconv"
 )
@@ -14,7 +13,7 @@ func CheckPathExists(path string) bool {
 }
 
 func ReadIntFromFile(path string) (result int, err error) {
-	content, err := ioutil.ReadFile(path)
+	content, err := os.ReadFile(path)
 	if err != nil {
 		awesome_error.CheckErr(err)
 		return
@@ -28,13 +27,13 @@ func ReadIntFromFile(path string) (result int, err error) {
 	return
 }
 
-func ReplaceContent(path string, source, dest []byte) (err error) {
-	content, err := ioutil.ReadFile(path)
+func ReplaceContent(path string, old, new []byte) (err error) {
+	content, err := os.ReadFile(path)
 	if err != nil {
 		awesome_error.CheckErr(err)
 		return
 	}
-	err = ioutil.WriteFile(path, bytes.Replace(content, source, dest, -1), 0)
+	err = os.WriteFile(path, bytes.Replace(content, old, new, -1), 0)
 	if err != nil {
 		awesome_error.CheckWarning(err)
 		return

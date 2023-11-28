@@ -1,6 +1,8 @@
 package pipe_primitive
 
-import "github.com/ctrsploit/ctrsploit/util"
+import (
+	"github.com/ctrsploit/ctrsploit/internal"
+)
 
 func Escalate(primitive Primitive) (err error) {
 	offset, err := getRootPasswdOffset()
@@ -12,6 +14,6 @@ func Escalate(primitive Primitive) (err error) {
 	if err != nil {
 		return
 	}
-	util.InvokeRootShell()
+	internal.InvokeRootShell()
 	return
 }

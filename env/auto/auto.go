@@ -12,9 +12,7 @@ import (
 )
 
 func Auto() (err error) {
-	_ = where.Container()
-	_ = where.Docker()
-	_ = where.K8s()
+	_ = where.Where()
 	_ = apparmor.Apparmor()
 	_ = selinux.Selinux()
 	_ = capability.Capability()

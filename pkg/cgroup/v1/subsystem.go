@@ -3,7 +3,6 @@ package v1
 import (
 	"github.com/opencontainers/runc/libcontainer/cgroups"
 	"github.com/ssst0n3/awesome_libs/awesome_error"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
@@ -43,7 +42,7 @@ func (c CgroupV1) IsTopOld(mountpoint, subsystemName string) (top bool, err erro
 }
 
 func (c CgroupV1) ListSubsystemsOld(mountpoint string) (subsystems []string, err error) {
-	fileInfo, err := ioutil.ReadDir(mountpoint)
+	fileInfo, err := os.ReadDir(mountpoint)
 	if err != nil {
 		awesome_error.CheckErr(err)
 		return

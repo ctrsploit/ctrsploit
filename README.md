@@ -2,7 +2,7 @@
 
 [中文文档](./README-ZH.md)
 
-ctrsploit [kənˈteɪnər splɔɪt]
+ctrsploit [kənˈteɪnər splɔɪt] , follows [sploit-spec](https://github.com/ctrsploit/sploit-spec) v0.4.3
 
 ## Why ctrsploit
 

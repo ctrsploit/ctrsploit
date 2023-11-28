@@ -2,8 +2,8 @@ package where
 
 import (
 	"fmt"
-	"github.com/ctrsploit/ctrsploit/internal"
 	"github.com/ctrsploit/ctrsploit/pkg/where"
+	"github.com/ctrsploit/sploit-spec/pkg/printer"
 	"github.com/ctrsploit/sploit-spec/pkg/result"
 	"github.com/ctrsploit/sploit-spec/pkg/result/item"
 )
@@ -11,28 +11,29 @@ import (
 const CommandName = "where"
 
 type Result struct {
-	Name  result.Title
-	Rules []item.Bool `json:"rules"`
-	In    item.Bool   `json:"in"`
+	Name  result.Title `json:"name"`
+	Rules []item.Bool  `json:"rules"`
+	In    item.Bool    `json:"in"`
 }
 
-func (r Result) String() (s string) {
-	s += internal.Print(r.Name)
-	for _, r := range r.Rules {
-		s += internal.Print(r)
+func Where() (err error) {
+	r := map[string]Result{
+		"container": Container(),
+		"docker":    Docker(),
+		"k8s":       K8s(),
 	}
-	s += internal.Print(r.In)
+	fmt.Println(printer.Printer.Print(r))
 	return
 }
 
-func Container() (err error) {
+func Container() (r Result) {
 	c := where.Container{}
 	in, err := c.IsIn()
 	if err != nil {
 		return
 	}
 
-	r := Result{
+	r = Result{
 		Name: result.Title{
 			Name: "Container",
 		},
@@ -42,17 +43,16 @@ func Container() (err error) {
 			Result:      in,
 		},
 	}
-	fmt.Println(r)
 	return
 }
 
-func Docker() (err error) {
+func Docker() (r Result) {
 	d := where.Docker{}
 	in, err := d.IsIn()
 	if err != nil {
 		return
 	}
-	r := Result{
+	r = Result{
 		Name: result.Title{
 			Name: "Docker",
 		},
@@ -89,18 +89,17 @@ func Docker() (err error) {
 			Result:      in,
 		},
 	}
-	fmt.Println(r)
 	return
 }
 
-func K8s() (err error) {
+func K8s() (r Result) {
 	k := where.K8s{}
 	in, err := k.IsIn()
 	if err != nil {
 		return
 	}
 
-	r := Result{
+	r = Result{
 		Name: result.Title{
 			Name: "K8S",
 		},
@@ -132,6 +131,5 @@ func K8s() (err error) {
 			Result:      in,
 		},
 	}
-	fmt.Println(r)
 	return
 }

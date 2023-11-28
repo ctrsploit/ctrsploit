@@ -1,28 +1,29 @@
 package checksec
 
 import (
-	"github.com/ctrsploit/ctrsploit/vul"
+	vul2 "github.com/ctrsploit/ctrsploit/vul"
+	"github.com/ctrsploit/sploit-spec/pkg/vul"
 	"github.com/urfave/cli/v2"
 )
 
+const (
+	CommandNameAuto = "auto"
+)
+
 var Auto = &cli.Command{
-	Name:  "auto",
-	Usage: "auto check security",
+	Name:    CommandNameAuto,
+	Usage:   "auto check security",
+	Aliases: []string{"a"},
 	Action: func(context *cli.Context) (err error) {
 		vulnerabilities := vul.Vulnerabilities{
-			&vul.SysadminCgroupV1,
-			&vul.NetworkNamespaceHostLevel,
+			&vul2.SysadminCgroupV1,
+			&vul2.NetworkNamespaceHostLevel,
 		}
-		for _, v := range vulnerabilities {
-			_, err = v.CheckSec()
-			if err != nil {
-				return
-			}
-		}
-		err = vulnerabilities.Output()
+		err = vulnerabilities.Check()
 		if err != nil {
 			return
 		}
+		vulnerabilities.Output()
 		return
 	},
 }

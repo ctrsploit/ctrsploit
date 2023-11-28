@@ -1,17 +1,18 @@
 package vul
 
 import (
-	"github.com/ctrsploit/ctrsploit/prerequisite"
 	"github.com/ctrsploit/ctrsploit/prerequisite/namespace"
+	"github.com/ctrsploit/sploit-spec/pkg/prerequisite"
+	"github.com/ctrsploit/sploit-spec/pkg/vul"
 )
 
 type networkNamespaceHostLevel struct {
-	BaseVulnerability
+	vul.BaseVulnerability
 }
 
 var (
 	NetworkNamespaceHostLevel = networkNamespaceHostLevel{
-		BaseVulnerability{
+		vul.BaseVulnerability{
 			Name:        "host_net_ns",
 			Description: "The network namespace of the host is shared",
 			CheckSecPrerequisites: prerequisite.Prerequisites{
@@ -21,6 +22,7 @@ var (
 		}}
 )
 
-func (v networkNamespaceHostLevel) Exploit() {
+func (v networkNamespaceHostLevel) Exploit() (err error) {
 	// TODO
+	return
 }

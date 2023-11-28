@@ -1,13 +1,14 @@
 package main
 
 import (
+	"github.com/ctrsploit/ctrsploit/cmd/ctrsploit/auto"
 	"github.com/ctrsploit/ctrsploit/cmd/ctrsploit/checksec"
 	"github.com/ctrsploit/ctrsploit/cmd/ctrsploit/env"
 	"github.com/ctrsploit/ctrsploit/cmd/ctrsploit/exploit"
 	"github.com/ctrsploit/ctrsploit/cmd/ctrsploit/helper"
-	"github.com/ctrsploit/ctrsploit/internal"
-	"github.com/ctrsploit/ctrsploit/internal/log"
-	"github.com/ctrsploit/ctrsploit/version"
+	"github.com/ctrsploit/sploit-spec/pkg/app"
+	"github.com/ctrsploit/sploit-spec/pkg/log"
+	"github.com/ctrsploit/sploit-spec/pkg/version"
 	"github.com/docker/docker/pkg/reexec"
 	"github.com/urfave/cli/v2"
 	"os"
@@ -22,20 +23,20 @@ func main() {
 	if reexec.Init() {
 		return
 	}
-	app := &cli.App{
+	sploit := &cli.App{
 		Name:  "ctrsploit",
 		Usage: usage,
 		Commands: []*cli.Command{
+			auto.Command,
 			env.Command,
 			exploit.Command,
 			checksec.Command,
-			autoCommand,
 			helper.Command,
 			version.Command,
 		},
 	}
-	internal.InstallGlobalFlags(app)
-	err := app.Run(os.Args)
+	app.InstallGlobalFlags(sploit)
+	err := sploit.Run(os.Args)
 	if err != nil {
 		log.Logger.Fatal(err)
 	}

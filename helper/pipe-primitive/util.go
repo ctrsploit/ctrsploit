@@ -2,12 +2,12 @@ package pipe_primitive
 
 import (
 	"github.com/ssst0n3/awesome_libs/awesome_error"
-	"io/ioutil"
+	"os"
 	"strings"
 )
 
 func getRootPasswdOffset() (offset int, err error) {
-	content, err := ioutil.ReadFile("/etc/passwd")
+	content, err := os.ReadFile("/etc/passwd")
 	if err != nil {
 		awesome_error.CheckErr(err)
 		return

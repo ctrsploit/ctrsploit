@@ -1,7 +1,9 @@
 package pkg
 
-import "github.com/ctrsploit/ctrsploit/util"
+import (
+	"github.com/ctrsploit/ctrsploit/internal"
+)
 
 func MaxPid() (int, error) {
-	return util.ReadIntFromFile("/proc/sys/kernel/pid_max")
+	return internal.ReadIntFromFile("/proc/sys/kernel/pid_max")
 }

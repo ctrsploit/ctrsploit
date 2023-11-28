@@ -2,9 +2,9 @@ package pipe_primitive
 
 import (
 	"github.com/ctrsploit/ctrsploit/helper/crash"
-	"github.com/ctrsploit/ctrsploit/util"
+	"github.com/ctrsploit/ctrsploit/internal"
 	"github.com/ssst0n3/awesome_libs/awesome_error"
-	"io/ioutil"
+	"os"
 )
 
 func Escape(primitive Primitive) (err error) {
@@ -28,13 +28,13 @@ func WriteImageEntrypoint(primitive Primitive, payload []byte) (err error) {
 	//	return nil
 	//}
 	path := "/proc/1/exe"
-	shebang, err := util.IsSheBang(1)
+	shebang, err := internal.IsSheBang(1)
 	if err != nil {
 		awesome_error.CheckErr(err)
 		return
 	}
 	if shebang {
-		comm, err := ioutil.ReadFile("/proc/1/comm")
+		comm, err := os.ReadFile("/proc/1/comm")
 		if err != nil {
 			awesome_error.CheckErr(err)
 			return err

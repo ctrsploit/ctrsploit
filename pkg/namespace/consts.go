@@ -1,6 +1,8 @@
 package namespace
 
-import "github.com/ctrsploit/ctrsploit/util"
+import (
+	"github.com/ctrsploit/ctrsploit/internal"
+)
 
 // Name
 
@@ -94,7 +96,7 @@ var (
 		// TODO: not sure time_for_children is same as time?
 		NameTimeForChildren: TypeTime,
 	}
-	MapType2Name = util.ReverseMap(MapName2Type).(map[Type]string)
+	MapType2Name = internal.ReverseMap(MapName2Type).(map[Type]string)
 	InitInoMap   = map[Type]int{
 		TypeCGroup:  ProcCGroupInitIno,
 		TypeIPC:     ProcIpcInitIno,

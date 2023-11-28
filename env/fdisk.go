@@ -2,9 +2,9 @@ package env
 
 import (
 	"fmt"
-	"github.com/ctrsploit/ctrsploit/internal/log"
 	"github.com/ctrsploit/ctrsploit/pkg/block"
 	"github.com/ctrsploit/sploit-spec/pkg/colorful"
+	"github.com/ctrsploit/sploit-spec/pkg/log"
 	"github.com/ssst0n3/awesome_libs"
 	"github.com/ssst0n3/awesome_libs/awesome_error"
 )

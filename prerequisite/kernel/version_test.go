@@ -1,7 +1,7 @@
 package kernel
 
 import (
-	"github.com/ctrsploit/ctrsploit/prerequisite"
+	"github.com/ctrsploit/sploit-spec/pkg/prerequisite"
 	"testing"
 )
 

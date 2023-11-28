@@ -3,7 +3,7 @@ package apparmor
 import (
 	"github.com/ctrsploit/ctrsploit/pkg/lsm"
 	"github.com/ssst0n3/awesome_libs/awesome_error"
-	"io/ioutil"
+	"os"
 	"strings"
 )
 
@@ -18,7 +18,7 @@ Mode
 Make sure the apparmor is supported by yourself
 */
 func Mode() (mode string, err error) {
-	content, err := ioutil.ReadFile(PathSysModuleApparmorMode)
+	content, err := os.ReadFile(PathSysModuleApparmorMode)
 	if err != nil {
 		awesome_error.CheckErr(err)
 		return
@@ -28,7 +28,7 @@ func Mode() (mode string, err error) {
 }
 
 func IsSupport() (support bool) {
-	content, err := ioutil.ReadFile(PathSysModuleApparmorEnabled)
+	content, err := os.ReadFile(PathSysModuleApparmorEnabled)
 	if err != nil {
 		if strings.Contains(err.Error(), "no such file or directory") { // not found means not support
 			return

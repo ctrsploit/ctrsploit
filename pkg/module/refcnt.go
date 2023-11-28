@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"fmt"
 	"github.com/ssst0n3/awesome_libs/awesome_error"
-	"io/ioutil"
 	"os"
 	"strconv"
 )
@@ -43,7 +42,7 @@ func Loaded(module string) (loaded bool, err error) {
 // if this file not exists, unable to know whether this module is loaded
 // for overlay, refcnt means the number of overlay mounted
 func RefCount(module string) (refcnt int, err error) {
-	content, err := ioutil.ReadFile(fmt.Sprintf("/sys/module/%s/refcnt", module))
+	content, err := os.ReadFile(fmt.Sprintf("/sys/module/%s/refcnt", module))
 	if err != nil {
 		return
 	}

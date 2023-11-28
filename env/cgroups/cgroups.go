@@ -2,9 +2,9 @@ package cgroups
 
 import (
 	"fmt"
-	"github.com/ctrsploit/ctrsploit/internal"
 	v1 "github.com/ctrsploit/ctrsploit/pkg/cgroup/v1"
 	"github.com/ctrsploit/ctrsploit/pkg/cgroup/version"
+	"github.com/ctrsploit/sploit-spec/pkg/printer"
 	"github.com/ctrsploit/sploit-spec/pkg/result"
 	"github.com/ctrsploit/sploit-spec/pkg/result/item"
 	"reflect"
@@ -13,19 +13,11 @@ import (
 const CommandCgroupsName = "cgroups"
 
 type Result struct {
-	Name result.Title
-	V1   item.Bool `json:"v1"`
-	V2   item.Bool `json:"v2"`
-	Sub  item.Long `json:"sub"`
-	Top  item.Long `json:"top"`
-}
-
-func (r Result) String() (s string) {
-	s += internal.Print(r.Name, r.V1, r.V2)
-	if r.V1.Result {
-		s += internal.Print(r.Sub, r.Top)
-	}
-	return
+	Name result.Title `json:"name"`
+	V1   item.Bool    `json:"v1"`
+	V2   item.Bool    `json:"v2"`
+	Sub  item.Long    `json:"sub"`
+	Top  item.Long    `json:"top"`
 }
 
 func Cgroups() (err error) {
@@ -43,7 +35,6 @@ func Cgroups() (err error) {
 			Description: "",
 			Result:      version.IsCgroupV2(),
 		},
-		Top: item.Long{},
 	}
 	c := v1.CgroupV1{}
 	subsystemsSupport, err := c.ListSubsystems("/proc/1/cgroup")
@@ -68,6 +59,6 @@ func Cgroups() (err error) {
 			Result:      fmt.Sprintf("%+q", topLevelSubsystems),
 		}
 	}
-	fmt.Println(r)
+	fmt.Println(printer.Printer.Print(r))
 	return
 }

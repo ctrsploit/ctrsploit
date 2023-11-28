@@ -1,9 +1,8 @@
 package lsm
 
 import (
-	"github.com/ctrsploit/ctrsploit/internal/log"
+	"github.com/ctrsploit/sploit-spec/pkg/log"
 	"github.com/ssst0n3/awesome_libs/awesome_error"
-	"io/ioutil"
 	"os"
 	"strings"
 )
@@ -21,7 +20,7 @@ Only useful under the host
 */
 func IsKernelSupported(module string) (supported int) {
 	// https://www.kernel.org/doc/html/v4.16/admin-guide/LSM/index.html
-	content, err := ioutil.ReadFile("/sys/kernel/security/lsm")
+	content, err := os.ReadFile("/sys/kernel/security/lsm")
 	if err != nil {
 		if os.IsNotExist(err) {
 			// means inside the ctr
@@ -34,7 +33,7 @@ func IsKernelSupported(module string) (supported int) {
 }
 
 func Current() (current string, err error) {
-	content, err := ioutil.ReadFile(PathAttrCurrent)
+	content, err := os.ReadFile(PathAttrCurrent)
 	if err != nil {
 		awesome_error.CheckErr(err)
 		return

@@ -1,7 +1,7 @@
 package version
 
 import (
-	"github.com/ctrsploit/ctrsploit/internal/log"
+	"github.com/ctrsploit/sploit-spec/pkg/log"
 	"github.com/opencontainers/runc/libcontainer/cgroups"
 	"github.com/ssst0n3/awesome_libs/awesome_error"
 	"golang.org/x/sys/unix"

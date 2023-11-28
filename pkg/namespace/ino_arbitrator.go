@@ -1,9 +1,9 @@
 package namespace
 
 import (
-	"github.com/ctrsploit/ctrsploit/internal/log"
-	"github.com/ctrsploit/ctrsploit/prerequisite"
 	"github.com/ctrsploit/ctrsploit/prerequisite/kernel"
+	"github.com/ctrsploit/sploit-spec/pkg/log"
+	"github.com/ctrsploit/sploit-spec/pkg/prerequisite"
 	"github.com/pkg/errors"
 	"github.com/ssst0n3/awesome_libs/awesome_error"
 	"sort"

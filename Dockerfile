@@ -26,7 +26,7 @@ COPY --from=gox /build/ /usr/local/bin/
 RUN --mount=type=cache,sharing=locked,id=ctrsploit-build-aptlib,target=/var/lib/apt \
     --mount=type=cache,sharing=locked,id=ctrsploit-build-aptcache,target=/var/cache/apt \
         apt update && apt install -y \
-            upx
+            upx jq
 RUN --mount=type=bind,target=.,rw \
     --mount=type=cache,target=/root/.cache/go-build,id=ctrsploit-build \
     --mount=type=cache,target=/go/pkg/mod,id=ctrsploit-mod \

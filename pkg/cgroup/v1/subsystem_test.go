@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"reflect"
@@ -85,7 +84,7 @@ func TestIsTopOld(t *testing.T) {
 					return
 				}
 				releaseAgentPath := filepath.Join(subsystemPath, releaseAgent)
-				err = ioutil.WriteFile(releaseAgentPath, nil, 0755)
+				err = os.WriteFile(releaseAgentPath, nil, 0755)
 				return
 			},
 			cleanEnvFunc: func(mountpoint, subsystemName string) error {
@@ -158,7 +157,7 @@ func TestCgroupV1_ListSubsystemsOld(t *testing.T) {
 					"fileA", "fileB", "fileC", "fileD",
 				}
 				for _, file := range files {
-					err = ioutil.WriteFile(filepath.Join(mountpoint, file), nil, 0755)
+					err = os.WriteFile(filepath.Join(mountpoint, file), nil, 0755)
 					if err != nil {
 						return
 					}
@@ -267,7 +266,7 @@ func TestCgroupV1_ListSubsystems(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			c := CgroupV1{}
 			procCgroupPath := fmt.Sprintf("/tmp/%s", uuid.New())
-			assert.NoError(t, ioutil.WriteFile(procCgroupPath, []byte(tt.procCgroupContent), 0755))
+			assert.NoError(t, os.WriteFile(procCgroupPath, []byte(tt.procCgroupContent), 0755))
 			defer func() {
 				assert.NoError(t, os.Remove(procCgroupPath))
 			}()

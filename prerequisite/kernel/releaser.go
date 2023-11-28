@@ -1,9 +1,9 @@
 package kernel
 
 import (
-	"github.com/ctrsploit/ctrsploit/internal/log"
 	"github.com/ctrsploit/ctrsploit/pkg/kernel/uname"
-	"github.com/ctrsploit/ctrsploit/prerequisite"
+	"github.com/ctrsploit/sploit-spec/pkg/log"
+	"github.com/ctrsploit/sploit-spec/pkg/prerequisite"
 	"strings"
 )
 
@@ -23,6 +23,10 @@ var (
 )
 
 func (p *Releaser) Check() (err error) {
+	err = p.BasePrerequisite.Check()
+	if err != nil {
+		return
+	}
 	u, err := uname.All()
 	if err != nil {
 		return

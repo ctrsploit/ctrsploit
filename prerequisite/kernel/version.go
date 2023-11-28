@@ -1,9 +1,9 @@
 package kernel
 
 import (
-	"github.com/ctrsploit/ctrsploit/internal/log"
 	"github.com/ctrsploit/ctrsploit/pkg/kernel/uname"
-	"github.com/ctrsploit/ctrsploit/prerequisite"
+	"github.com/ctrsploit/sploit-spec/pkg/log"
+	"github.com/ctrsploit/sploit-spec/pkg/prerequisite"
 )
 
 type Version struct {
@@ -44,6 +44,10 @@ func (p *Version) check(version string) (satisfied bool) {
 }
 
 func (p *Version) Check() (err error) {
+	err = p.BasePrerequisite.Check()
+	if err != nil {
+		return
+	}
 	version, err := uname.Release()
 	if err != nil {
 		return

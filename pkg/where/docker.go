@@ -2,11 +2,10 @@ package where
 
 import (
 	"bytes"
+	"github.com/ctrsploit/ctrsploit/internal"
 	"github.com/ctrsploit/ctrsploit/pkg/graphdriver"
 	"github.com/ctrsploit/ctrsploit/pkg/mountinfo"
-	"github.com/ctrsploit/ctrsploit/util"
 	"github.com/ssst0n3/awesome_libs/awesome_error"
-	"io/ioutil"
 	"os"
 	"regexp"
 	"strings"
@@ -26,7 +25,7 @@ type Docker struct {
 }
 
 func (d *Docker) CheckDockerEnvExists() {
-	d.DockerEnvFileExists = util.CheckPathExists("/.dockerenv")
+	d.DockerEnvFileExists = internal.CheckPathExists("/.dockerenv")
 }
 
 // CheckMountInfo rootfs contains "docker"
@@ -41,7 +40,7 @@ func (d *Docker) CheckMountInfo() (err error) {
 
 // CheckCgroup Only works in cgroup v1
 func (d *Docker) CheckCgroup() (err error) {
-	content, err := ioutil.ReadFile("/proc/self/cgroup")
+	content, err := os.ReadFile("/proc/self/cgroup")
 	if err != nil {
 		awesome_error.CheckErr(err)
 		return

@@ -1,4 +1,4 @@
-package util
+package internal
 
 import (
 	"github.com/containerd/cgroups"

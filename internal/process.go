@@ -1,11 +1,10 @@
-package util
+package internal
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
-	"github.com/pkg/errors"
 	"github.com/ssst0n3/awesome_libs/awesome_error"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -14,7 +13,7 @@ import (
 )
 
 func GetProcessNameByPid(pid int) (processName string, err error) {
-	path, err := GetProcessPathByPid(pid)
+	path, err := GetProcessPath(pid)
 	if err != nil {
 		return
 	}
@@ -22,12 +21,8 @@ func GetProcessNameByPid(pid int) (processName string, err error) {
 	return
 }
 
-func GetProcessPathByPid(pid int) (path string, err error) {
-	return getProcessPath(strconv.Itoa(pid))
-}
-
-func getProcessPath(pid string) (path string, err error) {
-	exe := fmt.Sprintf("/proc/%s/exe", pid)
+func GetProcessPath(pid int) (path string, err error) {
+	exe := fmt.Sprintf("/proc/%d/exe", pid)
 	path, err = filepath.EvalSymlinks(exe)
 	if err != nil {
 		if errors.Is(err, os.ErrPermission) || errors.Is(err, os.ErrNotExist) {
@@ -40,7 +35,7 @@ func getProcessPath(pid string) (path string, err error) {
 	return
 }
 
-func getSelfPid() (pid int, err error) {
+func GetSelfPid() (pid int, err error) {
 	path, err := filepath.EvalSymlinks("/proc/self")
 	if err != nil {
 		awesome_error.CheckErr(err)
@@ -61,7 +56,7 @@ func KillAll() (err error) {
 		awesome_error.CheckErr(err)
 		return
 	}
-	selfPid, err := getSelfPid()
+	selfPid, err := GetSelfPid()
 	if err != nil {
 		return
 	}
@@ -85,14 +80,14 @@ func KillAll() (err error) {
 }
 
 func IsSheBang(pid int) (shebang bool, err error) {
-	cmdline, err := ioutil.ReadFile(fmt.Sprintf("/proc/%d/cmdline", pid))
+	cmdline, err := os.ReadFile(fmt.Sprintf("/proc/%d/cmdline", pid))
 	if err != nil {
 		awesome_error.CheckErr(err)
 		return
 	}
 	args := bytes.Split(cmdline, []byte{0})
 	lastArg := string(args[len(args)-2])
-	comm, err := ioutil.ReadFile(fmt.Sprintf("/proc/%d/comm", pid))
+	comm, err := os.ReadFile(fmt.Sprintf("/proc/%d/comm", pid))
 	if err != nil {
 		awesome_error.CheckErr(err)
 		return

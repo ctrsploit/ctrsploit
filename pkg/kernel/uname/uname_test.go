@@ -1,7 +1,7 @@
 package uname
 
 import (
-	"github.com/ctrsploit/ctrsploit/internal/log"
+	"github.com/ctrsploit/sploit-spec/pkg/log"
 	"github.com/davecgh/go-spew/spew"
 	"github.com/stretchr/testify/assert"
 	"os/exec"

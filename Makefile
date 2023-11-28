@@ -1,12 +1,12 @@
 .PHONY: all shell local build
 
 GITCOMMIT := $(shell git rev-parse --short HEAD || echo unsupported)
-VERSION := $(shell cat ./version/VERSION)
+VERSION := $(shell cat ./VERSION)
 BUILDTIME := $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")
 LDFLAGS := "${LDFALGS} \
-	-X github.com/ctrsploit/ctrsploit/version.Version=${VERSION} \
-	-X github.com/ctrsploit/ctrsploit/version.GitCommit=${GITCOMMIT} \
-	-X github.com/ctrsploit/ctrsploit/version.BuildTime=${BUILDTIME}"
+	-X github.com/ctrsploit/sploit-spec/pkg/version.Version=${VERSION} \
+	-X github.com/ctrsploit/sploit-spec/pkg/version.GitCommit=${GITCOMMIT} \
+	-X github.com/ctrsploit/sploit-spec/pkg/version.BuildTime=${BUILDTIME}"
 
 DOCKER_CONTAINER_NAME := $(if $(CONTAINER_NAME),--name $(CONTAINER_NAME),)
 CTRSPLOIT_IMAGE := ctrsploit-dev

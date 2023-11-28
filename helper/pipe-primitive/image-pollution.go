@@ -5,7 +5,6 @@ import (
 	"flag"
 	"fmt"
 	"github.com/ssst0n3/awesome_libs/awesome_error"
-	"io/ioutil"
 	"os"
 )
 
@@ -15,7 +14,7 @@ func ImagePollution(primitive Primitive) (err error) {
 	flagSet.StringVar(&source, "source", "", "the path of file with evil content")
 	flagSet.StringVar(&dest, "destination", "", "the path of file you want to pollution")
 	awesome_error.CheckFatal(flagSet.Parse(os.Args[1:]))
-	payload, err := ioutil.ReadFile(dest)
+	payload, err := os.ReadFile(dest)
 	if err != nil {
 		awesome_error.CheckErr(err)
 		return
@@ -25,7 +24,7 @@ func ImagePollution(primitive Primitive) (err error) {
 
 func WriteImage(primitive Primitive, path string, payload []byte) (err error) {
 	minOffset := primitive.MinOffset()
-	content, err := ioutil.ReadFile(path)
+	content, err := os.ReadFile(path)
 	if err != nil {
 		awesome_error.CheckErr(err)
 		return
