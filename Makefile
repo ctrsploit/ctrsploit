@@ -1,8 +1,8 @@
 .PHONY: all shell local build
 
 # mirror
-APT_MIRROR ?= $(if $(CN),"mirrors.tuna.tsinghua.edu.cn",)
-GOPROXY ?= $(if $(CN),"https://goproxy.cn,https://goproxy.io,direct",)
+APT_MIRROR ?= $(if $(CN),mirrors.tuna.tsinghua.edu.cn,)
+GOPROXY ?= $(if $(CN),https://goproxy.cn,https://goproxy.io,direct,)
 
 GITCOMMIT := $(shell git rev-parse --short HEAD || echo unsupported)
 VERSION := $(shell cat ./VERSION)
