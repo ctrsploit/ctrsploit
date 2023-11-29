@@ -5,7 +5,7 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-var kernelCommand = &cli.Command{
+var Kernel = &cli.Command{
 	Name:    kernel.CommandName,
 	Aliases: []string{"k"},
 	Usage:   "collect kernel environment information",

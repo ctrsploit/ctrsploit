@@ -5,7 +5,7 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-var fdiskCommand = &cli.Command{
+var Fdisk = &cli.Command{
 	Name:    env.CommandFdiskName,
 	Aliases: []string{"f"},
 	Usage:   "like linux command fdisk or lsblk // TODO",
