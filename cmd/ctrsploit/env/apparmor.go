@@ -10,7 +10,7 @@ const (
 	CommandNameApparmor = "apparmor"
 )
 
-var ApparmorCommand = &cli.Command{
+var Apparmor = &cli.Command{
 	Name:    CommandNameApparmor,
 	Aliases: []string{"a"},
 	Usage:   "show the apparmor info",

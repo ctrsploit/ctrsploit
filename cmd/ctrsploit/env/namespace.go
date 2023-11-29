@@ -7,7 +7,7 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-var NamespaceCommand = &cli.Command{
+var Namespace = &cli.Command{
 	Name:    namespace.CommandName,
 	Aliases: []string{"n", "ns"},
 	Usage:   "check namespace is host ns",

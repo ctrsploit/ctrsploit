@@ -5,7 +5,7 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-var CgroupsCommand = &cli.Command{
+var Cgroups = &cli.Command{
 	Name:    cgroups.CommandCgroupsName,
 	Aliases: []string{"c"},
 	Usage:   "gather cgroup information",

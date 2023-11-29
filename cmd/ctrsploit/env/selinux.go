@@ -10,7 +10,7 @@ const (
 	CommandNameSelinux = "selinux"
 )
 
-var SelinuxCommand = &cli.Command{
+var Selinux = &cli.Command{
 	Name:    CommandNameSelinux,
 	Aliases: []string{"se"},
 	Usage:   "show the selinux info",
