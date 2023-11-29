@@ -5,7 +5,7 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-var graphdriverCommand = &cli.Command{
+var Graphdriver = &cli.Command{
 	Name:    graphdriver.CommandName,
 	Aliases: []string{"g"},
 	Usage:   "detect graphdriver type and extend information",

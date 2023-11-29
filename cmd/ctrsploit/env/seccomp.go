@@ -5,7 +5,7 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-var SeccompCommand = &cli.Command{
+var Seccomp = &cli.Command{
 	Name:    seccomp.CommandName,
 	Aliases: []string{"s"},
 	Usage:   "show the seccomp info",
