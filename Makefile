@@ -24,7 +24,7 @@ BUILD_GO_PROXY := $(if $(GOPROXY),--build-arg GOPROXY=$(GOPROXY))
 BUILD_OPTS := ${BUILD_APT_MIRROR} ${BUILD_GO_PROXY} ${DOCKER_BUILD_ARGS} ${DOCKER_BUILD_OPTS} -f "$(DOCKERFILE)"
 
 binary: bundle
-	docker buildx bake binary --progress plain
+	APT_MIRROR=$(APT_MIRROR) GOPROXY=$(GOPROXY) docker buildx bake binary --progress plain
 
 bundle:
 	mkdir -p bin/release
