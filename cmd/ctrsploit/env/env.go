@@ -11,16 +11,6 @@ var Command = &cli.Command{
 	Usage:   "gather information",
 	Subcommands: []*cli.Command{
 		Auto,
-		WhereCommand,
-		graphdriverCommand,
-		CgroupsCommand,
-		capabilityCommand,
-		SeccompCommand,
-		ApparmorCommand,
-		SelinuxCommand,
-		fdiskCommand,
-		kernelCommand,
-		NamespaceCommand,
 		Where,
 		Graphdriver,
 		Cgroups,
@@ -31,5 +21,6 @@ var Command = &cli.Command{
 		Fdisk,
 		Kernel,
 		Namespace,
+		DockerVersion,
 	},
 }
