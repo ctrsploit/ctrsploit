@@ -14,6 +14,11 @@ type Docker struct {
 	Beta   int
 }
 
+var (
+	FirstDockerVersion   = NewDocker("0.1.0")
+	FurtherDockerVersion = NewDocker("99.99.99")
+)
+
 func NewDocker(version string) Docker {
 	parts := strings.SplitN(version, "-", 2)
 	main := parts[0]
@@ -26,9 +31,11 @@ func NewDocker(version string) Docker {
 	var beta int
 	if len(parts) > 1 {
 		ext := parts[1]
-		if strings.Contains(ext, "beta.") {
+		if strings.Contains(ext, "beta") {
 			isBeta = true
-			beta, _ = strconv.Atoi(ext[5:])
+			ext = strings.TrimPrefix(ext, "beta")
+			ext = strings.TrimPrefix(ext, ".")
+			beta, _ = strconv.Atoi(ext)
 		}
 	}
 
@@ -42,9 +49,51 @@ func NewDocker(version string) Docker {
 }
 
 func (v Docker) String() (version string) {
-	version = fmt.Sprintf("%d.%d.%d", v.Major, v.Minor, v.Patch)
+	version = fmt.Sprintf("%d.%s.%d", v.Major, v.minor(), v.Patch)
 	if v.IsBeta {
-		version += fmt.Sprintf("-beta.%d", v.Beta)
+		version += v.beta()
+	}
+	return
+}
+
+/*
+v0.1.0
+...
+v1.13.1-rc2
+v17.03.0-ce
+...
+v22.06.0-beta.0
+v23.0.0
+...
+*/
+func (v Docker) minor() (version string) {
+	if v.Minor == 0 {
+		return "0"
+	}
+	if v.Major < 17 {
+		return fmt.Sprintf("%d", v.Minor)
+	}
+	version = fmt.Sprintf("%02d", v.Minor)
+	return
+}
+
+/*
+beta:
+
+$ git --no-pager tag | grep beta
+v18.09.0-beta3
+...
+v20.10.0-beta1
+v22.06.0-beta.0
+...
+*/
+func (v Docker) beta() (version string) {
+	if v.IsBeta {
+		point := ""
+		if v.Major >= 22 {
+			point = "."
+		}
+		version += fmt.Sprintf("-beta%s%d", point, v.Beta)
 	}
 	return
 }

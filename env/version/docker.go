@@ -22,11 +22,8 @@ func Docker() {
 		return
 	}
 	version := ""
-	if seccomp.IOURingSetup.Enabled() {
-		version = fmt.Sprintf("dockerd is in [%s, %s]", seccomp.IOURingSetup.DockerMinVersion, seccomp.IOURingSetup.DockerMaxVersion)
-	} else {
-		version = fmt.Sprintf("dockerd is in [, %s], [%s, ]", seccomp.IOURingSetup.DockerMinVersion, seccomp.IOURingSetup.DockerMaxVersion)
-	}
+	enabled := seccomp.IOURingSetup.Enabled()
+	version = fmt.Sprintf("dockerd is in %s", seccomp.IOURingSetup.Range(enabled))
 	r := item.Long{
 		Name:        "dockerd-version",
 		Description: "dockerd version range",
