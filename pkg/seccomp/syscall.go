@@ -34,8 +34,6 @@ type Syscall struct {
 	Number           int
 	KernelMinVersion string
 	KernelMaxVersion string
-	DockerMinVersion version.Docker
-	DockerMaxVersion version.Docker
 	DockerChangelog  []Status
 }
 
@@ -77,7 +75,6 @@ var (
 	IOURingSetup = Syscall{
 		Number:           unix.SYS_IO_URING_SETUP,
 		KernelMinVersion: "v5.1-rc1",
-		DockerMaxVersion: version.NewDocker("25.0.0-beta.1"),
 		DockerChangelog: []Status{
 			{
 				Version: version.FirstDockerVersion,
@@ -89,6 +86,17 @@ var (
 			},
 			{
 				Version: version.NewDocker("25.0.0-beta.1"),
+				Enable:  false,
+			},
+		},
+	}
+	NameToHandleAt = Syscall{
+		Number:           unix.SYS_NAME_TO_HANDLE_AT,
+		KernelMinVersion: "",
+		KernelMaxVersion: "",
+		DockerChangelog: []Status{
+			{
+				Version: version.FirstDockerVersion,
 				Enable:  false,
 			},
 		},
