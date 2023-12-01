@@ -3,6 +3,7 @@ package seccomp
 import (
 	"fmt"
 	"github.com/ctrsploit/ctrsploit/pkg/version"
+	"github.com/ctrsploit/sploit-spec/pkg/log"
 	"golang.org/x/sys/unix"
 	"strings"
 	"syscall"
@@ -44,6 +45,7 @@ func (s Syscall) Enabled() bool {
 		0,
 		0,
 	)
+	log.Logger.Debugf("syscall %d errno: %+v", s.Number, errno)
 	// return errno == unix.EFAULT
 	return errno != unix.EPERM
 }
