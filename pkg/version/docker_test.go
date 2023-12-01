@@ -28,6 +28,19 @@ func TestNew(t *testing.T) {
 			},
 		},
 		{
+			name: "beta1",
+			args: args{
+				version: "18.09.1-beta1",
+			},
+			want: Docker{
+				Major:  18,
+				Minor:  9,
+				Patch:  1,
+				IsBeta: true,
+				Beta:   1,
+			},
+		},
+		{
 			name: "release",
 			args: args{
 				version: "24.0.5",
@@ -73,6 +86,17 @@ func TestDocker_String(t *testing.T) {
 				Beta:   1,
 			},
 			wantVersion: "25.0.0-beta.1",
+		},
+		{
+			name: "beta1",
+			fields: fields{
+				Major:  18,
+				Minor:  9,
+				Patch:  1,
+				IsBeta: true,
+				Beta:   1,
+			},
+			wantVersion: "18.09.1-beta1",
 		},
 		{
 			name: "release",
