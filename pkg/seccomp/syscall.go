@@ -9,6 +9,16 @@ import (
 	"syscall"
 )
 
+const (
+	StateUnknown = iota
+	// StateValid means seccomp does not work
+	StateValid
+	// StateDisable means seccomp works
+	StateDisable
+	// StateUnsupported means seccomp works, and syscall hasn't been implemented, can guess runc version
+	StateUnsupported
+)
+
 type Status struct {
 	Version version.Version
 	Enable  bool
@@ -38,7 +48,7 @@ type Syscall struct {
 	DockerChangelog  []Status
 }
 
-func (s Syscall) Enabled() bool {
+func (s Syscall) State() (state int) {
 	_, _, errno := syscall.RawSyscall(
 		uintptr(s.Number),
 		0,
@@ -46,8 +56,22 @@ func (s Syscall) Enabled() bool {
 		0,
 	)
 	log.Logger.Debugf("syscall %d errno: %+v", s.Number, errno)
-	// return errno == unix.EFAULT
-	return errno != unix.EPERM
+	switch errno {
+	case unix.EPERM:
+		state = StateDisable
+	case unix.EFAULT:
+		state = StateValid
+	case unix.ENOSYS:
+		state = StateUnsupported
+	default:
+		state = StateUnknown
+	}
+	return
+}
+
+func (s Syscall) Enabled() bool {
+	state := s.State()
+	return state != StateDisable
 }
 
 func (s Syscall) Range(status bool) (r VersionRanges) {
