@@ -3,6 +3,7 @@ package seccomp
 import (
 	"fmt"
 	"github.com/ctrsploit/ctrsploit/pkg/version"
+	"golang.org/x/sys/unix"
 	"testing"
 )
 
@@ -14,4 +15,6 @@ func TestVersionRanges_String(t *testing.T) {
 		},
 	}
 	fmt.Println(v.String())
+
+	fmt.Println(unix.ENOSYS)
 }

@@ -3,9 +3,20 @@ package seccomp
 import (
 	"fmt"
 	"github.com/ctrsploit/ctrsploit/pkg/version"
+	"github.com/ctrsploit/sploit-spec/pkg/log"
 	"golang.org/x/sys/unix"
 	"strings"
 	"syscall"
+)
+
+const (
+	StateUnknown = iota
+	// StateValid means seccomp does not work
+	StateValid
+	// StateDisable means seccomp works
+	StateDisable
+	// StateUnsupported means seccomp works, and syscall hasn't been implemented, can guess runc version
+	StateUnsupported
 )
 
 type Status struct {
@@ -34,20 +45,33 @@ type Syscall struct {
 	Number           int
 	KernelMinVersion string
 	KernelMaxVersion string
-	DockerMinVersion version.Docker
-	DockerMaxVersion version.Docker
 	DockerChangelog  []Status
 }
 
-func (s Syscall) Enabled() bool {
+func (s Syscall) State() (state int) {
 	_, _, errno := syscall.RawSyscall(
 		uintptr(s.Number),
 		0,
 		0,
 		0,
 	)
-	// return errno == unix.EFAULT
-	return errno != unix.EPERM
+	log.Logger.Debugf("syscall %d errno: %+v", s.Number, errno)
+	switch errno {
+	case unix.EPERM:
+		state = StateDisable
+	case unix.EFAULT:
+		state = StateValid
+	case unix.ENOSYS:
+		state = StateUnsupported
+	default:
+		state = StateUnknown
+	}
+	return
+}
+
+func (s Syscall) Enabled() bool {
+	state := s.State()
+	return state != StateDisable
 }
 
 func (s Syscall) Range(status bool) (r VersionRanges) {
@@ -77,7 +101,6 @@ var (
 	IOURingSetup = Syscall{
 		Number:           unix.SYS_IO_URING_SETUP,
 		KernelMinVersion: "v5.1-rc1",
-		DockerMaxVersion: version.NewDocker("25.0.0-beta.1"),
 		DockerChangelog: []Status{
 			{
 				Version: version.FirstDockerVersion,
@@ -89,6 +112,17 @@ var (
 			},
 			{
 				Version: version.NewDocker("25.0.0-beta.1"),
+				Enable:  false,
+			},
+		},
+	}
+	NameToHandleAt = Syscall{
+		Number:           unix.SYS_NAME_TO_HANDLE_AT,
+		KernelMinVersion: "",
+		KernelMaxVersion: "",
+		DockerChangelog: []Status{
+			{
+				Version: version.FirstDockerVersion,
 				Enable:  false,
 			},
 		},
