@@ -6,11 +6,12 @@ ARG GOLANG_IMAGE="golang:${GO_VERSION}-${BASE_DEBIAN_DISTRO}"
 
 FROM ${GOLANG_IMAGE} AS base
 ARG APT_MIRROR
-WORKDIR /root/ctrsploit
+WORKDIR /root/app
 RUN sed -ri "s/(httpredir|deb).debian.org/${APT_MIRROR:-deb.debian.org}/g" /etc/apt/sources.list \
  && sed -ri "s/(security).debian.org/${APT_MIRROR:-security.debian.org}/g" /etc/apt/sources.list \
  && sed -ri "s/(snapshot).debian.org/${APT_MIRROR:-snapshot.debian.org}/g" /etc/apt/sources.list \
  && cat /etc/apt/sources.list
+RUN git config --global --add safe.directory /root/app
 
 FROM base AS gox
 ARG GOPROXY
@@ -21,7 +22,7 @@ RUN --mount=type=cache,target=/root/.cache/go-build \
 
 FROM base AS build-env
 ARG GOPROXY
-WORKDIR /root/ctrsploit
+WORKDIR /root/app
 COPY --from=gox /build/ /usr/local/bin/
 RUN --mount=type=cache,sharing=locked,id=ctrsploit-build-aptlib,target=/var/lib/apt \
     --mount=type=cache,sharing=locked,id=ctrsploit-build-aptcache,target=/var/cache/apt \
@@ -39,7 +40,6 @@ RUN --mount=type=bind,target=.,rw \
     --mount=type=cache,target=/go/pkg/mod,id=ctrsploit-mod \
     --mount=type=tmpfs,target=/go/src/ \
     make build-ctrsploit && mv bin/release /build
-#    GOPROXY=https://goproxy.io,https://goproxy.cn,direct go build -o /build/ -v github.com/ctrsploit/ctrsploit/cmd/ctrsploit
 
 # usage:
 # > docker buildx bake binary
