@@ -1,4 +1,4 @@
-package version
+package docker
 
 import (
 	"reflect"
@@ -12,14 +12,14 @@ func TestNew(t *testing.T) {
 	tests := []struct {
 		name string
 		args args
-		want Docker
+		want Version
 	}{
 		{
 			name: "beta",
 			args: args{
 				version: "25.0.0-beta.1",
 			},
-			want: Docker{
+			want: Version{
 				Major:  25,
 				Minor:  0,
 				Patch:  0,
@@ -32,7 +32,7 @@ func TestNew(t *testing.T) {
 			args: args{
 				version: "18.09.1-beta1",
 			},
-			want: Docker{
+			want: Version{
 				Major:  18,
 				Minor:  9,
 				Patch:  1,
@@ -45,7 +45,7 @@ func TestNew(t *testing.T) {
 			args: args{
 				version: "24.0.5",
 			},
-			want: Docker{
+			want: Version{
 				Major:  24,
 				Minor:  0,
 				Patch:  5,
@@ -56,14 +56,14 @@ func TestNew(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := NewDocker(tt.args.version); !reflect.DeepEqual(got, tt.want) {
+			if got := New(tt.args.version); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("NewDocker() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func TestDocker_String(t *testing.T) {
+func TestVersion_String(t *testing.T) {
 	type fields struct {
 		Major  int
 		Minor  int
@@ -112,7 +112,7 @@ func TestDocker_String(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			v := Docker{
+			v := Version{
 				Major:  tt.fields.Major,
 				Minor:  tt.fields.Minor,
 				Patch:  tt.fields.Patch,
