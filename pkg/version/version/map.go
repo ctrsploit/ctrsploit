@@ -10,3 +10,10 @@ func (m Map) Get(keys []string) (versions []Version) {
 	}
 	return
 }
+
+func (m Map) Values() (versions []Version) {
+	for _, v := range m {
+		versions = append(versions, v)
+	}
+	return
+}
