@@ -24,7 +24,7 @@ func Docker() {
 		return
 	}
 	state := syscall.IOURingSetup.State()
-	log.Logger.Debugf("io_uring_setup %v", state)
+	log.Logger.Debugf("io_uring_setup %s", state)
 	v := fmt.Sprintf("dockerd is in %+v", syscall.IOURingSetup.Range())
 	r := item.Long{
 		Name:        "dockerd-version",

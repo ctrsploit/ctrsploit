@@ -9,6 +9,20 @@ const (
 	StateUnsupported
 )
 
+func (t TypeState) String() (s string) {
+	switch t {
+	case StateValid:
+		s = "valid"
+	case StateDisable:
+		s = "disable"
+	case StateUnsupported:
+		s = "unsupported"
+	default:
+		s = "unknown"
+	}
+	return
+}
+
 type TypeSoftware int
 
 const (
