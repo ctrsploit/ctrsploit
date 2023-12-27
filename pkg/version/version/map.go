@@ -1,5 +1,7 @@
 package version
 
+// TODO: ordered map
+
 type Map map[string]Version
 
 func (m Map) Get(keys []string) (versions []Version) {
