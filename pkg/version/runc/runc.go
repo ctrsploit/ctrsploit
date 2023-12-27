@@ -21,5 +21,3 @@ type Version struct {
 func (v Version) String() (version string) {
 	return
 }
-
-type Versions map[string]Version

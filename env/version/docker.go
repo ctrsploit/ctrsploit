@@ -3,6 +3,7 @@ package version
 import (
 	"fmt"
 	"github.com/ctrsploit/ctrsploit/pkg/seccomp"
+	"github.com/ctrsploit/ctrsploit/pkg/syscall"
 	"github.com/ctrsploit/sploit-spec/pkg/log"
 	"github.com/ctrsploit/sploit-spec/pkg/printer"
 	"github.com/ctrsploit/sploit-spec/pkg/result"
@@ -22,14 +23,13 @@ func Docker() {
 	if seccompMode == 0 {
 		return
 	}
-	version := ""
-	enabled := seccomp.IOURingSetup.Enabled()
-	log.Logger.Debugf("io_uring_setup %t", enabled)
-	version = fmt.Sprintf("dockerd is in %s", seccomp.IOURingSetup.Range(enabled))
+	state := syscall.IOURingSetup.State()
+	log.Logger.Debugf("io_uring_setup %v", state)
+	v := fmt.Sprintf("dockerd is in %+v", syscall.IOURingSetup.Range())
 	r := item.Long{
 		Name:        "dockerd-version",
 		Description: "dockerd version range",
-		Result:      version,
+		Result:      v,
 	}
 	fmt.Println(printer.Printer.Print(r))
 }
