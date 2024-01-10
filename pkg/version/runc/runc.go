@@ -1,6 +1,9 @@
 package runc
 
-import "github.com/ctrsploit/ctrsploit/pkg/version/libseccomp"
+import (
+	"github.com/ctrsploit/ctrsploit/pkg/version/libseccomp"
+	"github.com/ctrsploit/ctrsploit/pkg/version/version"
+)
 
 type Releaser int
 
@@ -11,6 +14,7 @@ const (
 )
 
 type Version struct {
+	Number     version.Number
 	Url        string
 	Releaser   Releaser
 	Static     bool
@@ -19,5 +23,5 @@ type Version struct {
 }
 
 func (v Version) String() (version string) {
-	return
+	return v.Number.String()
 }
