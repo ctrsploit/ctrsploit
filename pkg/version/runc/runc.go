@@ -1,6 +1,7 @@
 package runc
 
 import (
+	"fmt"
 	"github.com/ctrsploit/ctrsploit/pkg/version/libseccomp"
 	"github.com/ctrsploit/ctrsploit/pkg/version/version"
 )
@@ -13,6 +14,24 @@ const (
 	DockerhubDind
 )
 
+var (
+	Releaser2Name = map[Releaser]string{
+		GithubRelease: "GithubRelease",
+		DockerhubDind: "DockerhubDind",
+	}
+)
+
+func (r Releaser) String() string {
+	switch r {
+	case GithubRelease:
+		return "github-release"
+	case DockerhubDind:
+		return "dind"
+	default:
+		return "unknown"
+	}
+}
+
 type Version struct {
 	Number     version.Number
 	Url        string
@@ -23,5 +42,9 @@ type Version struct {
 }
 
 func (v Version) String() (version string) {
-	return v.Number.String()
+	version = fmt.Sprintf("%s-%s", v.Number, v.Releaser)
+	if v.Static {
+		version = fmt.Sprintf("%s-static", version)
+	}
+	return
 }

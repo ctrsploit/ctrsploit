@@ -22,5 +22,5 @@ func New(v string) *Version {
 }
 
 func (v Version) String() (version string) {
-	return
+	return v.Number.String()
 }

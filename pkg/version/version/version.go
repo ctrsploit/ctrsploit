@@ -16,6 +16,7 @@ type Number struct {
 	Patch int
 	Rc    int
 	Beta  int
+	Init  bool // handle rc, beta default to be 0 instead of -1
 }
 
 func New(number string) *Number {
@@ -48,16 +49,19 @@ func New(number string) *Number {
 		Patch: patch,
 		Rc:    rc,
 		Beta:  beta,
+		Init:  true,
 	}
 }
 
 func (n Number) String() (s string) {
 	s = fmt.Sprintf("v%d.%d.%d", n.Major, n.Minor, n.Patch)
-	if n.Rc != -1 {
-		s = fmt.Sprintf("%s-rc%d", s, n.Rc)
-	}
-	if n.Beta != -1 {
-		s = fmt.Sprintf("%s-rc%d", s, n.Beta)
+	if n.Init {
+		if n.Rc != -1 {
+			s = fmt.Sprintf("%s-rc%d", s, n.Rc)
+		}
+		if n.Beta != -1 {
+			s = fmt.Sprintf("%s-rc%d", s, n.Beta)
+		}
 	}
 	return
 }
