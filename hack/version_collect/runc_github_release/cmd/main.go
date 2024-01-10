@@ -46,7 +46,7 @@ func main() {
 			if strings.Contains(asset.Name, "libseccomp") {
 				seccompVersion := strings.TrimPrefix(asset.Name, "libseccomp-")
 				seccompVersion = strings.TrimSuffix(asset.Name, ".tar.gz")
-				seccomp = libseccomp.New(seccompVersion)
+				seccomp = *libseccomp.New(seccompVersion)
 				break
 			}
 		}
