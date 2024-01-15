@@ -1,4 +1,4 @@
-package main
+package pkg
 
 import (
 	"debug/elf"
@@ -109,6 +109,26 @@ func ReadSymbol(path string) (ver libseccomp.Version, err error) {
 				Beta:  -1,
 				Init:  true,
 			},
+		}
+	}
+	return
+}
+
+func ReadLibseccompVersion(path string) (ver libseccomp.Version, err error) {
+	stripped, err := ElfStripped(path)
+	if err != nil {
+		awesome_error.CheckErr(err)
+		return
+	}
+	if stripped {
+		ver, err = ExecuteRuncVersion(path)
+		if err != nil {
+			return
+		}
+	} else {
+		ver, err = ReadSymbol(path)
+		if err != nil {
+			return
 		}
 	}
 	return
