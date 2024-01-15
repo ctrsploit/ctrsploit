@@ -38,6 +38,7 @@ type Version struct {
 	Releaser   Releaser
 	Static     bool
 	LibSeccomp libseccomp.Version
+	Image      []string // only set if released by dind
 	Note       string
 }
 

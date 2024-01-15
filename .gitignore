@@ -2,3 +2,4 @@
 bin
 cmd/tmp
 test/test_data/k8s/kubeconfig.json
+/hack/version_collect/runc_collector/cmd/runc_collector/runc_collector

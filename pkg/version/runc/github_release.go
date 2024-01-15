@@ -9,19 +9,6 @@ import (
 var (
 	GithubReleaseVersionsLastTimeUpdate, _ = time.Parse(time.RFC3339, "2024-01-10T18:00:00Z08:00")
 	GithubReleaseVersions                  = version.Map{
-		"1.0.0-rc92": Version{
-			Url:        "",
-			Releaser:   GithubRelease,
-			Static:     true,
-			LibSeccomp: libseccomp.Versions["2.4.1"].(libseccomp.Version),
-		},
-		"1.0.0-rc93": Version{
-			Url:        "https://github.com/opencontainers/runc/releases/download/v1.0.0-rc93/runc.amd64",
-			Releaser:   GithubRelease,
-			Static:     true,
-			LibSeccomp: libseccomp.Versions["2.5.1"].(libseccomp.Version),
-		},
-
 		"v1.1.11": Version{
 			Url:        "https://github.com/opencontainers/runc/releases/tag/v1.1.11",
 			Releaser:   GithubRelease,
