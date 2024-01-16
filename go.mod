@@ -12,6 +12,7 @@ require (
 	github.com/google/go-containerregistry v0.17.0
 	github.com/google/uuid v1.3.0
 	github.com/moby/sys/mountinfo v0.4.1
+	github.com/moby/term v0.0.0-20221205130635-1aeaba878587
 	github.com/opencontainers/runc v1.0.0-rc95
 	github.com/opencontainers/selinux v1.8.0
 	github.com/pkg/errors v0.9.1
