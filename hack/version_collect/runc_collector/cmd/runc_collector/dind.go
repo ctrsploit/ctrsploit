@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/ctrsploit/ctrsploit/hack/version_collect/runc_collector/pkg"
 	"github.com/ctrsploit/ctrsploit/pkg/version/libseccomp"
+	"github.com/ctrsploit/sploit-spec/pkg/log"
 	"github.com/ssst0n3/awesome_libs/awesome_error"
 	"os"
 	"strings"
@@ -13,7 +14,7 @@ func ImageLibseccompVersion(image string) (ver libseccomp.Version, err error) {
 	path, e := pkg.GetFileHostPath(image, "/usr/local/bin/runc")
 	if e != nil {
 		if os.IsNotExist(e) {
-			awesome_error.CheckWarning(fmt.Errorf("/usr/local/bin/runc not exists"))
+			log.Logger.Warn("/usr/local/bin/runc not exists")
 		} else {
 			err = e
 			awesome_error.CheckErr(err)
