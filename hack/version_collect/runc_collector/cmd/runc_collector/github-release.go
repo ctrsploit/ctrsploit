@@ -38,7 +38,7 @@ const (
 {.rbrace},`
 )
 
-func ReadLibseccompVersion(runcDownloadUrl string) (ver libseccomp.Version, err error) {
+func ReleaseLibseccompVersion(runcDownloadUrl string) (ver libseccomp.Version, err error) {
 	resp, err := http.DefaultClient.Get(runcDownloadUrl)
 	if err != nil {
 		awesome_error.CheckErr(err)
@@ -98,7 +98,7 @@ var (
 						// break
 					}
 					if asset.Name == "runc.amd64" {
-						seccomp, _ = ReadLibseccompVersion(asset.BrowserDownloadUrl)
+						seccomp, _ = ReleaseLibseccompVersion(asset.BrowserDownloadUrl)
 						break
 					}
 				}
