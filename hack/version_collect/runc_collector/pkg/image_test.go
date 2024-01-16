@@ -7,7 +7,7 @@ import (
 )
 
 func Test_inspect(t *testing.T) {
-	inspectGraphDrivers("docker:24.0.7-dind-alpine3.19")
+	inspectGraphDrivers("docker:24.0.7-dind-alpine3.191")
 }
 
 // TestGetFileHostPath
