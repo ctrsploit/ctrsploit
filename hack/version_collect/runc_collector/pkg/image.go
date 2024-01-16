@@ -87,7 +87,7 @@ func Pull(image string) (err error) {
 	}
 	_, _, err = cli.ImageInspectWithRaw(context.Background(), image)
 	if err != nil {
-		if strings.Contains(err.Error(), "No such images") {
+		if strings.Contains(err.Error(), "No such image") {
 			err = nil
 		} else {
 			awesome_error.CheckErr(err)

@@ -74,13 +74,17 @@ func ExecuteRuncVersion(path string) (ver libseccomp.Version, err error) {
 }
 
 func ReadSymbol(path string) (ver libseccomp.Version, err error) {
-	cmd := exec.Command("gdb", "-q", "-ex", "p library_version", "-ex", "quit", path)
+	//cmd := exec.Command("gdb", "-q", "-ex", "p library_version", "-ex", "quit", path)
+	cmd := exec.Command("gdb", "-q", "-ex", "x/3w &library_version", "-ex", "quit", path)
 	output, err := cmd.Output()
 	if err != nil {
 		awesome_error.CheckErr(err)
 		return
 	}
-	re := regexp.MustCompile(`major = (\d+), minor = (\d+), micro = (\d+)`)
+	//log.Logger.Info(string(output))
+	//re := regexp.MustCompile(`major = (\d+), minor = (\d+), micro = (\d+)`)
+	//matches := re.FindStringSubmatch(string(output))
+	re := regexp.MustCompile(`<library_version>:\s+(\d+)\s+(\d+)\s+(\d+)`)
 	matches := re.FindStringSubmatch(string(output))
 
 	if matches != nil && len(matches) == 4 {
