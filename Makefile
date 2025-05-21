@@ -1,4 +1,4 @@
-.PHONY: all shell local build
+.PHONY: all shell local build test
 
 APP_NAME := ctrsploit
 
@@ -23,7 +23,7 @@ LDFLAGS := "$(SLIM_LDFLAGS) \
 	-X github.com/ctrsploit/sploit-spec/pkg/version.BuildTime=${BUILD_TIME}"
 
 # image
-DEV_IMAGE := ${APP_NAME}-dev
+DEV_IMAGE := ghcr.io/ctrsploit/ctrsploit-dev # TODO: add version
 DOCKERFILE := Dockerfile_dev
 
 # build flags
@@ -62,3 +62,10 @@ shell: image
 #	use cn mirrors
 # DEBUG=1
 #	build --progress=plain
+
+unittest:
+	go test -v github.com/ctrsploit/ctrsploit/...
+test:
+	docker run --rm -v $(CURDIR):/root/app --env TEST_ENV=$(TEST_ENV) $(DEV_IMAGE) make unittest
+e2e:
+	./test/e2e.sh

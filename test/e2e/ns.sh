@@ -1,1 +1,0 @@
-docker run --env CTRSPLOIT_TEST_ ctrsploit
