@@ -6,6 +6,7 @@ import (
 	"github.com/ctrsploit/ctrsploit/cmd/ctrsploit/env"
 	"github.com/ctrsploit/ctrsploit/cmd/ctrsploit/exploit"
 	"github.com/ctrsploit/ctrsploit/cmd/ctrsploit/helper"
+	"github.com/ctrsploit/ctrsploit/cmd/ctrsploit/vul"
 	"github.com/ctrsploit/sploit-spec/pkg/app"
 	"github.com/ctrsploit/sploit-spec/pkg/log"
 	"github.com/ctrsploit/sploit-spec/pkg/version"
@@ -31,6 +32,7 @@ func main() {
 			env.Command,
 			exploit.Command,
 			checksec.Command,
+			vul.Command,
 			helper.Command,
 			version.Command,
 		},

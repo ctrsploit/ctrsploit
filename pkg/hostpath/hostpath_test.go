@@ -17,16 +17,15 @@ func TestWritableAccessible(t *testing.T) {
 }
 
 func TestE2E_WritableAccessible(t *testing.T) {
-	paths, err := WritableAccessible()
-	require.NoError(t, err)
-
 	testEnv := os.Getenv("TEST_ENV")
 	type expected struct {
 		path        Path
 		hostPattern string
 	}
 
-	// 针对不同的测试环境，构造各自的预期数据
+	paths, err := WritableAccessible()
+	require.NoError(t, err)
+
 	envExpectations := map[string][]expected{
 		"docker-v19.03.13": {
 			{

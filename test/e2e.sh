@@ -66,6 +66,8 @@ test_cmd() {
   '"
 }
 
+SEARCH_DIR=${1:-.}
+
 # Loop through all e2e.yml files in the current directory recursively.
 while IFS= read -r e2e_file; do
   echo "=================================="
@@ -90,6 +92,18 @@ while IFS= read -r e2e_file; do
 
     startup_testEnv "${DQD_DIR}"
     upload_codebase "${ENV_NAME}"
-    test_cmd "${ENV_NAME}" "${ENV_CMD}"
+    # The test_cmd function is called with ENV_NAME and ENV_CMD as its arguments.
+    # We explicitly redirect its standard input from /dev/null using '< /dev/null'.
+    # This redirection is important because:
+    #
+    # 1. The outer while loop reads its input (list of files) from a process substitution.
+    #    If test_cmd or any command inside it accidentally reads from standard input,
+    #    it might consume the input intended for the loop and cause the loop to terminate early.
+    #
+    # 2. By redirecting stdin from /dev/null, we ensure that test_cmd receives an empty input,
+    #    preventing it from interfering with the loop's ability to read remaining file names.
+    #
+    # This safeguard is necessary even if test_cmd itself does not seem to require any input.
+    test_cmd "${ENV_NAME}" "${ENV_CMD}" < /dev/null
   done
-done < <(find . -type f -name "e2e.yml")
+done < <(find ${SEARCH_DIR} -type f -name "e2e.yml")
