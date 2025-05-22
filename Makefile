@@ -67,5 +67,6 @@ unittest:
 	go test -v github.com/ctrsploit/ctrsploit/...
 test:
 	docker run --rm -v $(CURDIR):/root/app --env TEST_ENV=$(TEST_ENV) $(DEV_IMAGE) make unittest
+
 e2e:
-	./test/e2e.sh
+	./test/e2e.sh $(DIR)
