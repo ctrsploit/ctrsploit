@@ -156,11 +156,9 @@ test_envs:
     dqd_dir: docker/v19.03.13-e2e
     cmd: docker run --rm -v $(pwd):/root/app --env TEST_ENV=docker-v19.03.13-e2e ghcr.io/ctrsploit/ctrsploit-dev:latest
       go test -v -run '^TestE2E' github.com/ctrsploit/ctrsploit/pkg/hostpath
+    # optional
+    stop_flag: ok*github.com/ctrsploit/ctrsploit/pkg/hostpath
 ```
-
-### Directory Structure
-
-The script calculates the project directory as two levels up from its location. Ensure your directory structure aligns with this expectation, or modify the script accordingly.
 
 ---
 
