@@ -3,5 +3,10 @@ test_envs:
   - name: docker-v19.03.13
     kind: dqd
     dqd_dir: docker/v19.03.13
-    cmd: docker run --rm -v $(pwd):/root/app --env TEST_ENV=docker-v19.03.13 ghcr.io/ctrsploit/ctrsploit-dev:latest
+    pre_cmd: |
+      mkdir -p /root/ctrsploit;
+      tar xzf ctrsploit.tar.gz -C /root/ctrsploit;
+      docker load < /root/dev-image.tar;
+      # TODO: pull dev image from the remote registry instead of loading it from a local tarball
+    cmd: docker run --rm -v /root/ctrsploit:/root/app --env TEST_ENV=docker-v19.03.13 ghcr.io/ctrsploit/ctrsploit-dev:latest
          go test -v -run '^TestE2E' github.com/ctrsploit/ctrsploit/pkg/hostpath

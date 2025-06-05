@@ -4,6 +4,7 @@ import (
 	"github.com/ctrsploit/ctrsploit/cmd/ctrsploit/env"
 	"github.com/ctrsploit/ctrsploit/vul"
 	cve_2020_15257 "github.com/ctrsploit/ctrsploit/vul/cve-2020-15257"
+	cve_2025_47290 "github.com/ctrsploit/ctrsploit/vul/cve-2025-47290"
 	"github.com/ctrsploit/ctrsploit/vul/shocker"
 	"github.com/ctrsploit/ctrsploit/vul/sys_admin"
 	"github.com/ctrsploit/sploit-spec/pkg/app"
@@ -21,5 +22,6 @@ var Command = &cli.Command{
 		app.Vul2ChecksecCmd(&vul.NetworkNamespaceHostLevel, []string{"host"}, nil),
 		app.Vul2ChecksecCmd(&shocker.Shocker, []string{"cap_dac_read_search", "open_by_handle_at"}, nil),
 		cve_2020_15257.CheckSecCmd,
+		cve_2025_47290.CheckSecCmd,
 	},
 }

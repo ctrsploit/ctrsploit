@@ -44,36 +44,37 @@ startup_testEnv() {
   docker compose -f docker-compose.yml -f docker-compose.kvm.yml up -d
   sleep 1
   popd > /dev/null
+}
 
+stop_testEnv() {
+  local dqd_dir="$1"
+  pushd "${docker_archive_dir}/${dqd_dir}" > /dev/null
+  docker compose -f docker-compose.yml -f docker-compose.kvm.yml down
+  popd > /dev/null
 }
 
 test_cmd() {
   local remote_host="$1"
-  local cmd="$2"
+  local pre_cmd="$2"
+  local cmd="$3"
 
   # TODO: remove this when the dev image is available in the remote registry
   docker save ghcr.io/ctrsploit/ctrsploit-dev > /tmp/dev-image.tar
   scp /tmp/dev-image.tar "${remote_host}:/root/dev-image.tar"
-
   ssh "$remote_host" bash -c "'
-    set -euo pipefail
-    mkdir -p ctrsploit
-    tar xzf ctrsploit.tar.gz -C ctrsploit
-    cd ctrsploit
-    git config --global --add safe.directory /root/ctrsploit
-    # TODO: remove this when the dev image is available in the remote registry
-    docker load < /root/dev-image.tar
+    set -euo pipefail;
+    $pre_cmd
     $cmd
   '"
 }
 
 do_test() {
     local remote_host="$1"
-    local cmd="$2"
-    local stop_flag="$3"
+    local pre_cmd="$2"
+    local cmd="$3"
+    local stop_flag="$4"
     if [[ -z "$stop_flag" ]]; then
       echo "No stop flag provided."
-      # The test_cmd function is called with ENV_NAME and ENV_CMD as its arguments.
       # We explicitly redirect its standard input from /dev/null using '< /dev/null'.
       # This redirection is important because:
       #
@@ -85,18 +86,16 @@ do_test() {
       #    preventing it from interfering with the loop's ability to read remaining file names.
       #
       # This safeguard is necessary even if test_cmd itself does not seem to require any input.
-      test_cmd "${ENV_NAME}" "${ENV_CMD}" < /dev/null
+      test_cmd "${remote_host}" "${pre_cmd}" "${cmd}" < /dev/null
     else
       fifo="/tmp/command_fifo.$$"
       mkfifo "$fifo"
-      test_cmd "${ENV_NAME}" "${ENV_CMD}" < /dev/null > "$fifo" &
+      test_cmd "${remote_host}" "${pre_cmd}" "${cmd}" < /dev/null > "$fifo" &
       # stop until the stop_flag
       while IFS= read -r line; do
         echo "$line"
-        if [[ "$line" == *${STOP_FLAG}* ]]; then
-          pushd "${docker_archive_dir}/${DQD_DIR}" > /dev/null
-          docker compose -f docker-compose.yml -f docker-compose.kvm.yml down
-          popd > /dev/null
+        if [[ "$line" == *${stop_flag}* ]]; then
+          break
         fi
       done < "$fifo"
       rm $fifo
@@ -119,43 +118,21 @@ while IFS= read -r e2e_file; do
   for (( i = 0; i < num_envs; i++ )); do
     # Extract the test environment details.
     ENV_NAME=$(yq eval ".test_envs[$i].name" "$e2e_file")
+    ENV_PRE_CMD=$(yq eval ".test_envs[$i].pre_cmd" "$e2e_file")
     ENV_CMD=$(yq eval ".test_envs[$i].cmd" "$e2e_file")
     DQD_DIR=$(yq eval ".test_envs[$i].dqd_dir" "$e2e_file")
     STOP_FLAG=$(yq eval ".test_envs[$i].stop_flag" "$e2e_file")
 
     echo "----------------------------------"
     echo "TEST_ENV = ${ENV_NAME}"
+    echo "PRE_CMD = ${ENV_PRE_CMD}"
     echo "TEST_CMD = ${ENV_CMD}"
     echo "DQD_DIR  = ${DQD_DIR}"
     echo "STOP_FLAG  = ${STOP_FLAG}"
 
     startup_testEnv "${DQD_DIR}"
     upload_codebase "${ENV_NAME}"
-    do_test "${ENV_NAME}" "${ENV_CMD}" "${STOP_FLAG}"
-#    fifo="/tmp/command_fifo.$$"
-#    mkfifo "$fifo"
-#    # The test_cmd function is called with ENV_NAME and ENV_CMD as its arguments.
-#    # We explicitly redirect its standard input from /dev/null using '< /dev/null'.
-#    # This redirection is important because:
-#    #
-#    # 1. The outer while loop reads its input (list of files) from a process substitution.
-#    #    If test_cmd or any command inside it accidentally reads from standard input,
-#    #    it might consume the input intended for the loop and cause the loop to terminate early.
-#    #
-#    # 2. By redirecting stdin from /dev/null, we ensure that test_cmd receives an empty input,
-#    #    preventing it from interfering with the loop's ability to read remaining file names.
-#    #
-#    # This safeguard is necessary even if test_cmd itself does not seem to require any input.
-#    test_cmd "${ENV_NAME}" "${ENV_CMD}" < /dev/null > "$fifo" &
-#    # stop until the stop_flag
-#    while IFS= read -r line; do
-#      echo "$line"
-#      if [[ "$line" == *${STOP_FLAG}* ]]; then
-#        pushd "${docker_archive_dir}/${DQD_DIR}" > /dev/null
-#        docker compose -f docker-compose.yml -f docker-compose.kvm.yml down
-#        popd > /dev/null
-#      fi
-#    done < "$fifo"
-#    rm $fifo
+    do_test "${ENV_NAME}" "${ENV_PRE_CMD}" "${ENV_CMD}" "${STOP_FLAG}"
+    stop_testEnv "${DQD_DIR}"
   done
 done < <(find ${SEARCH_DIR} -type f -name "e2e.yml")
