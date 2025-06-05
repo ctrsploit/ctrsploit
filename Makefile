@@ -23,7 +23,8 @@ LDFLAGS := "$(SLIM_LDFLAGS) \
 	-X github.com/ctrsploit/sploit-spec/pkg/version.BuildTime=${BUILD_TIME}"
 
 # image
-DEV_IMAGE := ghcr.io/ctrsploit/ctrsploit-dev # TODO: add version
+# TODO: add version
+DEV_IMAGE := ghcr.io/ctrsploit/ctrsploit-dev:latest
 DOCKERFILE := Dockerfile_dev
 
 # build flags
