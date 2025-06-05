@@ -33,14 +33,11 @@ BUILD_GO_PROXY := $(if $(GOPROXY),--build-arg GOPROXY="$(GOPROXY)")
 BUILD_SLIM_LDFLAGS := $(if $(SLIM_LDFLAGS), --build-arg SLIM_LDFLAGS="$(SLIM_LDFLAGS)")
 BUILD_OPTS := ${BUILD_APT_MIRROR} ${BUILD_GO_PROXY} ${BUILD_SLIM_LDFLAGS} ${DOCKER_BUILD_ARGS} ${DOCKER_BUILD_OPTS} -f "$(DOCKERFILE)"
 
-binary: bundle
+binary:
 	APT_MIRROR="$(APT_MIRROR)" GOPROXY="$(GOPROXY)" SLIM_LDFLAGS="$(SLIM_LDFLAGS)" docker buildx bake binary ${DEBUG_FLGAS}
 
-bundle:
-	mkdir -p bin/release
-
 build:
-	LDFLAGS=$(LDFLAGS) ./release.sh
+	LDFLAGS=$(LDFLAGS) ./script/release.sh
 
 install: build
 	rm -f /usr/local/bin/${APP_NAME} && ln -s $(CURDIR)/bin/release/${APP_NAME}_linux_amd64 /usr/local/bin/${APP_NAME}

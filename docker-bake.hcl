@@ -26,5 +26,5 @@ target "binary" {
   dockerfile = "Dockerfile_dev"
   inherits = ["_common"]
   target = "binary"
-  output = ["bin/release"]
+  output = ["bin"]
 }
