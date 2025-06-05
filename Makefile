@@ -14,7 +14,7 @@ DEBUG_FLAGS ?= $(if $(DEBUG),$(PROGRESS_PLAIN),)
 
 # ldflags
 GIT_COMMIT := $(shell git rev-parse --short HEAD || echo unsupported)
-VERSION := $(shell cat ./VERSION)
+VERSION := $(shell ./script/version.sh)
 BUILD_TIME := $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")
 SLIM_LDFLAGS ?= -s -w
 LDFLAGS := "$(SLIM_LDFLAGS) \
@@ -23,8 +23,8 @@ LDFLAGS := "$(SLIM_LDFLAGS) \
 	-X github.com/ctrsploit/sploit-spec/pkg/version.BuildTime=${BUILD_TIME}"
 
 # image
-# TODO: add version
-DEV_IMAGE := ghcr.io/ctrsploit/ctrsploit-dev:latest
+IMAGE_NAME := ghcr.io/ctrsploit/ctrsploit-dev
+DEV_IMAGE := $(IMAGE_NAME):$(VERSION)
 DOCKERFILE := Dockerfile_dev
 
 # build flags
@@ -44,6 +44,7 @@ install: build
 
 image:
 	docker buildx build $(BUILD_OPTS) --load -t "$(DEV_IMAGE)" ${DEBUG_FLAGS} .
+	docker tag $(DEV_IMAGE) $(IMAGE_NAME):latest
 
 shell: image
 	docker run --rm -ti -v $(CURDIR):/root/app $(DEV_IMAGE) bash
