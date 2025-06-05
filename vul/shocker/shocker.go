@@ -26,7 +26,11 @@ var Shocker = Vulnerability{
 	BaseVulnerability: vul.BaseVulnerability{
 		Name:        "shocker",
 		Description: "Container escape with CAP_DAC_READ_SEARCH, alias shocker, found by Sebastian Krahmer (stealth) in 2014.",
-		ExeEnv:      exeenv.InContainer,
+		ExeEnv: exeenv.ExeEnv{
+			Env:     exeenv.InContainer,
+			Check:   exeenv.InContainer,
+			Exploit: exeenv.InContainer,
+		},
 		CheckSecPrerequisites: prerequisite.Prerequisites{
 			&capability.CapDacReadSearchBnd,
 		},
@@ -54,6 +58,7 @@ var Exploit = app.Vul2ExploitCmd(
 			Value:       "/etc/hosts",
 		},
 	},
+	true,
 )
 
 func (v Vulnerability) GetFd(inode int, ref string) (fd int, err error) {

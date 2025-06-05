@@ -17,7 +17,11 @@ var (
 		vul.BaseVulnerability{
 			Name:        "host_net_ns",
 			Description: "The network namespace of the host is shared",
-			ExeEnv:      exeenv.InContainer,
+			ExeEnv: exeenv.ExeEnv{
+				Env:     exeenv.InContainer,
+				Check:   exeenv.InContainer,
+				Exploit: exeenv.InContainer,
+			},
 			CheckSecPrerequisites: prerequisite.Prerequisites{
 				&namespace.NetworkNamespaceLevelHost,
 			},

@@ -54,8 +54,8 @@ github.com/cpuguy83/go-md2man/v2 v2.0.2/go.mod h1:tgQtvFlXSQOSOSIRvRPT7W67SCa46t
 github.com/cpuguy83/go-md2man/v2 v2.0.5 h1:ZtcqGrnekaHpVLArFSe4HK5DoKx1T0rq2DwVB0alcyc=
 github.com/cpuguy83/go-md2man/v2 v2.0.5/go.mod h1:tgQtvFlXSQOSOSIRvRPT7W67SCa46tRHOmNcaadrF8o=
 github.com/creack/pty v1.1.9/go.mod h1:oKZEueFk5CKHvIhNR5MUki03XCEU+Q6VDXinZuGJ33E=
-github.com/ctrsploit/sploit-spec v0.5.0-rc9 h1:xcAjL2G59Tze+5R4YEMZKj/keauo003mr74avpJnzJs=
-github.com/ctrsploit/sploit-spec v0.5.0-rc9/go.mod h1:8SEHnTOBTwXdgp/9LV6ZwDPXx5B9pQOJuf0X5w7qd7Q=
+github.com/ctrsploit/sploit-spec v0.5.1 h1:20wTUHz1A83uDRTIq6RtyW7xz/E9mAcV6bHWrezIpgw=
+github.com/ctrsploit/sploit-spec v0.5.1/go.mod h1:8SEHnTOBTwXdgp/9LV6ZwDPXx5B9pQOJuf0X5w7qd7Q=
 github.com/cyphar/filepath-securejoin v0.3.5 h1:L81NHjquoQmcPgXcttUS9qTSR/+bXry6pbSINQGpjj4=
 github.com/cyphar/filepath-securejoin v0.3.5/go.mod h1:edhVd3c6OXKjUmSrVa/tGJRS9joFTxlslFCAyaxigkE=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=

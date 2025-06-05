@@ -12,7 +12,7 @@ require (
 	github.com/containerd/platforms v1.0.0-rc.1
 	github.com/containerd/ttrpc v1.2.7
 	github.com/containerd/typeurl v1.0.2
-	github.com/ctrsploit/sploit-spec v0.5.0-rc9
+	github.com/ctrsploit/sploit-spec v0.5.1
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc
 	github.com/docker/docker v27.3.1+incompatible
 	github.com/google/cadvisor v0.48.1

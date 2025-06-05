@@ -20,7 +20,11 @@ var (
 		BaseVulnerability: vul.BaseVulnerability{
 			Name:        "cap_sys_admin",
 			Description: "Container can be escaped when has cap_sys_admin and use cgroups v1",
-			ExeEnv:      exeenv.InContainer,
+			ExeEnv: exeenv.ExeEnv{
+				Env:     exeenv.InContainer,
+				Check:   exeenv.InContainer,
+				Exploit: exeenv.InContainer,
+			},
 			CheckSecPrerequisites: prerequisite.Prerequisites{
 				&capability.CapSysAdminBnd,
 			},
