@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+SCRIPT_DIR=$(dirname "$(readlink -f "$0")")
+PROJECT_DIR=$(dirname ${SCRIPT_DIR})
+pushd ${PROJECT_DIR} > /dev/null
+
 function get_version() {
     # detect is there any tag
     if git describe --tags --abbrev=0 >/dev/null 2>&1; then
@@ -37,3 +41,4 @@ function get_version() {
 
 get_version
 echo "$VERSION"
+popd > /dev/null

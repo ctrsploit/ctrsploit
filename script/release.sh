@@ -21,3 +21,8 @@ CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -o env_linux_arm64 -ldflags "${LD
 
 cd -
 upx bin/latest/* || echo done
+
+if [[ "${RELEASE_DIR}" == *release* ]]; then
+    rm -f bin/release/latest
+    ln -s $(realpath --relative-to=bin ${RELEASE_DIR}) bin/release/latest
+fi
