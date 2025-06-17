@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-SCRIPT_DIR=$(dirname "$(readlink -f "$0")")
+SCRIPT_DIR=$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")
 PROJECT_DIR=$(dirname ${SCRIPT_DIR})
 pushd ${PROJECT_DIR} > /dev/null
 

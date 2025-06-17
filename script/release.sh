@@ -1,7 +1,7 @@
 #!/bin/bash
 set -ex
 
-SCRIPT_DIR=$(dirname "$(readlink -f "$0")")
+SCRIPT_DIR=$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")
 PROJECT_DIR=$(dirname ${SCRIPT_DIR})
 
 # setup RELEASE_DIR
