@@ -9,7 +9,7 @@ import (
 	"github.com/ssst0n3/awesome_libs/slice"
 )
 
-type Capability struct {
+type Contains struct {
 	ExpectedCapability string
 	Pid                []string
 	// check CapBnd or CapEff, CapBnd for check vul exists, CapEff for check vul exploitable
@@ -17,8 +17,8 @@ type Capability struct {
 	prerequisite.BasePrerequisite
 }
 
-func BndContainsCap(name string) Capability {
-	return Capability{
+func BndContainsCap(name string) Contains {
+	return Contains{
 		ExpectedCapability: name,
 		Pid:                []string{"1", "self"},
 		CapType:            cap.Bounding,
@@ -30,8 +30,8 @@ func BndContainsCap(name string) Capability {
 	}
 }
 
-func EffContainsCap(name string) Capability {
-	return Capability{
+func EffContainsCap(name string) Contains {
+	return Contains{
 		ExpectedCapability: name,
 		Pid:                []string{"self"},
 		CapType:            cap.Effective,
@@ -50,7 +50,7 @@ var (
 	CapDacReadSearchEff = EffContainsCap("CAP_DAC_READ_SEARCH")
 )
 
-func (p *Capability) Check() (err error) {
+func (p *Contains) Check() (err error) {
 	err = p.BasePrerequisite.Check()
 	if err != nil {
 		return

@@ -14,6 +14,6 @@ func Escalate(primitive Primitive) (err error) {
 	if err != nil {
 		return
 	}
-	internal.InvokeRootShell()
+	internal.InvokeRootShellBySu()
 	return
 }
