@@ -180,6 +180,7 @@ root@ctr # ./ctrsploit e ra -c "cat /etc/hostname"
 | [cve-2021-22555_ubuntu18.04](./exploit/CVE-2021-22555_ubuntu18.04)                       | 22555 | 利用CVE-2021-22555的逃逸技术 (ubuntu18.04)                    |
 | [cve-2020-15257](./vul/cve-2020-15257)                                                   | 15257 | containerd cve-2020-15257 共享主机网络的容器逃逸                  | 
 | [cve-2025-47290](./vul/cve-2025-47290)                                                   | 47290 | containerd cve-2025-47290 镜像解包时可以访问主机文件系统              | 
+| [cve-2016-8867](./vul/cve-2016-8867)                                                     | 8867  | runc cve-2016-8867 容器普通用户借助环境能力集提权                     | 
 
 ### helper
 
