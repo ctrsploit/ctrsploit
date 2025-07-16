@@ -5,6 +5,7 @@ import (
 	cve_2020_15257 "github.com/ctrsploit/ctrsploit/vul/cve-2020-15257"
 	cve_2025_47290 "github.com/ctrsploit/ctrsploit/vul/cve-2025-47290"
 	"github.com/ctrsploit/ctrsploit/vul/shocker"
+	"github.com/ctrsploit/ctrsploit/vul/sys_admin"
 	"github.com/ctrsploit/ctrsploit/vul/sys_admin/release_agent"
 	"github.com/urfave/cli/v2"
 )
@@ -16,6 +17,7 @@ var Command = &cli.Command{
 	Subcommands: []*cli.Command{
 		cve_2025_47290.VulCmd,
 		cve_2020_15257.VulCmd,
+		sys_admin.VulCmd,
 		release_agent.VulCmd,
 		cve_2016_8867.VulCmd,
 		shocker.VulCmd,

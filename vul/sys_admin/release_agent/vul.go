@@ -6,7 +6,7 @@ import (
 )
 
 var (
-	aliases      = []string{"ra", "cgroup_v1_release_agent", "cap_sys_admin", "sys_admin"}
+	aliases      = []string{"ra", "cgroup_v1_release_agent"}
 	flagsExploit = []cli.Flag{
 		&cli.StringFlag{Name: "cmd", Aliases: []string{"c"}, Required: true},
 	}
