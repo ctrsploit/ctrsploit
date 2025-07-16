@@ -29,9 +29,6 @@ var (
 				Exploit: exeenv.InContainer,
 			},
 			CheckSecPrerequisites: prerequisite.Prerequisites{
-				&capability.CapSysAdminBnd,
-			},
-			ExploitablePrerequisites: prerequisite.Prerequisites{
 				&capability.CapSysAdminEff,
 				&user.MustBeRootToWriteReleaseAgent,
 				&cgroups.V1,

