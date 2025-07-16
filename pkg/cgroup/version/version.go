@@ -1,8 +1,8 @@
 package version
 
 import (
+	"github.com/containerd/containerd/pkg/cri/opts"
 	"github.com/ctrsploit/sploit-spec/pkg/log"
-	"github.com/opencontainers/runc/libcontainer/cgroups"
 	"github.com/ssst0n3/awesome_libs/awesome_error"
 	"golang.org/x/sys/unix"
 	"os"
@@ -23,7 +23,7 @@ const (
 
 // IsCgroupV2BorrowedFromRunc https://github.com/opencontainers/runc/blob/3f2f06dfe1b3289b01daa531964b4f0af49cdf2d/docs/cgroup-v2.md#am-i-using-cgroup-v2
 func IsCgroupV2BorrowedFromRunc() bool {
-	return cgroups.IsCgroup2UnifiedMode()
+	return opts.IsCgroup2UnifiedMode()
 }
 
 func getStatfs() (st unix.Statfs_t, err error) {
