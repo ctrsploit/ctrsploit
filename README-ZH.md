@@ -175,12 +175,13 @@ root@ctr # ./ctrsploit e ra -c "cat /etc/hostname"
 
 | exploit                                                                                  | 缩写    | 简述                                                     |
 |------------------------------------------------------------------------------------------|-------|--------------------------------------------------------|
-| [cgroupv1-release_agent](./exploit/cgroupv1-release_agent)                               | ra    | 利用cgroup v1的notify_on_release功能的逃逸技术                   |
 | [cgroupv1-release_agent-unknown_rootfs](./exploit/cgroupv1-release_agent-unknown_rootfs) | ra3   | 在不知道rootfs在宿主机路径时，利用cgroup v1的notify_on_release功能的逃逸技术 |
 | [cve-2021-22555_ubuntu18.04](./exploit/CVE-2021-22555_ubuntu18.04)                       | 22555 | 利用CVE-2021-22555的逃逸技术 (ubuntu18.04)                    |
-| [cve-2020-15257](./vul/cve-2020-15257)                                                   | 15257 | containerd cve-2020-15257 共享主机网络的容器逃逸                  | 
 | [cve-2025-47290](./vul/cve-2025-47290)                                                   | 47290 | containerd cve-2025-47290 镜像解包时可以访问主机文件系统              | 
+| [cve-2020-15257](./vul/cve-2020-15257)                                                   | 15257 | containerd cve-2020-15257 共享主机网络的容器逃逸                  | 
+| [release_agent](./vul/sys_admin/release_agent)                                           | ra    | 利用cgroup v1的notify_on_release功能的逃逸技术                   |
 | [cve-2016-8867](./vul/cve-2016-8867)                                                     | 8867  | runc cve-2016-8867 容器普通用户借助环境能力集提权                     | 
+| [shocker](./vul/shocker)                                                                 |
 
 ### helper
 

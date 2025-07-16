@@ -7,7 +7,7 @@ import (
 	cve_2020_15257 "github.com/ctrsploit/ctrsploit/vul/cve-2020-15257"
 	cve_2025_47290 "github.com/ctrsploit/ctrsploit/vul/cve-2025-47290"
 	"github.com/ctrsploit/ctrsploit/vul/shocker"
-	"github.com/ctrsploit/ctrsploit/vul/sys_admin"
+	"github.com/ctrsploit/ctrsploit/vul/sys_admin/release_agent"
 	"github.com/ctrsploit/sploit-spec/pkg/app"
 	"github.com/urfave/cli/v2"
 )
@@ -19,10 +19,10 @@ var Command = &cli.Command{
 	Subcommands: []*cli.Command{
 		Auto,
 		env.Command,
-		app.Vul2ChecksecCmd(&sys_admin.SysadminCgroupV1, []string{"sys_admin", "release_agent", "ra"}, nil),
 		app.Vul2ChecksecCmd(&vul.NetworkNamespaceHostLevel, []string{"host"}, nil),
 		cve_2025_47290.CheckSecCmd,
 		cve_2020_15257.CheckSecCmd,
+		release_agent.CheckSecCmd,
 		cve_2016_8867.CheckSecCmd,
 		shocker.CheckSecCmd,
 	},
