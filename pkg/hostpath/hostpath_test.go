@@ -37,9 +37,9 @@ func TestE2E_WritableAccessible(t *testing.T) {
 			},
 			{
 				path: Path{
-					ContainerPath: "/root/app",
+					ContainerPath: "/usr/bin/ctrsploit.test",
 					Type:          TypeUserCustomBindMount,
-					HostPath:      "/root/ctrsploit",
+					HostPath:      "/ctrsploit.test",
 				},
 			},
 			{
