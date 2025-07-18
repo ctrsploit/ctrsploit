@@ -19,9 +19,9 @@ var Command = &cli.Command{
 		cve_2025_47290.VulCmd,
 		cve_2022_39253.VulCmd,
 		cve_2020_15257.VulCmd,
+		cve_2016_8867.VulCmd,
 		sys_admin.VulCmd,
 		release_agent.VulCmd,
-		cve_2016_8867.VulCmd,
 		shocker.VulCmd,
 	},
 }
