@@ -15,7 +15,7 @@ import (
 var Command = &cli.Command{
 	Name:    "vul",
 	Aliases: []string{"v"},
-	Usage:   "check security inside a container",
+	Usage:   "list vulnerabilities",
 	Subcommands: []*cli.Command{
 		cve_2025_47290.VulCmd,
 		cve_2022_39253.VulCmd,
