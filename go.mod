@@ -5,6 +5,7 @@ go 1.23.0
 toolchain go1.23.3
 
 require (
+	github.com/Masterminds/semver/v3 v3.4.0
 	github.com/containerd/cgroups v1.1.0
 	github.com/containerd/containerd v1.7.23
 	github.com/containerd/containerd/api v1.9.0
