@@ -5,6 +5,7 @@ import (
 	cve_2020_15257 "github.com/ctrsploit/ctrsploit/vul/cve-2020-15257"
 	cve_2021_25741 "github.com/ctrsploit/ctrsploit/vul/cve-2021-25741"
 	cve_2022_39253 "github.com/ctrsploit/ctrsploit/vul/cve-2022-39253"
+	cve_2025_23266 "github.com/ctrsploit/ctrsploit/vul/cve-2025-23266"
 	cve_2024_23650 "github.com/ctrsploit/ctrsploit/vul/cve-2024-23650"
 	cve_2025_47290 "github.com/ctrsploit/ctrsploit/vul/cve-2025-47290"
 	"github.com/ctrsploit/ctrsploit/vul/shocker"
@@ -16,8 +17,9 @@ import (
 var Command = &cli.Command{
 	Name:    "vul",
 	Aliases: []string{"v"},
-	Usage:   "check security inside a container",
+	Usage:   "list vulnerabilities",
 	Subcommands: []*cli.Command{
+		cve_2025_23266.VulCmd,
 		cve_2025_47290.VulCmd,
 		cve_2024_23650.VulCmd,
 		cve_2022_39253.VulCmd,

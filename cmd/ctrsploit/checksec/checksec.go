@@ -7,6 +7,7 @@ import (
 	cve_2020_15257 "github.com/ctrsploit/ctrsploit/vul/cve-2020-15257"
 	cve_2021_25741 "github.com/ctrsploit/ctrsploit/vul/cve-2021-25741"
 	cve_2022_39253 "github.com/ctrsploit/ctrsploit/vul/cve-2022-39253"
+	cve_2025_23266 "github.com/ctrsploit/ctrsploit/vul/cve-2025-23266"
 	cve_2024_23650 "github.com/ctrsploit/ctrsploit/vul/cve-2024-23650"
 	cve_2025_47290 "github.com/ctrsploit/ctrsploit/vul/cve-2025-47290"
 	"github.com/ctrsploit/ctrsploit/vul/shocker"
@@ -24,6 +25,7 @@ var Command = &cli.Command{
 		Auto,
 		env.Command,
 		app.Vul2ChecksecCmd(&vul.NetworkNamespaceHostLevel, []string{"host"}, nil),
+		cve_2025_23266.CheckSecCmd,
 		cve_2025_47290.CheckSecCmd,
 		cve_2024_23650.CheckSecCmd,
 		cve_2022_39253.CheckSecCmd,

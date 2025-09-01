@@ -174,6 +174,7 @@ Just execute `ctrsploit checksec` or standalone binary file `checksec` in the co
 |------------------------------------------------------------------------------------------|-------|---------------------------------------------------------------------------------------|
 | [cgroupv1-release_agent-unknown_rootfs](./exploit/cgroupv1-release_agent-unknown_rootfs) | ra3   | escape tech by using the notify_on_release of cgroup v1 without known rootfs          |
 | [cve-2021-22555_ubuntu18.04](./exploit/CVE-2021-22555_ubuntu18.04)                       | 22555 | escape tech by using the CVE-2021-22555 (ubuntu18.04)                                 |
+| [cve-2025-23266](./vul/cve-2025-23266)                                                   | 23266 | nvidia-container-toolkit CVE-2025-23266 GPU container escape                          | 
 | [cve-2025-47290](./vul/cve-2025-47290)                                                   | 47290 | containerd cve-2025-47290 host filesystem access during image unpack                  | 
 | [cve-2024-23650](./vul/cve-2024-23650)                                                   | 23650 | buildkitd cve-2024-23650 panic when incorrect parameters sent from frontend           | 
 | [cve-2022-39253](./vul/cve-2022-39253)                                                   | 39253 | docker build host file read by git CVE-2022-39253                                     | 
