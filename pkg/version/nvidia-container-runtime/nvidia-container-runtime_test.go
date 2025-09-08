@@ -5,33 +5,19 @@ import (
 	"os"
 	"testing"
 
-	"github.com/ctrsploit/ctrsploit/pkg/version/version"
+	"github.com/Masterminds/semver/v3"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestE2E_GetVersion(t *testing.T) {
 	tests := map[string]struct {
-		ver version.Number
+		ver *semver.Version
 	}{
 		"nvidia-container-toolkit-v1.17.7": {
-			ver: version.Number{
-				Major: 1,
-				Minor: 17,
-				Patch: 7,
-				Rc:    -1,
-				Beta:  -1,
-				Init:  true,
-			},
+			ver: semver.New(1, 17, 7, "", ""),
 		},
 		"nvidia-container-toolkit-v1.17.0-rc.1": {
-			ver: version.Number{
-				Major: 1,
-				Minor: 17,
-				Patch: 0,
-				Rc:    1,
-				Beta:  -1,
-				Init:  true,
-			},
+			ver: semver.New(1, 17, 0, "rc.1", ""),
 		},
 	}
 	testEnv := os.Getenv("TEST_ENV")
@@ -42,6 +28,6 @@ func TestE2E_GetVersion(t *testing.T) {
 	t.Run(fmt.Sprintf("%s", testEnv), func(t *testing.T) {
 		ver, err := GetVersion()
 		assert.NoError(t, err)
-		assert.Equal(t, test.ver, *ver)
+		assert.Equal(t, test.ver, ver)
 	})
 }
