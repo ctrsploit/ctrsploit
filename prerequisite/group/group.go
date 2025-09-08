@@ -1,10 +1,11 @@
 package group
 
 import (
-	"github.com/ctrsploit/sploit-spec/pkg/prerequisite"
-	"github.com/ssst0n3/awesome_libs/awesome_error"
 	"os/user"
 	"strconv"
+
+	"github.com/ctrsploit/sploit-spec/pkg/prerequisite"
+	"github.com/ssst0n3/awesome_libs/awesome_error"
 )
 
 type MustBe struct {
@@ -20,21 +21,21 @@ var MustBeRoot = MustBe{
 	},
 }
 
-func (p *MustBe) Check() (err error) {
-	err = p.BasePrerequisite.Check()
-	if err != nil {
-		return
+func (p *MustBe) Check() (bool, error) {
+	if p.Checked {
+		return p.Satisfied, nil
 	}
 	current, err := user.Current()
 	if err != nil {
 		awesome_error.CheckErr(err)
-		return
+		return false, err
 	}
 	gid, err := strconv.Atoi(current.Gid)
 	if err != nil {
 		awesome_error.CheckErr(err)
-		return
+		return false, err
 	}
 	p.Satisfied = uint(gid) == p.ExpectedGroup
-	return
+	p.Checked = true
+	return p.Satisfied, nil
 }

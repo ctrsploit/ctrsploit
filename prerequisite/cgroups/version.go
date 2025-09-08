@@ -16,11 +16,10 @@ var V1 = Version{
 	},
 }
 
-func (p *Version) Check() (err error) {
-	err = p.BasePrerequisite.Check()
-	if err != nil {
-		return
+func (p *Version) Check() (bool, error) {
+	if !p.Checked {
+		p.Satisfied = version.IsCgroupV1()
+		p.Checked = true
 	}
-	p.Satisfied = version.IsCgroupV1()
-	return
+	return p.Satisfied, nil
 }

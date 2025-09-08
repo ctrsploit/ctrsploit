@@ -2,6 +2,7 @@ package namespace
 
 import (
 	"fmt"
+
 	"github.com/ctrsploit/ctrsploit/prerequisite/kernel"
 	"github.com/ctrsploit/sploit-spec/pkg/colorful"
 	"github.com/ctrsploit/sploit-spec/pkg/env/container"
@@ -46,7 +47,7 @@ func Human(namespace container.Namespace, ns string) (human Result) {
 			// maybe kernel not support
 			switch ns {
 			case container.NamespaceNameTime, container.NamespaceNameTimeForChildren:
-				err := kernel.SupportsTimeNamespace.Check()
+				_, err := kernel.SupportsTimeNamespace.Check()
 				if err != nil {
 					break
 				}
@@ -54,7 +55,7 @@ func Human(namespace container.Namespace, ns string) (human Result) {
 					level = container.NamespaceLevelHost
 				}
 			case container.NamespaceNameCGroup:
-				err := kernel.SupportsCgroupNamespace.Check()
+				_, err := kernel.SupportsCgroupNamespace.Check()
 				if err != nil {
 					break
 				}

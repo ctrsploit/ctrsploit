@@ -19,20 +19,20 @@ var HasTopLevelSubsystem = TopLevelSubsystem{
 	},
 }
 
-func (p *TopLevelSubsystem) Check() (err error) {
-	err = p.BasePrerequisite.Check()
-	if err != nil {
-		return
+func (p *TopLevelSubsystem) Check() (bool, error) {
+	if p.Checked {
+		return p.Satisfied, nil
 	}
 	if version.IsCgroupV1() {
 		var c v1.CgroupV1
 		subsystemsSupport, err := c.ListSubsystems("/proc/1/cgroup")
 		if err != nil {
-			return err
+			return false, err
 		}
 		if len(subsystemsSupport) > 0 {
 			p.Satisfied = true
 		}
 	}
-	return
+	p.Checked = true
+	return p.Satisfied, nil
 }

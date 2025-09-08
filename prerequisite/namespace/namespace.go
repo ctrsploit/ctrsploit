@@ -2,6 +2,7 @@ package namespace
 
 import (
 	"fmt"
+
 	"github.com/ctrsploit/ctrsploit/pkg/namespace"
 	"github.com/ctrsploit/sploit-spec/pkg/env/container"
 	"github.com/ctrsploit/sploit-spec/pkg/exeenv"
@@ -27,25 +28,25 @@ var (
 	}
 )
 
-func (p *Namespace) Check() (err error) {
-	err = p.BasePrerequisite.Check()
-	if err != nil {
-		return
+func (p *Namespace) Check() (bool, error) {
+	if p.Checked {
+		return p.Satisfied, nil
 	}
 	arbitrator, err := namespace.NewInoArbitrator()
 	if err != nil {
-		return
+		return false, err
 	}
 	namespaceLevels, _, err := namespace.CheckNamespaceLevel(arbitrator)
 	if err != nil {
-		return
+		return false, err
 	}
 	level, ok := namespaceLevels[container.NamespaceMapType2Name[p.Type]]
 	if !ok {
 		err = fmt.Errorf("unknown namespace type %s", p.Type)
 		awesome_error.CheckErr(err)
-		return
+		return false, err
 	}
 	p.Satisfied = level == container.NamespaceLevelHost
-	return
+	p.Checked = true
+	return p.Satisfied, nil
 }

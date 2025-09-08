@@ -28,12 +28,12 @@ var (
 				Check:   exeenv.InContainer,
 				Exploit: exeenv.InContainer,
 			},
-			CheckSecPrerequisites: prerequisite.Prerequisites{
+			CheckSecPrerequisites: prerequisite.And(
 				&capability.CapSysAdminEff,
 				&user.MustBeRootToWriteReleaseAgent,
 				&cgroups.V1,
 				&cgroups.HasTopLevelSubsystem,
-			},
+			),
 		},
 	}
 )

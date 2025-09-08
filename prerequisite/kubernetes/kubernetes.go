@@ -8,11 +8,12 @@ import (
 
 	"github.com/ctrsploit/ctrsploit/pkg/kubernetes"
 	"github.com/ctrsploit/sploit-spec/pkg/exeenv"
+	"github.com/ctrsploit/sploit-spec/pkg/log"
 	"github.com/ctrsploit/sploit-spec/pkg/prerequisite"
+	"github.com/ssst0n3/awesome_libs/awesome_error"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	k8sclient "k8s.io/client-go/kubernetes"
-	"github.com/ctrsploit/sploit-spec/pkg/log"
 )
 
 func getKubernetesClient(kubeconfigPath ...string) (*k8sclient.Clientset, error) {
@@ -82,28 +83,25 @@ var VulnerableToCVE202125741 = CVE202125741KubeletVersion{
 	VulnerableNodes: []string{},
 }
 
-func (p *CVE202125741KubeletVersion) Check() error {
-	log.Logger.Debugf("Checking CVE-2021-25741 KubeletVersion")
-	
-	err := p.BasePrerequisite.Check()
-	if err != nil {
-		log.Logger.Errorf("BasePrerequisite.Check() failed: %v", err)
-		return err
+func (p *CVE202125741KubeletVersion) Check() (satisfied bool, err error) {
+	if !p.Checked {
+		log.Logger.Debugf("Checking CVE-2021-25741 KubeletVersion")
+		vulnerableNodes, err := GetVulnerableNodesToCVE202125741()
+		if err != nil {
+			return false, err
+		}
+		if len(vulnerableNodes) == 0 {
+			err = fmt.Errorf("not found kubelet version vulnerable to CVE-2021-25741")
+			awesome_error.CheckErr(err)
+			return false, err
+		}
+		p.VulnerableNodes = vulnerableNodes
+		p.Satisfied = true
+		log.Logger.Infof("Found %d vulnerable nodes: %v", len(vulnerableNodes), vulnerableNodes)
+		p.Checked = true
 	}
-
-	vulnerableNodes, err := GetVulnerableNodesToCVE202125741()
-	if err != nil {
-		return err
-	}
-
-	if len(vulnerableNodes) == 0 {
-		return fmt.Errorf("not found kubelet version vulnerable to CVE-2021-25741")
-	}
-
-	p.VulnerableNodes = vulnerableNodes
-	p.Satisfied = true
-	log.Logger.Infof("Found %d vulnerable nodes: %v", len(vulnerableNodes), vulnerableNodes)
-	return nil
+	satisfied = p.Satisfied
+	return
 }
 
 func (p *CVE202125741KubeletVersion) GetVulnerableNodes() []string {
@@ -112,46 +110,46 @@ func (p *CVE202125741KubeletVersion) GetVulnerableNodes() []string {
 
 func isVulnerableToCVE202125741(version string) bool {
 	version = strings.TrimPrefix(version, "v")
-	
+
 	// CVE-2021-25741 affected versions:
 	// v1.22.0 - v1.22.1
-	// v1.21.0 - v1.21.4  
+	// v1.21.0 - v1.21.4
 	// v1.20.0 - v1.20.10
 	// <= v1.19.14
-	
+
 	if strings.HasPrefix(version, "1.22.") {
 		return version == "1.22.0" || version == "1.22.1"
 	}
-	
+
 	if strings.HasPrefix(version, "1.21.") {
 		minorVersion := strings.TrimPrefix(version, "1.21.")
 		return compareVersion(minorVersion, "4") <= 0
 	}
-	
+
 	if strings.HasPrefix(version, "1.20.") {
 		minorVersion := strings.TrimPrefix(version, "1.20.")
 		return compareVersion(minorVersion, "10") <= 0
 	}
-	
+
 	if strings.HasPrefix(version, "1.19.") {
 		minorVersion := strings.TrimPrefix(version, "1.19.")
 		return compareVersion(minorVersion, "14") <= 0
 	}
-	
-	if strings.HasPrefix(version, "1.18.") || 
-	   strings.HasPrefix(version, "1.17.") ||
-	   strings.HasPrefix(version, "1.16.") ||
-	   strings.HasPrefix(version, "1.15.") {
+
+	if strings.HasPrefix(version, "1.18.") ||
+		strings.HasPrefix(version, "1.17.") ||
+		strings.HasPrefix(version, "1.16.") ||
+		strings.HasPrefix(version, "1.15.") {
 		return true
 	}
-	
+
 	return false
 }
 
 func compareVersion(version1 string, version2 string) int {
 	v1 := strings.Split(version1, ".")
 	v2 := strings.Split(version2, ".")
-	
+
 	for i := 0; i < len(v1) && i < len(v2); i++ {
 		if v1[i] < v2[i] {
 			return -1
@@ -159,13 +157,13 @@ func compareVersion(version1 string, version2 string) int {
 			return 1
 		}
 	}
-	
+
 	if len(v1) < len(v2) {
 		return -1
 	} else if len(v1) > len(v2) {
 		return 1
 	}
-	
+
 	return 0
 }
 
@@ -185,26 +183,23 @@ var HasPodCreatePermission = PodPermission{
 
 var HasPodExecPermission = PodPermission{
 	BasePrerequisite: prerequisite.BasePrerequisite{
-		Name:   "HasPodExecPermission", 
+		Name:   "HasPodExecPermission",
 		Info:   "Check if current user has pod exec permission",
 		ExeEnv: exeenv.Local | exeenv.K8S,
 	},
 	Action: "exec",
 }
 
-func (p *PodPermission) Check() error {
-	log.Logger.Debugf("Checking PodPermission (Action: %s)", p.Action)
-	
-	err := p.BasePrerequisite.Check()
-	if err != nil {
-		log.Logger.Errorf("BasePrerequisite.Check() failed: %v", err)
-		return err
+func (p *PodPermission) Check() (bool, error) {
+	if p.Checked {
+		return p.Satisfied, nil
 	}
-
+	log.Logger.Debugf("Checking PodPermission (Action: %s)", p.Action)
 	clientset, err := getKubernetesClient()
 	if err != nil {
-		log.Logger.Errorf("Failed to get Kubernetes client: %v", err)
-		return err
+		err = fmt.Errorf("failed to get Kubernetes client: %v", err)
+		awesome_error.CheckErr(err)
+		return false, err
 	}
 
 	namespace := os.Getenv("NAMESPACE")
@@ -229,23 +224,28 @@ func (p *PodPermission) Check() error {
 				},
 			},
 		}
-		
+
 		_, err = clientset.CoreV1().Pods(namespace).Create(context.TODO(), pod, metav1.CreateOptions{DryRun: []string{metav1.DryRunAll}})
 		if err != nil {
-			return fmt.Errorf("no pod create permission: %v", err)
+			err = fmt.Errorf("no pod create permission: %v", err)
+			awesome_error.CheckErr(err)
+			return false, err
 		}
 		log.Logger.Debugf("Pod creation permission check passed")
-		
+
 	case "exec":
 		log.Logger.Debugf("Checking pod exec permission")
 		_, err = clientset.CoreV1().Pods(namespace).List(context.TODO(), metav1.ListOptions{})
 		if err != nil {
-			return fmt.Errorf("no pod list/exec permission: %v", err)
+			err = fmt.Errorf("no pod list/exec permission: %v", err)
+			awesome_error.CheckErr(err)
+			return false, err
 		}
 		log.Logger.Debugf("Pod exec permission check passed")
 	}
 
 	p.Satisfied = true
 	log.Logger.Debugf("PodPermission.Satisfied = %v", p.Satisfied)
-	return nil
-} 
+	p.Checked = true
+	return p.Satisfied, nil
+}

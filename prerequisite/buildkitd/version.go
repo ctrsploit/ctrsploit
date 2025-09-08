@@ -17,28 +17,28 @@ type VersionBetween struct {
 	Max  string
 }
 
-func (vb *VersionBetween) Check() (err error) {
-	err = vb.BasePrerequisite.Check()
-	if err != nil {
-		return
+func (vb *VersionBetween) Check() (bool, error) {
+	if vb.Checked {
+		return vb.Satisfied, nil
 	}
 	version, err := buildkitd.Version(vb.Addr)
 	if err != nil {
-		return
+		return false, err
 	}
 	constraint, err := semver.NewConstraint(fmt.Sprintf(">= %s, <= %s", vb.Min, vb.Max))
 	if err != nil {
 		awesome_error.CheckErr(err)
-		return
+		return false, err
 	}
 	var e []error
 	vb.Satisfied, e = constraint.Validate(version)
 	if len(e) > 0 {
 		err = fmt.Errorf("failed to validate version %s: %v", version.String(), e)
 		awesome_error.CheckErr(err)
-		return
+		return false, err
 	}
-	return
+	vb.Checked = true
+	return vb.Satisfied, nil
 }
 
 var VulnerableToCVE_2024_23650 = func(addr string) *VersionBetween {

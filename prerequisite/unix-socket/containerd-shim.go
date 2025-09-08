@@ -18,15 +18,15 @@ var ContainerdShimAbstract = Available{
 	},
 }
 
-func (p *Available) Check() (err error) {
-	err = p.BasePrerequisite.Check()
-	if err != nil {
-		return
+func (p *Available) Check() (bool, error) {
+	if p.Checked {
+		return p.Satisfied, nil
 	}
 	path, err := net.ContainerdShimAbstractUnixSocketPath(p.PrefixSocketName)
 	if err != nil {
-		return
+		return false, err
 	}
 	p.Satisfied = path != ""
-	return
+	p.Checked = true
+	return p.Satisfied, nil
 }
