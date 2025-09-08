@@ -25,15 +25,14 @@ var (
 	}
 )
 
-func (p *NotEmpty) Check() (err error) {
-	err = p.BasePrerequisite.Check()
-	if err != nil {
-		return
+func (p *NotEmpty) Check() (bool, error) {
+	if p.Checked {
+		return p.Satisfied, nil
 	}
 	for _, pid := range p.Pid {
 		caps, err := capability.GetCapabilityByPid(pid, p.CapType)
 		if err != nil {
-			return err
+			return false, err
 		}
 		capsParsed, _ := cap.FromBitmap(caps)
 		if len(capsParsed) > 0 {
@@ -41,5 +40,6 @@ func (p *NotEmpty) Check() (err error) {
 			break
 		}
 	}
-	return
+	p.Checked = true
+	return p.Satisfied, nil
 }

@@ -43,15 +43,15 @@ func (p *Version) check(version string) (satisfied bool) {
 	return
 }
 
-func (p *Version) Check() (err error) {
-	err = p.BasePrerequisite.Check()
-	if err != nil {
-		return
+func (p *Version) Check() (bool, error) {
+	if p.Checked {
+		return p.Satisfied, nil
 	}
 	version, err := uname.Release()
 	if err != nil {
-		return
+		return false, err
 	}
 	p.Satisfied = p.check(version)
-	return
+	p.Checked = true
+	return p.Satisfied, nil
 }

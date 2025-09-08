@@ -1,26 +1,25 @@
 package namespace
 
 import (
+	"sort"
+
 	"github.com/ctrsploit/ctrsploit/prerequisite/kernel"
 	"github.com/ctrsploit/sploit-spec/pkg/env/container"
 	"github.com/ctrsploit/sploit-spec/pkg/log"
 	"github.com/ctrsploit/sploit-spec/pkg/prerequisite"
 	"github.com/pkg/errors"
 	"github.com/ssst0n3/awesome_libs/awesome_error"
-	"sort"
 )
 
 type InoArbitrator struct {
 	InoList       []int
 	MinIno        int
 	MaxIno        int
-	Prerequisites prerequisite.Prerequisites
+	Prerequisites prerequisite.Set
 }
 
 func NewInoArbitrator() (arbitrator *InoArbitrator, err error) {
-	arbitrator = &InoArbitrator{
-		Prerequisites: prerequisite.Prerequisites{},
-	}
+	arbitrator = &InoArbitrator{}
 	err = arbitrator.init()
 	if err != nil {
 		return
@@ -89,7 +88,7 @@ func (i *InoArbitrator) IsNetworkNamespaceInoBetweenProcInoList(ns Namespace) (i
 func (i *InoArbitrator) Arbitrate(ns Namespace) (namespaceLevel container.NamespaceLevel, err error) {
 	var isHostNamespace, normal bool
 	// linuxkit
-	err = kernel.ReleasedByLinuxkit.Check()
+	_, err = kernel.ReleasedByLinuxkit.Check()
 	if err != nil {
 		return
 	}
@@ -120,7 +119,7 @@ func (i *InoArbitrator) Arbitrate(ns Namespace) (namespaceLevel container.Namesp
 			// cgroups namespace:
 			//     kernel not supports => host
 			//     otherwise, compare with initIno
-			err = kernel.SupportsCgroupNamespace.Check()
+			_, err = kernel.SupportsCgroupNamespace.Check()
 			if err != nil {
 				return
 			}
@@ -135,7 +134,7 @@ func (i *InoArbitrator) Arbitrate(ns Namespace) (namespaceLevel container.Namesp
 			// time namespace:
 			//     kernel not supports => host
 			//     otherwise, compare with initIno
-			err = kernel.SupportsTimeNamespace.Check()
+			_, err = kernel.SupportsTimeNamespace.Check()
 			if err != nil {
 				return
 			}

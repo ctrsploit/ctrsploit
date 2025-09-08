@@ -5,7 +5,6 @@ import (
 	"github.com/ctrsploit/ctrsploit/vul/sys_admin/release_agent"
 	"github.com/ctrsploit/sploit-spec/pkg/app"
 	"github.com/ctrsploit/sploit-spec/pkg/exeenv"
-	"github.com/ctrsploit/sploit-spec/pkg/prerequisite"
 	"github.com/ctrsploit/sploit-spec/pkg/vul"
 	"github.com/urfave/cli/v2"
 )
@@ -39,12 +38,8 @@ var (
 				Check:   exeenv.InContainer,
 				Exploit: exeenv.InContainer,
 			},
-			CheckSecPrerequisites: prerequisite.Prerequisites{
-				&capability.CapSysAdminBnd,
-			},
-			ExploitablePrerequisites: prerequisite.Prerequisites{
-				&capability.CapSysAdminEff,
-			},
+			CheckSecPrerequisites:    &capability.CapSysAdminBnd,
+			ExploitablePrerequisites: &capability.CapSysAdminEff,
 		},
 	}
 )

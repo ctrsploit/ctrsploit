@@ -3,7 +3,6 @@ package vul
 import (
 	"github.com/ctrsploit/ctrsploit/prerequisite/namespace"
 	"github.com/ctrsploit/sploit-spec/pkg/exeenv"
-	"github.com/ctrsploit/sploit-spec/pkg/prerequisite"
 	"github.com/ctrsploit/sploit-spec/pkg/vul"
 	"github.com/urfave/cli/v2"
 )
@@ -22,9 +21,7 @@ var (
 				Check:   exeenv.InContainer,
 				Exploit: exeenv.InContainer,
 			},
-			CheckSecPrerequisites: prerequisite.Prerequisites{
-				&namespace.NetworkNamespaceLevelHost,
-			},
+			CheckSecPrerequisites:    &namespace.NetworkNamespaceLevelHost,
 			ExploitablePrerequisites: nil,
 		}}
 )

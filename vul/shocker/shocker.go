@@ -4,17 +4,17 @@ import (
 	_ "embed"
 	"encoding/binary"
 	"fmt"
-	"github.com/ctrsploit/ctrsploit/prerequisite/capability"
-	"github.com/ctrsploit/sploit-spec/pkg/exeenv"
-	"github.com/ctrsploit/sploit-spec/pkg/prerequisite"
-	"github.com/ctrsploit/sploit-spec/pkg/vul"
-	"github.com/ssst0n3/awesome_libs/awesome_error"
-	"github.com/urfave/cli/v2"
-	"golang.org/x/sys/unix"
 	"io"
 	"os"
 	"os/exec"
 	"syscall"
+
+	"github.com/ctrsploit/ctrsploit/prerequisite/capability"
+	"github.com/ctrsploit/sploit-spec/pkg/exeenv"
+	"github.com/ctrsploit/sploit-spec/pkg/vul"
+	"github.com/ssst0n3/awesome_libs/awesome_error"
+	"github.com/urfave/cli/v2"
+	"golang.org/x/sys/unix"
 )
 
 type Vulnerability struct {
@@ -30,12 +30,8 @@ var Shocker = Vulnerability{
 			Check:   exeenv.InContainer,
 			Exploit: exeenv.InContainer,
 		},
-		CheckSecPrerequisites: prerequisite.Prerequisites{
-			&capability.CapDacReadSearchBnd,
-		},
-		ExploitablePrerequisites: prerequisite.Prerequisites{
-			&capability.CapDacReadSearchEff,
-		},
+		CheckSecPrerequisites:    &capability.CapDacReadSearchBnd,
+		ExploitablePrerequisites: &capability.CapDacReadSearchEff,
 	},
 }
 

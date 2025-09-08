@@ -18,15 +18,15 @@ var VersionEqualToV2_1_0 = VersionEqualTo{
 	},
 }
 
-func (p *VersionEqualTo) Check() (err error) {
-	err = p.BasePrerequisite.Check()
-	if err != nil {
-		return
+func (p *VersionEqualTo) Check() (bool, error) {
+	if p.Checked {
+		return p.Satisfied, nil
 	}
 	v, err := containerd.GetVersionBySock()
 	if err != nil {
-		return
+		return false, err
 	}
 	p.Satisfied = v.Version == p.ExpectedVersion
-	return
+	p.Checked = true
+	return p.Satisfied, nil
 }
