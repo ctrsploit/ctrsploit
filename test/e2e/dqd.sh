@@ -35,7 +35,7 @@ up() {
 
   pushd "${DIR_DOCKER_ARCHIVE}/${dqd_dir}" > /dev/null
   docker compose -f docker-compose.yml -f docker-compose.kvm.yml up -d
-  sleep 5
+  sleep 6
   popd > /dev/null
 }
 
