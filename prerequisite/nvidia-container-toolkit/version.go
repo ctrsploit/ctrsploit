@@ -1,4 +1,4 @@
-package nvidia_container_runtime
+package nvidia_container_toolkit
 
 import (
 	"fmt"
