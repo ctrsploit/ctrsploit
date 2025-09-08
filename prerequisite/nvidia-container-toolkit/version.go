@@ -42,8 +42,8 @@ var (
 		}
 		return &Version{
 			BasePrerequisite: prerequisite.BasePrerequisite{
-				Name:   "nvidia-container-toolkit vulnerable to CVE-2025-0132",
-				Info:   "nvidia-container-toolkit(libnvidia-container) >=v1.0.0, <=v1.16.1 is vulnerable to CVE-2025-0132",
+				Name:   "nvidia-container-toolkit vulnerable to CVE-2024-0132",
+				Info:   "nvidia-container-toolkit(libnvidia-container) >=v1.0.0, <=v1.16.1 is vulnerable to CVE-2024-0132",
 				ExeEnv: exeenv.InHost | exeenv.Local,
 			},
 			Constraint: cons,
