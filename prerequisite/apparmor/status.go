@@ -1,7 +1,7 @@
-package selinux
+package apparmor
 
 import (
-	"github.com/ctrsploit/ctrsploit/pkg/selinux"
+	"github.com/ctrsploit/ctrsploit/pkg/apparmor"
 	"github.com/ctrsploit/sploit-spec/pkg/exeenv"
 	"github.com/ctrsploit/sploit-spec/pkg/prerequisite"
 )
@@ -13,7 +13,7 @@ type status struct {
 
 func (p *status) Check() (bool, error) {
 	if !p.Checked {
-		p.Satisfied = selinux.IsEnabled() == p.expectedStatus
+		p.Satisfied = apparmor.IsEnabled() == p.expectedStatus
 		p.Checked = true
 	}
 	return p.Satisfied, nil
@@ -22,7 +22,7 @@ func (p *status) Check() (bool, error) {
 var (
 	Disabled = status{
 		BasePrerequisite: prerequisite.BasePrerequisite{
-			Name:   "selinux disabled",
+			Name:   "apparmor disabled",
 			Info:   "",
 			ExeEnv: exeenv.InContainer,
 		},
