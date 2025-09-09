@@ -1,0 +1,20 @@
+name: naked
+test_envs:
+  - name: docker-v28.3.2
+    kind: dqd
+    dqd_dir: docker/v28.3.2
+    pkg: github.com/ctrsploit/ctrsploit/vul/naked
+    cmd: docker run -v /ctrsploit.test:/ctrsploit.test
+      --env TEST_ENV=docker-v28.3.2_naked
+      --security-opt seccomp=unconfined
+      --security-opt apparmor=unconfined
+      busybox:latest
+      /ctrsploit.test -test.v -test.run '^TestE2E'
+  - name: docker-v28.3.2
+    kind: dqd
+    dqd_dir: docker/v28.3.2
+    pkg: github.com/ctrsploit/ctrsploit/vul/naked
+    cmd: docker run -v /ctrsploit.test:/ctrsploit.test
+      --env TEST_ENV=docker-v28.3.2_default
+      busybox:latest
+      /ctrsploit.test -test.v -test.run '^TestE2E'

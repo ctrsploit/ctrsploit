@@ -11,6 +11,7 @@ import (
 	cve_2024_23650 "github.com/ctrsploit/ctrsploit/vul/cve-2024-23650"
 	cve_2025_23266 "github.com/ctrsploit/ctrsploit/vul/cve-2025-23266"
 	cve_2025_47290 "github.com/ctrsploit/ctrsploit/vul/cve-2025-47290"
+	"github.com/ctrsploit/ctrsploit/vul/naked"
 	"github.com/ctrsploit/ctrsploit/vul/shocker"
 	"github.com/ctrsploit/ctrsploit/vul/sys_admin"
 	"github.com/ctrsploit/ctrsploit/vul/sys_admin/release_agent"
@@ -37,5 +38,6 @@ var Command = &cli.Command{
 		sys_admin.CheckSecCmd,
 		release_agent.CheckSecCmd,
 		shocker.CheckSecCmd,
+		naked.CheckSecCmd,
 	},
 }
