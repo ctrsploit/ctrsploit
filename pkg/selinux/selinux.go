@@ -1,10 +1,11 @@
 package selinux
 
 import (
-	"github.com/opencontainers/selinux/go-selinux"
-	"github.com/ssst0n3/awesome_libs/awesome_error"
 	"os"
 	"strings"
+
+	"github.com/opencontainers/selinux/go-selinux"
+	"github.com/ssst0n3/awesome_libs/awesome_error"
 )
 
 type TypeMode int
@@ -33,8 +34,59 @@ func KernelSupported() (supported bool, err error) {
 	return
 }
 
+// IsEnabled detect selinux enabled inside the container
 func IsEnabled() bool {
-	return selinux.GetEnabled()
+	con, err := selinux.CurrentLabel()
+	if err != nil {
+		return false
+	}
+	if con == "kernel" {
+		return false
+	}
+	if strings.Count(con, ":") >= 2 {
+		return true
+	}
+	return false
+}
+
+func IsSelinuxPrivileged() bool {
+	con, err := selinux.CurrentLabel()
+	if err != nil {
+		return true
+	}
+	return isSelinuxPrivileged(con)
+}
+
+var (
+	knownPrivilegedCon = map[string]struct{}{
+		"unconfined_t": {},
+		"spc_t":        {},
+		"sysadm_t":     {},
+		"init_t":       {},
+		"kernel_t":     {},
+		"kernel":       {},
+	}
+)
+
+// isSelinuxPrivileged reports whether the given SELinux context string
+// represents a privileged or unconfined domain.
+func isSelinuxPrivileged(con string) bool {
+	if con == "kernel" {
+		return true
+	}
+	parts := strings.Split(con, ":")
+	if len(parts) < 3 {
+		return true
+	} else {
+		t := parts[2]
+		if _, ok := knownPrivilegedCon[t]; ok {
+			return true
+		}
+		if strings.Contains(t, "unconfined") {
+			return true
+		}
+	}
+	return false
 }
 
 func Mode() TypeMode {
