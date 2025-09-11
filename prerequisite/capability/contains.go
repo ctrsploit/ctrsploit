@@ -49,6 +49,8 @@ var (
 	CapSysAdminEff      = EffContainsCap("CAP_SYS_ADMIN")
 	CapDacReadSearchBnd = BndContainsCap("CAP_DAC_READ_SEARCH")
 	CapDacReadSearchEff = EffContainsCap("CAP_DAC_READ_SEARCH")
+	CapSysPtraceBnd     = BndContainsCap("CAP_SYS_PTRACE")
+	CapSysPtraceEff     = EffContainsCap("CAP_SYS_PTRACE")
 )
 
 func (p *Contains) Check() (bool, error) {

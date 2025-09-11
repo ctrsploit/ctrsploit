@@ -25,6 +25,7 @@ var Shocker = Vulnerability{
 	BaseVulnerability: vul.BaseVulnerability{
 		Name:        "shocker",
 		Description: "Container escape with CAP_DAC_READ_SEARCH, alias shocker, found by Sebastian Krahmer (stealth) in 2014.",
+		Level:       vul.LevelHigh,
 		ExeEnv: exeenv.ExeEnv{
 			Env:     exeenv.InContainer,
 			Check:   exeenv.InContainer,
@@ -35,7 +36,7 @@ var Shocker = Vulnerability{
 	},
 }
 
-func (v Vulnerability) Exploit(context *cli.Context) (err error) {
+func (v *Vulnerability) Exploit(context *cli.Context) (err error) {
 	err = v.BaseVulnerability.Exploit(context)
 	if err != nil {
 		return

@@ -1,8 +1,8 @@
-package sys_admin
+package sys_ptrace
 
 import (
 	"github.com/ctrsploit/ctrsploit/prerequisite/capability"
-	"github.com/ctrsploit/ctrsploit/vul/sys_admin/release_agent"
+	"github.com/ctrsploit/ctrsploit/vul/caps/sys_ptrace/pid_host"
 	"github.com/ctrsploit/sploit-spec/pkg/app"
 	"github.com/ctrsploit/sploit-spec/pkg/exeenv"
 	"github.com/ctrsploit/sploit-spec/pkg/vul"
@@ -10,7 +10,7 @@ import (
 )
 
 var (
-	aliases     = []string{"sys_admin"}
+	aliases     = []string{"sys_ptrace", "ptrace"}
 	CheckSecCmd = getCheckSecCmd(Vul.GetName(), Vul.GetDescription(), aliases)
 	ExploitCmd  = getExploitCmd(Vul.GetName(), Vul.GetDescription(), aliases)
 	VulCmd      = &cli.Command{
@@ -24,22 +24,23 @@ var (
 	}
 )
 
-type SysAdmin struct {
+type vulnerability struct {
 	vul.BaseVulnerability
 }
 
 var (
-	Vul = SysAdmin{
+	Vul = vulnerability{
 		BaseVulnerability: vul.BaseVulnerability{
-			Name:        "cap_sys_admin",
-			Description: "Container can be escaped when has cap_sys_admin",
+			Name:        "cap_sys_ptrace",
+			Description: "Container can be escaped when has cap_sys_ptrace",
+			Level:       vul.LevelHigh,
 			ExeEnv: exeenv.ExeEnv{
 				Env:     exeenv.InContainer,
 				Check:   exeenv.InContainer,
 				Exploit: exeenv.InContainer,
 			},
-			CheckSecPrerequisites:    &capability.CapSysAdminBnd,
-			ExploitablePrerequisites: &capability.CapSysAdminEff,
+			CheckSecPrerequisites:    &capability.CapSysPtraceBnd,
+			ExploitablePrerequisites: &capability.CapSysPtraceEff,
 		},
 	}
 )
@@ -58,8 +59,8 @@ func getExploitCmd(name, usage string, aliases []string) (cmd *cli.Command) {
 		Usage:   usage,
 		Aliases: aliases,
 		Subcommands: []*cli.Command{
+			pid_host.ExploitCmd,
 			// TODO: add more exploit methods
-			release_agent.ExploitCmd,
 		},
 	}
 }

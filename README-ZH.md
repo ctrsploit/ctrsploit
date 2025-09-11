@@ -184,9 +184,10 @@ root@ctr # ./ctrsploit e ra -c "cat /etc/hostname"
 | [cve-2022-39253](./vul/cve-2022-39253)                                                   | 39253 | docker build 主机任意文件读(git CVE-2022-39253)                | 
 | [cve-2020-15257](./vul/cve-2020-15257)                                                   | 15257 | containerd cve-2020-15257 共享主机网络的容器逃逸                   | 
 | [cve-2016-8867](./vul/cve-2016-8867)                                                     | 8867  | runc cve-2016-8867 容器普通用户借助环境能力集提权                      | 
-| [release_agent](./vul/sys_admin/release_agent)                                           | ra    | 利用cgroup v1的notify_on_release功能的逃逸技术                    |
+| [release_agent](vul/caps/sys_admin/release_agent)                                        | ra    | 利用cgroup v1的notify_on_release功能的逃逸技术                    |
 | [shocker](./vul/shocker)                                                                 |
 | [naked](./vul/naked)                                                                     |       | seccomp, apparmor, selinux 均未开启的容器我们称作'裸奔容器',容易通过内核漏洞逃逸 |
+| [ptrace-pid-host](./vul/caps/sys_ptrace/pid_host)                                        | pid   | 容器具备cap_sys_ptrace和host pid namespace时可通过劫持主机进程被逃逸      |
 
 ### helper
 

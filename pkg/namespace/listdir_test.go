@@ -1,12 +1,13 @@
 package namespace
 
 import (
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestListNamespaceDir(t *testing.T) {
-	namespaces, err := ListNamespaceDir("/proc/self/ns")
+	namespaces, _, err := ListNamespaceDir("/proc/self/ns")
 	assert.NoError(t, err)
 	assert.True(t, len(namespaces) > 0)
 	for _, ns := range []string{

@@ -181,9 +181,10 @@ Just execute `ctrsploit checksec` or standalone binary file `checksec` in the co
 | [cve-2022-39253](./vul/cve-2022-39253)                                                   | 39253 | docker build host file read by git CVE-2022-39253                                                                                                                                   | 
 | [cve-2020-15257](./vul/cve-2020-15257)                                                   | 15257 | containerd cve-2020-15257 host network container escape                                                                                                                             | 
 | [cve-2016-8867](./vul/cve-2016-8867)                                                     | 8867  | runc cve-2016-8867 container normal user privilege escalation by ambient capabilities                                                                                               | 
-| [release_agent](./vul/sys_admin/release_agent)                                           | ra    | escape tech by using the notify_on_release of cgroup v1                                                                                                                             |
+| [release_agent](vul/caps/sys_admin/release_agent)                                        | ra    | escape tech by using the notify_on_release of cgroup v1                                                                                                                             |
 | [shocker](./vul/shocker)                                                                 |
 | [naked](./vul/naked)                                                                     |       | We call containers running without seccomp, AppArmor, or SELinux enabled 'naked containers', which leaves them highly vulnerable to kernel exploits and potential container escapes |
+| [ptrace-pid-host](./vul/caps/sys_ptrace/pid_host)                                        | pid   | Container can be escaped when has cap_sys_ptrace and host pid namespace                                                                                                             |
 
 ### helper
 

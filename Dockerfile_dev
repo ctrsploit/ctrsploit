@@ -51,3 +51,4 @@ COPY --from=build /build /
 FROM build-env AS shell
 ENV GOPROXY=${GOPROXY}
 ENV SLIM_LDFLAGS=${SLIM_LDFLAGS}
+RUN ln -s /root/app/bin/latest/ctrsploit_linux_amd64 /usr/bin/ctrsploit
