@@ -3,6 +3,10 @@ package checksec
 import (
 	"github.com/ctrsploit/ctrsploit/cmd/ctrsploit/env"
 	"github.com/ctrsploit/ctrsploit/vul"
+	"github.com/ctrsploit/ctrsploit/vul/caps/sys_admin"
+	"github.com/ctrsploit/ctrsploit/vul/caps/sys_admin/release_agent"
+	"github.com/ctrsploit/ctrsploit/vul/caps/sys_ptrace"
+	"github.com/ctrsploit/ctrsploit/vul/caps/sys_ptrace/pid_host"
 	cve_2016_8867 "github.com/ctrsploit/ctrsploit/vul/cve-2016-8867"
 	cve_2020_15257 "github.com/ctrsploit/ctrsploit/vul/cve-2020-15257"
 	cve_2021_25741 "github.com/ctrsploit/ctrsploit/vul/cve-2021-25741"
@@ -13,8 +17,6 @@ import (
 	cve_2025_47290 "github.com/ctrsploit/ctrsploit/vul/cve-2025-47290"
 	"github.com/ctrsploit/ctrsploit/vul/naked"
 	"github.com/ctrsploit/ctrsploit/vul/shocker"
-	"github.com/ctrsploit/ctrsploit/vul/sys_admin"
-	"github.com/ctrsploit/ctrsploit/vul/sys_admin/release_agent"
 	"github.com/ctrsploit/sploit-spec/pkg/app"
 	"github.com/urfave/cli/v2"
 )
@@ -35,9 +37,11 @@ var Command = &cli.Command{
 		cve_2021_25741.CheckSecCmd,
 		cve_2020_15257.CheckSecCmd,
 		cve_2016_8867.CheckSecCmd,
+		naked.CheckSecCmd,
 		sys_admin.CheckSecCmd,
 		release_agent.CheckSecCmd,
 		shocker.CheckSecCmd,
-		naked.CheckSecCmd,
+		pid_host.CheckSecCmd,
+		sys_ptrace.CheckSecCmd,
 	},
 }

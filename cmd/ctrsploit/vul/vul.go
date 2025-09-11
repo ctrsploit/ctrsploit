@@ -1,6 +1,7 @@
 package vul
 
 import (
+	"github.com/ctrsploit/ctrsploit/vul/caps"
 	cve_2016_8867 "github.com/ctrsploit/ctrsploit/vul/cve-2016-8867"
 	cve_2020_15257 "github.com/ctrsploit/ctrsploit/vul/cve-2020-15257"
 	cve_2021_25741 "github.com/ctrsploit/ctrsploit/vul/cve-2021-25741"
@@ -10,9 +11,6 @@ import (
 	cve_2025_23266 "github.com/ctrsploit/ctrsploit/vul/cve-2025-23266"
 	cve_2025_47290 "github.com/ctrsploit/ctrsploit/vul/cve-2025-47290"
 	"github.com/ctrsploit/ctrsploit/vul/naked"
-	"github.com/ctrsploit/ctrsploit/vul/shocker"
-	"github.com/ctrsploit/ctrsploit/vul/sys_admin"
-	"github.com/ctrsploit/ctrsploit/vul/sys_admin/release_agent"
 	"github.com/urfave/cli/v2"
 )
 
@@ -29,9 +27,7 @@ var Command = &cli.Command{
 		cve_2021_25741.VulCmd,
 		cve_2020_15257.VulCmd,
 		cve_2016_8867.VulCmd,
-		sys_admin.VulCmd,
-		release_agent.VulCmd,
-		shocker.VulCmd,
 		naked.VulCmd,
+		caps.VulCmd,
 	},
 }

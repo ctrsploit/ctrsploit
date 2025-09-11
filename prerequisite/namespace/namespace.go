@@ -26,6 +26,15 @@ var (
 			ExeEnv: exeenv.InContainer,
 		},
 	}
+	PidNamespaceLevelHost = Namespace{
+		ExpectedLevel: container.NamespaceLevelHost,
+		Type:          container.NamespaceTypePid,
+		BasePrerequisite: prerequisite.BasePrerequisite{
+			Name:   "Pid_Namespace_Level_Host",
+			Info:   "Container with host pid namespace may cause cross filesystem access even escape",
+			ExeEnv: exeenv.InContainer,
+		},
+	}
 )
 
 func (p *Namespace) Check() (bool, error) {

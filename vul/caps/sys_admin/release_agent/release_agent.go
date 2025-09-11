@@ -23,6 +23,7 @@ var (
 		BaseVulnerability: vul.BaseVulnerability{
 			Name:        "release_agent",
 			Description: "Container can be escaped when has cap_sys_admin and use cgroups v1",
+			Level:       vul.LevelHigh,
 			ExeEnv: exeenv.ExeEnv{
 				Env:     exeenv.InContainer,
 				Check:   exeenv.InContainer,
@@ -38,7 +39,7 @@ var (
 	}
 )
 
-func (v ReleaseAgent) Exploit(context *cli.Context) (err error) {
+func (v *ReleaseAgent) Exploit(context *cli.Context) (err error) {
 	err = v.BaseVulnerability.Exploit(context)
 	if err != nil {
 		return

