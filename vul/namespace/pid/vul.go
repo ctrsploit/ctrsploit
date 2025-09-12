@@ -1,7 +1,7 @@
 package pid
 
 import (
-	"github.com/ctrsploit/ctrsploit/prerequisite/capability"
+	"github.com/ctrsploit/ctrsploit/prerequisite/namespace"
 	"github.com/ctrsploit/ctrsploit/vul/caps/sys_ptrace/pid_host"
 	"github.com/ctrsploit/ctrsploit/vul/namespace/pid/proc_root"
 	"github.com/ctrsploit/sploit-spec/pkg/app"
@@ -11,8 +11,9 @@ import (
 )
 
 var (
-	aliases = []string{"pid"}
-	VulCmd  = &cli.Command{
+	aliases     = []string{"pid"}
+	CheckSecCmd = getCheckSecCmd(Vul.Name, Vul.Description, aliases)
+	VulCmd      = &cli.Command{
 		Name:    Vul.GetName(),
 		Aliases: aliases,
 		Usage:   Vul.GetDescription(),
@@ -38,8 +39,8 @@ var (
 				Check:   exeenv.InContainer,
 				Exploit: exeenv.InContainer,
 			},
-			CheckSecPrerequisites:    &capability.CapSysPtraceBnd,
-			ExploitablePrerequisites: &capability.CapSysPtraceEff,
+			CheckSecPrerequisites:    &namespace.PidNamespaceLevelHost,
+			ExploitablePrerequisites: nil,
 		},
 	}
 )

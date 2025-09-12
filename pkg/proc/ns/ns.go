@@ -10,7 +10,7 @@ import (
 )
 
 var (
-	mntNsRegexp = regexp.MustCompile(`^mnt:\[(\d+)]$`)
+	mntNsRegexp = regexp.MustCompile(`:\[(\d+)]$`)
 )
 
 // GetInodeNumber returns inode number of /proc/[pid]/ns/[ns]

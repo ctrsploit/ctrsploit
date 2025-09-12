@@ -1,8 +1,9 @@
 package namespace
 
 import (
-	"github.com/ctrsploit/sploit-spec/pkg/env/container"
 	"path/filepath"
+
+	"github.com/ctrsploit/sploit-spec/pkg/env/container"
 )
 
 type Namespace struct {

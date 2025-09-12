@@ -12,7 +12,6 @@ import (
 )
 
 var (
-	aliases      = []string{"pid"}
 	flagsExploit = []cli.Flag{
 		&cli.StringFlag{
 			Name:    "ip",
@@ -41,9 +40,9 @@ var (
 			Value:   false,
 		},
 	}
-	CheckSecCmd = app.Vul2ChecksecCmd(&Vul, aliases, nil)
-	ExploitCmd  = GetExploitCmd(Vul.GetName(), Vul.GetDescription(), aliases)
-	VulCmd      = app.Vul2VulCmd(&Vul, aliases, nil, flagsExploit, true)
+	CheckSecCmd = getCheckSecCmd(Vul.GetName(), Vul.GetDescription(), []string{"ptrace-pid"})
+	ExploitCmd  = GetExploitCmd(Vul.GetName(), Vul.GetDescription(), []string{"ptrace-pid"})
+	VulCmd      = app.Vul2VulCmd(&Vul, []string{"pid"}, nil, flagsExploit, true)
 )
 
 type vulnerability struct {
@@ -86,6 +85,14 @@ func (v *vulnerability) Exploit(context *cli.Context) (err error) {
 		}
 	}
 	return Exploit(context.Int("pid"), ip, context.Int("port"), context.Bool("listen"))
+}
+
+func getCheckSecCmd(name, usage string, aliases []string) (cmd *cli.Command) {
+	cmd = app.Vul2ChecksecCmd(&Vul, aliases, nil)
+	cmd.Name = name
+	cmd.Usage = usage
+	cmd.Aliases = aliases
+	return
 }
 
 func GetExploitCmd(name, usage string, aliases []string) (cmd *cli.Command) {

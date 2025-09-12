@@ -16,7 +16,7 @@ import (
 	cve_2025_47290 "github.com/ctrsploit/ctrsploit/vul/cve-2025-47290"
 	"github.com/ctrsploit/ctrsploit/vul/naked"
 	"github.com/ctrsploit/ctrsploit/vul/namespace/net"
-	"github.com/ctrsploit/ctrsploit/vul/namespace/pid/proc_root"
+	"github.com/ctrsploit/ctrsploit/vul/namespace/pid"
 	"github.com/ctrsploit/ctrsploit/vul/shocker"
 	"github.com/ctrsploit/sploit-spec/pkg/app"
 	"github.com/urfave/cli/v2"
@@ -44,6 +44,6 @@ var Command = &cli.Command{
 		shocker.CheckSecCmd,
 		pid_host.CheckSecCmd,
 		sys_ptrace.CheckSecCmd,
-		proc_root.CheckSecCmd,
+		pid.CheckSecCmd,
 	},
 }
