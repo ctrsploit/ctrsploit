@@ -34,9 +34,15 @@ var (
 			Aliases: []string{"l"},
 			Value:   true,
 		},
+		&cli.BoolFlag{
+			Name:    "force",
+			Aliases: []string{"f"},
+			Usage:   "ignore exploitable check",
+			Value:   false,
+		},
 	}
 	CheckSecCmd = app.Vul2ChecksecCmd(&Vul, aliases, nil)
-	ExploitCmd  = app.Vul2ExploitCmd(&Vul, aliases, flagsExploit, true)
+	ExploitCmd  = GetExploitCmd(Vul.GetName(), Vul.GetDescription(), aliases)
 	VulCmd      = app.Vul2VulCmd(&Vul, aliases, nil, flagsExploit, true)
 )
 
@@ -68,6 +74,10 @@ var (
 )
 
 func (v *vulnerability) Exploit(context *cli.Context) (err error) {
+	err = v.BaseVulnerability.Exploit(context)
+	if err != nil {
+		return
+	}
 	ip := context.String("ip")
 	if ip == "" {
 		ip, err = getIp()
@@ -76,4 +86,21 @@ func (v *vulnerability) Exploit(context *cli.Context) (err error) {
 		}
 	}
 	return Exploit(context.Int("pid"), ip, context.Int("port"), context.Bool("listen"))
+}
+
+func GetExploitCmd(name, usage string, aliases []string) (cmd *cli.Command) {
+	return &cli.Command{
+		Name:    name,
+		Usage:   usage,
+		Aliases: aliases,
+		Flags:   flagsExploit,
+		Action: func(context *cli.Context) (err error) {
+			_, err = Vul.CheckSec(context)
+			if err != nil {
+				return
+			}
+			err = Vul.Exploit(context)
+			return
+		},
+	}
 }

@@ -6,9 +6,9 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"os/exec"
 	"syscall"
 
+	"github.com/ctrsploit/ctrsploit/pkg/util"
 	"github.com/ctrsploit/ctrsploit/prerequisite/capability"
 	"github.com/ctrsploit/sploit-spec/pkg/exeenv"
 	"github.com/ctrsploit/sploit-spec/pkg/vul"
@@ -95,16 +95,5 @@ func GetFd(inode int, ref string) (fd int, err error) {
 }
 
 func Chroot(rootFd int, i io.Reader, o, e io.Writer) (err error) {
-	shell := "/bin/sh"
-	cmd := exec.Command(shell)
-	cmd.Dir = fmt.Sprintf("/proc/self/fd/%d", rootFd)
-	//cmd.Stdin = os.Stdin
-	//cmd.Stdout = os.Stdout
-	//cmd.Stderr = os.Stderr
-	cmd.Stdin = i
-	cmd.Stdout = o
-	cmd.Stderr = e
-	awesome_error.CheckFatal(cmd.Start())
-	cmd.Wait()
-	return
+	return util.InvokeShellUnderDir(fmt.Sprintf("/proc/self/fd/%d", rootFd), i, o, e)
 }

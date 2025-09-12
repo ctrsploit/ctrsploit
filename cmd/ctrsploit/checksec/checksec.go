@@ -2,7 +2,6 @@ package checksec
 
 import (
 	"github.com/ctrsploit/ctrsploit/cmd/ctrsploit/env"
-	"github.com/ctrsploit/ctrsploit/vul"
 	"github.com/ctrsploit/ctrsploit/vul/caps/sys_admin"
 	"github.com/ctrsploit/ctrsploit/vul/caps/sys_admin/release_agent"
 	"github.com/ctrsploit/ctrsploit/vul/caps/sys_ptrace"
@@ -16,6 +15,7 @@ import (
 	cve_2025_23266 "github.com/ctrsploit/ctrsploit/vul/cve-2025-23266"
 	cve_2025_47290 "github.com/ctrsploit/ctrsploit/vul/cve-2025-47290"
 	"github.com/ctrsploit/ctrsploit/vul/naked"
+	"github.com/ctrsploit/ctrsploit/vul/namespace/net"
 	"github.com/ctrsploit/ctrsploit/vul/shocker"
 	"github.com/ctrsploit/sploit-spec/pkg/app"
 	"github.com/urfave/cli/v2"
@@ -28,7 +28,7 @@ var Command = &cli.Command{
 	Subcommands: []*cli.Command{
 		Auto,
 		env.Command,
-		app.Vul2ChecksecCmd(&vul.NetworkNamespaceHostLevel, []string{"host"}, nil),
+		app.Vul2ChecksecCmd(&net.Vul, []string{"host"}, nil),
 		cve_2025_23266.CheckSecCmd,
 		cve_2025_47290.CheckSecCmd,
 		cve_2024_0132.CheckSecCmd,

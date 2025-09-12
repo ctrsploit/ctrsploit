@@ -1,7 +1,7 @@
 package pipe_primitive
 
 import (
-	"github.com/ctrsploit/ctrsploit/internal"
+	"github.com/ctrsploit/ctrsploit/pkg/util"
 )
 
 func Escalate(primitive Primitive) (err error) {
@@ -14,6 +14,6 @@ func Escalate(primitive Primitive) (err error) {
 	if err != nil {
 		return
 	}
-	internal.InvokeRootShellBySu()
+	util.InvokeRootShellBySu()
 	return
 }
