@@ -19,7 +19,7 @@ var (
 var (
 	Vul = vulnerability{
 		BaseVulnerability: vul.BaseVulnerability{
-			Name:        "proc-root",
+			Name:        "host-pid-proc-root",
 			Description: "escape by /proc/[pid]/root with host pid",
 			Level:       vul.LevelHigh,
 			ExeEnv: exeenv.ExeEnv{
