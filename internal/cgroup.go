@@ -2,8 +2,9 @@ package internal
 
 import (
 	"bytes"
-	"github.com/ssst0n3/awesome_libs/awesome_error"
 	"os"
+
+	"github.com/ssst0n3/awesome_libs/awesome_error"
 )
 
 type Cgroup struct {

@@ -4,12 +4,13 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
-	"github.com/ssst0n3/awesome_libs/awesome_error"
 	"os"
 	"path/filepath"
 	"strconv"
 	"strings"
 	"syscall"
+
+	"github.com/ssst0n3/awesome_libs/awesome_error"
 )
 
 func GetProcessNameByPid(pid int) (processName string, err error) {

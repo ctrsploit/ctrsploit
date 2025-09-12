@@ -2,9 +2,10 @@ package internal
 
 import (
 	"bytes"
-	"github.com/ssst0n3/awesome_libs/awesome_error"
 	"os"
 	"strconv"
+
+	"github.com/ssst0n3/awesome_libs/awesome_error"
 )
 
 func CheckPathExists(path string) bool {
