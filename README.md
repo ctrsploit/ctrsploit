@@ -185,6 +185,7 @@ Just execute `ctrsploit checksec` or standalone binary file `checksec` in the co
 | [shocker](./vul/shocker)                                                                 |
 | [naked](./vul/naked)                                                                     |       | We call containers running without seccomp, AppArmor, or SELinux enabled 'naked containers', which leaves them highly vulnerable to kernel exploits and potential container escapes |
 | [ptrace-pid-host](./vul/caps/sys_ptrace/pid_host)                                        | pid   | Container can be escaped when has cap_sys_ptrace and host pid namespace                                                                                                             |
+| [host-pid-proc-root](./vul/namespace/pid/proc_root)                                      | proc  | Host level pid ns escape via /proc/[pid]/root, accessing host or other container's filesystem                                                                                       |
 
 ### helper
 

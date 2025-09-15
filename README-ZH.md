@@ -188,6 +188,7 @@ root@ctr # ./ctrsploit e ra -c "cat /etc/hostname"
 | [shocker](./vul/shocker)                                                                 |
 | [naked](./vul/naked)                                                                     |       | seccomp, apparmor, selinux 均未开启的容器我们称作'裸奔容器',容易通过内核漏洞逃逸 |
 | [ptrace-pid-host](./vul/caps/sys_ptrace/pid_host)                                        | pid   | 容器具备cap_sys_ptrace和host pid namespace时可通过劫持主机进程被逃逸      |
+| [host-pid-proc-root](./vul/namespace/pid/proc_root)                                      | proc  | 容器具备host pid ns时可以通过/proc/[pid]/root访问主机或其他容器的文件系统      |
 
 ### helper
 
