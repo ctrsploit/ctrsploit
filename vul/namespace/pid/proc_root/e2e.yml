@@ -1,0 +1,12 @@
+name: host-pid-proc-root
+test_envs:
+  - name: docker-v28.3.2
+    kind: dqd
+    dqd_dir: docker/v28.3.2
+    pkg: github.com/ctrsploit/ctrsploit/vul/namespace/pid/proc_root
+    cmd: docker run -v /ctrsploit.test:/ctrsploit.test
+      --env TEST_ENV=exploitable
+      --pid=host
+      --security-opt apparmor=unconfined
+      busybox:latest
+      sh -c "echo flag{proof} > /flag && /ctrsploit.test -test.v -test.run '^TestE2E'"

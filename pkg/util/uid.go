@@ -12,7 +12,6 @@ import (
 )
 
 func WithFsuidFsgid(fsuid, fsgid int, f func() error) (err error) {
-	log.Logger.Debugf("WithFsuidFsgid(%d, %d)", fsgid, fsgid)
 	err = unix.Setfsuid(fsuid)
 	if err != nil {
 		awesome_error.CheckErr(err)

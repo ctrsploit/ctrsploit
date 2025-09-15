@@ -1,6 +1,8 @@
 package proc_root
 
 import (
+	"os"
+
 	"github.com/ctrsploit/ctrsploit/prerequisite/namespace"
 	"github.com/ctrsploit/sploit-spec/pkg/app"
 	"github.com/ctrsploit/sploit-spec/pkg/exeenv"
@@ -37,5 +39,5 @@ type vulnerability struct {
 }
 
 func (v *vulnerability) Exploit(ctx *cli.Context) (err error) {
-	return Exploit(ctx)
+	return Exploit(os.Stdin, os.Stdout, os.Stderr)
 }
