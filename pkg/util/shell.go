@@ -1,4 +1,4 @@
-package internal
+package util
 
 import (
 	"io"
@@ -68,4 +68,15 @@ func ReceiveReverseShell(listener net.Listener) (err error) {
 	}()
 	io.Copy(conn, os.Stdin)
 	return
+}
+
+func InvokeShellUnderDir(dir string, i io.Reader, o, e io.Writer) (err error) {
+	shell := "/bin/sh"
+	cmd := exec.Command(shell)
+	cmd.Dir = dir
+	cmd.Stdin = i
+	cmd.Stdout = o
+	cmd.Stderr = e
+	awesome_error.CheckFatal(cmd.Start())
+	return cmd.Wait()
 }

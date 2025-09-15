@@ -1,0 +1,9 @@
+name: util
+test_envs:
+  - name: WithUidAndCaps
+    kind: plain
+    pkg: github.com/ctrsploit/ctrsploit/pkg/util
+    cmd: docker run --rm
+      -v $(pwd)/bin/test/github.com_ctrsploit_ctrsploit_pkg_util.test:/ctrsploit.test
+      busybox:latest
+      /ctrsploit.test -test.v -test.run '^TestWithUid$'

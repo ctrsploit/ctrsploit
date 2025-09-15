@@ -1,8 +1,8 @@
 package checksec
 
 import (
-	vul2 "github.com/ctrsploit/ctrsploit/vul"
 	"github.com/ctrsploit/ctrsploit/vul/caps/sys_admin/release_agent"
+	"github.com/ctrsploit/ctrsploit/vul/namespace/net"
 	"github.com/ctrsploit/sploit-spec/pkg/vul"
 	"github.com/urfave/cli/v2"
 )
@@ -18,7 +18,7 @@ var Auto = &cli.Command{
 	Action: func(context *cli.Context) (err error) {
 		vulnerabilities := vul.Vulnerabilities{
 			&release_agent.Vul,
-			&vul2.NetworkNamespaceHostLevel,
+			&net.Vul,
 		}
 		err = vulnerabilities.Check(context)
 		if err != nil {

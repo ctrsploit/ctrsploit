@@ -1,13 +1,14 @@
 package namespace
 
 import (
-	"github.com/ssst0n3/awesome_libs/awesome_error"
 	"io/fs"
 	"os"
 	"path/filepath"
 	"strconv"
-	"strings"
 	"syscall"
+
+	"github.com/ctrsploit/ctrsploit/pkg/proc/ns"
+	"github.com/ssst0n3/awesome_libs/awesome_error"
 )
 
 var (
@@ -29,16 +30,11 @@ func ListNamespaceDir(path string) (namespaceInoMap map[string]int, names []stri
 		return
 	}
 	for _, entry := range entries {
-		var link string
-		link, err = os.Readlink(filepath.Join(path, entry.Name()))
+		ino, err := ns.GetInodeNumber(path + "/" + entry.Name())
 		if err != nil {
-			awesome_error.CheckErr(err)
-			return
+			return nil, nil, err
 		}
-		inodeNumber := link[strings.Index(link, "[")+1 : strings.Index(link, "]")]
-		var number int
-		number, err = strconv.Atoi(inodeNumber)
-		namespaceInoMap[entry.Name()] = number
+		namespaceInoMap[entry.Name()] = int(ino)
 		names = append(names, entry.Name())
 	}
 	return

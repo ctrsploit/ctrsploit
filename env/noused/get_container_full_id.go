@@ -3,9 +3,10 @@ package noused
 import (
 	"errors"
 	"fmt"
+	"strings"
+
 	"github.com/ctrsploit/ctrsploit/internal"
 	"github.com/ssst0n3/awesome_libs/awesome_error"
-	"strings"
 )
 
 func GetContainerFullId() (ID string, err error) {

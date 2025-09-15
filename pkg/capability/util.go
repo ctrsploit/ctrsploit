@@ -2,9 +2,10 @@ package capability
 
 import (
 	"fmt"
+	"os"
+
 	"github.com/containerd/containerd/pkg/cap"
 	"github.com/ssst0n3/awesome_libs/awesome_error"
-	"os"
 )
 
 func getCapability(pathStatus string, capType cap.Type) (caps uint64, err error) {
