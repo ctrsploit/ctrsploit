@@ -1,9 +1,9 @@
 package caps
 
 import (
+	"github.com/ctrsploit/ctrsploit/vul/caps/shocker"
 	"github.com/ctrsploit/ctrsploit/vul/caps/sys_admin"
 	"github.com/ctrsploit/ctrsploit/vul/caps/sys_ptrace"
-	"github.com/ctrsploit/ctrsploit/vul/shocker"
 	"github.com/ctrsploit/sploit-spec/pkg/exeenv"
 	"github.com/ctrsploit/sploit-spec/pkg/vul"
 	"github.com/urfave/cli/v2"

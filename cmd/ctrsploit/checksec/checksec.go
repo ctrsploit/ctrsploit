@@ -2,6 +2,7 @@ package checksec
 
 import (
 	"github.com/ctrsploit/ctrsploit/cmd/ctrsploit/env"
+	"github.com/ctrsploit/ctrsploit/vul/caps/shocker"
 	"github.com/ctrsploit/ctrsploit/vul/caps/sys_admin"
 	"github.com/ctrsploit/ctrsploit/vul/caps/sys_admin/release_agent"
 	"github.com/ctrsploit/ctrsploit/vul/caps/sys_ptrace"
@@ -18,7 +19,6 @@ import (
 	"github.com/ctrsploit/ctrsploit/vul/namespace/net"
 	"github.com/ctrsploit/ctrsploit/vul/namespace/pid"
 	docker_sock "github.com/ctrsploit/ctrsploit/vul/shared-socket/docker-sock"
-	"github.com/ctrsploit/ctrsploit/vul/shocker"
 	"github.com/ctrsploit/sploit-spec/pkg/app"
 	"github.com/urfave/cli/v2"
 )
