@@ -173,22 +173,23 @@ root@ctr # ./ctrsploit e ra -c "cat /etc/hostname"
 
 ### exploit
 
-| exploit                                                                                  | 缩写    | 简述                                                      |
-|------------------------------------------------------------------------------------------|-------|---------------------------------------------------------|
-| [cgroupv1-release_agent-unknown_rootfs](./exploit/cgroupv1-release_agent-unknown_rootfs) | ra3   | 在不知道rootfs在宿主机路径时，利用cgroup v1的notify_on_release功能的逃逸技术  |
-| [cve-2021-22555_ubuntu18.04](./exploit/CVE-2021-22555_ubuntu18.04)                       | 22555 | 利用CVE-2021-22555的逃逸技术 (ubuntu18.04)                     |
-| [cve-2025-23266](./vul/cve-2025-23266)                                                   | 23266 | nvidia-container-toolkit CVE-2025-23266 GPU 容器逃逸        | 
-| [cve-2025-47290](./vul/cve-2025-47290)                                                   | 47290 | containerd cve-2025-47290 镜像解包时可以访问主机文件系统               | 
-| [cve-2024-0132](./vul/cve-2024-0132)                                                     | 0132  | nvidia-container-toolkit CVE-2024-0132 GPU 容器逃逸         | 
-| [cve-2024-23650](./vul/cve-2024-23650)                                                   | 23650 | buildkitd cve-2024-23650 恶意frontend可以发送特制的请求导致panic     | 
-| [cve-2022-39253](./vul/cve-2022-39253)                                                   | 39253 | docker build 主机任意文件读(git CVE-2022-39253)                | 
-| [cve-2020-15257](./vul/cve-2020-15257)                                                   | 15257 | containerd cve-2020-15257 共享主机网络的容器逃逸                   | 
-| [cve-2016-8867](./vul/cve-2016-8867)                                                     | 8867  | runc cve-2016-8867 容器普通用户借助环境能力集提权                      | 
-| [release_agent](vul/caps/sys_admin/release_agent)                                        | ra    | 利用cgroup v1的notify_on_release功能的逃逸技术                    |
+| exploit                                                                                  | 缩写     | 简述                                                      |
+|------------------------------------------------------------------------------------------|--------|---------------------------------------------------------|
+| [cgroupv1-release_agent-unknown_rootfs](./exploit/cgroupv1-release_agent-unknown_rootfs) | ra3    | 在不知道rootfs在宿主机路径时，利用cgroup v1的notify_on_release功能的逃逸技术  |
+| [cve-2021-22555_ubuntu18.04](./exploit/CVE-2021-22555_ubuntu18.04)                       | 22555  | 利用CVE-2021-22555的逃逸技术 (ubuntu18.04)                     |
+| [cve-2025-23266](./vul/cve-2025-23266)                                                   | 23266  | nvidia-container-toolkit CVE-2025-23266 GPU 容器逃逸        | 
+| [cve-2025-47290](./vul/cve-2025-47290)                                                   | 47290  | containerd cve-2025-47290 镜像解包时可以访问主机文件系统               | 
+| [cve-2024-0132](./vul/cve-2024-0132)                                                     | 0132   | nvidia-container-toolkit CVE-2024-0132 GPU 容器逃逸         | 
+| [cve-2024-23650](./vul/cve-2024-23650)                                                   | 23650  | buildkitd cve-2024-23650 恶意frontend可以发送特制的请求导致panic     | 
+| [cve-2022-39253](./vul/cve-2022-39253)                                                   | 39253  | docker build 主机任意文件读(git CVE-2022-39253)                | 
+| [cve-2020-15257](./vul/cve-2020-15257)                                                   | 15257  | containerd cve-2020-15257 共享主机网络的容器逃逸                   | 
+| [cve-2016-8867](./vul/cve-2016-8867)                                                     | 8867   | runc cve-2016-8867 容器普通用户借助环境能力集提权                      | 
+| [release_agent](vul/caps/sys_admin/release_agent)                                        | ra     | 利用cgroup v1的notify_on_release功能的逃逸技术                    |
 | [shocker](./vul/shocker)                                                                 |
-| [naked](./vul/naked)                                                                     |       | seccomp, apparmor, selinux 均未开启的容器我们称作'裸奔容器',容易通过内核漏洞逃逸 |
-| [ptrace-pid-host](./vul/caps/sys_ptrace/pid_host)                                        | pid   | 容器具备cap_sys_ptrace和host pid namespace时可通过劫持主机进程被逃逸      |
-| [host-pid-proc-root](./vul/namespace/pid/proc_root)                                      | proc  | 容器具备host pid ns时可以通过/proc/[pid]/root访问主机或其他容器的文件系统      |
+| [naked](./vul/naked)                                                                     |        | seccomp, apparmor, selinux 均未开启的容器我们称作'裸奔容器',容易通过内核漏洞逃逸 |
+| [ptrace-pid-host](./vul/caps/sys_ptrace/pid_host)                                        | pid    | 容器具备cap_sys_ptrace和host pid namespace时可通过劫持主机进程被逃逸      |
+| [host-pid-proc-root](./vul/namespace/pid/proc_root)                                      | proc   | 容器具备host pid ns时可以通过/proc/[pid]/root访问主机或其他容器的文件系统      |
+| [docker.sock](./vul/shared-socket/docker-sock)                                           | docker | 容器中挂载了docker.sock时可以通过创建特权容器来实现逃逸                       |
 
 ### helper
 

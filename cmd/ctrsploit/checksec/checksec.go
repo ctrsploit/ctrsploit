@@ -17,6 +17,7 @@ import (
 	"github.com/ctrsploit/ctrsploit/vul/naked"
 	"github.com/ctrsploit/ctrsploit/vul/namespace/net"
 	"github.com/ctrsploit/ctrsploit/vul/namespace/pid"
+	docker_sock "github.com/ctrsploit/ctrsploit/vul/shared-socket/docker-sock"
 	"github.com/ctrsploit/ctrsploit/vul/shocker"
 	"github.com/ctrsploit/sploit-spec/pkg/app"
 	"github.com/urfave/cli/v2"
@@ -45,5 +46,6 @@ var Command = &cli.Command{
 		pid_host.CheckSecCmd,
 		sys_ptrace.CheckSecCmd,
 		pid.CheckSecCmd,
+		docker_sock.CheckSecCmd,
 	},
 }

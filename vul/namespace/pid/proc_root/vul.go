@@ -39,5 +39,9 @@ type vulnerability struct {
 }
 
 func (v *vulnerability) Exploit(ctx *cli.Context) (err error) {
+	err = v.BaseVulnerability.Exploit(ctx)
+	if err != nil {
+		return
+	}
 	return Exploit(os.Stdin, os.Stdout, os.Stderr)
 }
