@@ -33,14 +33,17 @@ BUILD_GO_PROXY := $(if $(GOPROXY),--build-arg GOPROXY="$(GOPROXY)")
 BUILD_SLIM_LDFLAGS := $(if $(SLIM_LDFLAGS), --build-arg SLIM_LDFLAGS="$(SLIM_LDFLAGS)")
 BUILD_OPTS := ${BUILD_APT_MIRROR} ${BUILD_GO_PROXY} ${BUILD_SLIM_LDFLAGS} ${DOCKER_BUILD_ARGS} ${DOCKER_BUILD_OPTS} -f "$(DOCKERFILE)"
 
-binary:
-	APT_MIRROR="$(APT_MIRROR)" GOPROXY="$(GOPROXY)" SLIM_LDFLAGS="$(SLIM_LDFLAGS)" docker buildx bake binary ${DEBUG_FLGAS}
+# ebpf
+include vul/caps/sys_admin/ebpf/Makefile
 
-build:
+build: generate
 	LDFLAGS=$(LDFLAGS) ./script/release.sh
 
 install: build
 	rm -f /usr/local/bin/${APP_NAME} && ln -s $(CURDIR)/bin/release/${APP_NAME}_linux_amd64 /usr/local/bin/${APP_NAME}
+
+binary:
+	APT_MIRROR="$(APT_MIRROR)" GOPROXY="$(GOPROXY)" SLIM_LDFLAGS="$(SLIM_LDFLAGS)" docker buildx bake binary ${DEBUG_FLGAS}
 
 image:
 	docker buildx build $(BUILD_OPTS) --load -t "$(DEV_IMAGE)" ${DEBUG_FLAGS} .
