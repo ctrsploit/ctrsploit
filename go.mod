@@ -6,6 +6,7 @@ toolchain go1.24.7
 
 require (
 	github.com/Masterminds/semver/v3 v3.4.0
+	github.com/cilium/ebpf v0.19.0
 	github.com/containerd/cgroups v1.1.0
 	github.com/containerd/containerd v1.7.28
 	github.com/containerd/containerd/api v1.9.0
