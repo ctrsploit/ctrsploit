@@ -11,6 +11,12 @@ var (
 	aliases = []string{"bash"}
 	// TODO: implement flags
 	flagsExploit = []cli.Flag{
+		&cli.StringFlag{
+			Name:    "cmd",
+			Aliases: []string{"c"},
+			Usage:   "command to execute, default: id",
+			Value:   "id",
+		},
 		&cli.BoolFlag{
 			Name:    "once",
 			Aliases: []string{"o"},
@@ -50,5 +56,5 @@ func (v *vulnerability) Exploit(context *cli.Context) (err error) {
 	if err := v.BaseVulnerability.Exploit(context); err != nil {
 		return err
 	}
-	return Load()
+	return Load(context.String("cmd"))
 }

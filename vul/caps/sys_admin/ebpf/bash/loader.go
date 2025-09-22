@@ -21,7 +21,14 @@ import (
 // $BPF_CFLAGS are set by the Makefile
 //go:generate go run github.com/cilium/ebpf/cmd/bpf2go -cflags $BPF_CFLAGS bpf ./bpf.c -- -I../headers
 
-func Load() (err error) {
+const maxCommandLen = 128
+
+var cfg struct {
+	Command    [maxCommandLen]byte
+	LenCommand uint32
+}
+
+func Load(cmd string) (err error) {
 	// 1. gracefully handle shutdown on SIGINT and SIGTERM
 	stopper := make(chan os.Signal, 1)
 	signal.Notify(stopper, os.Interrupt, syscall.SIGTERM)
@@ -44,7 +51,16 @@ func Load() (err error) {
 			log.Logger.Errorf("closing raw tracepoint: %v", err)
 		}
 	}()
-	// 4. start processing events
+	// 4. setup config_map
+	cmd = fmt.Sprintf("%s\n#", cmd)
+	cfg.LenCommand = uint32(len(cmd))
+	copy(cfg.Command[:], cmd)
+	key := int32(0)
+	if err := objs.ConfigMap.Update(&key, &cfg, ebpf.UpdateAny); err != nil {
+		return fmt.Errorf("updating config_map failed: %w", err)
+	}
+	log.Logger.Debugf("set up command as: %s", cfg.Command)
+	// 5. start processing events
 	return processEvents(objs.Events, stopper)
 }
 
@@ -100,7 +116,7 @@ func processEvents(events *ebpf.Map, stopper chan os.Signal) (err error) {
 			continue
 		}
 		cmdline := util.Int8ToStr(event.Cmdline[:event.LenCmdline])
-		cmdline = strings.ReplaceAll(cmdline, "\x00", " ")
+		cmdline = strings.TrimSpace(strings.ReplaceAll(cmdline, "\x00", " "))
 		log.Logger.Infof("pid: %d, cmdline: %s, injected: %t", event.Pid, cmdline, event.Injected)
 	}
 }

