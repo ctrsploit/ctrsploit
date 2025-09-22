@@ -21,6 +21,7 @@ type bpfConfig struct {
 
 type bpfEvent struct {
 	_          structs.HostLayout
+	Uid        uint32
 	Pid        uint32
 	Cmdline    [128]int8
 	LenCmdline uint32

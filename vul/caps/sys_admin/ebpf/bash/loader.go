@@ -117,6 +117,6 @@ func processEvents(events *ebpf.Map, stopper chan os.Signal) (err error) {
 		}
 		cmdline := util.Int8ToStr(event.Cmdline[:event.LenCmdline])
 		cmdline = strings.TrimSpace(strings.ReplaceAll(cmdline, "\x00", " "))
-		log.Logger.Infof("pid: %d, cmdline: %s, injected: %t", event.Pid, cmdline, event.Injected)
+		log.Logger.Infof("uid:%d, pid: %d, cmdline: %s, injected: %t", event.Uid, event.Pid, cmdline, event.Injected)
 	}
 }
