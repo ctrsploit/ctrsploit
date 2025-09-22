@@ -17,7 +17,7 @@ const (
 	ProcCGroupInitIno = 0xEFFFFFFB
 	ProcTimeInitIno   = 0xEFFFFFFA
 	// ProcMountInitIno mount init ns create once procfs mounted
-	ProcMountInitIno = ProcDynamicFirst
+	ProcMountInitIno = ProcDynamicFirst + 1
 	// LinuxKitNetNsInitIno not sure, just use in practice
 	LinuxKitNetNsInitIno   = ProcDynamicFirst
 	LinuxKitMountNsInitIno = ProcDynamicFirst + 1

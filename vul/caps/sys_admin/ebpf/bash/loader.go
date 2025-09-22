@@ -7,14 +7,15 @@ import (
 	"fmt"
 	"os"
 	"os/signal"
+	"strings"
 	"syscall"
 
 	"github.com/cilium/ebpf"
 	"github.com/cilium/ebpf/link"
 	"github.com/cilium/ebpf/ringbuf"
 	"github.com/cilium/ebpf/rlimit"
+	"github.com/ctrsploit/ctrsploit/pkg/util"
 	"github.com/ctrsploit/sploit-spec/pkg/log"
-	"github.com/davecgh/go-spew/spew"
 )
 
 // $BPF_CFLAGS are set by the Makefile
@@ -88,7 +89,7 @@ func processEvents(events *ebpf.Map, stopper chan os.Signal) (err error) {
 		if err != nil {
 			if errors.Is(err, ringbuf.ErrClosed) {
 				log.Logger.Info("Received signal, exiting..")
-				return
+				return err
 			}
 			log.Logger.Errorf("reading from reader: %s", err)
 			continue
@@ -98,6 +99,8 @@ func processEvents(events *ebpf.Map, stopper chan os.Signal) (err error) {
 			log.Logger.Errorf("parsing ringbuf event: %s", err)
 			continue
 		}
-		spew.Dump(event)
+		cmdline := util.Int8ToStr(event.Cmdline[:event.LenCmdline])
+		cmdline = strings.ReplaceAll(cmdline, "\x00", " ")
+		log.Logger.Infof("pid: %d, cmdline: %s, injected: %t", event.Pid, cmdline, event.Injected)
 	}
 }

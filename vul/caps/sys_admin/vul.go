@@ -2,6 +2,7 @@ package sys_admin
 
 import (
 	"github.com/ctrsploit/ctrsploit/prerequisite/capability"
+	"github.com/ctrsploit/ctrsploit/vul/caps/sys_admin/ebpf"
 	"github.com/ctrsploit/ctrsploit/vul/caps/sys_admin/release_agent"
 	"github.com/ctrsploit/sploit-spec/pkg/app"
 	"github.com/ctrsploit/sploit-spec/pkg/exeenv"
@@ -61,6 +62,7 @@ func getExploitCmd(name, usage string, aliases []string) (cmd *cli.Command) {
 		Subcommands: []*cli.Command{
 			// TODO: add more exploit methods
 			release_agent.ExploitCmd,
+			ebpf.GetExploitCmd("ebpf", "exploit via eBPF", nil),
 		},
 	}
 }
