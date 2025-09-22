@@ -45,20 +45,24 @@ static __inline int handle_enter_execve(struct bpf_raw_tracepoint_args *ctx) {
         return -1;
     }
     // 3. overwrite pathname to /bin/whoami
+    // TODO: overwrite args also
     bool injected;
     // TODO: read from user space
     const char new_path[] = "/bin/ls";
-    // TODO: overflow risk?
     // if (e->len_pathname < sizeof(new_path)) {
     //     return -1;
     // }
+    // This may fail with errno 14, which means "Bad address"
+    // But it still works, because execve will be called frequently
     long ret = bpf_probe_write_user((void *)args.pathname, new_path, sizeof(new_path));
     if (ret != 0) {
+        bpf_printk("bpf_probe_write_user failed: %d\n", ret);
         bpf_ringbuf_discard(e, 0);
         return -1;
     }
     injected = true;
     // 4. send event to user space
+    e->pid = bpf_get_current_pid_tgid() >> 32;
     e->injected = injected;
     bpf_ringbuf_submit(e, 0);
     return 0;
@@ -83,6 +87,9 @@ int raw_tracepoint(struct bpf_raw_tracepoint_args *ctx) {
         if (handle_enter_execve(ctx) != 0) {
             return 0;
         }
+        break;
+    case 322: // execveat
+        bpf_printk("syscall_id=%d\n", syscall_id);
         break;
     default:
         return 0;

