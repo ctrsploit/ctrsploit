@@ -3,6 +3,7 @@ package ebpf
 import (
 	"github.com/ctrsploit/ctrsploit/prerequisite/capability"
 	"github.com/ctrsploit/ctrsploit/vul/caps/sys_admin/ebpf/bash"
+	"github.com/ctrsploit/ctrsploit/vul/caps/sys_admin/ebpf/execve"
 	"github.com/ctrsploit/sploit-spec/pkg/app"
 	"github.com/ctrsploit/sploit-spec/pkg/exeenv"
 	"github.com/ctrsploit/sploit-spec/pkg/prerequisite"
@@ -64,6 +65,7 @@ func GetExploitCmd(name, usage string, aliases []string) *cli.Command {
 		Usage:   usage,
 		Subcommands: []*cli.Command{
 			bash.ExploitCmd,
+			execve.ExploitCmd,
 		},
 	}
 }
