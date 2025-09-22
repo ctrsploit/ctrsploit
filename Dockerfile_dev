@@ -15,19 +15,16 @@ RUN sed -ri "s/(httpredir|deb).debian.org/${APT_MIRROR:-deb.debian.org}/g" /etc/
  && cat /etc/apt/sources.list
 RUN git config --global --add safe.directory /root/app
 
-FROM base AS gox
-RUN --mount=type=cache,target=/root/.cache/go-build \
-    --mount=type=cache,target=/go/pkg/mod \
-        GOBIN=/build/ GO111MODULE=on GOPROXY=${GOPROXY} go install github.com/mitchellh/gox@latest \
-     && /build/gox --help
-
 FROM base AS build-env
 WORKDIR /root/app
-COPY --from=gox /build/ /usr/local/bin/
 RUN --mount=type=cache,sharing=locked,id=ctrsploit-build-aptlib,target=/var/lib/apt \
     --mount=type=cache,sharing=locked,id=ctrsploit-build-aptcache,target=/var/cache/apt \
-        apt update && apt install -y \
-            upx jq
+    apt update && apt install -y \
+    upx \
+    jq \
+    clang \
+    llvm \
+    libbpf-dev
 RUN --mount=type=bind,target=.,rw \
     --mount=type=cache,target=/root/.cache/go-build,id=ctrsploit-build \
     --mount=type=cache,target=/go/pkg/mod,id=ctrsploit-mod \
