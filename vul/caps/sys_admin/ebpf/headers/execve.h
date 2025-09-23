@@ -12,6 +12,7 @@ struct execve_args {
 *   - non-zero: failure (e.g., invalid args)
 */
 static __inline int parse_execve_args(struct bpf_raw_tracepoint_args *ctx, struct execve_args *args) {
+    // int execve(const char *pathname, char *const _Nullable argv[], char *const _Nullable envp[]);
     struct pt_regs *regs = (struct pt_regs *)(ctx->args[0]);
     if (!regs) {
         return -1;

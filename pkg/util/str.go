@@ -7,3 +7,13 @@ func Int8ToStr(arr []int8) string {
 	}
 	return string(byteSlice)
 }
+
+func StrToInt8(s string) []int8 {
+	bs := []byte(s)
+	res := make([]int8, len(bs))
+	for i, v := range bs {
+		res[i] = int8(v)
+	}
+
+	return res
+}
