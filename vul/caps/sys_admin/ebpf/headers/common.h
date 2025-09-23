@@ -1,3 +1,14 @@
+static inline int get_syscall_id_from_regs(struct pt_regs *regs)
+{
+    int id = -1; // Unsupported architecture
+#if defined(bpf_target_x86)
+    id = BPF_CORE_READ(regs, orig_ax);
+#elif defined(bpf_target_arm64)
+    id = BPF_CORE_READ(regs, syscallno);
+#endif
+    return id;
+}
+
 static __inline bool const_memcmp(const char *s1, const char *s2, int n) {
     for (int i = 0; i < n; i++) {
         if (s1[i] != s2[i]) {
@@ -69,37 +80,4 @@ static __inline int get_cmdline(char *buf, int size) {
     }
     buf[len] = '\0';
     return len;
-}
-
-static __always_inline int int_to_str(__u32 n, char *dst, int dst_len)
-{
-    if (dst_len < 2)
-        return 0;
-
-    int pos = (dst_len - 2);
-    dst[dst_len - 1] = '\0';
-
-#pragma unroll
-    for (int i = 0; i < 10; i++) {
-        dst[pos] = '0' + (n % 10);
-        n /= 10;
-
-        if (!n)
-            break;
-        if (--pos < 0)
-            break;
-    }
-
-    int start = pos + 1;
-    int out_len = (dst_len - 1) - start;
-
-#pragma unroll
-    for (int i = 0; i < 10; i++) {
-        if (i >= out_len)
-            break;
-        dst[i] = dst[start + i];
-    }
-    dst[out_len] = '\0';
-
-    return out_len;
 }

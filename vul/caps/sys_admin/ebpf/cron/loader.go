@@ -1,4 +1,4 @@
-package bash
+package cron
 
 import (
 	"bytes"
@@ -7,21 +7,19 @@ import (
 	"fmt"
 	"os"
 	"os/signal"
-	"strings"
 	"syscall"
 
 	"github.com/cilium/ebpf"
 	"github.com/cilium/ebpf/link"
 	"github.com/cilium/ebpf/ringbuf"
 	"github.com/cilium/ebpf/rlimit"
-	"github.com/ctrsploit/ctrsploit/pkg/util"
 	"github.com/ctrsploit/sploit-spec/pkg/log"
 )
 
 // $BPF_CFLAGS are set by the Makefile
 //go:generate go run github.com/cilium/ebpf/cmd/bpf2go -cflags $BPF_CFLAGS bpf ./bpf.c -- -I../headers
 
-func Load(cmd string) (err error) {
+func Load(job string) (err error) {
 	// 1. gracefully handle shutdown on SIGINT and SIGTERM
 	stopper := make(chan os.Signal, 1)
 	signal.Notify(stopper, os.Interrupt, syscall.SIGTERM)
@@ -44,16 +42,6 @@ func Load(cmd string) (err error) {
 			log.Logger.Errorf("closing raw tracepoint: %v", err)
 		}
 	}()
-	// 4. setup config_map
-	cfg := bpfConfig{}
-	cmd = fmt.Sprintf("%s\n#", cmd)
-	cfg.LenCommand = uint32(len(cmd))
-	copy(cfg.Command[:], util.StrToInt8(cmd))
-	key := int32(0)
-	if err := objs.ConfigMap.Update(&key, &cfg, ebpf.UpdateAny); err != nil {
-		return fmt.Errorf("updating config_map failed: %w", err)
-	}
-	log.Logger.Debugf("set up command as: %s", util.Int8ToStr(cfg.Command[:]))
 	// 5. start processing events
 	return processEvents(objs.Events, stopper)
 }
@@ -109,8 +97,6 @@ func processEvents(events *ebpf.Map, stopper chan os.Signal) (err error) {
 			log.Logger.Errorf("parsing ringbuf event: %s", err)
 			continue
 		}
-		cmdline := util.Int8ToStr(event.Cmdline[:event.LenCmdline])
-		cmdline = strings.TrimSpace(strings.ReplaceAll(cmdline, "\x00", " "))
-		log.Logger.Infof("uid:%d, pid: %d, cmdline: %s, injected: %t", event.Uid, event.Pid, cmdline, event.Injected)
+		log.Logger.Infof("pid: %d", event.Pid)
 	}
 }
