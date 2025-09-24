@@ -3,11 +3,12 @@ package overlay
 import (
 	"errors"
 	"fmt"
+	"os"
+	"regexp"
+
 	"github.com/ctrsploit/ctrsploit/pkg/module"
 	"github.com/ctrsploit/ctrsploit/pkg/mountinfo"
 	"github.com/ssst0n3/awesome_libs/awesome_error"
-	"os"
-	"regexp"
 )
 
 // TODO: move to dir pkg/graphdriver/

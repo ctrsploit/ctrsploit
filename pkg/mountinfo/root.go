@@ -1,8 +1,9 @@
 package mountinfo
 
 import (
-	"github.com/moby/sys/mountinfo"
 	"strings"
+
+	"github.com/moby/sys/mountinfo"
 )
 
 func RootMount() (info *mountinfo.Info, err error) {

@@ -2,8 +2,9 @@ package overlay
 
 import (
 	"fmt"
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestHaveBeenUsed(t *testing.T) {
