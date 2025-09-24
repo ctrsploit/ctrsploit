@@ -1,6 +1,7 @@
 package where
 
 import (
+	"github.com/ctrsploit/ctrsploit/pkg/runtime"
 	"github.com/ctrsploit/ctrsploit/pkg/where"
 	"github.com/ctrsploit/sploit-spec/pkg/env/container"
 )
@@ -8,11 +9,8 @@ import (
 const CommandName = "where"
 
 func Docker() (docker container.Type, err error) {
-	d := where.Docker{}
-	in, err := d.IsIn()
-	if err != nil {
-		return
-	}
+	d := runtime.NewDocker()
+	in, _ := d.Is()
 	docker = container.Type{
 		In: in,
 		Rules: map[string]bool{
