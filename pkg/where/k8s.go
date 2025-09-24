@@ -2,12 +2,14 @@ package where
 
 import (
 	"bytes"
-	"github.com/ctrsploit/ctrsploit/internal"
-	"github.com/ctrsploit/ctrsploit/pkg/mountinfo"
-	"github.com/ssst0n3/awesome_libs/awesome_error"
+	"fmt"
 	"os"
 	"regexp"
 	"strings"
+
+	"github.com/ctrsploit/ctrsploit/internal"
+	"github.com/ctrsploit/ctrsploit/pkg/mountinfo"
+	"github.com/ssst0n3/awesome_libs/awesome_error"
 )
 
 const (
@@ -25,8 +27,12 @@ type K8s struct {
 	CgroupContainsKubepods       bool
 }
 
-func (k *K8s) CheckDirSecretsExists() {
-	k.DirSecretsExists = internal.CheckPathExists(PathDirSecrets)
+func (k *K8s) CheckDirSecretsExists() (err error) {
+	k.DirSecretsExists, err = internal.CheckPathExists(PathDirSecrets)
+	if err != nil {
+		return fmt.Errorf("error checking dir secrets exists: %v", err)
+	}
+	return
 }
 
 func (k *K8s) CheckHostsMountSourceContainsPods() (err error) {
@@ -71,7 +77,10 @@ func (k *K8s) IsIn() (in bool, err error) {
 		in = true
 	}
 
-	k.CheckDirSecretsExists()
+	err = k.CheckDirSecretsExists()
+	if err != nil {
+		return
+	}
 	if k.DirSecretsExists {
 		in = true
 	}

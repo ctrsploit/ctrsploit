@@ -2,15 +2,22 @@ package internal
 
 import (
 	"bytes"
+	"fmt"
 	"os"
 	"strconv"
 
 	"github.com/ssst0n3/awesome_libs/awesome_error"
 )
 
-func CheckPathExists(path string) bool {
+func CheckPathExists(path string) (bool, error) {
 	_, err := os.Lstat(path)
-	return !os.IsNotExist(err)
+	if err != nil {
+		if os.IsNotExist(err) {
+			return false, nil
+		}
+		return false, fmt.Errorf("checkPathExists: %w", err)
+	}
+	return true, nil
 }
 
 func ReadIntFromFile(path string) (result int, err error) {
