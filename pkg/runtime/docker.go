@@ -21,7 +21,8 @@ type Docker struct {
 	RootfsContainsDocker           bool
 	CgroupContainsDocker           bool
 	HostsMountSourceContainsDocker bool
-	HostnameMatchPattern           bool
+	// both docker, nerdctl match this behavior, disable this method
+	hostnameMatchPattern bool
 }
 
 func NewDocker() *Docker {
@@ -30,40 +31,41 @@ func NewDocker() *Docker {
 	return d
 }
 
-func (d *Docker) Is() (bool, error) {
-	return d.DockerEnvFileExists ||
-		d.RootfsContainsDocker ||
-		d.CgroupContainsDocker ||
-		d.HostsMountSourceContainsDocker ||
-		d.HostnameMatchPattern, nil
+func (r *Docker) Is() (bool, error) {
+	return r.DockerEnvFileExists ||
+			r.RootfsContainsDocker ||
+			r.CgroupContainsDocker ||
+			//r.hostnameMatchPattern || // both docker, nerdctl match this behavior
+			r.HostsMountSourceContainsDocker,
+		nil
 }
 
-func (d *Docker) CheckAll() {
-	err := d.checkDockerEnvExists()
+func (r *Docker) CheckAll() {
+	err := r.checkDockerEnvExists()
 	if err != nil {
 		awesome_error.CheckWarning(err)
 	}
-	err = d.checkMountInfo()
+	err = r.checkMountInfo()
 	if err != nil {
 		awesome_error.CheckWarning(err)
 	}
-	err = d.checkCgroup()
+	err = r.checkCgroup()
 	if err != nil {
 		awesome_error.CheckWarning(err)
 	}
-	err = d.checkHostsMountSourceContainsDocker()
+	err = r.checkHostsMountSourceContainsDocker()
 	if err != nil {
 		awesome_error.CheckWarning(err)
 	}
-	err = d.checkHostnameMatchPattern()
+	err = r.checkHostnameMatchPattern()
 	if err != nil {
 		awesome_error.CheckWarning(err)
 	}
 	return
 }
 
-func (d *Docker) checkDockerEnvExists() (err error) {
-	d.DockerEnvFileExists, err = internal.CheckPathExists("/.dockerenv")
+func (r *Docker) checkDockerEnvExists() (err error) {
+	r.DockerEnvFileExists, err = internal.CheckPathExists("/.dockerenv")
 	if err != nil {
 		return fmt.Errorf("error on checking /.dockerenv exists: %w", err)
 	}
@@ -71,7 +73,7 @@ func (d *Docker) checkDockerEnvExists() (err error) {
 }
 
 // checkMountInfo rootfs contains "docker"
-func (d *Docker) checkMountInfo() (err error) {
+func (r *Docker) checkMountInfo() (err error) {
 	info, err := mountinfo.RootMount()
 	if err != nil {
 		return fmt.Errorf("error getting root's mount info: %w", err)
@@ -80,36 +82,36 @@ func (d *Docker) checkMountInfo() (err error) {
 	if strings.Contains(info.Source, "docker") ||
 		// overlay: lowerdir=/var/lib/docker/overlay2...
 		strings.Contains(info.VFSOptions, "docker") {
-		d.RootfsContainsDocker = true
+		r.RootfsContainsDocker = true
 	}
 	return
 }
 
 // checkCgroup Only works in cgroup v1
-func (d *Docker) checkCgroup() (err error) {
+func (r *Docker) checkCgroup() (err error) {
 	content, err := os.ReadFile("/proc/self/cgroup")
 	if err != nil {
 		return fmt.Errorf("error reading /proc/self/cgroup: %w", err)
 	}
-	d.CgroupContainsDocker = bytes.Contains(content, []byte("docker"))
+	r.CgroupContainsDocker = bytes.Contains(content, []byte("docker"))
 	return
 }
 
-func (d *Docker) checkHostsMountSourceContainsDocker() (err error) {
+func (r *Docker) checkHostsMountSourceContainsDocker() (err error) {
 	mount, err := mountinfo.HostsMount()
 	if err != nil {
 		return fmt.Errorf("error getting mountinfo of /etc/hosts: %w", err)
 	}
-	d.HostsMountSourceContainsDocker = strings.Contains(mount.Root, "docker")
+	r.HostsMountSourceContainsDocker = strings.Contains(mount.Root, "docker")
 	return
 }
 
-func (d *Docker) checkHostnameMatchPattern() (err error) {
+func (r *Docker) checkHostnameMatchPattern() (err error) {
 	hostname, err := os.Hostname()
 	if err != nil {
 		return fmt.Errorf("error getting hostname: %w", err)
 	}
-	d.HostnameMatchPattern, err = regexp.MatchString(PatternDockerHostname, hostname)
+	r.hostnameMatchPattern, err = regexp.MatchString(PatternDockerHostname, hostname)
 	if err != nil {
 		return fmt.Errorf("error checking hostname match pattern: %w", err)
 	}
