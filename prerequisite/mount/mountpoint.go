@@ -9,18 +9,18 @@ import (
 	"github.com/ssst0n3/awesome_libs/awesome_error"
 )
 
-type Contains struct {
+type ContainsMountPoint struct {
 	prerequisite.BasePrerequisite
 	ExpectedMountPoint string
 	Type               os.FileMode
 	realMountPoint     string
 }
 
-func (p *Contains) RealMountPoint() string {
+func (p *ContainsMountPoint) RealMountPoint() string {
 	return p.realMountPoint
 }
 
-func (p *Contains) Check() (bool, error) {
+func (p *ContainsMountPoint) Check() (bool, error) {
 	if p.Checked {
 		return p.Satisfied, nil
 	}
@@ -52,7 +52,7 @@ func (p *Contains) Check() (bool, error) {
 	return p.Satisfied, nil
 }
 
-var DockerSock = Contains{
+var DockerSock = ContainsMountPoint{
 	ExpectedMountPoint: "docker.sock",
 	Type:               os.ModeSocket,
 }
