@@ -7,6 +7,7 @@ const (
 	TypeDocker
 	TypeContainerd
 	TypePodman
+	TypeCrio
 )
 
 func (t Type) String() string {
