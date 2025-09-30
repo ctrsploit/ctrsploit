@@ -1,0 +1,12 @@
+name: mount
+test_envs:
+  - name: docker-v28.3.2
+    kind: dqd
+    dqd_dir: docker/v28.3.2
+    pkg: github.com/ctrsploit/ctrsploit/prerequisite/apparmor
+    cmd: docker run --rm
+         -v /ctrsploit.test:/ctrsploit.test
+         -v /var/run/docker.sock:/var/run/docker.sock
+         --env TEST_ENV=docker-v28.3.2
+         busybox:latest
+         /ctrsploit.test -test.v -test.run '^TestE2E'
