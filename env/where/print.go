@@ -2,6 +2,7 @@ package where
 
 import (
 	"fmt"
+
 	"github.com/ctrsploit/ctrsploit/pkg/where"
 	"github.com/ctrsploit/sploit-spec/pkg/env/container"
 	"github.com/ctrsploit/sploit-spec/pkg/printer"
@@ -52,10 +53,20 @@ func Human(machine container.Where) (human Result) {
 					Description: "the mount source of /etc/hosts contains 'docker'",
 					Result:      machine.Docker.Rules["hosts"],
 				},
+				//{
+				//	Name:        "hostname",
+				//	Description: "hostname match regex ^[0-9a-f]{12}$",
+				//	Result:      machine.Docker.Rules["hostname"],
+				//},
 				{
-					Name:        "hostname",
-					Description: "hostname match regex ^[0-9a-f]{12}$",
-					Result:      machine.Docker.Rules["hostname"],
+					Name:        "lsm",
+					Description: "/proc/1/attr/current contains 'docker'",
+					Result:      machine.Docker.Rules["lsm"],
+				},
+				{
+					Name:        "socket",
+					Description: "/proc/net/unix contains 'docker.sock'",
+					Result:      machine.Docker.Rules["socket"],
 				},
 			},
 			In: item.Bool{
@@ -63,6 +74,34 @@ func Human(machine container.Where) (human Result) {
 				Description: "",
 				Result:      machine.Docker.In,
 			},
+		},
+		"containerd": {
+			Name: result.Title{
+				Name: "containerd",
+			},
+			Rules: []item.Bool{
+				{
+					Name:        "rootfs",
+					Description: "rootfs contains 'containerd'",
+					Result:      machine.Containerd.Rules["rootfs"],
+				},
+				{
+					Name:        "hosts",
+					Description: "the mount source of /etc/hosts contains 'nerdctl'",
+					Result:      machine.Containerd.Rules["hosts"],
+				},
+				{
+					Name:        "hostname",
+					Description: "the mount source of /etc/hostname contains 'containerd'/'nerdctl'",
+					Result:      machine.Containerd.Rules["hostname"],
+				},
+				{
+					Name:        "socket",
+					Description: "/proc/net/unix contains 'containerd.sock', no 'docker.sock'",
+					Result:      machine.Containerd.Rules["socket"],
+				},
+			},
+			In: item.Bool{},
 		},
 		"k8s": {
 			Name: result.Title{
@@ -96,7 +135,6 @@ func Human(machine container.Where) (human Result) {
 				Result:      machine.K8s.In,
 			},
 		},
-		"containerd": {},
 	}
 	return
 }

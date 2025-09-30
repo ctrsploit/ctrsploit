@@ -18,7 +18,23 @@ func Docker() (docker container.Type, err error) {
 			"rootfs":    d.RootfsContainsDocker,
 			"cgroups":   d.CgroupContainsDocker,
 			"hosts":     d.HostsMountSourceContainsDocker,
-			"hostname":  d.HostnameMatchPattern,
+			"lsm":       d.ProcAttrCurrentContainsDocker,
+			"socket":    d.ProcNetUnixContainsDockerSock,
+		},
+	}
+	return
+}
+
+func Containerd() (containerd container.Type, err error) {
+	r := runtime.NewContainerd()
+	in, _ := r.Is()
+	containerd = container.Type{
+		In: in,
+		Rules: map[string]bool{
+			"rootfs":   r.RootfsContainsContainerd,
+			"hosts":    r.HostsMountSourceContainsNerdctl,
+			"hostname": r.HostnameMountSourceContainsContainerd,
+			"socket":   r.ProcNetUnixContainsContainerdSock,
 		},
 	}
 	return
@@ -60,6 +76,10 @@ func Where() (machine container.Where, err error) {
 	if err != nil {
 		return
 	}
+	containerd, err := Containerd()
+	if err != nil {
+		return
+	}
 	k8s, err := K8s()
 	if err != nil {
 		return
@@ -71,7 +91,7 @@ func Where() (machine container.Where, err error) {
 	machine = container.Where{
 		Container:  c,
 		K8s:        k8s,
-		Containerd: container.Type{},
+		Containerd: containerd,
 		Docker:     docker,
 	}
 	return
