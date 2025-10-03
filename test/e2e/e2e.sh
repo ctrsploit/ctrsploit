@@ -22,14 +22,20 @@ while IFS= read -r e2e_file; do
   for (( i = 0; i < num_envs; i++ )); do
     # Extract the test environment details.
     ENV_NAME=$(yq eval ".test_envs[$i].name" "$e2e_file")
+    REMOTE_HOST=$(yq eval ".test_envs[$i].remote_host" "$e2e_file")
     ENV_KIND=$(yq eval ".test_envs[$i].kind" "$e2e_file")
     DQD_DIR=$(yq eval ".test_envs[$i].dqd_dir" "$e2e_file")
     PKG=$(yq eval ".test_envs[$i].pkg" "$e2e_file")
     CMD=$(yq eval ".test_envs[$i].cmd" "$e2e_file")
     STOP_FLAG=$(yq eval ".test_envs[$i].stop_flag" "$e2e_file")
 
+    if [ -z "$REMOTE_HOST" ]; then
+        REMOTE_HOST=$ENV_NAME
+    fi
+
     echo "----------------------------------"
     echo "TEST_ENV = ${ENV_NAME}"
+    echo "REMOTE_HOST = ${REMOTE_HOST}"
     echo "ENV_KIND = ${ENV_KIND}"
     echo "DQD_DIR = ${DQD_DIR}"
     echo "PKG = ${PKG}"
@@ -41,7 +47,7 @@ while IFS= read -r e2e_file; do
     if [[ "${ENV_KIND}" == "plain" ]]; then
       eval "${CMD}"
     elif [[ "${ENV_KIND}" == "dqd" ]]; then
-      ${DIR_SCRIPT}/dqd.sh "${ENV_NAME}" "${DQD_DIR}" "${PKG}" "${CMD}" "${STOP_FLAG}"
+      ${DIR_SCRIPT}/dqd.sh "${REMOTE_HOST}" "${DQD_DIR}" "${PKG}" "${CMD}" "${STOP_FLAG}"
     fi
   done
 done < <(find ${DIR_SEARCH} -type f -name "e2e.yml")

@@ -11,7 +11,7 @@
 # Stop on any error, treat unset variables as errors, and propagate exit codes through pipes.
 set -euo pipefail
 
-ENV_NAME=$1
+REMOTE_HOST=$1
 DQD_DIR=$2
 PKG=$3
 CMD=$4
@@ -98,6 +98,6 @@ do_test() {
 }
 
 up "${DQD_DIR}"
-upload_test_bin "${ENV_NAME}" "${PKG}"
-do_test "${ENV_NAME}" "${CMD}" "${STOP_FLAG}"
+upload_test_bin "${REMOTE_HOST}" "${PKG}"
+do_test "${REMOTE_HOST}" "${CMD}" "${STOP_FLAG}"
 down "${DQD_DIR}"
