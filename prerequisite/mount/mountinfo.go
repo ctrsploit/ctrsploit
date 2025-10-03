@@ -11,7 +11,7 @@ import (
 
 type RootMountInfoSourceContains struct {
 	prerequisite.BasePrerequisite
-	Contains string
+	Expected string
 }
 
 func (p *RootMountInfoSourceContains) Check() (bool, error) {
@@ -22,7 +22,7 @@ func (p *RootMountInfoSourceContains) Check() (bool, error) {
 	if err != nil {
 		return false, fmt.Errorf("failed to check rootfs's mountinfo source caused by getting root's mountinfo: %w", err)
 	}
-	p.Satisfied = strings.Contains(info.Source, p.Contains)
+	p.Satisfied = strings.Contains(info.Source, p.Expected)
 	p.Checked = true
 	return p.Satisfied, nil
 }
@@ -36,13 +36,13 @@ var (
 			Info:   "rootfs's mountinfo source contains 'docker', e.g., /dev/mapper/docker-8:...",
 			ExeEnv: exeenv.InContainer,
 		},
-		Contains: "docker",
+		Expected: "docker",
 	}
 )
 
 type RootMountInfoVFSOptionsContains struct {
 	prerequisite.BasePrerequisite
-	Contains string
+	Expected string
 }
 
 func (p *RootMountInfoVFSOptionsContains) Check() (bool, error) {
@@ -53,7 +53,7 @@ func (p *RootMountInfoVFSOptionsContains) Check() (bool, error) {
 	if err != nil {
 		return false, fmt.Errorf("failed to check rootfs's mountinfo vfs options caused by getting root's mountinfo: %w", err)
 	}
-	p.Satisfied = strings.Contains(info.VFSOptions, p.Contains)
+	p.Satisfied = strings.Contains(info.VFSOptions, p.Expected)
 	p.Checked = true
 	return p.Satisfied, nil
 }
@@ -67,6 +67,39 @@ var (
 			Info:   "rootfs's mountinfo vfs options contains 'docker', e.g., /var/lib/docker/overlay2...",
 			ExeEnv: exeenv.InContainer,
 		},
-		Contains: "docker",
+		Expected: "docker",
+	}
+)
+
+type HostsMountInfoRootContains struct {
+	prerequisite.BasePrerequisite
+	Expected string
+}
+
+func (p *HostsMountInfoRootContains) Check() (bool, error) {
+	if p.Checked {
+		return p.Satisfied, nil
+	}
+	info, err := mountinfo.HostsMount()
+	if err != nil {
+		return false, fmt.Errorf("failed to check %s caused by getting mountinfo of /etc/hosts: %w", p.Name, err)
+	}
+	p.Satisfied = strings.Contains(info.Root, p.Expected)
+	p.Checked = true
+	return p.Satisfied, nil
+}
+
+var (
+	// HostsMountInfoRootContainsDocker
+	//https://github.com/moby/moby/blob/v28.4.0/daemon/container_operations_unix.go#L552
+	//https://github.com/moby/moby/blob/v28.4.0/daemon/config/config_linux.go#L189
+	//https://github.com/moby/moby/blob/v28.4.0/container/container.go#L407
+	HostsMountInfoRootContainsDocker = HostsMountInfoRootContains{
+		BasePrerequisite: prerequisite.BasePrerequisite{
+			Name:   "/etc/hosts",
+			Info:   "/etc/hosts's mountinfo root contains 'docker', e.g., 814 696 259:2 /var/lib/docker/containers/44bec6602ccfae7458bcd71279beafc287d9fde509fa861377e162270d4cd92f/hosts /etc/hosts rw,relatime - ext4 /dev/nvme0n1p2 rw,errors=remount-ro",
+			ExeEnv: exeenv.InContainer,
+		},
+		Expected: "docker",
 	}
 )
