@@ -29,8 +29,8 @@ while IFS= read -r e2e_file; do
     CMD=$(yq eval ".test_envs[$i].cmd" "$e2e_file")
     STOP_FLAG=$(yq eval ".test_envs[$i].stop_flag" "$e2e_file")
 
-    if [ -z "$REMOTE_HOST" ]; then
-        REMOTE_HOST=$ENV_NAME
+    if [[ -z "$REMOTE_HOST" || "$REMOTE_HOST" == "null" ]]; then
+        REMOTE_HOST="$ENV_NAME"
     fi
 
     echo "----------------------------------"
