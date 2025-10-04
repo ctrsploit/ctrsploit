@@ -4,6 +4,11 @@ import (
 	"fmt"
 
 	"github.com/ctrsploit/ctrsploit/pkg/where"
+	"github.com/ctrsploit/ctrsploit/prerequisite/apparmor"
+	"github.com/ctrsploit/ctrsploit/prerequisite/cgroups"
+	"github.com/ctrsploit/ctrsploit/prerequisite/file"
+	"github.com/ctrsploit/ctrsploit/prerequisite/mount"
+	"github.com/ctrsploit/ctrsploit/prerequisite/proc/net"
 	"github.com/ctrsploit/sploit-spec/pkg/env/container"
 	"github.com/ctrsploit/sploit-spec/pkg/printer"
 	"github.com/ctrsploit/sploit-spec/pkg/result"
@@ -34,39 +39,39 @@ func Human(machine container.Where) (human Result) {
 			},
 			Rules: []item.Bool{
 				{
-					Name:        "dockerenv",
-					Description: ".dockerenv exists",
-					Result:      machine.Docker.Rules["dockerenv"],
+					Name:        file.DockerEnvFileExists.Name,
+					Description: file.DockerEnvFileExists.Info,
+					Result:      machine.Docker.Rules[file.DockerEnvFileExists.Name],
 				},
 				{
-					Name:        "rootfs",
-					Description: "rootfs contains 'docker'",
-					Result:      machine.Docker.Rules["rootfs"],
+					Name:        mount.RootMountInfoSourceContainsDocker.Name,
+					Description: mount.RootMountInfoSourceContainsDocker.Info,
+					Result:      machine.Docker.Rules[mount.RootMountInfoSourceContainsDocker.Name],
 				},
 				{
-					Name:        "cgroups",
-					Description: "cgroups contains 'docker'",
-					Result:      machine.Docker.Rules["cgroups"],
+					Name:        mount.RootMountInfoVFSOptionsContainsDocker.Name,
+					Description: mount.RootMountInfoVFSOptionsContainsDocker.Info,
+					Result:      machine.Docker.Rules[mount.RootMountInfoVFSOptionsContainsDocker.Name],
 				},
 				{
-					Name:        "hosts",
-					Description: "the mount source of /etc/hosts contains 'docker'",
-					Result:      machine.Docker.Rules["hosts"],
-				},
-				//{
-				//	Name:        "hostname",
-				//	Description: "hostname match regex ^[0-9a-f]{12}$",
-				//	Result:      machine.Docker.Rules["hostname"],
-				//},
-				{
-					Name:        "lsm",
-					Description: "/proc/1/attr/current contains 'docker'",
-					Result:      machine.Docker.Rules["lsm"],
+					Name:        mount.HostsMountInfoRootContainsDocker.Name,
+					Description: mount.HostsMountInfoRootContainsDocker.Info,
+					Result:      machine.Docker.Rules[mount.HostsMountInfoRootContainsDocker.Name],
 				},
 				{
-					Name:        "socket",
-					Description: "/proc/net/unix contains 'docker.sock'",
-					Result:      machine.Docker.Rules["socket"],
+					Name:        cgroups.ContainsDocker.Name,
+					Description: cgroups.ContainsDocker.Info,
+					Result:      machine.Docker.Rules[cgroups.ContainsDocker.Name],
+				},
+				{
+					Name:        apparmor.ProfileDockerDefault.Name,
+					Description: apparmor.ProfileDockerDefault.Info,
+					Result:      machine.Docker.Rules[apparmor.ProfileDockerDefault.Name],
+				},
+				{
+					Name:        net.UnixContainsDockerSock.Name,
+					Description: net.UnixContainsDockerSock.Info,
+					Result:      machine.Docker.Rules[net.UnixContainsDockerSock.Name],
 				},
 			},
 			In: item.Bool{

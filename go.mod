@@ -12,7 +12,7 @@ require (
 	github.com/containerd/containerd/api v1.9.0
 	github.com/containerd/ttrpc v1.2.7
 	github.com/containerd/typeurl v1.0.2
-	github.com/ctrsploit/sploit-spec v0.6.0-rc7
+	github.com/ctrsploit/sploit-spec v0.6.0-rc8
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc
 	github.com/docker/docker v28.4.0+incompatible
 	github.com/go-git/go-git/v6 v6.0.0-20250906064640-2917a7134436

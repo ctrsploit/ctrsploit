@@ -4,6 +4,7 @@ import (
 	"github.com/ctrsploit/ctrsploit/pkg/runtime"
 	"github.com/ctrsploit/ctrsploit/pkg/where"
 	"github.com/ctrsploit/sploit-spec/pkg/env/container"
+	"github.com/ctrsploit/sploit-spec/pkg/prerequisite"
 )
 
 const CommandName = "where"
@@ -12,15 +13,12 @@ func Docker() (docker container.Type, err error) {
 	d := runtime.NewDocker()
 	in, _ := d.Is()
 	docker = container.Type{
-		In: in,
-		Rules: map[string]bool{
-			"dockerenv": d.DockerEnvFileExists,
-			"rootfs":    d.RootfsContainsDocker,
-			"cgroups":   d.CgroupContainsDocker,
-			"hosts":     d.HostsMountSourceContainsDocker,
-			"lsm":       d.ProcAttrCurrentContainsDocker,
-			"socket":    d.ProcNetUnixContainsDockerSock,
-		},
+		In:    in,
+		Rules: map[string]bool{},
+	}
+	for pre := range d.Prerequisites.Range() {
+		p := pre.(*prerequisite.BasePrerequisite)
+		docker.Rules[p.Name] = p.Satisfied
 	}
 	return
 }
