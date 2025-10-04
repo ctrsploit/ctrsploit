@@ -2,6 +2,7 @@ package mountinfo
 
 import (
 	"fmt"
+
 	"github.com/moby/sys/mountinfo"
 	"github.com/ssst0n3/awesome_libs/awesome_error"
 )
@@ -20,9 +21,14 @@ func GetMountByMountpoint(mountpoint string) (info *mountinfo.Info, err error) {
 		awesome_error.CheckErr(err)
 		return
 	}
-	if len(mounts) != 1 {
-		err = fmt.Errorf("there're more or less than one rootfs mount point: %+v", mounts)
+	if len(mounts) == 0 {
+		err = fmt.Errorf("mount point %s not found", mountpoint)
 		awesome_error.CheckDebug(err)
+		return
+	}
+	if len(mounts) > 1 {
+		err = fmt.Errorf("there're more than one mount point %s: %+v", mountpoint, mounts)
+		awesome_error.CheckWarning(err)
 		return
 	}
 	info = mounts[0]
