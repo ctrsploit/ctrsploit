@@ -22,7 +22,7 @@ func TestE2E_Docker(t *testing.T) {
 		t.Skipf("Skipping test for unsupported environment: %s", testEnv)
 	}
 	t.Run(fmt.Sprintf("%s", testEnv), func(t *testing.T) {
-		d := NewDocker()
+		d := Docker()
 		satisfied, err := d.Is()
 		assert.NoError(t, err)
 		assert.Equal(t, test.satisfied, satisfied)
