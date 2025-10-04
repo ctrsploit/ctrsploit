@@ -35,7 +35,23 @@ up() {
 
   pushd "${DIR_DOCKER_ARCHIVE}/${dqd_dir}" > /dev/null
   docker compose -f docker-compose.yml -f docker-compose.kvm.yml up -d
-  sleep 6
+  # until 'Reached target multi-user.target' || timeout 30
+  local timeout=60
+  local found=false
+  local success_string="Reached target multi-user.target"
+  local start_time=$(date +%s)
+  while [ $(($(date +%s) - $start_time)) -lt ${timeout} ]; do
+    if docker compose logs | sed 's/\x1b\[[0-9;]*m//g' | grep -q "${success_string}"; then
+      found=true
+      break
+    fi
+    sleep 2
+  done
+  if [ "${found}" = true ]; then
+    echo "docker_archive started successfully"
+  else
+    echo "docker_archive started timeout $(( $(date +%s) - $start_time ))"
+  fi
   popd > /dev/null
 }
 
