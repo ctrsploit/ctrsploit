@@ -69,37 +69,14 @@ var (
 		},
 		Expected: "docker",
 	}
-)
-
-type HostsMountInfoRootContains struct {
-	prerequisite.BasePrerequisite
-	Expected string
-}
-
-func (p *HostsMountInfoRootContains) Check() (bool, error) {
-	if p.Checked {
-		return p.Satisfied, nil
-	}
-	info, err := mountinfo.HostsMount()
-	if err != nil {
-		return false, fmt.Errorf("failed to check %s caused by getting mountinfo of /etc/hosts: %w", p.Name, err)
-	}
-	p.Satisfied = strings.Contains(info.Root, p.Expected)
-	p.Checked = true
-	return p.Satisfied, nil
-}
-
-var (
-	// HostsMountInfoRootContainsDocker
-	//https://github.com/moby/moby/blob/v28.4.0/daemon/container_operations_unix.go#L552
-	//https://github.com/moby/moby/blob/v28.4.0/daemon/config/config_linux.go#L189
-	//https://github.com/moby/moby/blob/v28.4.0/container/container.go#L407
-	HostsMountInfoRootContainsDocker = HostsMountInfoRootContains{
+	// RootMountInfoVFSOptionsContainsContainerd
+	//https://github.com/containerd/containerd/blob/v2.1.4/defaults/defaults_unix.go#L26
+	RootMountInfoVFSOptionsContainsContainerd = RootMountInfoVFSOptionsContains{
 		BasePrerequisite: prerequisite.BasePrerequisite{
-			Name:   "/etc/hosts",
-			Info:   "/etc/hosts's mountinfo root contains 'docker', e.g., 814 696 259:2 /var/lib/docker/containers/44bec6602ccfae7458bcd71279beafc287d9fde509fa861377e162270d4cd92f/hosts /etc/hosts rw,relatime - ext4 /dev/nvme0n1p2 rw,errors=remount-ro",
+			Name:   "rootfs vfs otions",
+			Info:   "rootfs's mountinfo vfs options contains 'containerd', e.g., lowerdir=/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/...",
 			ExeEnv: exeenv.InContainer,
 		},
-		Expected: "docker",
+		Expected: "containerd",
 	}
 )

@@ -48,11 +48,11 @@ func TestE2E_RootMountInfoVFSOptionsContainsDocker(t *testing.T) {
 	})
 }
 
-func TestE2E_HostsMountInfoRootContainsDocker(t *testing.T) {
+func TestE2E_RootMountInfoVFSOptionsContainsContainerd(t *testing.T) {
 	tests := map[string]struct {
 		satisfied bool
 	}{
-		"docker-v28.3.2": {
+		"nerdctl-v2.1.2": {
 			satisfied: true,
 		},
 	}
@@ -62,7 +62,7 @@ func TestE2E_HostsMountInfoRootContainsDocker(t *testing.T) {
 		t.Skipf("Skipping test for unsupported environment: %s", testEnv)
 	}
 	t.Run(fmt.Sprintf("%s", testEnv), func(t *testing.T) {
-		satisfied, err := HostsMountInfoRootContainsDocker.Check()
+		satisfied, err := RootMountInfoVFSOptionsContainsContainerd.Check()
 		assert.NoError(t, err)
 		assert.Equal(t, test.satisfied, satisfied)
 	})
