@@ -22,10 +22,6 @@ func runtime2Where(r *runtime.Runtime) container.Type {
 	return t
 }
 
-func Nerdctl() container.Type {
-	return runtime2Where(runtime.Nerdctl())
-}
-
 func Container() (t container.Type, err error) {
 	c := where.Container{}
 	in, err := c.IsIn()
@@ -49,6 +45,7 @@ func Where() (machine container.Where, err error) {
 		K8s:        runtime2Where(runtime.K8s()),
 		Containerd: runtime2Where(runtime.Containerd()),
 		Docker:     runtime2Where(runtime.Docker()),
+		Nerdctl:    runtime2Where(runtime.Nerdctl()),
 	}
 	return
 }

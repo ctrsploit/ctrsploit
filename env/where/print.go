@@ -155,6 +155,33 @@ func Human(machine container.Where) (human Result) {
 				Result:      machine.K8s.In,
 			},
 		},
+		"nerdctl": {
+			Name: result.Title{
+				Name: "Nerdctl",
+			},
+			Rules: []item.Bool{
+				{
+					Name:        apparmor.ProfileNerdctlDefault.Name,
+					Description: apparmor.ProfileNerdctlDefault.Info,
+					Result:      machine.Nerdctl.Rules[apparmor.ProfileNerdctlDefault.Name],
+				},
+				{
+					Name:        file.HostsContainsNerdctlMarker.Name,
+					Description: file.HostsContainsNerdctlMarker.Info,
+					Result:      machine.Nerdctl.Rules[file.HostsContainsNerdctlMarker.Name],
+				},
+				{
+					Name:        mountinfo.HostnameRootContainsNerdctl.Name,
+					Description: mountinfo.HostnameRootContainsNerdctl.Info,
+					Result:      machine.Nerdctl.Rules[mountinfo.HostnameRootContainsNerdctl.Name],
+				},
+			},
+			In: item.Bool{
+				Name:        "is in nerdctl",
+				Description: "",
+				Result:      machine.Nerdctl.In,
+			},
+		},
 	}
 	return
 }
