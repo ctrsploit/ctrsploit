@@ -53,4 +53,15 @@ var (
 		},
 		Expected: "/docker",
 	}
+	// ContainsKubepods
+	// https://github.com/kubernetes/kubernetes/blob/v1.34.1/pkg/kubelet/cm/node_container_manager_linux.go#L41
+	// https://github.com/kubernetes/kubernetes/blob/master/pkg/kubelet/cm/container_manager_linux.go#L273
+	ContainsKubepods = Contains{
+		BasePrerequisite: prerequisite.BasePrerequisite{
+			Name:   "/proc/1/cgroup",
+			Info:   "/proc/1/cgroup contains /",
+			ExeEnv: exeenv.InContainer,
+		},
+		Expected: "kubepods",
+	}
 )
