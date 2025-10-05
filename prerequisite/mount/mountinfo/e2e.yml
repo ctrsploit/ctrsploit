@@ -14,6 +14,7 @@ test_envs:
     dqd_dir: kubernetes/v1.33.1-calico
     pkg: github.com/ctrsploit/ctrsploit/prerequisite/mount/mountinfo
     cmd: |
+      until kubectl wait --for=condition=Ready pod --all -A --timeout=30s; do sleep 10; done
       cat <<EOF | kubectl apply -f -
       apiVersion: batch/v1
       kind: Job
@@ -44,3 +45,12 @@ test_envs:
       kubectl wait --for=condition=complete job/test-job --timeout=120s
       POD_NAME=$(kubectl get pods -l job-name=test-job -o jsonpath='{.items[0].metadata.name}')
       kubectl logs $POD_NAME
+  - name: nerdctl-v2.1.2
+    kind: dqd
+    dqd_dir: nerdctl/v2.1.2
+    pkg: github.com/ctrsploit/ctrsploit/prerequisite/mount/mountinfo
+    cmd: nerdctl run --rm -q
+      -v /ctrsploit.test:/ctrsploit.test
+      --env TEST_ENV=nerdctl-v2.1.2
+      busybox:latest
+      /ctrsploit.test -test.v -test.run '^TestE2E_HostnameRootContainsNerdctl$'

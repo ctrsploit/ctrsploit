@@ -56,4 +56,15 @@ var (
 		MountPoint: "/etc/hostname",
 		Expected:   "containerd",
 	}
+	// HostnameRootContainsNerdctl
+	// https://github.com/containerd/nerdctl/blob/v2.1.6/docs/dir.md?plain=1#L28
+	HostnameRootContainsNerdctl = RootContains{
+		BasePrerequisite: prerequisite.BasePrerequisite{
+			Name:   "/etc/hostname",
+			Info:   "/etc/hostname's mountinfo root contains 'nerdctl'",
+			ExeEnv: exeenv.InContainer,
+		},
+		MountPoint: "/etc/hostname",
+		Expected:   "nerdctl",
+	}
 )
