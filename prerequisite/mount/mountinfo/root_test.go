@@ -67,3 +67,23 @@ func TestE2E_HostnameRootContainsNerdctl(t *testing.T) {
 		assert.Equal(t, test.satisfied, satisfied)
 	})
 }
+
+func TestE2E_HostsRootContainsPods(t *testing.T) {
+	tests := map[string]struct {
+		satisfied bool
+	}{
+		"kubernetes-v1.33.1-calico": {
+			satisfied: true,
+		},
+	}
+	testEnv := os.Getenv("TEST_ENV")
+	test, ok := tests[testEnv]
+	if !ok {
+		t.Skipf("Skipping test for unsupported environment: %s", testEnv)
+	}
+	t.Run(fmt.Sprintf("%s", testEnv), func(t *testing.T) {
+		satisfied, err := HostsRootContainsPods.Check()
+		assert.NoError(t, err)
+		assert.Equal(t, test.satisfied, satisfied)
+	})
+}

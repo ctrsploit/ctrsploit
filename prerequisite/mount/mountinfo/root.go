@@ -67,4 +67,13 @@ var (
 		MountPoint: "/etc/hostname",
 		Expected:   "nerdctl",
 	}
+	HostsRootContainsPods = RootContains{
+		BasePrerequisite: prerequisite.BasePrerequisite{
+			Name:   "/etc/hosts",
+			Info:   "/etc/hosts's mountinfo root contains 'pods'",
+			ExeEnv: exeenv.InContainer,
+		},
+		MountPoint: "/etc/hosts",
+		Expected:   "pods",
+	}
 )
