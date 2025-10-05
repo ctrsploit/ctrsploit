@@ -3,11 +3,12 @@ package where
 import (
 	"fmt"
 
-	"github.com/ctrsploit/ctrsploit/pkg/where"
 	"github.com/ctrsploit/ctrsploit/prerequisite/apparmor"
 	"github.com/ctrsploit/ctrsploit/prerequisite/cgroups"
 	"github.com/ctrsploit/ctrsploit/prerequisite/file"
+	"github.com/ctrsploit/ctrsploit/prerequisite/hostname"
 	"github.com/ctrsploit/ctrsploit/prerequisite/mount"
+	"github.com/ctrsploit/ctrsploit/prerequisite/mount/mountinfo"
 	"github.com/ctrsploit/ctrsploit/prerequisite/proc/net"
 	"github.com/ctrsploit/sploit-spec/pkg/env/container"
 	"github.com/ctrsploit/sploit-spec/pkg/printer"
@@ -54,9 +55,9 @@ func Human(machine container.Where) (human Result) {
 					Result:      machine.Docker.Rules[mount.RootMountInfoVFSOptionsContainsDocker.Name],
 				},
 				{
-					Name:        mount.HostsMountInfoRootContainsDocker.Name,
-					Description: mount.HostsMountInfoRootContainsDocker.Info,
-					Result:      machine.Docker.Rules[mount.HostsMountInfoRootContainsDocker.Name],
+					Name:        mountinfo.HostsRootContainsDocker.Name,
+					Description: mountinfo.HostsRootContainsDocker.Info,
+					Result:      machine.Docker.Rules[mountinfo.HostsRootContainsDocker.Name],
 				},
 				{
 					Name:        cgroups.ContainsDocker.Name,
@@ -86,27 +87,41 @@ func Human(machine container.Where) (human Result) {
 			},
 			Rules: []item.Bool{
 				{
-					Name:        "rootfs",
-					Description: "rootfs contains 'containerd'",
-					Result:      machine.Containerd.Rules["rootfs"],
+					Name:        mount.RootMountInfoVFSOptionsContainsContainerd.Name,
+					Description: mount.RootMountInfoVFSOptionsContainsContainerd.Info,
+					Result:      machine.Containerd.Rules[mount.RootMountInfoVFSOptionsContainsContainerd.Name],
 				},
 				{
-					Name:        "hosts",
-					Description: "the mount source of /etc/hosts contains 'nerdctl'",
-					Result:      machine.Containerd.Rules["hosts"],
+					Name:        mountinfo.HostnameRootContainsContainerd.Name,
+					Description: mountinfo.HostnameRootContainsContainerd.Info,
+					Result:      machine.Containerd.Rules[mountinfo.HostnameRootContainsContainerd.Name],
 				},
 				{
-					Name:        "hostname",
-					Description: "the mount source of /etc/hostname contains 'containerd'/'nerdctl'",
-					Result:      machine.Containerd.Rules["hostname"],
+					Name:        mountinfo.HostnameRootContainsNerdctl.Name,
+					Description: mountinfo.HostnameRootContainsNerdctl.Info,
+					Result:      machine.Containerd.Rules[mountinfo.HostnameRootContainsNerdctl.Name],
 				},
 				{
-					Name:        "socket",
-					Description: "/proc/net/unix contains 'containerd.sock', no 'docker.sock'",
-					Result:      machine.Containerd.Rules["socket"],
+					Name:        net.UnixContainsContainerdSock.Name,
+					Description: net.UnixContainsContainerdSock.Info,
+					Result:      machine.Containerd.Rules[net.UnixContainsContainerdSock.Name],
+				},
+				{
+					Name:        apparmor.ProfileCriContainerd.Name,
+					Description: apparmor.ProfileCriContainerd.Info,
+					Result:      machine.Containerd.Rules[apparmor.ProfileCriContainerd.Name],
+				},
+				{
+					Name:        apparmor.ProfileNerdctlDefault.Name,
+					Description: apparmor.ProfileNerdctlDefault.Info,
+					Result:      machine.Containerd.Rules[apparmor.ProfileNerdctlDefault.Name],
 				},
 			},
-			In: item.Bool{},
+			In: item.Bool{
+				Name:        "Is in containerd",
+				Description: "",
+				Result:      machine.Containerd.In,
+			},
 		},
 		"k8s": {
 			Name: result.Title{
@@ -114,24 +129,24 @@ func Human(machine container.Where) (human Result) {
 			},
 			Rules: []item.Bool{
 				{
-					Name:        "secret",
-					Description: fmt.Sprintf("secret path %s exists", where.PathDirSecrets),
-					Result:      machine.K8s.Rules["secret"],
+					Name:        file.K8sSecretsExists.Name,
+					Description: file.K8sSecretsExists.Info,
+					Result:      machine.K8s.Rules[file.K8sSecretsExists.Name],
 				},
 				{
-					Name:        "hostname",
-					Description: "hostname match k8s pattern",
-					Result:      machine.K8s.Rules["hostname"],
+					Name:        mountinfo.HostsRootContainsPods.Name,
+					Description: mountinfo.HostsRootContainsPods.Info,
+					Result:      machine.K8s.Rules[mountinfo.HostsRootContainsPods.Name],
 				},
 				{
-					Name:        "hosts",
-					Description: "the mount source of /etc/hosts contains 'pods'",
-					Result:      machine.K8s.Rules["hosts"],
+					Name:        cgroups.ContainsDocker.Name,
+					Description: cgroups.ContainsDocker.Info,
+					Result:      machine.K8s.Rules[cgroups.ContainsDocker.Name],
 				},
 				{
-					Name:        "cgroups",
-					Description: "cgroups contains 'kubepods'",
-					Result:      machine.K8s.Rules["cgroups"],
+					Name:        hostname.K8sDeploymentHostname.Name,
+					Description: hostname.K8sDeploymentHostname.Info,
+					Result:      machine.K8s.Rules[hostname.K8sDeploymentHostname.Name],
 				},
 			},
 			In: item.Bool{

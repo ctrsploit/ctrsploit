@@ -9,51 +9,21 @@ import (
 
 const CommandName = "where"
 
-func Docker() (docker container.Type, err error) {
-	d := runtime.NewDocker()
-	in, _ := d.Is()
-	docker = container.Type{
+func runtime2Where(r *runtime.Runtime) container.Type {
+	in, _ := r.Is()
+	t := container.Type{
 		In:    in,
 		Rules: map[string]bool{},
 	}
-	for pre := range d.Prerequisites.Range() {
+	for pre := range r.Prerequisites.Range() {
 		p := pre.(*prerequisite.BasePrerequisite)
-		docker.Rules[p.Name] = p.Satisfied
+		t.Rules[p.Name] = p.Satisfied
 	}
-	return
+	return t
 }
 
-func Containerd() (containerd container.Type, err error) {
-	r := runtime.NewContainerd()
-	in, _ := r.Is()
-	containerd = container.Type{
-		In: in,
-		Rules: map[string]bool{
-			"rootfs":   r.RootfsContainsContainerd,
-			"hosts":    r.HostsMountSourceContainsNerdctl,
-			"hostname": r.HostnameMountSourceContainsContainerd,
-			"socket":   r.ProcNetUnixContainsContainerdSock,
-		},
-	}
-	return
-}
-
-func K8s() (k8s container.Type, err error) {
-	k := where.K8s{}
-	in, err := k.IsIn()
-	if err != nil {
-		return
-	}
-	k8s = container.Type{
-		In: in,
-		Rules: map[string]bool{
-			"secret":   k.DirSecretsExists,
-			"hostname": k.HostnameMatchPattern,
-			"hosts":    k.HostsMountSourceContainsPods,
-			"cgroups":  k.CgroupContainsKubepods,
-		},
-	}
-	return
+func Nerdctl() container.Type {
+	return runtime2Where(runtime.Nerdctl())
 }
 
 func Container() (t container.Type, err error) {
@@ -70,27 +40,15 @@ func Container() (t container.Type, err error) {
 }
 
 func Where() (machine container.Where, err error) {
-	docker, err := Docker()
-	if err != nil {
-		return
-	}
-	containerd, err := Containerd()
-	if err != nil {
-		return
-	}
-	k8s, err := K8s()
-	if err != nil {
-		return
-	}
 	c, err := Container()
 	if err != nil {
 		return
 	}
 	machine = container.Where{
 		Container:  c,
-		K8s:        k8s,
-		Containerd: containerd,
-		Docker:     docker,
+		K8s:        runtime2Where(runtime.K8s()),
+		Containerd: runtime2Where(runtime.Containerd()),
+		Docker:     runtime2Where(runtime.Docker()),
 	}
 	return
 }

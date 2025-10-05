@@ -43,5 +43,8 @@ func GetType() (t Type) {
 	if is, _ := Containerd().Is(); is {
 		t |= TypeContainerd
 	}
+	if is, _ := Nerdctl().Is(); is {
+		t |= TypeNerdCtl
+	}
 	return
 }
