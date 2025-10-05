@@ -1,15 +1,12 @@
 package internal
 
 import (
-	"github.com/stretchr/testify/assert"
+	"fmt"
 	"os"
 	"testing"
-)
 
-func TestCheckFileExists(t *testing.T) {
-	assert.True(t, CheckPathExists("/etc/passwd"))
-	assert.False(t, CheckPathExists("/not_exists"))
-}
+	"github.com/stretchr/testify/assert"
+)
 
 func TestReadIntFromFile(t *testing.T) {
 	result, err := ReadIntFromFile("/proc/sys/kernel/pid_max")
@@ -23,4 +20,42 @@ func TestReplaceContent(t *testing.T) {
 	content, err := os.ReadFile("/tmp/replace_test")
 	assert.NoError(t, err)
 	assert.Equal(t, []byte("dest"), content)
+}
+
+func TestCheckPathExists(t *testing.T) {
+	type args struct {
+		path string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    bool
+		wantErr assert.ErrorAssertionFunc
+	}{
+		{
+			name: "exists",
+			args: args{
+				path: "/etc/passwd",
+			},
+			want:    true,
+			wantErr: assert.NoError,
+		},
+		{
+			name: "not exists",
+			args: args{
+				path: "/not-exists",
+			},
+			want:    false,
+			wantErr: assert.NoError,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := CheckPathExists(tt.args.path)
+			if !tt.wantErr(t, err, fmt.Sprintf("CheckPathExists(%v)", tt.args.path)) {
+				return
+			}
+			assert.Equalf(t, tt.want, got, "CheckPathExists(%v)", tt.args.path)
+		})
+	}
 }

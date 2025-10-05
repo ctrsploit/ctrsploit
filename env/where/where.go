@@ -1,47 +1,25 @@
 package where
 
 import (
+	"github.com/ctrsploit/ctrsploit/pkg/runtime"
 	"github.com/ctrsploit/ctrsploit/pkg/where"
 	"github.com/ctrsploit/sploit-spec/pkg/env/container"
+	"github.com/ctrsploit/sploit-spec/pkg/prerequisite"
 )
 
 const CommandName = "where"
 
-func Docker() (docker container.Type, err error) {
-	d := where.Docker{}
-	in, err := d.IsIn()
-	if err != nil {
-		return
+func runtime2Where(r *runtime.Runtime) container.Type {
+	in, _ := r.Is()
+	t := container.Type{
+		In:    in,
+		Rules: map[string]bool{},
 	}
-	docker = container.Type{
-		In: in,
-		Rules: map[string]bool{
-			"dockerenv": d.DockerEnvFileExists,
-			"rootfs":    d.RootfsContainsDocker,
-			"cgroups":   d.CgroupContainsDocker,
-			"hosts":     d.HostsMountSourceContainsDocker,
-			"hostname":  d.HostnameMatchPattern,
-		},
+	for pre := range r.Prerequisites.Range() {
+		p := pre.(*prerequisite.BasePrerequisite)
+		t.Rules[p.Name] = p.Satisfied
 	}
-	return
-}
-
-func K8s() (k8s container.Type, err error) {
-	k := where.K8s{}
-	in, err := k.IsIn()
-	if err != nil {
-		return
-	}
-	k8s = container.Type{
-		In: in,
-		Rules: map[string]bool{
-			"secret":   k.DirSecretsExists,
-			"hostname": k.HostnameMatchPattern,
-			"hosts":    k.HostsMountSourceContainsPods,
-			"cgroups":  k.CgroupContainsKubepods,
-		},
-	}
-	return
+	return t
 }
 
 func Container() (t container.Type, err error) {
@@ -58,23 +36,16 @@ func Container() (t container.Type, err error) {
 }
 
 func Where() (machine container.Where, err error) {
-	docker, err := Docker()
-	if err != nil {
-		return
-	}
-	k8s, err := K8s()
-	if err != nil {
-		return
-	}
 	c, err := Container()
 	if err != nil {
 		return
 	}
 	machine = container.Where{
 		Container:  c,
-		K8s:        k8s,
-		Containerd: container.Type{},
-		Docker:     docker,
+		K8s:        runtime2Where(runtime.K8s()),
+		Containerd: runtime2Where(runtime.Containerd()),
+		Docker:     runtime2Where(runtime.Docker()),
+		Nerdctl:    runtime2Where(runtime.Nerdctl()),
 	}
 	return
 }

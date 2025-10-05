@@ -1,10 +1,11 @@
 package config
 
 import (
-	"github.com/sirupsen/logrus"
-	"github.com/ssst0n3/awesome_libs/log"
 	"os"
 	"strconv"
+
+	"github.com/sirupsen/logrus"
+	"github.com/ssst0n3/awesome_libs/log"
 )
 
 const (

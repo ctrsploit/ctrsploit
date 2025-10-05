@@ -65,7 +65,7 @@ type vulnerability struct {
 }
 
 func (v *vulnerability) Exploit(ctx *cli.Context) (err error) {
-	sock := v.CheckSecPrerequisites.(*mount.Contains).RealMountPoint()
+	sock := v.CheckSecPrerequisites.(*mount.ContainsMountPoint).RealMountPoint()
 	image := ctx.String("image")
 	pull := ctx.Bool("pull")
 	tty := ctx.Bool("tty")

@@ -2,6 +2,7 @@ package auto
 
 import (
 	"fmt"
+
 	"github.com/ctrsploit/ctrsploit/env/apparmor"
 	"github.com/ctrsploit/ctrsploit/env/capability"
 	"github.com/ctrsploit/ctrsploit/env/cgroups"

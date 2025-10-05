@@ -11,7 +11,7 @@
 # Stop on any error, treat unset variables as errors, and propagate exit codes through pipes.
 set -euo pipefail
 
-ENV_NAME=$1
+REMOTE_HOST=$1
 DQD_DIR=$2
 PKG=$3
 CMD=$4
@@ -35,7 +35,23 @@ up() {
 
   pushd "${DIR_DOCKER_ARCHIVE}/${dqd_dir}" > /dev/null
   docker compose -f docker-compose.yml -f docker-compose.kvm.yml up -d
-  sleep 6
+  # until 'Reached target multi-user.target' || timeout 30
+  local timeout=60
+  local found=false
+  local success_string="Reached target multi-user.target"
+  local start_time=$(date +%s)
+  while [ $(($(date +%s) - $start_time)) -lt ${timeout} ]; do
+    if docker compose logs | sed 's/\x1b\[[0-9;]*m//g' | grep -q "${success_string}"; then
+      found=true
+      break
+    fi
+    sleep 2
+  done
+  if [ "${found}" = true ]; then
+    echo "docker_archive started successfully"
+  else
+    echo "docker_archive started timeout $(( $(date +%s) - $start_time ))"
+  fi
   popd > /dev/null
 }
 
@@ -98,6 +114,6 @@ do_test() {
 }
 
 up "${DQD_DIR}"
-upload_test_bin "${ENV_NAME}" "${PKG}"
-do_test "${ENV_NAME}" "${CMD}" "${STOP_FLAG}"
+upload_test_bin "${REMOTE_HOST}" "${PKG}"
+do_test "${REMOTE_HOST}" "${CMD}" "${STOP_FLAG}"
 down "${DQD_DIR}"

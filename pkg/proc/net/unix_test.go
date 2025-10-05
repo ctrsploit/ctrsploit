@@ -1,9 +1,10 @@
 package net
 
 import (
+	"testing"
+
 	"github.com/davecgh/go-spew/spew"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func TestListUnixSocketPath(t *testing.T) {

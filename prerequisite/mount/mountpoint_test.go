@@ -38,7 +38,7 @@ func TestContains_Check(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			p := &Contains{
+			p := &ContainsMountPoint{
 				ExpectedMountPoint: tt.fields.ExpectedMountInfo,
 			}
 			got, err := p.Check()
@@ -58,7 +58,7 @@ func TestE2E_DockerSock(t *testing.T) {
 	allTestcases := map[string]struct {
 		Satisfied bool
 	}{
-		"docker.sock": {
+		"docker-v28.3.2": {
 			Satisfied: true,
 		},
 	}

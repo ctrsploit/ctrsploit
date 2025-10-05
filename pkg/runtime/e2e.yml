@@ -1,0 +1,47 @@
+name: runtime
+test_envs:
+  - name: docker-v28.3.2
+    kind: dqd
+    dqd_dir: docker/v28.3.2
+    pkg: github.com/ctrsploit/ctrsploit/pkg/runtime
+    cmd: docker run --rm
+      -v /ctrsploit.test:/ctrsploit.test
+      --env TEST_ENV=docker-v28.3.2
+      busybox:latest
+      /ctrsploit.test -test.v -test.run '^TestE2E_Docker$'
+  - name: kubernetes-v1.33.1-calico
+    kind: dqd
+    dqd_dir: kubernetes/v1.33.1-calico
+    pkg: github.com/ctrsploit/ctrsploit/pkg/runtime
+    cmd: |
+      until kubectl wait --for=condition=Ready pod --all -A --timeout=30s; do sleep 10; done
+      cat <<EOF | kubectl apply -f -
+      apiVersion: batch/v1
+      kind: Job
+      metadata:
+        name: test-job
+      spec:
+        template:
+          spec:
+            restartPolicy: Never
+            containers:
+              - name: test-container
+                image: busybox:latest
+                tty: true
+                env: 
+                  - name: TEST_ENV
+                    value: kubernetes-v1.33.1-calico
+                command: ["/ctrsploit.test", "-test.v", "-test.run", "^TestE2E_Kubernetes$"]
+                volumeMounts:
+                  - name: volume
+                    mountPath: /ctrsploit.test
+            volumes:
+              - name: volume
+                hostPath:
+                  path: /ctrsploit.test
+                  type: File
+      EOF
+      echo "Waiting for job 'test-job' to complete..."
+      kubectl wait --for=condition=complete job/test-job --timeout=120s
+      POD_NAME=$(kubectl get pods -l job-name=test-job -o jsonpath='{.items[0].metadata.name}')
+      kubectl logs $POD_NAME
