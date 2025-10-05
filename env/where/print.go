@@ -5,6 +5,7 @@ import (
 
 	"github.com/ctrsploit/ctrsploit/prerequisite/apparmor"
 	"github.com/ctrsploit/ctrsploit/prerequisite/cgroups"
+	"github.com/ctrsploit/ctrsploit/prerequisite/env"
 	"github.com/ctrsploit/ctrsploit/prerequisite/file"
 	"github.com/ctrsploit/ctrsploit/prerequisite/hostname"
 	"github.com/ctrsploit/ctrsploit/prerequisite/mount"
@@ -147,6 +148,11 @@ func Human(machine container.Where) (human Result) {
 					Name:        hostname.K8sDeploymentHostname.Name,
 					Description: hostname.K8sDeploymentHostname.Info,
 					Result:      machine.K8s.Rules[hostname.K8sDeploymentHostname.Name],
+				},
+				{
+					Name:        env.KubernetesServiceHostExists.Name,
+					Description: env.KubernetesServiceHostExists.Info,
+					Result:      machine.K8s.Rules[env.KubernetesServiceHostExists.Name],
 				},
 			},
 			In: item.Bool{

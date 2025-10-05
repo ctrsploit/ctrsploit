@@ -3,6 +3,7 @@ package runtime
 import (
 	"github.com/ctrsploit/ctrsploit/prerequisite/apparmor"
 	"github.com/ctrsploit/ctrsploit/prerequisite/cgroups"
+	"github.com/ctrsploit/ctrsploit/prerequisite/env"
 	"github.com/ctrsploit/ctrsploit/prerequisite/file"
 	"github.com/ctrsploit/ctrsploit/prerequisite/hostname"
 	"github.com/ctrsploit/ctrsploit/prerequisite/mount"
@@ -69,5 +70,6 @@ func K8s() *Runtime {
 		&mountinfo.HostsRootContainsPods,
 		&cgroups.ContainsKubepods,
 		&hostname.K8sDeploymentHostname,
+		&env.KubernetesServiceHostExists,
 	))
 }
