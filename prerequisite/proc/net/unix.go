@@ -38,4 +38,14 @@ var (
 		},
 		Expected: "docker.sock",
 	}
+	// UnixContainsContainerdSock
+	// https://github.com/containerd/containerd/blob/v2.1.4/defaults/defaults_linux.go#L21
+	UnixContainsContainerdSock = UnixContains{
+		BasePrerequisite: prerequisite.BasePrerequisite{
+			Name:   "/proc/unix/net",
+			Info:   "/proc/unix/net contains containerd.sock, which can be seen when use host net ns",
+			ExeEnv: exeenv.InContainer,
+		},
+		Expected: "containerd.sock",
+	}
 )
