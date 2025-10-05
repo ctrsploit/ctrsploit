@@ -29,4 +29,14 @@ var (
 		},
 		Path: "/.dockerenv",
 	}
+	// K8sSecretsExists
+	// https://github.com/kubernetes/kubernetes/blob/v1.34.1/plugin/pkg/admission/serviceaccount/admission.go#L57
+	K8sSecretsExists = Exists{
+		BasePrerequisite: prerequisite.BasePrerequisite{
+			Name:   "secrets",
+			Info:   "/var/run/secrets/kubernetes.io exists",
+			ExeEnv: exeenv.InContainer,
+		},
+		Path: "/var/run/secrets/kubernetes.io",
+	}
 )
