@@ -53,7 +53,7 @@ test_envs:
     kind: dqd
     dqd_dir: nerdctl/v2.1.2-apparmor
     pkg: github.com/ctrsploit/ctrsploit/prerequisite/apparmor
-    cmd: nerdctl run --rm
+    cmd: nerdctl run --rm -q
       -v /ctrsploit.test:/ctrsploit.test
       --env TEST_ENV=nerdctl-v2.1.2-apparmor
       busybox:latest
