@@ -4,11 +4,11 @@ import (
 	"github.com/ctrsploit/ctrsploit/env/apparmor"
 	"github.com/ctrsploit/ctrsploit/env/capability"
 	"github.com/ctrsploit/ctrsploit/env/cgroups"
-	"github.com/ctrsploit/ctrsploit/env/graphdriver"
 	"github.com/ctrsploit/ctrsploit/env/mountinfo"
 	"github.com/ctrsploit/ctrsploit/env/namespace"
 	"github.com/ctrsploit/ctrsploit/env/seccomp"
 	"github.com/ctrsploit/ctrsploit/env/selinux"
+	"github.com/ctrsploit/ctrsploit/env/storagedriver"
 	"github.com/ctrsploit/ctrsploit/env/where"
 	"github.com/ctrsploit/sploit-spec/pkg/env/container"
 )
@@ -55,7 +55,7 @@ func LinuxSecurityFeature() (lsf container.LinuxSecurityFeature, err error) {
 	if err != nil {
 		return
 	}
-	fs, err := graphdriver.GraphDrivers()
+	fs, err := storagedriver.Filesystem()
 	if err != nil {
 		return
 	}

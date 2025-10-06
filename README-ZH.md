@@ -71,21 +71,24 @@ NAME:
    ctrsploit env - gather information
 
 USAGE:
-   ctrsploit env command [command options] [arguments...]
+   ctrsploit env [command options]
 
 COMMANDS:
-   auto              auto
-   where, w          detect whether you are in the container, and which type of the container
-   graphdriver, g    detect graphdriver type and extend information
-   cgroups, c        gather cgroup information
-   capability, cap   show the capability of pid 1 and current process
-   seccomp, s        show the seccomp info
-   apparmor, a       show the apparmor info
-   selinux, se       show the selinux info
-   fdisk, f          like linux command fdisk or lsblk // TODO
-   kernel, k         collect kernel environment information
-   namespace, n, ns  check namespace is host ns
-   help, h           Shows a list of commands or help for one command
+   auto                auto
+   where, w            detect whether you are in the container, and which type of the container
+   mountinfo, m        list mount points
+   storage-driver, sd  detect storage driver type and extend information
+   cgroups, c          gather cgroup information
+   capability, cap     show the capability of pid 1 and current process
+   seccomp, sc         show the seccomp info
+   apparmor, a         show the apparmor info
+   selinux, se         show the selinux info
+   fdisk, f            like linux command fdisk or lsblk // TODO
+   kernel, k           collect kernel environment information
+   namespace, n, ns    check namespace is host ns
+   docker-version, dv  guess dockerd version range
+   upload, up          upload <servicename> <filename> <obs> [host]
+   help, h             Shows a list of commands or help for one command
 
 OPTIONS:
    --help, -h  show help
@@ -160,16 +163,16 @@ root@ctr # ./ctrsploit e ra -c "cat /etc/hostname"
 
 ### env
 
-| 子命令                              | 简写    | 描述                         |
-|----------------------------------|-------|----------------------------|
-| [auto](./env/auto)               |       | 自动收集环境信息                   |
-| [where](./env/where)             | w     | 检测你是否在容器内，在何种类型的容器内        |
-| [graphdriver](./env/graphdriver) | g     | 检测graphdriver类型和扩展信息       |
-| [cgroups](./env/cgroups)         | c     | 收集cgroup信息                 |
-| [capability](./env/capability)   | cap   | 显示pid为1的进程和当前进程的capability |
-| [seccomp](./env/seccomp)         | s     | 显示seccomp信息                |
-| [apparmor](./env/apparmor)       | a     | 显示apparmor信息               |
-| [namespace](./env/namespace)     | n, ns | check namespace is host ns |
+| 子命令                                   | 简写    | 描述                         |
+|---------------------------------------|-------|----------------------------|
+| [auto](./env/auto)                    |       | 自动收集环境信息                   |
+| [where](./env/where)                  | w     | 检测你是否在容器内，在何种类型的容器内        |
+| [storage-driver](./env/storagedriver) | sd    | 检测存储驱动类型和扩展信息              |
+| [cgroups](./env/cgroups)              | c     | 收集cgroup信息                 |
+| [capability](./env/capability)        | cap   | 显示pid为1的进程和当前进程的capability |
+| [seccomp](./env/seccomp)              | sc    | 显示seccomp信息                |
+| [apparmor](./env/apparmor)            | a     | 显示apparmor信息               |
+| [namespace](./env/namespace)          | n, ns | check namespace is host ns |
 
 ### exploit
 

@@ -45,7 +45,7 @@
         - [ ] k8s variant 1
         - [ ] k8s variant 2
     - [ ] openstack api accessibility
-    - [ ] graphdriver
+    - [ ] storage driver
         - [x] overlay
         - [x] devicemapper
         - [ ] aufs

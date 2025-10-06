@@ -7,7 +7,7 @@ import (
 
 var Seccomp = &cli.Command{
 	Name:    seccomp.CommandName,
-	Aliases: []string{"s"},
+	Aliases: []string{"sc"},
 	Usage:   "show the seccomp info",
 	Action: func(context *cli.Context) (err error) {
 		err = seccomp.Print()

@@ -13,7 +13,7 @@ var Command = &cli.Command{
 		Auto,
 		Where,
 		Mountinfo,
-		Graphdriver,
+		StorageDriver,
 		Cgroups,
 		Capability,
 		Seccomp,
