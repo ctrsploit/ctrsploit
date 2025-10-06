@@ -1,9 +1,13 @@
 package hostpath
 
 import (
-	"github.com/ctrsploit/ctrsploit/pkg/graphdriver"
-	"github.com/ctrsploit/ctrsploit/pkg/mountinfo"
+	"fmt"
 	"strings"
+
+	"github.com/ctrsploit/ctrsploit/pkg/hostpath/rootfs"
+	"github.com/ctrsploit/ctrsploit/pkg/mountinfo"
+	"github.com/ctrsploit/ctrsploit/pkg/runtime"
+	"github.com/ctrsploit/ctrsploit/pkg/storagedriver"
 )
 
 type Path struct {
@@ -20,21 +24,21 @@ const (
 )
 
 func RootFs() (path string, err error) {
-	g := graphdriver.GraphDriver{}
-	err = g.Init()
-	if err == nil {
-		path = g.Rootfs
+	runtimeType := runtime.GetType()
+	storageDriverType, err := storagedriver.GetType()
+	if err != nil {
+		return "", fmt.Errorf("failed to get storage driver type: %w", err)
 	}
-	return
+	return rootfs.HostPath(runtimeType, storageDriverType)
 }
 
 func WritableAccessible() (paths []Path, err error) {
 	// rootfs: get the host path of the container rootfs
-	rootfs, err := RootFs()
+	rootfsHostPath, err := RootFs()
 	if err == nil {
 		paths = append(paths, Path{
 			ContainerPath: "/",
-			HostPath:      rootfs,
+			HostPath:      rootfsHostPath,
 			Type:          TypeRootfs,
 		})
 	}

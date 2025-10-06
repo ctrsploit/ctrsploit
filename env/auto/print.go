@@ -6,11 +6,11 @@ import (
 	"github.com/ctrsploit/ctrsploit/env/apparmor"
 	"github.com/ctrsploit/ctrsploit/env/capability"
 	"github.com/ctrsploit/ctrsploit/env/cgroups"
-	"github.com/ctrsploit/ctrsploit/env/graphdriver"
 	"github.com/ctrsploit/ctrsploit/env/mountinfo"
 	"github.com/ctrsploit/ctrsploit/env/namespace"
 	"github.com/ctrsploit/ctrsploit/env/seccomp"
 	"github.com/ctrsploit/ctrsploit/env/selinux"
+	"github.com/ctrsploit/ctrsploit/env/storagedriver"
 	"github.com/ctrsploit/ctrsploit/env/where"
 	"github.com/ctrsploit/sploit-spec/pkg/env/container"
 	"github.com/ctrsploit/sploit-spec/pkg/printer"
@@ -24,7 +24,7 @@ type Result struct {
 	SELinux    selinux.Result
 	Capability capability.Caps
 	Cgroups    cgroups.Result
-	Filesystem graphdriver.Result
+	Filesystem storagedriver.Result
 	Namespace  namespace.Result
 	Seccomp    seccomp.Result
 }
@@ -37,7 +37,7 @@ func Human(machine container.Env) (human Result) {
 		SELinux:    selinux.Human(machine.SELinux),
 		Capability: capability.Human(machine.Capabilities),
 		Cgroups:    cgroups.Human(machine.CGroups),
-		Filesystem: graphdriver.Human(machine.Filesystem),
+		Filesystem: storagedriver.Human(machine.Filesystem),
 		Namespace:  namespace.Human(machine.Namespace, ""),
 		Seccomp:    seccomp.Human(machine.Seccomp),
 	}

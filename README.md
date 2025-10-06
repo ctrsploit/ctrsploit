@@ -68,21 +68,24 @@ NAME:
    ctrsploit env - gather information
 
 USAGE:
-   ctrsploit env command [command options] [arguments...]
+   ctrsploit env [command options]
 
 COMMANDS:
-   auto              auto
-   where, w          detect whether you are in the container, and which type of the container
-   graphdriver, g    detect graphdriver type and extend information
-   cgroups, c        gather cgroup information
-   capability, cap   show the capability of pid 1 and current process
-   seccomp, s        show the seccomp info
-   apparmor, a       show the apparmor info
-   selinux, se       show the selinux info
-   fdisk, f          like linux command fdisk or lsblk // TODO
-   kernel, k         collect kernel environment information
-   namespace, n, ns  check namespace is host ns
-   help, h           Shows a list of commands or help for one command
+   auto                auto
+   where, w            detect whether you are in the container, and which type of the container
+   mountinfo, m        list mount points
+   storage-driver, sd  detect storage driver type and extend information
+   cgroups, c          gather cgroup information
+   capability, cap     show the capability of pid 1 and current process
+   seccomp, sc         show the seccomp info
+   apparmor, a         show the apparmor info
+   selinux, se         show the selinux info
+   fdisk, f            like linux command fdisk or lsblk // TODO
+   kernel, k           collect kernel environment information
+   namespace, n, ns    check namespace is host ns
+   docker-version, dv  guess dockerd version range
+   upload, up          upload <servicename> <filename> <obs> [host]
+   help, h             Shows a list of commands or help for one command
 
 OPTIONS:
    --help, -h  show help
@@ -157,16 +160,16 @@ Just execute `ctrsploit checksec` or standalone binary file `checksec` in the co
 
 ### env
 
-| command                          | alias | description                                                              |
-|----------------------------------|-------|--------------------------------------------------------------------------|
-| [auto](./env/auto)               |       | auto gather environment information                                      |
-| [where](./env/where)             | w     | detect whether you are in the container, and which type of the container |
-| [graphdriver](./env/graphdriver) | g     | detect graphdriver type and extend information                           |
-| [cgroups](./env/cgroups)         | c     | gather cgroup information                                                |
-| [capability](./env/capability)   | cap   | show the capability of pid 1 and current process                         |
-| [seccomp](./env/seccomp)         | s     | show the seccomp info                                                    |
-| [apparmor](./env/apparmor)       | a     | show the apparmor info                                                   |
-| [namespace](./env/namespace)     | n, ns | check namespace is host ns                                               |
+| command                               | alias | description                                                              |
+|---------------------------------------|-------|--------------------------------------------------------------------------|
+| [auto](./env/auto)                    |       | auto gather environment information                                      |
+| [where](./env/where)                  | w     | detect whether you are in the container, and which type of the container |
+| [storage-driver](./env/storagedriver) | sd    | detect storage driver type and extend information                        |
+| [cgroups](./env/cgroups)              | c     | gather cgroup information                                                |
+| [capability](./env/capability)        | cap   | show the capability of pid 1 and current process                         |
+| [seccomp](./env/seccomp)              | sc    | show the seccomp info                                                    |
+| [apparmor](./env/apparmor)            | a     | show the apparmor info                                                   |
+| [namespace](./env/namespace)          | n, ns | check namespace is host ns                                               |
 
 ### exploit
 
