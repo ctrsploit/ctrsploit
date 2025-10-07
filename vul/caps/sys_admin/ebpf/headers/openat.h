@@ -2,6 +2,7 @@ struct openat_args {
     int dirfd;
     const char *pathname;
     int flags;
+    int ret;
 };
 
 
@@ -22,5 +23,6 @@ static __inline int parse_openat_args(struct bpf_raw_tracepoint_args *ctx, struc
         return -2;
     }
     args->flags = (int)PT_REGS_PARM3_CORE(regs);
+    args->ret = (int)PT_REGS_RC_CORE(regs);
     return 0;
 }

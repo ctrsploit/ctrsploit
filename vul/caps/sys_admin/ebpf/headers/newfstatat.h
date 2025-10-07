@@ -3,7 +3,7 @@
 struct newfstatat_args {
     int dirfd;
     const char *filename;
-    struct stat *statbuf;
+    struct stat *stat_buf;
     int flags;
 };
 
@@ -23,8 +23,8 @@ static __inline int parse_newfstatat_args(struct bpf_raw_tracepoint_args *ctx, s
     if (!args->filename) {
         return -2;
     }
-    args->statbuf = (struct stat*)PT_REGS_PARM3_CORE(regs);
-    if (!args->statbuf) {
+    args->stat_buf = (struct stat*)PT_REGS_PARM3_CORE(regs);
+    if (!args->stat_buf) {
         return -3;
     }
     args->flags = (int)PT_REGS_PARM4_CORE(regs);

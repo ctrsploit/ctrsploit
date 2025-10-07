@@ -13,6 +13,12 @@ import (
 	"github.com/cilium/ebpf"
 )
 
+type bpfConfig struct {
+	_      structs.HostLayout
+	Job    [1024]int8
+	LenJob uint32
+}
+
 type bpfEvent struct {
 	_   structs.HostLayout
 	Pid uint32
@@ -67,7 +73,9 @@ type bpfProgramSpecs struct {
 //
 // It can be passed ebpf.CollectionSpec.Assign.
 type bpfMapSpecs struct {
-	Events *ebpf.MapSpec `ebpf:"events"`
+	ConfigMap *ebpf.MapSpec `ebpf:"config_map"`
+	Events    *ebpf.MapSpec `ebpf:"events"`
+	FdMap     *ebpf.MapSpec `ebpf:"fd_map"`
 }
 
 // bpfVariableSpecs contains global variables before they are loaded into the kernel.
@@ -96,12 +104,16 @@ func (o *bpfObjects) Close() error {
 //
 // It can be passed to loadBpfObjects or ebpf.CollectionSpec.LoadAndAssign.
 type bpfMaps struct {
-	Events *ebpf.Map `ebpf:"events"`
+	ConfigMap *ebpf.Map `ebpf:"config_map"`
+	Events    *ebpf.Map `ebpf:"events"`
+	FdMap     *ebpf.Map `ebpf:"fd_map"`
 }
 
 func (m *bpfMaps) Close() error {
 	return _BpfClose(
+		m.ConfigMap,
 		m.Events,
+		m.FdMap,
 	)
 }
 
