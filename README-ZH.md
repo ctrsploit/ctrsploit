@@ -193,6 +193,9 @@ root@ctr # ./ctrsploit e ra -c "cat /etc/hostname"
 | [ptrace-pid-host](./vul/caps/sys_ptrace/pid_host)                                        | pid                 | 容器具备cap_sys_ptrace和host pid namespace时可通过劫持主机进程被逃逸                 |
 | [host-pid-proc-root](./vul/namespace/pid/proc_root)                                      | proc                | 容器具备host pid ns时可以通过/proc/[pid]/root访问主机或其他容器的文件系统                 |
 | [docker.sock](./vul/shared-socket/docker-sock)                                           | docker              | 容器中挂载了docker.sock时可以通过创建特权容器来实现逃逸                                  |
+| [ebpf-bash](./vul/caps/sys_admin/ebpf/bash)                                              | bash                | Ebpf escape by bash                                                |
+| [execve-bash](./vul/caps/sys_admin/ebpf/execve)                                          | execve              | Ebpf escape by execve                                              |
+| [cron-bash](./vul/caps/sys_admin/ebpf/cron)                                              | cron                | Ebpf escape by cron                                                |
 
 ### helper
 

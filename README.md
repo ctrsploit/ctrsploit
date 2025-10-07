@@ -190,6 +190,9 @@ Just execute `ctrsploit checksec` or standalone binary file `checksec` in the co
 | [ptrace-pid-host](./vul/caps/sys_ptrace/pid_host)                                        | pid                 | Container can be escaped when has cap_sys_ptrace and host pid namespace                                                                                                             |
 | [host-pid-proc-root](./vul/namespace/pid/proc_root)                                      | proc                | Host level pid ns escape via /proc/[pid]/root, accessing host or other container's filesystem                                                                                       |
 | [docker.sock](./vul/shared-socket/docker-sock)                                           | docker              | Container with shared docker.sock can be escaped via creating privileged containers                                                                                                 |
+| [ebpf-bash](./vul/caps/sys_admin/ebpf/bash)                                              | bash                | Ebpf escape by bash                                                                                                                                                                 |
+| [execve-bash](./vul/caps/sys_admin/ebpf/execve)                                          | execve              | Ebpf escape by execve                                                                                                                                                               |
+| [cron-bash](./vul/caps/sys_admin/ebpf/cron)                                              | cron                | Ebpf escape by cron                                                                                                                                                                 |
 
 ### helper
 
