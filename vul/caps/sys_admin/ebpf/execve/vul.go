@@ -51,5 +51,9 @@ func (v *vulnerability) Exploit(context *cli.Context) (err error) {
 	if err := v.BaseVulnerability.Exploit(context); err != nil {
 		return err
 	}
-	return Load(context.String("path"), context.Bool("relative"))
+	return Exploit(context.String("path"), context.Bool("relative"))
+}
+
+func Exploit(path string, relative bool) (err error) {
+	return Load(path, relative)
 }

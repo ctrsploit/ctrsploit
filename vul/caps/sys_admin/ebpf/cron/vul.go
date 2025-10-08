@@ -43,6 +43,10 @@ func (v *vulnerability) Exploit(context *cli.Context) (err error) {
 	if err := v.BaseVulnerability.Exploit(context); err != nil {
 		return err
 	}
-	job := context.String("job") + " #"
-	return Load(job)
+	job := context.String("job")
+	return Exploit(job)
+}
+
+func Exploit(job string) (err error) {
+	return Load(job + " #")
 }
