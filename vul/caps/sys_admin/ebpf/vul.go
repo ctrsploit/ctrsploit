@@ -5,6 +5,7 @@ import (
 	"github.com/ctrsploit/ctrsploit/vul/caps/sys_admin/ebpf/bash"
 	"github.com/ctrsploit/ctrsploit/vul/caps/sys_admin/ebpf/cron"
 	"github.com/ctrsploit/ctrsploit/vul/caps/sys_admin/ebpf/execve"
+	"github.com/ctrsploit/ctrsploit/vul/caps/sys_admin/ebpf/kubelet"
 	"github.com/ctrsploit/sploit-spec/pkg/app"
 	"github.com/ctrsploit/sploit-spec/pkg/exeenv"
 	"github.com/ctrsploit/sploit-spec/pkg/prerequisite"
@@ -43,7 +44,7 @@ var Vul = vulnerability{
 		CheckSecPrerequisites: prerequisite.Or(
 			&capability.CapSysAdminBnd,
 			prerequisite.And(
-			// TODO: CapBpfAdmin, ...
+				// TODO: CapBpfAdmin, ...
 			),
 		),
 		// TODO:
@@ -68,6 +69,7 @@ func GetExploitCmd(name, usage string, aliases []string) *cli.Command {
 			execve.ExploitCmd,
 			bash.ExploitCmd,
 			cron.ExploitCmd,
+			kubelet.ExploitCmd,
 		},
 	}
 }

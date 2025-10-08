@@ -1,3 +1,6 @@
+#include "vmlinux.h"
+#ifndef __CTRSPLOIT_COMMON_H__
+#define __CTRSPLOIT_COMMON_H__
 static inline int get_syscall_id_from_regs(struct pt_regs *regs)
 {
     int id = -1; // Unsupported architecture
@@ -7,6 +10,18 @@ static inline int get_syscall_id_from_regs(struct pt_regs *regs)
     id = BPF_CORE_READ(regs, syscallno);
 #endif
     return id;
+}
+
+static __inline void my_memset(void *s, int c, u32 n) {
+    const int max_len = 512;
+    char *p = (char *)s;
+
+    #pragma unroll
+    for (int i = 0; i < max_len; i++) {
+        if (i < n) {
+            p[i] = (char)c;
+        }
+    }
 }
 
 static __inline bool const_memcmp(const char *s1, const char *s2, int n) {
@@ -28,6 +43,21 @@ static __inline bool starts_with(const char *cmdline, int cmd_len, const char *t
         return true;
     }
     return false;
+}
+
+#define MAX_SUFFIX_LEN 32
+static __inline bool ends_with(const char *str, int str_len, const char *suffix) {
+    if (!str || !suffix) {
+        return false;
+    }
+    int suffix_len = 0;
+    for (int i = 0; i < MAX_SUFFIX_LEN && suffix[i]; i++) {
+        suffix_len++;
+    }
+    if (suffix_len == 0 || str_len < suffix_len) {
+        return false;
+    }
+    return const_memcmp(str + str_len - suffix_len, suffix, suffix_len);
 }
 
 static __inline bool is_root() {
@@ -81,3 +111,4 @@ static __inline int get_cmdline(char *buf, int size) {
     buf[len] = '\0';
     return len;
 }
+#endif /* __CTRSPLOIT_COMMON_H__ */

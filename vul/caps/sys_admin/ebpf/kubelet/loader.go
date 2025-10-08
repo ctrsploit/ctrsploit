@@ -1,4 +1,4 @@
-package cron
+package kubelet
 
 import (
 	"bytes"
@@ -21,11 +21,15 @@ import (
 //go:generate go run github.com/cilium/ebpf/cmd/bpf2go -cflags $BPF_CFLAGS bpf ./bpf.c -- -I../headers
 
 var (
-	cfg  = bpfConfig{}
 	objs = &bpfObjects{}
 )
 
-func Load(job string) (err error) {
+type Event struct {
+	Path  string
+	Token string
+}
+
+func Load(c chan Event) error {
 	// 1. gracefully handle shutdown on SIGINT and SIGTERM
 	stopper := make(chan os.Signal, 1)
 	signal.Notify(stopper, os.Interrupt, syscall.SIGTERM)
@@ -48,23 +52,8 @@ func Load(job string) (err error) {
 			log.Logger.Errorf("closing raw tracepoint: %v", err)
 		}
 	}()
-	// 4. setup config_map
-	if err := SetupConfig(job); err != nil {
-		log.Logger.Errorf("loading config: %v", err)
-	}
 	// 5. start processing events
-	return processEvents(objs.Events, stopper)
-}
-
-func SetupConfig(job string) (err error) {
-	copy(cfg.Job[:], util.StrToInt8(job))
-	cfg.LenJob = uint32(len(job))
-	key := int32(0)
-	if err := objs.ConfigMap.Update(&key, &cfg, ebpf.UpdateAny); err != nil {
-		return fmt.Errorf("updating config_map failed: %w", err)
-	}
-	log.Logger.Infof("set up job as: %q", util.Int8ToStr(cfg.Job[:len(job)]))
-	return
+	return processEvents(objs.Events, stopper, c)
 }
 
 func SetupBpf() (link.Link, error) {
@@ -83,7 +72,7 @@ func SetupBpf() (link.Link, error) {
 	return tp, nil
 }
 
-func processEvents(events *ebpf.Map, stopper chan os.Signal) (err error) {
+func processEvents(events *ebpf.Map, stopper chan os.Signal, notifier chan Event) error {
 	rd, err := ringbuf.NewReader(events)
 	if err != nil {
 		return fmt.Errorf("opening ringbuf reader: %s", err)
@@ -116,6 +105,14 @@ func processEvents(events *ebpf.Map, stopper chan os.Signal) (err error) {
 			log.Logger.Errorf("parsing ringbuf event: %s", err)
 			continue
 		}
-		log.Logger.Infof("pid: %d", event.Pid)
+		pathname := util.Int8ToStr(event.Pathname[:])
+		token := util.Int8ToStr(event.Token[:])
+		log.Logger.Infof("pid: %d, fd=%d, pathname: %s\ntoken: %s", event.Pid, event.Fd, pathname, token)
+		if notifier != nil {
+			notifier <- Event{
+				Path:  pathname,
+				Token: token,
+			}
+		}
 	}
 }

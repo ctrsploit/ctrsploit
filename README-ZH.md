@@ -194,8 +194,9 @@ root@ctr # ./ctrsploit e ra -c "cat /etc/hostname"
 | [host-pid-proc-root](./vul/namespace/pid/proc_root)                                      | proc                | 容器具备host pid ns时可以通过/proc/[pid]/root访问主机或其他容器的文件系统                 |
 | [docker.sock](./vul/shared-socket/docker-sock)                                           | docker              | 容器中挂载了docker.sock时可以通过创建特权容器来实现逃逸                                  |
 | [ebpf-bash](./vul/caps/sys_admin/ebpf/bash)                                              | bash                | Ebpf escape by bash                                                |
-| [execve-bash](./vul/caps/sys_admin/ebpf/execve)                                          | execve              | Ebpf escape by execve                                              |
-| [cron-bash](./vul/caps/sys_admin/ebpf/cron)                                              | cron                | Ebpf escape by cron                                                |
+| [ebpf-execve](./vul/caps/sys_admin/ebpf/execve)                                          | execve              | Ebpf escape by execve                                              |
+| [ebpf-cron](./vul/caps/sys_admin/ebpf/cron)                                              | cron                | Ebpf escape by cron                                                |
+| [ebpf-kubelet](./vul/caps/sys_admin/ebpf/kubelet)                                        | cron                | Ebpf escape by leaking k8s service account token via kubelet       |
 
 ### helper
 
