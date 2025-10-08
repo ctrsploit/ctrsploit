@@ -36,9 +36,9 @@ func (v *vulnerability) Exploit(context *cli.Context) (err error) {
 	if err := v.BaseVulnerability.Exploit(context); err != nil {
 		return err
 	}
-	return Exploit()
+	return Exploit(nil)
 }
 
-func Exploit() (err error) {
-	return Load()
+func Exploit(c chan Event) (err error) {
+	return Load(c)
 }

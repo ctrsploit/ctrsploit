@@ -24,7 +24,12 @@ var (
 	objs = &bpfObjects{}
 )
 
-func Load() (err error) {
+type Event struct {
+	Path  string
+	Token string
+}
+
+func Load(c chan Event) error {
 	// 1. gracefully handle shutdown on SIGINT and SIGTERM
 	stopper := make(chan os.Signal, 1)
 	signal.Notify(stopper, os.Interrupt, syscall.SIGTERM)
@@ -48,7 +53,7 @@ func Load() (err error) {
 		}
 	}()
 	// 5. start processing events
-	return processEvents(objs.Events, stopper)
+	return processEvents(objs.Events, stopper, c)
 }
 
 func SetupBpf() (link.Link, error) {
@@ -67,7 +72,7 @@ func SetupBpf() (link.Link, error) {
 	return tp, nil
 }
 
-func processEvents(events *ebpf.Map, stopper chan os.Signal) (err error) {
+func processEvents(events *ebpf.Map, stopper chan os.Signal, notifier chan Event) error {
 	rd, err := ringbuf.NewReader(events)
 	if err != nil {
 		return fmt.Errorf("opening ringbuf reader: %s", err)
@@ -103,5 +108,11 @@ func processEvents(events *ebpf.Map, stopper chan os.Signal) (err error) {
 		pathname := util.Int8ToStr(event.Pathname[:])
 		token := util.Int8ToStr(event.Token[:])
 		log.Logger.Infof("pid: %d, fd=%d, pathname: %s\ntoken: %s", event.Pid, event.Fd, pathname, token)
+		if notifier != nil {
+			notifier <- Event{
+				Path:  pathname,
+				Token: token,
+			}
+		}
 	}
 }
