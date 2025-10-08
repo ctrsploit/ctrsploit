@@ -1,0 +1,13 @@
+name: cron
+test_envs:
+  - name: docker-v28.3.2-cron
+    kind: dqd
+    dqd_dir: docker/v28.3.2-cron
+    pkg: github.com/ctrsploit/ctrsploit/vul/caps/sys_admin/ebpf/cron
+    cmd: docker run --rm
+      -v /ctrsploit.test:/ctrsploit.test
+      --env TEST_ENV=docker-v28.3.2-cron
+      --cap-add CAP_SYS_ADMIN
+      -v /:/host
+      busybox:latest
+      /ctrsploit.test -test.v -test.run '^TestE2E_Exploit$'
