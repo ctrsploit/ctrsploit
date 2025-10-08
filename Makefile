@@ -36,7 +36,7 @@ BUILD_OPTS := ${BUILD_APT_MIRROR} ${BUILD_GO_PROXY} ${BUILD_SLIM_LDFLAGS} ${DOCK
 # ebpf
 include vul/caps/sys_admin/ebpf/Makefile
 
-build: generate
+build:
 	LDFLAGS=$(LDFLAGS) ./script/release.sh
 
 install: build
@@ -53,6 +53,7 @@ shell: image
 	docker run --rm -ti -v $(CURDIR):/root/app $(DEV_IMAGE) bash
 
 # usage:
+# make genereate: generate ebpf .o files
 # make binary
 # make shell
 # make install
