@@ -122,7 +122,7 @@ static __inline int handle_exit_openat(struct bpf_raw_tracepoint_args *ctx) {
     if (!const_memcmp(pathname, SYSCRONTAB, sizeof(SYSCRONTAB))) {
         return -1;
     }
-     bpf_printk("[handle_exit_openat] fd=%d", args.ret);
+    // bpf_printk("[handle_exit_openat] fd=%d", args.ret);
     // save args.ret into a global var
     u32 pid = bpf_get_current_pid_tgid() >> 32;
     bpf_map_update_elem(&fd_map, &pid, &args.ret, BPF_ANY);
