@@ -32,8 +32,8 @@ var (
 	// https://github.com/moby/moby/blob/v28.4.0/opts/hosts.go#L23
 	UnixContainsDockerSock = UnixContains{
 		BasePrerequisite: prerequisite.BasePrerequisite{
-			Name:   "/proc/unix/net",
-			Info:   "/proc/unix/net contains docker.sock, which can be seen when use host net ns",
+			Name:   "/proc/net/unix",
+			Info:   "/proc/net/unix contains docker.sock, which can be seen when use host net ns",
 			ExeEnv: exeenv.InContainer,
 		},
 		Expected: "docker.sock",
@@ -42,8 +42,8 @@ var (
 	// https://github.com/containerd/containerd/blob/v2.1.4/defaults/defaults_linux.go#L21
 	UnixContainsContainerdSock = UnixContains{
 		BasePrerequisite: prerequisite.BasePrerequisite{
-			Name:   "/proc/unix/net",
-			Info:   "/proc/unix/net contains containerd.sock, which can be seen when use host net ns",
+			Name:   "/proc/net/unix",
+			Info:   "/proc/net/unix contains containerd.sock, which can be seen when use host net ns",
 			ExeEnv: exeenv.InContainer,
 		},
 		Expected: "containerd.sock",
