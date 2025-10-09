@@ -20,6 +20,9 @@ func (p *ProfileNameContains) Check() (bool, error) {
 	}
 	profile, err := os.ReadFile("/proc/self/attr/apparmor/current")
 	if err != nil {
+		if os.IsNotExist(err) {
+			return false, nil
+		}
 		return false, fmt.Errorf("could not read apparmor profile: %w", err)
 	}
 	p.Satisfied = strings.Contains(string(profile), p.Expected)
