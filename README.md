@@ -195,6 +195,12 @@ Just execute `ctrsploit checksec` or standalone binary file `checksec` in the co
 | [ebpf-cron](./vul/caps/sys_admin/ebpf/cron)                                              | cron                | Ebpf escape by cron                                                                                                                                                                 |
 | [ebpf-kubelet](./vul/caps/sys_admin/ebpf/kubelet)                                        | cron                | Ebpf escape by leaking k8s service account token via kubelet                                                                                                                        |
 
+### vul
+
+| vul                           | check              | exploit            | test                | doc                | video              |
+|-------------------------------|--------------------|--------------------|---------------------|--------------------|--------------------|
+| [shocker](./vul/caps/shocker) | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:️ | :heavy_check_mark: | :heavy_check_mark: |
+
 ### helper
 
 | helper                                  | alias                    | description                    |
