@@ -32,67 +32,64 @@ changelog:
 
 ## 5. 漏洞复现
 
+![](./video.svg)
+
 ### 5.1 复现环境
 
-下面以 [ssst0n3/docker_archive:ubuntu-22.04_docker-ce-24.0.7_containerd.io-1.6.27_runc-1.1.11_v0.1.0](https://github.com/ssst0n3/docker_archive/tree/branch_ubuntu-22.04_docker-ce-24.0.7_containerd.io-1.6.27_runc-1.1.11) 作为复现环境。
-
-```
+```shell
 $ git clone https://github.com/ssst0n3/docker_archive.git
-$ cd docker_archive
-$ git checkout branch_ubuntu-20.04_docker-ce-19.03.15_docker-ce-cli-19.03.15_containerd.io-1.4.3_runc-1.0.0-rc92
-$ docker compose -f docker-compose.kvm.yml up -d
-$ ssh -p 19315 root@127.0.0.1
-root@127.0.0.1's password: root
-root@ubuntu:~# docker info
-Client:
- Debug Mode: false
+$ cd docker_archive/docker/v28.3.2
+$ docker compose -f docker-compose.yml -f docker-compose.kvm.yml up -d
+```
 
-Server:
- Containers: 0
-  Running: 0
-  Paused: 0
-  Stopped: 0
- Images: 0
- Server Version: 19.03.15
- Storage Driver: overlay2
-  Backing Filesystem: extfs
-  Supports d_type: true
-  Native Overlay Diff: true
- Logging Driver: json-file
- Cgroup Driver: cgroupfs
- Plugins:
-  Volume: local
-  Network: bridge host ipvlan macvlan null overlay
-  Log: awslogs fluentd gcplogs gelf journald json-file local logentries splunk syslog
- Swarm: inactive
- Runtimes: runc
- Default Runtime: runc
- Init Binary: docker-init
- containerd version: 269548fa27e0089a8b8278fc4fc781d7f65a939b
- runc version: ff819c7e9184c13b7c2607fe6c30ae19403a7aff
- init version: fec3683
- Security Options:
-  apparmor
-  seccomp
-   Profile: default
- Kernel Version: 5.4.0-56-generic
- Operating System: Ubuntu 20.04.1 LTS
- OSType: linux
- Architecture: x86_64
- CPUs: 2
- Total Memory: 2.43GiB
- Name: ubuntu
- ID: 4X4W:QE26:IMGY:UHI5:QPCY:NDI5:KKFJ:YWUO:RNOC:QJKR:OHOQ:TXVR
- Docker Root Dir: /var/lib/docker
- Debug Mode: false
- Registry: https://index.docker.io/v1/
- Labels:
- Experimental: false
- Insecure Registries:
-  127.0.0.0/8
- Live Restore Enabled: false
+```shell
+$ ./ssh
+root@localhost:~# docker version
+Client: Docker Engine - Community
+ Version:           28.3.2
+ API version:       1.51
+ Go version:        go1.24.5
+ Git commit:        578ccf6
+ Built:             Wed Jul  9 16:13:45 2025
+ OS/Arch:           linux/amd64
+ Context:           default
 
-WARNING: No swap limit support
+Server: Docker Engine - Community
+ Engine:
+  Version:          28.3.2
+  API version:      1.51 (minimum version 1.24)
+  Go version:       go1.24.5
+  Git commit:       e77ff99
+  Built:            Wed Jul  9 16:13:45 2025
+  OS/Arch:          linux/amd64
+  Experimental:     false
+ containerd:
+  Version:          1.7.27
+  GitCommit:        05044ec0a9a75232cad458027ca83437aae3f4da
+ runc:
+  Version:          1.2.5
+  GitCommit:        v1.2.5-0-g59923ef
+ docker-init:
+  Version:          0.19.0
+  GitCommit:        de40ad0
+root@localhost:~# containerd --version
+containerd containerd.io 1.7.27 05044ec0a9a75232cad458027ca83437aae3f4da
+root@localhost:~# cat /etc/os-release
+PRETTY_NAME="Ubuntu 24.04.2 LTS"
+NAME="Ubuntu"
+VERSION_ID="24.04"
+VERSION="24.04.2 LTS (Noble Numbat)"
+VERSION_CODENAME=noble
+ID=ubuntu
+ID_LIKE=debian
+HOME_URL="https://www.ubuntu.com/"
+SUPPORT_URL="https://help.ubuntu.com/"
+BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/"
+PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
+UBUNTU_CODENAME=noble
+LOGO=ubuntu-logo
+root@localhost:~# uname -a
+Linux localhost.localdomain 6.8.0-64-generic #67-Ubuntu SMP PREEMPT_DYNAMIC Sun Jun 15 20:23:31 UTC 2025 x86_64 x86_64 x86_64 GNU/Linux
 ```
 
 ### 5.2 漏洞复现
@@ -100,7 +97,7 @@ WARNING: No swap limit support
 启动存在不安全配置的容器。
 
 ```
-root@ubuntu:~# docker run -ti --name poc --cap-add CAP_DAC_READ_SEARCH ubuntu
+root@localhost:~# docker run -ti --name poc --cap-add CAP_DAC_READ_SEARCH busybox:latest
 ```
 
 下载 ctrsploit 步骤略，在容器内发起逃逸攻击。
