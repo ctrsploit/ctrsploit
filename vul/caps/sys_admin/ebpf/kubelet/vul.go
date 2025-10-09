@@ -1,8 +1,10 @@
 package kubelet
 
 import (
+	"github.com/ctrsploit/ctrsploit/prerequisite/capability"
 	"github.com/ctrsploit/sploit-spec/pkg/app"
 	"github.com/ctrsploit/sploit-spec/pkg/exeenv"
+	"github.com/ctrsploit/sploit-spec/pkg/prerequisite"
 	"github.com/ctrsploit/sploit-spec/pkg/vul"
 	"github.com/urfave/cli/v2"
 )
@@ -27,8 +29,17 @@ var Vul = vulnerability{
 			Check:   exeenv.InContainer,
 			Exploit: exeenv.InContainer,
 		},
-		CheckSecPrerequisites:    nil,
-		ExploitablePrerequisites: nil,
+		CheckSecPrerequisites: prerequisite.Or(
+			&capability.CapSysAdminBnd,
+			&capability.CapBpfBnd,
+		),
+		ExploitablePrerequisites: prerequisite.Or(
+			&capability.CapSysAdminEff,
+			prerequisite.And(
+				&capability.CapBpfEff,
+				&capability.CapPerfmonEff,
+			),
+		),
 	},
 }
 
@@ -40,5 +51,6 @@ func (v *vulnerability) Exploit(context *cli.Context) (err error) {
 }
 
 func Exploit(c chan Event) (err error) {
+	defer close(c)
 	return Load(c)
 }
