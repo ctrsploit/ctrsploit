@@ -223,6 +223,17 @@ root@ctr # ./ctrsploit e ra -c "cat /etc/hostname"
 | &emsp;└─[ebpf](./vul/caps/sys_admin/ebpf) (同 caps/sys_admin/ebpf) | :heavy_check_mark: | :heavy_minus_sign: | :heavy_minus_sign:  | :heavy_minus_sign: | :heavy_minus_sign: |
 | └─[sys_ptrace](./vul/caps/sys_ptrace)                             | :heavy_check_mark: | :heavy_minus_sign: | :heavy_minus_sign:  | :heavy_minus_sign: | :heavy_minus_sign: |
 | &emsp;└─[pid_host](./vul/caps/sys_ptrace/pid_host)                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: |
+| └─sys_module                                                      | :calendar:         | :calendar:         | :calendar:          | :calendar:         | :calendar:         |
+| └─net_admin                                                       | :calendar:         | :calendar:         | :calendar:          | :calendar:         | :calendar:         |
+| cve-2016-8867                                                     | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: |
+| cve-2020-15257                                                    | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: |
+| cve-2021-25741                                                    | :heavy_check_mark: | :heavy_check_mark: | :x:                 | :heavy_check_mark: | :x:                |
+| cve-2022-39253                                                    | :o:                | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: |
+| cve-2022-0492                                                     | :calendar:         | :heavy_check_mark: | :calendar:          | :calendar:         | :calendar:         |
+| cve-2024-0132                                                     | :o:                | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: |
+| cve-2024-23650                                                    | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: |
+| cve-2025-23266                                                    | :o:                | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: |
+| cve-2025-47290                                                    | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: |
 
 ### helper
 
