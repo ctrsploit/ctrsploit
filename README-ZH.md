@@ -234,6 +234,11 @@ root@ctr # ./ctrsploit e ra -c "cat /etc/hostname"
 | [cve-2024-23650](./vul/cve-2024-23650)                            | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: |
 | [cve-2025-23266](./vul/cve-2025-23266)                            | :o:                | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: |
 | [cve-2025-47290](./vul/cve-2025-47290)                            | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: |
+| [naked](./vul/naked)                                              | :heavy_check_mark: | :heavy_minus_sign: | :heavy_check_mark:  | :x:                | :x:                |
+| namespace                                                         | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign:  | :heavy_minus_sign: | :heavy_minus_sign: |
+| └─[net](./vul/namespace/net)                                      | :heavy_minus_sign: | :x:                | :x:                 | :x:                | :x:                |
+| └─[pid](./vul/namespace/pid)                                      | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign:  | :heavy_minus_sign: | :heavy_minus_sign: |
+| &emsp;└─[proc_root](./vul/namespace/pid/proc_root)                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: |
 
 ### helper
 
