@@ -19,6 +19,27 @@ func InvokeRootShellBySu() {
 	shell.Run()
 }
 
+func InvokeRootShellBySetuid(i io.Reader, o, e io.Writer) (err error) {
+	err = syscall.Setresuid(0, 0, 0)
+	if err != nil {
+		awesome_error.CheckErr(err)
+		return
+	}
+	err = syscall.Setresgid(0, 0, 0)
+	awesome_error.CheckDebug(err)
+	shell := exec.Command("/bin/sh")
+	shell.Stdin = i
+	shell.Stdout = o
+	shell.Stderr = e
+	err = shell.Run()
+	if err != nil {
+		awesome_error.CheckErr(err)
+		return
+	}
+	return
+}
+
+// InvokeRootShellBySuid doest not work for busybox
 func InvokeRootShellBySuid(i io.Reader, o, e io.Writer) (err error) {
 	// Incorrect call:
 	//     os.Chmod("/bin/dash", 06755)
