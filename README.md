@@ -218,6 +218,8 @@ Just execute `ctrsploit checksec` or standalone binary file `checksec` in the co
 | └─[bpf](./vul/caps/bpf)                                                 | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign:  | :heavy_minus_sign: | :heavy_minus_sign: |
 | &emsp;└─[release_agent](./vul/caps/sys_admin/release_agent)             | :heavy_check_mark: | :heavy_check_mark: | :x:                 | :heavy_check_mark: | :x:                |
 | &emsp;└─[ebpf](./vul/caps/sys_admin/ebpf) (same as caps/sys_admin/ebpf) | :heavy_check_mark: | :heavy_minus_sign: | :heavy_minus_sign:  | :heavy_minus_sign: | :heavy_minus_sign: |
+| └─[sys_ptrace](./vul/caps/sys_ptrace)                                   | :heavy_check_mark: | :heavy_minus_sign: | :heavy_minus_sign:  | :heavy_minus_sign: | :heavy_minus_sign: |
+| &emsp;└─[pid_host](./vul/caps/sys_ptrace/pid_host)                      | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: |
 
 ### helper
 

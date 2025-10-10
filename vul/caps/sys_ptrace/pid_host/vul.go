@@ -66,6 +66,7 @@ var (
 			),
 			ExploitablePrerequisites: prerequisite.And(
 				&capability.CapSysPtraceEff,
+				&namespace.PidNamespaceLevelHost,
 				&apparmor.Disabled,
 			),
 		},
