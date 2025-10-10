@@ -219,6 +219,7 @@ root@ctr # ./ctrsploit e ra -c "cat /etc/hostname"
 | &emsp;&emsp;└─[ebpf-kubelet](./vul/caps/sys_admin/ebpf/kubelet)   | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: |
 | &emsp;&emsp;└─ebpf-sshd                                           | :calendar:         | :calendar:         | :calendar:          | :calendar:         | :calendar:         |
 | └─[bpf](./vul/caps/bpf)                                           | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign:  | :heavy_minus_sign: | :heavy_minus_sign: |
+| &emsp;└─[release_agent](./vul/caps/sys_admin/release_agent)       | :heavy_check_mark: | :heavy_check_mark: | :x:                 | :heavy_check_mark: | :x:                |
 | &emsp;└─[ebpf](./vul/caps/sys_admin/ebpf) (同 caps/sys_admin/ebpf) | :heavy_check_mark: | :heavy_minus_sign: | :heavy_minus_sign:  | :heavy_minus_sign: | :heavy_minus_sign: |
 
 ### helper

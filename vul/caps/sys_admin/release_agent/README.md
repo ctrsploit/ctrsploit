@@ -24,7 +24,11 @@ Insecure configuration
 
 ## 3. Prerequisites
 
-1. cap_sys_admin
+vulnerability existence:
+1. CAP_BND: CAP_SYS_ADMIN
+
+vulnerability exploitable:
+1. CAP_EFF: CAP_SYS_ADMIN
 2. root user in container
 3. cgroups v1
 4. top level cgroups subsystem
