@@ -224,6 +224,7 @@ Just execute `ctrsploit checksec` or standalone binary file `checksec` in the co
 | └─net_admin                                                             | :calendar:         | :calendar:         | :calendar:          | :calendar:         | :calendar:         |
 | cve-2016-8867                                                           | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: |
 | cve-2020-15257                                                          | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: |
+| cve-2021-25741                                                          | :heavy_check_mark: | :heavy_check_mark: | :x:                 | :heavy_check_mark: | :x:                |
 | cve-2022-0492                                                           | :calendar:         | :calendar:         | :calendar:          | :calendar:         | :calendar:         |
 
 ### helper
