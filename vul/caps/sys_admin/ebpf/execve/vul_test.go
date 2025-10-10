@@ -14,10 +14,16 @@ import (
 
 func TestE2E_Exploit(t *testing.T) {
 	tests := map[string]struct {
-		vulnerable bool
+		loadable    bool
+		exploitable bool
 	}{
-		"docker-v28.3.2-cron": {
-			vulnerable: true,
+		"CAP_SYS_ADMIN": {
+			loadable:    true,
+			exploitable: true,
+		},
+		"CAP_BPF+CAP_PERFMON": {
+			loadable:    false,
+			exploitable: false,
 		},
 	}
 	testEnv := os.Getenv("TEST_ENV")
@@ -38,8 +44,9 @@ func TestE2E_Exploit(t *testing.T) {
 		err = os.WriteFile("/host/etc/cron.d/trigger", []byte("* * * * * root whoami\n"), 0644)
 		require.NoError(t, err, "Failed to write cron job file")
 		// Exploit
+		ec := make(chan error, 1)
 		go func() {
-			_ = Exploit("/test", true)
+			ec <- Exploit("/test", true)
 		}()
 		// check
 		const timeout = 3 * time.Minute
@@ -50,10 +57,20 @@ func TestE2E_Exploit(t *testing.T) {
 			return exists
 		}
 
-		if test.vulnerable {
+		if test.exploitable {
 			assert.Eventually(t, condition, timeout, pollInterval, "Exploit failed to create the file within the timeout period.")
 		} else {
 			assert.Never(t, condition, timeout, pollInterval, "File was created, but the environment was expected to be non-vulnerable.")
+		}
+		select {
+		case err = <-ec:
+		case <-time.After(time.Second):
+			err = nil
+		}
+		if test.loadable {
+			require.NoError(t, err, "Exploit function returned an error but was expected to succeed.")
+		} else {
+			require.Error(t, err, "Exploit function did not return an error but was expected to fail (not loadable).")
 		}
 	})
 }
