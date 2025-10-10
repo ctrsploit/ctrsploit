@@ -51,6 +51,12 @@ var (
 	CapDacReadSearchEff = EffContainsCap("CAP_DAC_READ_SEARCH")
 	CapSysPtraceBnd     = BndContainsCap("CAP_SYS_PTRACE")
 	CapSysPtraceEff     = EffContainsCap("CAP_SYS_PTRACE")
+	CapBpfBnd           = BndContainsCap("CAP_BPF")
+	// CapBpfEff CAP_BPF: CAP_BPF load ebpf program
+	CapBpfEff     = EffContainsCap("CAP_BPF")
+	CapPerfmonBnd = BndContainsCap("CAP_PERFMON")
+	// CapPerfmonEff CAP_PERFMON: attach to kprobes, uprobes, tracepoints
+	CapPerfmonEff = EffContainsCap("CAP_PERFMON")
 )
 
 func (p *Contains) Check() (bool, error) {

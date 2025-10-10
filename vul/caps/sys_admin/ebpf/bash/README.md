@@ -1,8 +1,32 @@
-# ebpf escape by bash
+# ebpf escape by hooking bash process
 
-Inject shell commands when bash open fd 255.
+## 1. Vulnerability Introduction
+
+This vulnerability describes a container escape method that leverages eBPF.
+
+When a container is granted excessive privileges (such as CAP_SYS_ADMIN or CAP_BPF), an attacker can load a malicious eBPF program into the host's kernel from within the container.
+
+This eBPF program can inject evil script by hooking bash process.
+
+## 2. Exploit Scenario
+
+Insecure configuration
+
+## 3. Prerequisites
+
+vulnerability exists:
+* CAP_BND: CAP_SYS_ADMIN / CAP_BPF
+
+vulnerability exploitable:
+* CAP_EFF: CAP_SYS_ADMIN
+
+## 4. Vulnerability Existence Check
+
+`ctrsploit checksec ebpf`
 
 ## 5. Reproduce
+
+![](./video.svg)
 
 ### 5.1 Reproduce Environment
 

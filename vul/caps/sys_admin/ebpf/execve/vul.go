@@ -1,8 +1,10 @@
 package execve
 
 import (
+	"github.com/ctrsploit/ctrsploit/prerequisite/capability"
 	"github.com/ctrsploit/sploit-spec/pkg/app"
 	"github.com/ctrsploit/sploit-spec/pkg/exeenv"
+	"github.com/ctrsploit/sploit-spec/pkg/prerequisite"
 	"github.com/ctrsploit/sploit-spec/pkg/vul"
 	"github.com/urfave/cli/v2"
 )
@@ -42,8 +44,11 @@ var Vul = vulnerability{
 			Check:   exeenv.InContainer,
 			Exploit: exeenv.InContainer,
 		},
-		CheckSecPrerequisites:    nil,
-		ExploitablePrerequisites: nil,
+		CheckSecPrerequisites: prerequisite.Or(
+			&capability.CapSysAdminBnd,
+			&capability.CapBpfBnd,
+		),
+		ExploitablePrerequisites: &capability.CapSysAdminEff,
 	},
 }
 

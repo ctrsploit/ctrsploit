@@ -43,12 +43,12 @@ var Vul = vulnerability{
 		},
 		CheckSecPrerequisites: prerequisite.Or(
 			&capability.CapSysAdminBnd,
-			prerequisite.And(
-				// TODO: CapBpfAdmin, ...
-			),
+			&capability.CapBpfBnd,
 		),
-		// TODO:
-		ExploitablePrerequisites: nil,
+		ExploitablePrerequisites: prerequisite.Or(
+			&capability.CapSysAdminEff,
+			&capability.CapBpfEff,
+		),
 	},
 }
 

@@ -42,6 +42,8 @@ $ cd docker_archive/docker/v28.3.2
 $ docker compose -f docker-compose.yml -f docker-compose.kvm.yml up -d
 ```
 
+<details><summary>env details</summary>
+
 ```shell
 $ ./ssh
 root@localhost:~# docker version
@@ -91,6 +93,8 @@ LOGO=ubuntu-logo
 root@localhost:~# uname -a
 Linux localhost.localdomain 6.8.0-64-generic #67-Ubuntu SMP PREEMPT_DYNAMIC Sun Jun 15 20:23:31 UTC 2025 x86_64 x86_64 x86_64 GNU/Linux
 ```
+
+</details>
 
 ### 5.2 漏洞复现
 

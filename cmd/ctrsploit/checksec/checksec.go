@@ -4,6 +4,7 @@ import (
 	"github.com/ctrsploit/ctrsploit/cmd/ctrsploit/env"
 	"github.com/ctrsploit/ctrsploit/vul/caps/shocker"
 	"github.com/ctrsploit/ctrsploit/vul/caps/sys_admin"
+	"github.com/ctrsploit/ctrsploit/vul/caps/sys_admin/ebpf"
 	"github.com/ctrsploit/ctrsploit/vul/caps/sys_admin/release_agent"
 	"github.com/ctrsploit/ctrsploit/vul/caps/sys_ptrace"
 	"github.com/ctrsploit/ctrsploit/vul/caps/sys_ptrace/pid_host"
@@ -41,6 +42,7 @@ var Command = &cli.Command{
 		cve_2016_8867.CheckSecCmd,
 		naked.CheckSecCmd,
 		sys_admin.CheckSecCmd,
+		ebpf.CheckSecCmd,
 		release_agent.CheckSecCmd,
 		shocker.CheckSecCmd,
 		pid_host.CheckSecCmd,
