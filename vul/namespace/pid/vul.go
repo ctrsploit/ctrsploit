@@ -32,7 +32,7 @@ var (
 	Vul = vulnerability{
 		BaseVulnerability: vul.BaseVulnerability{
 			Name:        "host-pid",
-			Description: "TODO",
+			Description: "container can be escaped with host pid namespace",
 			Level:       vul.LevelHigh,
 			ExeEnv: exeenv.ExeEnv{
 				Env:     exeenv.InContainer,
