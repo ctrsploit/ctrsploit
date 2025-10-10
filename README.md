@@ -236,6 +236,8 @@ Just execute `ctrsploit checksec` or standalone binary file `checksec` in the co
 | └─[net](./vul/namespace/net)                                            | :heavy_minus_sign: | :x:                | :x:                 | :x:                | :x:                |
 | └─[pid](./vul/namespace/pid)                                            | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign:  | :heavy_minus_sign: | :heavy_minus_sign: |
 | &emsp;└─[proc_root](./vul/namespace/pid/proc_root)                      | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: |
+| shared-socket                                                           | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign:  | :heavy_minus_sign: | :heavy_minus_sign: |
+| └─[docker-sock](./vul/shared-socket/docker-sock)                        | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: |
 
 ### helper
 
