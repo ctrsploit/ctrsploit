@@ -2,6 +2,12 @@
 
 ## 1. Vulnerability Introduction
 
+This vulnerability describes a container escape method that leverages eBPF.
+
+When a container is granted excessive privileges (such as CAP_SYS_ADMIN or CAP_BPF), an attacker can load a malicious eBPF program into the host's kernel from within the container.
+
+This eBPF program can leak k8s service account token via hooking kubelet. Once a high-privilege SA token is obtained, the attacker can elevate their privileges from a restricted container to gaining control over the entire Kubernetes cluster, posing a severe security risk.
+
 ## 2. Exploit Scenario
 
 Insecure configuration
