@@ -207,7 +207,17 @@ Just execute `ctrsploit checksec` or standalone binary file `checksec` in the co
 | vul                                                                     | check              | exploit            | test                | doc                | video              |
 |-------------------------------------------------------------------------|--------------------|--------------------|---------------------|--------------------|--------------------|
 | [cve-2016-8867](./vul/cve-2016-8867)                                    | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: |
+| CVE-2017-1002101                                                        | :x:                | :heavy_check_mark: | :x:                 | :x:                | :x:                |
+| CVE-2019-5736                                                           | :x:                | :heavy_check_mark: | :x:                 | :x:                | :x:                |
+| CVE-2019-14271                                                          | :x:                | :heavy_check_mark: | :x:                 | :x:                | :x:                |
+| CVE-2019-16884                                                          | :x:                | :heavy_check_mark: | :x:                 | :x:                | :x:                |
+| CVE-2020-8555                                                           | :x:                | :heavy_check_mark: | :x:                 | :x:                | :x:                |
+| CVE-2020-8558                                                           | :x:                | :heavy_check_mark: | :x:                 | :x:                | :x:                |
+| CVE-2020-15157                                                          | :x:                | :heavy_check_mark: | :x:                 | :x:                | :x:                |
 | [cve-2020-15257](./vul/cve-2020-15257)                                  | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: |
+| CVE-2021-21285                                                          | :x:                | :heavy_check_mark: | :x:                 | :x:                | :x:                |
+| CVE-2021-22555                                                          | :x:                | :heavy_check_mark: | :x:                 | :x:                | :x:                |
+| CVE-2021-41091                                                          | :x:                | :heavy_check_mark: | :x:                 | :x:                | :x:                |
 | [cve-2021-25741](./vul/cve-2021-25741)                                  | :heavy_check_mark: | :heavy_check_mark: | :x:                 | :heavy_check_mark: | :x:                |
 | [cve-2022-39253](./vul/cve-2022-39253)                                  | :o:                | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: |
 | cve-2022-0492                                                           | :calendar:         | :heavy_check_mark: | :calendar:          | :calendar:         | :calendar:         |
@@ -238,7 +248,9 @@ Just execute `ctrsploit checksec` or standalone binary file `checksec` in the co
 | &emsp;└─[proc_root](./vul/namespace/pid/proc_root)                      | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: |
 | shared-socket                                                           | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign:  | :heavy_minus_sign: | :heavy_minus_sign: |
 | └─[docker.sock](./vul/shared-socket/docker-sock)                        | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: |
-| containerd.sock                                                         | :calendar:         | :calendar:         | :calendar:          | :calendar:         | :calendar:         |                                  
+| └─containerd.sock                                                       | :calendar:         | :calendar:         | :calendar:          | :calendar:         | :calendar:         |                                  
+| crash                                                                   | :x:                | :heavy_check_mark: | :x:                 | :x:                | :x:                |
+| dirty-pipe                                                              | :x:                | :heavy_check_mark: | :x:                 | :x:                | :x:                |
 
 ### helper
 
