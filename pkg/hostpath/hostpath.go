@@ -32,6 +32,14 @@ func RootFs() (path string, err error) {
 	return rootfs.HostPath(runtimeType, storageDriverType)
 }
 
+func EtcHosts() (string, error) {
+	info, err := mountinfo.GetMountByMountpoint("/etc/hosts")
+	if err != nil {
+		return "", fmt.Errorf("failed to get hosts info: %w", err)
+	}
+	return info.Root, nil
+}
+
 func WritableAccessible() (paths []Path, err error) {
 	// rootfs: get the host path of the container rootfs
 	rootfsHostPath, err := RootFs()
