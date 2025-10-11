@@ -1,6 +1,7 @@
 package release_agent
 
 import (
+	"github.com/ctrsploit/ctrsploit/prerequisite/apparmor"
 	"github.com/ctrsploit/ctrsploit/prerequisite/capability"
 	"github.com/ctrsploit/ctrsploit/prerequisite/cgroups"
 	"github.com/ctrsploit/sploit-spec/pkg/app"
@@ -9,6 +10,7 @@ import (
 	"github.com/ctrsploit/sploit-spec/pkg/prerequisite"
 	"github.com/ctrsploit/sploit-spec/pkg/prerequisite/user"
 	"github.com/ctrsploit/sploit-spec/pkg/vul"
+	"github.com/ssst0n3/awesome_libs/awesome_error"
 	"github.com/urfave/cli/v2"
 )
 
@@ -43,6 +45,7 @@ var (
 				&user.MustBeRootToWriteReleaseAgent,
 				&cgroups.V1,
 				&cgroups.HasTopLevelSubsystem,
+				&apparmor.Disabled,
 			),
 		},
 	}
@@ -55,6 +58,8 @@ func (v *vulnerability) Exploit(context *cli.Context) (err error) {
 	}
 	cmd := context.String("cmd")
 	log.Logger.Debug("cmd: ", cmd)
-	Exploit(cmd)
+	result, err := Exploit(cmd)
+	awesome_error.CheckErr(err)
+	log.Logger.Infof("result:\n%s", result)
 	return
 }

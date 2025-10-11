@@ -1,0 +1,4 @@
+#!/bin/sh
+outFdPath=$(find -L /proc/[0-9]*/fd/{{.fd}} -inum {{.inum}} 2>/dev/null)
+{{.cmd}} > ${outFdPath}
+echo {{.end}} >> ${outFdPath}

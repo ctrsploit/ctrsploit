@@ -1,0 +1,15 @@
+name: bash
+test_envs:
+  - name: exploitable
+    remote_host: docker-v19.03.13
+    kind: dqd
+    dqd_dir: docker/v19.03.13
+    pkg: github.com/ctrsploit/ctrsploit/vul/caps/sys_admin/release_agent
+    cmd: docker run --rm
+      -v /ctrsploit.test:/ctrsploit.test
+      --env TEST_ENV=exploitable
+      --cap-add CAP_SYS_ADMIN
+      --security-opt apparmor=unconfined
+      -v /:/host
+      busybox:latest
+      /ctrsploit.test -test.v -test.run '^TestE2E_Exploit$'

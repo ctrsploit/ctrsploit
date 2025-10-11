@@ -1,11 +1,13 @@
 package v1
 
 import (
-	"github.com/containerd/cgroups"
-	"github.com/ssst0n3/awesome_libs/awesome_error"
+	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/containerd/cgroups"
+	"github.com/ssst0n3/awesome_libs/awesome_error"
 )
 
 const releaseAgent = "release_agent"
@@ -74,4 +76,18 @@ func (c CgroupV1) ListSubsystems(procCgroupPath string) (subsystems map[string]s
 
 func (c CgroupV1) IsTop(subsystemPath string) (top bool) {
 	return subsystemPath == "/"
+}
+
+func ListTopLevelSubSystem() (topLevelSubSystems []string, err error) {
+	var c CgroupV1
+	subsystemsSupport, err := c.ListSubsystems("/proc/1/cgroup")
+	if err != nil {
+		return nil, fmt.Errorf("ListTopLevelSubSystem: failed to list sub systems: %w", err)
+	}
+	for subsystemName, subsystemPath := range subsystemsSupport {
+		if c.IsTop(subsystemPath) {
+			topLevelSubSystems = append(topLevelSubSystems, subsystemName)
+		}
+	}
+	return
 }
