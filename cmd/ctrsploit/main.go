@@ -1,6 +1,8 @@
 package main
 
 import (
+	"os"
+
 	"github.com/ctrsploit/ctrsploit/cmd/ctrsploit/auto"
 	"github.com/ctrsploit/ctrsploit/cmd/ctrsploit/checksec"
 	"github.com/ctrsploit/ctrsploit/cmd/ctrsploit/env"
@@ -10,9 +12,8 @@ import (
 	"github.com/ctrsploit/sploit-spec/pkg/app"
 	"github.com/ctrsploit/sploit-spec/pkg/log"
 	"github.com/ctrsploit/sploit-spec/pkg/version"
-	"github.com/docker/docker/pkg/reexec"
+	"github.com/moby/sys/reexec"
 	"github.com/urfave/cli/v2"
-	"os"
 )
 
 const usage = `A penetration toolkit for container environment
