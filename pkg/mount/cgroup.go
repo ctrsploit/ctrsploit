@@ -12,8 +12,8 @@ import (
 var ErrorNoTopLevelCgroupSubSystems = fmt.Errorf("no top level cgroup sub systems")
 
 func CgroupV1(dest string, options string) (err error) {
-	log.Logger.Info("mount cgroup to ", dest)
-	err = unix.Mount("none", dest, "cgroup", 0, options)
+	log.Logger.Infof("mount cgroup/%s to %s", options, dest)
+	err = unix.Mount("cgroup", dest, "cgroup", 0, options)
 	if err != nil {
 		awesome_error.CheckErr(err)
 		return

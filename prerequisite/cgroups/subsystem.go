@@ -24,12 +24,11 @@ func (p *TopLevelSubsystem) Check() (bool, error) {
 		return p.Satisfied, nil
 	}
 	if version.IsCgroupV1() {
-		var c v1.CgroupV1
-		subsystemsSupport, err := c.ListSubsystems("/proc/1/cgroup")
+		topLevelSubSystems, err := v1.ListTopLevelSubSystem()
 		if err != nil {
 			return false, err
 		}
-		if len(subsystemsSupport) > 0 {
+		if len(topLevelSubSystems) > 0 {
 			p.Satisfied = true
 		}
 	}

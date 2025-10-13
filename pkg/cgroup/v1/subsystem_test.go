@@ -98,7 +98,7 @@ func TestIsTopOld(t *testing.T) {
 			if tt.envPrepareFunc != nil {
 				assert.NoError(t, tt.envPrepareFunc(tt.args.mountpoint, tt.args.subsystemName))
 			}
-			gotTop, err := c.IsTopOld(tt.args.mountpoint, tt.args.subsystemName)
+			gotTop, err := c.IsTop(tt.args.mountpoint, tt.args.subsystemName)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("IsTopCgroup() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -176,13 +176,13 @@ func TestCgroupV1_ListSubsystemsOld(t *testing.T) {
 			if tt.envPrepareFunc != nil {
 				assert.NoError(t, tt.envPrepareFunc(tt.args.mountpoint, tt.wantSubsystems))
 			}
-			gotSubsystems, err := c.ListSubsystemsOld(tt.args.mountpoint)
+			gotSubsystems, err := c.ListSubsystems(tt.args.mountpoint)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("ListSubsystems() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("ListSubsystemsDeprecated() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if !reflect.DeepEqual(gotSubsystems, tt.wantSubsystems) {
-				t.Errorf("ListSubsystems() gotSubsystems = %v, want %v", gotSubsystems, tt.wantSubsystems)
+				t.Errorf("ListSubsystemsDeprecated() gotSubsystems = %v, want %v", gotSubsystems, tt.wantSubsystems)
 			}
 			if tt.cleanEnvFunc != nil {
 				assert.NoError(t, tt.cleanEnvFunc(tt.args.mountpoint))
@@ -270,13 +270,13 @@ func TestCgroupV1_ListSubsystems(t *testing.T) {
 			defer func() {
 				assert.NoError(t, os.Remove(procCgroupPath))
 			}()
-			gotSubsystems, err := c.ListSubsystems(procCgroupPath)
+			gotSubsystems, err := c.ListSubsystemsDeprecated(procCgroupPath)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("ListSubsystems() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("ListSubsystemsDeprecated() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if !reflect.DeepEqual(gotSubsystems, tt.wantSubsystems) {
-				t.Errorf("ListSubsystems() gotSubsystems = %v, want %v", gotSubsystems, tt.wantSubsystems)
+				t.Errorf("ListSubsystemsDeprecated() gotSubsystems = %v, want %v", gotSubsystems, tt.wantSubsystems)
 			}
 		})
 	}
