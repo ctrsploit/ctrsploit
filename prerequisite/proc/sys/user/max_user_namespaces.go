@@ -34,7 +34,7 @@ func (p *MaxUserNamespaces) Check() (bool, error) {
 	if err != nil {
 		return false, fmt.Errorf("[NOT POSSIBLE] failed to parse the value of max_user_namespaces: %w", err)
 	}
-	p.Satisfied = p.ExpectZero && value == 0
+	p.Satisfied = p.ExpectZero == (value == 0)
 	return p.Satisfied, nil
 }
 
