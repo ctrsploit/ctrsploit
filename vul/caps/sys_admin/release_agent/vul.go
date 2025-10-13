@@ -4,18 +4,18 @@ import (
 	"github.com/ctrsploit/ctrsploit/prerequisite/apparmor"
 	"github.com/ctrsploit/ctrsploit/prerequisite/capability"
 	"github.com/ctrsploit/ctrsploit/prerequisite/cgroups"
+	"github.com/ctrsploit/ctrsploit/prerequisite/user"
 	"github.com/ctrsploit/sploit-spec/pkg/app"
 	"github.com/ctrsploit/sploit-spec/pkg/exeenv"
 	"github.com/ctrsploit/sploit-spec/pkg/log"
 	"github.com/ctrsploit/sploit-spec/pkg/prerequisite"
-	"github.com/ctrsploit/sploit-spec/pkg/prerequisite/user"
 	"github.com/ctrsploit/sploit-spec/pkg/vul"
 	"github.com/ssst0n3/awesome_libs/awesome_error"
 	"github.com/urfave/cli/v2"
 )
 
 var (
-	aliases      = []string{"ra", "cgroup_v1_release_agent"}
+	aliases      = []string{"ra"}
 	flagsExploit = []cli.Flag{
 		&cli.StringFlag{Name: "cmd", Aliases: []string{"c"}, Required: true},
 	}

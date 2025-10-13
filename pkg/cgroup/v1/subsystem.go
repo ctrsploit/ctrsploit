@@ -11,15 +11,16 @@ import (
 )
 
 const releaseAgent = "release_agent"
+const DefaultMountPoint = "/sys/fs/cgroup"
 
-// IsTopOld
+// IsTop
 /*
 borrowed from: https://www.kernel.org/doc/Documentation/cgroup-v1/cgroups.txt
 
  - release_agent: the path to use for release notifications (this file
    exists in the top cgroup only)
 */
-func (c CgroupV1) IsTopOld(mountpoint, subsystemName string) (top bool, err error) {
+func (c CgroupV1) IsTop(mountpoint, subsystemName string) (top bool, err error) {
 	_, err = os.Lstat(mountpoint)
 	if err != nil {
 		return
@@ -43,7 +44,7 @@ func (c CgroupV1) IsTopOld(mountpoint, subsystemName string) (top bool, err erro
 	}
 }
 
-func (c CgroupV1) ListSubsystemsOld(mountpoint string) (subsystems []string, err error) {
+func (c CgroupV1) ListSubsystems(mountpoint string) (subsystems []string, err error) {
 	fileInfo, err := os.ReadDir(mountpoint)
 	if err != nil {
 		awesome_error.CheckErr(err)
@@ -57,7 +58,7 @@ func (c CgroupV1) ListSubsystemsOld(mountpoint string) (subsystems []string, err
 	return
 }
 
-func (c CgroupV1) ListSubsystems(procCgroupPath string) (subsystems map[string]string, err error) {
+func (c CgroupV1) ListSubsystemsDeprecated(procCgroupPath string) (subsystems map[string]string, err error) {
 	subsystems, err = cgroups.ParseCgroupFile(procCgroupPath)
 	if err != nil {
 		awesome_error.CheckErr(err)
@@ -74,18 +75,40 @@ func (c CgroupV1) ListSubsystems(procCgroupPath string) (subsystems map[string]s
 	return
 }
 
-func (c CgroupV1) IsTop(subsystemPath string) (top bool) {
+/*
+IsTopDeprecated fails in the sub cgroup ns
+root@73313224d1ef:/# unshare -UrCm /bin/bash
+root@73313224d1ef:/# cat /proc/1/cgroup
+12:freezer:/
+11:hugetlb:/
+10:memory:/
+9:cpu,cpuacct:/
+8:pids:/
+7:cpuset:/
+6:blkio:/
+5:perf_event:/
+4:net_cls,net_prio:/
+3:rdma:/
+2:devices:/
+1:name=systemd:/
+0::/
+*/
+func (c CgroupV1) IsTopDeprecated(subsystemPath string) (top bool) {
 	return subsystemPath == "/"
 }
 
 func ListTopLevelSubSystem() (topLevelSubSystems []string, err error) {
 	var c CgroupV1
-	subsystemsSupport, err := c.ListSubsystems("/proc/1/cgroup")
+	subsystemsSupport, err := c.ListSubsystems(DefaultMountPoint)
 	if err != nil {
 		return nil, fmt.Errorf("ListTopLevelSubSystem: failed to list sub systems: %w", err)
 	}
-	for subsystemName, subsystemPath := range subsystemsSupport {
-		if c.IsTop(subsystemPath) {
+	for _, subsystemName := range subsystemsSupport {
+		is, err := c.IsTop(DefaultMountPoint, subsystemName)
+		if err != nil {
+			return nil, fmt.Errorf("ListTopLevelSubSystem: failed to list sub system %s: %w", subsystemName, err)
+		}
+		if is {
 			topLevelSubSystems = append(topLevelSubSystems, subsystemName)
 		}
 	}
