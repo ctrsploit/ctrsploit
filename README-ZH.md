@@ -223,7 +223,7 @@ root@ctr # ./ctrsploit e ra -c "cat /etc/hostname"
 | CVE-2021-41091                                                    | :x:                | :heavy_check_mark: | :x:                 | :x:                | :x:                |
 | [cve-2021-25741](./vul/cve-2021-25741)                            | :heavy_check_mark: | :heavy_check_mark: | :x:                 | :heavy_check_mark: | :x:                |
 | [cve-2022-39253](./vul/cve-2022-39253)                            | :o:                | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: |
-| cve-2022-0492                                                     | :calendar:         | :heavy_check_mark: | :calendar:          | :calendar:         | :calendar:         |
+| cve-2022-0492                                                     | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: |
 | [cve-2024-0132](./vul/cve-2024-0132)                              | :o:                | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: |
 | [cve-2024-23650](./vul/cve-2024-23650)                            | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: |
 | [cve-2025-23266](./vul/cve-2025-23266)                            | :o:                | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: |
