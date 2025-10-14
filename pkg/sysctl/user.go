@@ -21,7 +21,7 @@ func MaxUserNamespaces() (int, error) {
 		if os.IsNotExist(err) {
 			return UserNamespaceNotSupported, nil
 		}
-		return 0, fmt.Errorf("failed to read user.max_user_namespaces: %w", err)
+		return 0, err
 	}
 	i, err := strconv.Atoi(strings.TrimSpace(string(content)))
 	if err != nil {
