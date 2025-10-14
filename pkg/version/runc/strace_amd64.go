@@ -46,9 +46,9 @@ func newPipe() (parent *os.File, child *os.File, err error) {
 }
 
 func buildCmd(child *os.File) (*exec.Cmd, error) {
-	path, err := exec.LookPath("runc")
+	path, err := LookRunC()
 	if err != nil {
-		return nil, fmt.Errorf("failed to find runc binary: %w", err)
+		return nil, err
 	}
 	cmd := &exec.Cmd{
 		Path: path,
@@ -56,8 +56,8 @@ func buildCmd(child *os.File) (*exec.Cmd, error) {
 		Args:       []string{"runc"},
 		ExtraFiles: []*os.File{child},
 		Env:        []string{"_LIBCONTAINER_INITPIPE=3"},
-		Stdout:     os.Stdout,
-		Stderr:     os.Stderr,
+		Stdout:     io.Discard,
+		Stderr:     io.Discard,
 		SysProcAttr: &syscall.SysProcAttr{
 			Ptrace: true,
 		},
