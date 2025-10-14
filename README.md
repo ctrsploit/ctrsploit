@@ -207,8 +207,11 @@ Just execute `ctrsploit checksec` or standalone binary file `checksec` in the co
 | vul                                                                     | check              | exploit            | test                | doc                | video              |
 |-------------------------------------------------------------------------|--------------------|--------------------|---------------------|--------------------|--------------------|
 | [cve-2016-8867](./vul/cve-2016-8867)                                    | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: |
+| cve-2016-9962                                                           | :calendar:         | :calendar:         | :calendar:          | :calendar:         | :calendar:         |
 | CVE-2017-1002101                                                        | :x:                | :heavy_check_mark: | :x:                 | :x:                | :x:                |
-| CVE-2019-5736                                                           | :x:                | :heavy_check_mark: | :x:                 | :x:                | :x:                |
+| [cve-2019-5736](./vul/cve-2019-5736)                                    | :heavy_check_mark: | :heavy_minus_sign: | :heavy_minus_sign:  | :heavy_check_mark: | :heavy_minus_sign: |
+| └─[exec](./vul/cve-2019-5736/exec)                                      | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:  | :heavy_minus_sign: | :heavy_check_mark: |
+| └─[image](./vul/cve-2019-5736/image)                                    | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:  | :heavy_minus_sign: | :heavy_check_mark: |
 | CVE-2019-14271                                                          | :x:                | :heavy_check_mark: | :x:                 | :x:                | :x:                |
 | CVE-2019-16884                                                          | :x:                | :heavy_check_mark: | :x:                 | :x:                | :x:                |
 | CVE-2020-8555                                                           | :x:                | :heavy_check_mark: | :x:                 | :x:                | :x:                |
