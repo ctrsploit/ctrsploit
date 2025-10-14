@@ -16,12 +16,19 @@ func Sysctl() (container.Sysctl, error) {
 	if err != nil {
 		return container.Sysctl{}, err
 	}
+	unprivilegedUsernsClone, err := sysctl.UnprivilegedUsernsCloneEnabled()
+	if err != nil {
+		return container.Sysctl{}, err
+	}
 	return container.Sysctl{
 		Net: container.Net{
 			RouteLocalNet: routeLocalNetEnabled,
 		},
 		User: container.User{
 			MaxUserNamespaces: maxUserNamespaces,
+		},
+		KernelSysctl: container.KernelSysctl{
+			UnprivilegedUsernsClone: unprivilegedUsernsClone,
 		},
 	}, nil
 }
