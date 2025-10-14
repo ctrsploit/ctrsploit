@@ -1,0 +1,47 @@
+name: runc
+test_envs:
+  - name: runc-v0.0.1
+    kind: dqd
+    dqd_dir: runc/v0.0.1
+    pkg: github.com/ctrsploit/ctrsploit/prerequisite/runc
+    cmd: TEST_ENV=runc-v0.0.1 /ctrsploit.test -test.v -test.run '^TestE2E_EnsureCloned$'
+  - name: runc-v0.1.0
+    kind: dqd
+    dqd_dir: runc/v0.1.0
+    pkg: github.com/ctrsploit/ctrsploit/prerequisite/runc
+    cmd: TEST_ENV=runc-v0.1.0 /ctrsploit.test -test.v -test.run '^TestE2E_EnsureCloned$'
+  - name: runc-v1.0.0-rc6
+    kind: dqd
+    dqd_dir: runc/v1.0.0-rc6
+    pkg: github.com/ctrsploit/ctrsploit/prerequisite/runc
+    cmd: TEST_ENV=runc-v1.0.0-rc6 /ctrsploit.test -test.v -test.run '^TestE2E_EnsureCloned$'
+  - name: runc-v1.0.0-rc7
+    kind: dqd
+    dqd_dir: runc/v1.0.0-rc7
+    pkg: github.com/ctrsploit/ctrsploit/prerequisite/runc
+    cmd: TEST_ENV=runc-v1.0.0-rc7 /ctrsploit.test -test.v -test.run '^TestE2E_EnsureCloned$'
+  - name: runc-v1.0.0
+    kind: dqd
+    dqd_dir: runc/v1.0.0
+    pkg: github.com/ctrsploit/ctrsploit/prerequisite/runc
+    cmd: TEST_ENV=runc-v1.0.0 /ctrsploit.test -test.v -test.run '^TestE2E_EnsureCloned$'
+  - name: runc-v1.1.0
+    kind: dqd
+    dqd_dir: runc/v1.1.0
+    pkg: github.com/ctrsploit/ctrsploit/prerequisite/runc
+    cmd: TEST_ENV=runc-v1.1.0 /ctrsploit.test -test.v -test.run '^TestE2E_EnsureCloned$'
+  - name: runc-v1.1.15
+    kind: dqd
+    dqd_dir: runc/v1.1.15
+    pkg: github.com/ctrsploit/ctrsploit/prerequisite/runc
+    cmd: TEST_ENV=runc-v1.1.15 /ctrsploit.test -test.v -test.run '^TestE2E_EnsureCloned$'
+  - name: runc-v1.2.0-rc.1
+    kind: dqd
+    dqd_dir: runc/v1.2.0-rc.1
+    pkg: github.com/ctrsploit/ctrsploit/prerequisite/runc
+    cmd: TEST_ENV=runc-v1.2.0-rc.1 /ctrsploit.test -test.v -test.run '^TestE2E_EnsureCloned$'
+  - name: runc-v1.3.0
+    kind: dqd
+    dqd_dir: runc/v1.3.0
+    pkg: github.com/ctrsploit/ctrsploit/prerequisite/runc
+    cmd: TEST_ENV=runc-v1.3.0 /ctrsploit.test -test.v -test.run '^TestE2E_EnsureCloned$'
