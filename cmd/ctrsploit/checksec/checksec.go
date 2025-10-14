@@ -9,6 +9,7 @@ import (
 	"github.com/ctrsploit/ctrsploit/vul/caps/sys_ptrace"
 	"github.com/ctrsploit/ctrsploit/vul/caps/sys_ptrace/pid_host"
 	cve_2016_8867 "github.com/ctrsploit/ctrsploit/vul/cve-2016-8867"
+	cve_2019_5736 "github.com/ctrsploit/ctrsploit/vul/cve-2019-5736"
 	cve_2020_15257 "github.com/ctrsploit/ctrsploit/vul/cve-2020-15257"
 	cve_2021_25741 "github.com/ctrsploit/ctrsploit/vul/cve-2021-25741"
 	cve_2022_0492 "github.com/ctrsploit/ctrsploit/vul/cve-2022-0492"
@@ -41,6 +42,7 @@ var Command = &cli.Command{
 		cve_2022_0492.CheckSecCmd,
 		cve_2021_25741.CheckSecCmd,
 		cve_2020_15257.CheckSecCmd,
+		cve_2019_5736.CheckSecCmd,
 		cve_2016_8867.CheckSecCmd,
 		naked.CheckSecCmd,
 		sys_admin.CheckSecCmd,
