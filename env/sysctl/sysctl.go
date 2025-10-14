@@ -12,7 +12,16 @@ func Sysctl() (container.Sysctl, error) {
 	if err != nil {
 		return container.Sysctl{}, err
 	}
+	maxUserNamespaces, err := sysctl.MaxUserNamespaces()
+	if err != nil {
+		return container.Sysctl{}, err
+	}
 	return container.Sysctl{
-		ProcSysNetIpv4ConfAllRouteLocalNet: routeLocalNetEnabled,
+		Net: container.Net{
+			RouteLocalNet: routeLocalNetEnabled,
+		},
+		User: container.User{
+			MaxUserNamespaces: maxUserNamespaces,
+		},
 	}, nil
 }

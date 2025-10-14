@@ -10,8 +10,9 @@ import (
 )
 
 type Result struct {
-	Name          result.Title
-	RouteLocalNet item.Bool `json:"route_localnet"`
+	Name              result.Title
+	RouteLocalNet     item.Bool  `json:"route_localnet"`
+	MaxUserNamespaces item.Short `json:"max_user_namespaces"`
 }
 
 func Human(machine container.Sysctl) (human Result) {
@@ -22,7 +23,12 @@ func Human(machine container.Sysctl) (human Result) {
 		RouteLocalNet: item.Bool{
 			Name:        "net.ipv4.conf.all.route_localnet",
 			Description: "Indicates if the kernel parameter net.ipv4.conf.all.route_localnet is enabled.",
-			Result:      machine.ProcSysNetIpv4ConfAllRouteLocalNet,
+			Result:      machine.RouteLocalNet,
+		},
+		MaxUserNamespaces: item.Short{
+			Name:        "user.max_user_namespaces",
+			Description: "",
+			Result:      fmt.Sprintf("%d", machine.MaxUserNamespaces),
 		},
 	}
 	return
