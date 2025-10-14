@@ -23,7 +23,7 @@ https://github.com/kubernetes/kubernetes/issues/90259
 func RouteLocalNetEnabled() (bool, error) {
 	content, err := os.ReadFile(PathRouteLocalNet)
 	if err != nil {
-		return false, fmt.Errorf("failed to read %s: %v", PathRouteLocalNet, err)
+		return false, fmt.Errorf("failed to read net.ipv4.conf.all.route_localnet: %v", err)
 	}
 	return strings.TrimSpace(string(content)) == "1", nil
 }
