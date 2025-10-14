@@ -7,6 +7,7 @@ import (
 	"github.com/ctrsploit/ctrsploit/pkg/version/runc"
 	"github.com/ctrsploit/sploit-spec/pkg/exeenv"
 	"github.com/ctrsploit/sploit-spec/pkg/prerequisite"
+	"github.com/ssst0n3/awesome_libs/awesome_error"
 )
 
 type Version struct {
@@ -26,7 +27,8 @@ func (p *Version) Check() (bool, error) {
 	var errs []error
 	p.Satisfied, errs = p.Constraint.Validate(ver)
 	if len(errs) > 0 {
-		return false, fmt.Errorf("constraint validation errors: %v", errs)
+		awesome_error.CheckDebug(fmt.Errorf("constraint validation errors: %v", errs))
+		return false, nil
 	}
 	return p.Satisfied, nil
 }

@@ -26,9 +26,8 @@ func (p *Version) Check() (bool, error) {
 	var errs []error
 	p.Satisfied, errs = p.Constraint.Validate(ver)
 	if len(errs) > 0 {
-		err = fmt.Errorf("failed to validate version %s: %v", ver.String(), errs)
-		awesome_error.CheckErr(err)
-		return false, err
+		awesome_error.CheckDebug(fmt.Errorf("constraint validation errors: %v", errs))
+		return false, nil
 	}
 	p.Checked = true
 	return p.Satisfied, nil
