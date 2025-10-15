@@ -6,8 +6,8 @@ import (
 	"github.com/ctrsploit/ctrsploit/prerequisite/env"
 	"github.com/ctrsploit/ctrsploit/prerequisite/file"
 	"github.com/ctrsploit/ctrsploit/prerequisite/hostname"
-	"github.com/ctrsploit/ctrsploit/prerequisite/mount"
-	"github.com/ctrsploit/ctrsploit/prerequisite/mount/mountinfo"
+	"github.com/ctrsploit/ctrsploit/prerequisite/mount/mountinfo/root"
+	"github.com/ctrsploit/ctrsploit/prerequisite/mount/mountinfo/source"
 	"github.com/ctrsploit/ctrsploit/prerequisite/proc/net"
 	"github.com/ctrsploit/sploit-spec/pkg/prerequisite"
 	"github.com/ssst0n3/awesome_libs/awesome_error"
@@ -35,9 +35,9 @@ func (r *Runtime) Is() (bool, error) {
 func Docker() *Runtime {
 	return NewRuntime(prerequisite.Or(
 		&file.DockerEnvFileExists,
-		&mount.RootMountInfoSourceContainsDocker,
-		&mount.RootMountInfoVFSOptionsContainsDocker,
-		&mountinfo.HostsRootContainsDocker,
+		&source.RootMountInfoSourceContainsDocker,
+		&source.RootMountInfoVFSOptionsContainsDocker,
+		&root.HostsRootContainsDocker,
 		&cgroups.ContainsDocker,
 		apparmor.ProfileDockerDefault,
 		&net.UnixContainsDockerSock,
@@ -47,9 +47,9 @@ func Docker() *Runtime {
 
 func Containerd() *Runtime {
 	return NewRuntime(prerequisite.Or(
-		&mount.RootMountInfoVFSOptionsContainsContainerd,
+		&source.RootMountInfoVFSOptionsContainsContainerd,
 		// ctrsploit assumes that nerdctl only appears with containerd
-		&mountinfo.HostnameRootContainsContainerd, &mountinfo.HostnameRootContainsNerdctl,
+		&root.HostnameRootContainsContainerd, &root.HostnameRootContainsNerdctl,
 		&net.UnixContainsContainerdSock,
 		// ctrsploit assumes that nerdctl only appears with containerd
 		apparmor.ProfileCriContainerd, apparmor.ProfileNerdctlDefault,
@@ -60,14 +60,14 @@ func Nerdctl() *Runtime {
 	return NewRuntime(prerequisite.Or(
 		apparmor.ProfileNerdctlDefault,
 		&file.HostsContainsNerdctlMarker,
-		&mountinfo.HostnameRootContainsNerdctl,
+		&root.HostnameRootContainsNerdctl,
 	))
 }
 
 func K8s() *Runtime {
 	return NewRuntime(prerequisite.Or(
 		&file.K8sSecretsExists,
-		&mountinfo.HostsRootContainsPods,
+		&root.HostsRootContainsPods,
 		&cgroups.ContainsKubepods,
 		&hostname.K8sDeploymentHostname,
 		&env.KubernetesServiceHostExists,

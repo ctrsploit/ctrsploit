@@ -1,4 +1,4 @@
-package mount
+package mountpoint
 
 import (
 	"os"
@@ -39,7 +39,7 @@ func TestContains_Check(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			p := &ContainsMountPoint{
-				ExpectedMountPoint: tt.fields.ExpectedMountInfo,
+				ExpectedContains: tt.fields.ExpectedMountInfo,
 			}
 			got, err := p.Check()
 			assert.NoError(t, err)
