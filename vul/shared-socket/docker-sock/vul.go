@@ -40,6 +40,16 @@ var (
 			Usage:   "tty mode",
 			Value:   true,
 		},
+		&cli.BoolFlag{
+			Name:    "force",
+			Aliases: []string{"f"},
+			Usage:   "force exploit even if checksec fails",
+		},
+		&cli.StringFlag{
+			Name:    "sock",
+			Aliases: []string{"s"},
+			Usage:   "path to docker.sock, if not specified, will try to detect automatically",
+		},
 	}
 	CheckSecCmd = app.Vul2ChecksecCmd(&Vul, aliases, nil)
 	ExploitCmd  = app.Vul2ExploitCmd(&Vul, aliases, exploitFlags, true)
@@ -74,7 +84,15 @@ type mountPointProvider interface {
 	RealMountPoint() string
 }
 
-func (v *vulnerability) getSockPath() (string, error) {
+func (v *vulnerability) getSockPath(ctx *cli.Context) (string, error) {
+	sock := ctx.String("sock")
+	if sock != "" {
+		if _, err := os.Stat(sock); err == nil {
+			return sock, nil
+		} else {
+			return "", fmt.Errorf("specified docker.sock path %s does not exist", sock)
+		}
+	}
 	for pre := range v.CheckSecPrerequisites.Range() {
 		if satisfied, _ := pre.Check(); satisfied {
 			if provider, ok := pre.(mountPointProvider); ok {
@@ -91,7 +109,7 @@ func (v *vulnerability) Exploit(ctx *cli.Context) (err error) {
 	if err := v.BaseVulnerability.Exploit(ctx); err != nil {
 		return err
 	}
-	sock, err := v.getSockPath()
+	sock, err := v.getSockPath(ctx)
 	if err != nil {
 		return err
 	}
