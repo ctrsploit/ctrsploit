@@ -33,7 +33,7 @@ vulnerability exploitable:
 ```shell
 $ git clone https://github.com/ssst0n3/docker_archive.git
 $ cd docker_archive/docker/v28.3.2/
-$ docker compose -f docker-compose.yml -f docker-compose.kvm up -d
+$ docker compose -f docker-compose.yml -f docker-compose.kvm.yml up -d
 ```
 
 <details><summary>env details</summary>
