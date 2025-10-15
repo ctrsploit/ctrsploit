@@ -203,80 +203,80 @@ Just execute `ctrsploit checksec` or standalone binary file `checksec` in the co
 * :x: : Not Supported
 * `-` : Not Applicable
 
-| vul                                                                     | check              | exploit            | test                | doc                | video              |
-|-------------------------------------------------------------------------|--------------------|--------------------|---------------------|--------------------|--------------------|
-| [cve-2016-8867](./vul/cve-2016-8867)                                    | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: |
-| cve-2016-9962                                                           | :x:                | :x:                | :x:                 | :x:                | :x:                |
-| CVE-2017-1002101                                                        | :x:                | :heavy_check_mark: | :x:                 | :x:                | :x:                |
-| [cve-2019-5736](./vul/cve-2019-5736)                                    | :heavy_check_mark: | -                  | -                   | :heavy_check_mark: | -                  |
-| └─[exec](./vul/cve-2019-5736/exec)                                      | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:  | -                  | :heavy_check_mark: |
-| └─[image](./vul/cve-2019-5736/image)                                    | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:  | -                  | :heavy_check_mark: |
-| CVE-2019-14271                                                          | :x:                | :heavy_check_mark: | :x:                 | :x:                | :x:                |
-| CVE-2019-16884                                                          | :x:                | :heavy_check_mark: | :x:                 | :x:                | :x:                |
-| CVE-2020-8555                                                           | :x:                | :heavy_check_mark: | :x:                 | :x:                | :x:                |
-| CVE-2020-8558                                                           | :x:                | :heavy_check_mark: | :x:                 | :x:                | :x:                |
-| CVE-2020-15157                                                          | :x:                | :heavy_check_mark: | :x:                 | :x:                | :x:                |
-| [cve-2020-15257](./vul/cve-2020-15257)                                  | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: |
-| CVE-2021-3493                                                           | :x:                | :heavy_check_mark: | :x:                 | :x:                | :x:                |
-| CVE-2021-21285                                                          | :x:                | :heavy_check_mark: | :x:                 | :x:                | :x:                |
-| CVE-2021-22555                                                          | :x:                | :heavy_check_mark: | :x:                 | :x:                | :x:                |
-| CVE-2021-41091                                                          | :x:                | :heavy_check_mark: | :x:                 | :x:                | :x:                |
-| [cve-2021-25741](./vul/cve-2021-25741)                                  | :heavy_check_mark: | :heavy_check_mark: | :x:                 | :heavy_check_mark: | :x:                |
-| [cve-2022-39253](./vul/cve-2022-39253)                                  | :o:                | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: |
-| [cve-2022-0492](./vul/cve-2022-0492)                                    | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: |
-| CVE-2022-0847                                                           | :x:                | :heavy_check_mark: | :x:                 | :x:                | :x:                |
-| CVE-2023-28642                                                          | :x:                | :x:                | :x:                 | :x:                | :x:                |
-| [cve-2024-0132](./vul/cve-2024-0132)                                    | :o:                | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: |
-| CVE-2024-21626                                                          | :x:                | :x:                | :x:                 | :x:                | :x:                |
-| [cve-2024-23650](./vul/cve-2024-23650)                                  | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: |
-| [cve-2025-23266](./vul/cve-2025-23266)                                  | :o:                | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: |
-| cve-2025-23267                                                          | :x:                | :x:                | :x:                 | :x:                | :x:                |
-| cve-2025-23359                                                          | :x:                | :x:                | :x:                 | :x:                | :x:                |
-| cve-2025-31133                                                          | :x:                | :x:                | :x:                 | :x:                | :x:                |
-| [cve-2025-47290](./vul/cve-2025-47290)                                  | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: |
-| cve-2025-52565                                                          | :x:                | :x:                | :x:                 | :x:                | :x:                |
-| caps                                                                    | -                  | -                  | -                   | -                  | -                  |
-| └─[shocker](./vul/caps/shocker)                                         | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:️ | :heavy_check_mark: | :heavy_check_mark: |
-| └─[sys_admin](./vul/caps/sys_admin)                                     | :heavy_check_mark: | -                  | -                   | -                  | -                  |
-| &emsp;└─[release_agent](./vul/caps/sys_admin/release_agent)             | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: |
-| &emsp;└─mount-device                                                    | :x:                | :x:                | :x:                 | :x:                | :x:                |
-| &emsp;└─mount-proc                                                      | :x:                | :x:                | :x:                 | :x:                | :x:                |
-| &emsp;└─device.allow                                                    | :x:                | :x:                | :x:                 | :x:                | :x:                |
-| &emsp;└─[ebpf](./vul/caps/sys_admin/ebpf)                               | :heavy_check_mark: | -                  | -                   | -                  | -                  |
-| &emsp;&emsp;└─[ebpf-bash](./vul/caps/sys_admin/ebpf/bash)               | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: |
-| &emsp;&emsp;└─[ebpf-cron](./vul/caps/sys_admin/ebpf/cron)               | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: |
-| &emsp;&emsp;└─[ebpf-execve](./vul/caps/sys_admin/ebpf/execve)           | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: |
-| &emsp;&emsp;└─[ebpf-kubelet](./vul/caps/sys_admin/ebpf/kubelet)         | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: |
-| &emsp;&emsp;└─ebpf-sshd                                                 | :x:                | :x:                | :x:                 | :x:                | :x:                |
-| └─[bpf](./vul/caps/bpf)                                                 | -                  | -                  | -                   | -                  | -                  |
-| &emsp;└─[ebpf](./vul/caps/sys_admin/ebpf) (same as caps/sys_admin/ebpf) | :heavy_check_mark: | -                  | -                   | -                  | -                  |
-| └─[sys_ptrace](./vul/caps/sys_ptrace)                                   | :heavy_check_mark: | -                  | -                   | -                  | -                  |
-| &emsp;└─[pid_host](./vul/caps/sys_ptrace/pid_host)                      | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: |
-| └─sys_module                                                            | :x:                | :x:                | :x:                 | :x:                | :x:                |
-| └─net_admin                                                             | :x:                | :x:                | :x:                 | :x:                | :x:                |
-| [naked](./vul/naked)                                                    | :heavy_check_mark: | -                  | :heavy_check_mark:  | :x:                | :x:                |
-| namespace                                                               | -                  | -                  | -                   | -                  | -                  |
-| └─[net](./vul/namespace/net)                                            | -                  | :x:                | :x:                 | :x:                | :x:                |
-| &emsp;└─shijack                                                         | -                  | -                  | -                   | -                  | -                  |
-| &emsp;&emsp;└─basic                                                     | :x:                | :x:                | :x:                 | :x:                | :x:                |
-| &emsp;&emsp;└─ali                                                       | :x:                | :x:                | :x:                 | :x:                | :x:                |
-| &emsp;&emsp;└─hw                                                        | :x:                | :x:                | :x:                 | :x:                | :x:                |
-| &emsp;&emsp;└─gcp                                                       | :x:                | :x:                | :x:                 | :x:                | :x:                |
-| &emsp;&emsp;└─aws                                                       | :x:                | :x:                | :x:                 | :x:                | :x:                |
-| └─[pid](./vul/namespace/pid)                                            | -                  | -                  | -                   | -                  | -                  |
-| &emsp;└─[proc_root](./vul/namespace/pid/proc_root)                      | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: |
-| fs                                                                      | :x:                | :x:                | :x:                 | :x:                | :x:                |
-| └─proc-rw                                                               | :x:                | -                  | -                   | :x:                | :x:                |
-| &emsp;└─core_pattern                                                    | :x:                | :x:                | :x:                 | :x:                | :x:                |
-| &emsp;└─binfmt                                                          | :x:                | :x:                | :x:                 | :x:                | :x:                |
-| └─sys-rw                                                                | :x:                | :x:                | :x:                 | :x:                | :x:                |
-| └─lxcfs-rw                                                              | :x:                | :x:                | :x:                 | :x:                | :x:                |
-| shared-socket                                                           | -                  | -                  | -                   | -                  | -                  |
-| └─[docker.sock](./vul/shared-socket/docker-sock)                        | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: |
-| └─containerd.sock                                                       | :x:                | :x:                | :x:                 | :x:                | :x:                |                                  
-| exposed-api                                                             | -                  | -                  | -                   | -                  | -                  |
-| └─docker-2375                                                           | :x:                | :x:                | :x:                 | :x:                | :x:                |
-| lxcfs                                                                   | :x:                | :x:                | :x:                 | :x:                | :x:                |
+| vul                                                                     | check              | exploit            | test                | doc                | video              | case               |
+|-------------------------------------------------------------------------|--------------------|--------------------|---------------------|--------------------|--------------------|--------------------|
+| [cve-2016-8867](./vul/cve-2016-8867)                                    | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: | :x:                |
+| cve-2016-9962                                                           | :x:                | :x:                | :x:                 | :x:                | :x:                | :x:                |
+| CVE-2017-1002101                                                        | :x:                | :heavy_check_mark: | :x:                 | :x:                | :x:                | :x:                |
+| [cve-2019-5736](./vul/cve-2019-5736)                                    | :heavy_check_mark: | -                  | -                   | :heavy_check_mark: | -                  | :x:                |
+| └─[exec](./vul/cve-2019-5736/exec)                                      | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:  | -                  | :heavy_check_mark: | :x:                |
+| └─[image](./vul/cve-2019-5736/image)                                    | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:  | -                  | :heavy_check_mark: | :x:                |
+| CVE-2019-14271                                                          | :x:                | :heavy_check_mark: | :x:                 | :x:                | :x:                | :x:                |
+| CVE-2019-16884                                                          | :x:                | :heavy_check_mark: | :x:                 | :x:                | :x:                | :x:                |
+| CVE-2020-8555                                                           | :x:                | :heavy_check_mark: | :x:                 | :x:                | :x:                | :x:                |
+| CVE-2020-8558                                                           | :x:                | :heavy_check_mark: | :x:                 | :x:                | :x:                | :x:                |
+| CVE-2020-15157                                                          | :x:                | :heavy_check_mark: | :x:                 | :x:                | :x:                | :x:                |
+| [cve-2020-15257](./vul/cve-2020-15257)                                  | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: | :x:                |
+| CVE-2021-3493                                                           | :x:                | :heavy_check_mark: | :x:                 | :x:                | :x:                | :x:                |
+| CVE-2021-21285                                                          | :x:                | :heavy_check_mark: | :x:                 | :x:                | :x:                | :x:                |
+| CVE-2021-22555                                                          | :x:                | :heavy_check_mark: | :x:                 | :x:                | :x:                | :x:                |
+| CVE-2021-41091                                                          | :x:                | :heavy_check_mark: | :x:                 | :x:                | :x:                | :x:                |
+| [cve-2021-25741](./vul/cve-2021-25741)                                  | :heavy_check_mark: | :heavy_check_mark: | :x:                 | :heavy_check_mark: | :x:                | :x:                |
+| [cve-2022-39253](./vul/cve-2022-39253)                                  | :o:                | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: | :x:                |
+| [cve-2022-0492](./vul/cve-2022-0492)                                    | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: | :x:                |
+| CVE-2022-0847                                                           | :x:                | :heavy_check_mark: | :x:                 | :x:                | :x:                | :x:                |
+| CVE-2023-28642                                                          | :x:                | :x:                | :x:                 | :x:                | :x:                | :x:                |
+| [cve-2024-0132](./vul/cve-2024-0132)                                    | :o:                | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: | :x:                |
+| CVE-2024-21626                                                          | :x:                | :x:                | :x:                 | :x:                | :x:                | :x:                |
+| [cve-2024-23650](./vul/cve-2024-23650)                                  | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: | :x:                |
+| [cve-2025-23266](./vul/cve-2025-23266)                                  | :o:                | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: | :x:                |
+| cve-2025-23267                                                          | :x:                | :x:                | :x:                 | :x:                | :x:                | :x:                |
+| cve-2025-23359                                                          | :x:                | :x:                | :x:                 | :x:                | :x:                | :x:                |
+| cve-2025-31133                                                          | :x:                | :x:                | :x:                 | :x:                | :x:                | :x:                |
+| [cve-2025-47290](./vul/cve-2025-47290)                                  | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: | :x:                |
+| cve-2025-52565                                                          | :x:                | :x:                | :x:                 | :x:                | :x:                | :x:                |
+| caps                                                                    | -                  | -                  | -                   | -                  | -                  | -                  |
+| └─[shocker](./vul/caps/shocker)                                         | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:️ | :heavy_check_mark: | :heavy_check_mark: | :x:                |
+| └─[sys_admin](./vul/caps/sys_admin)                                     | :heavy_check_mark: | -                  | -                   | -                  | -                  | -                  |
+| &emsp;└─[release_agent](./vul/caps/sys_admin/release_agent)             | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: | :x:                |
+| &emsp;└─mount-device                                                    | :x:                | :x:                | :x:                 | :x:                | :x:                | :x:                |
+| &emsp;└─mount-proc                                                      | :x:                | :x:                | :x:                 | :x:                | :x:                | :x:                |
+| &emsp;└─device.allow                                                    | :x:                | :x:                | :x:                 | :x:                | :x:                | :x:                |
+| &emsp;└─[ebpf](./vul/caps/sys_admin/ebpf)                               | :heavy_check_mark: | -                  | -                   | -                  | -                  | -                  |
+| &emsp;&emsp;└─[ebpf-bash](./vul/caps/sys_admin/ebpf/bash)               | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: | :x:                |
+| &emsp;&emsp;└─[ebpf-cron](./vul/caps/sys_admin/ebpf/cron)               | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: | :x:                |
+| &emsp;&emsp;└─[ebpf-execve](./vul/caps/sys_admin/ebpf/execve)           | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: | :x:                |
+| &emsp;&emsp;└─[ebpf-kubelet](./vul/caps/sys_admin/ebpf/kubelet)         | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: | :x:                |
+| &emsp;&emsp;└─ebpf-sshd                                                 | :x:                | :x:                | :x:                 | :x:                | :x:                | :x:                |
+| └─[bpf](./vul/caps/bpf)                                                 | -                  | -                  | -                   | -                  | -                  | -                  |
+| &emsp;└─[ebpf](./vul/caps/sys_admin/ebpf) (same as caps/sys_admin/ebpf) | :heavy_check_mark: | -                  | -                   | -                  | -                  | -                  |
+| └─[sys_ptrace](./vul/caps/sys_ptrace)                                   | :heavy_check_mark: | -                  | -                   | -                  | -                  | -                  |
+| &emsp;└─[pid_host](./vul/caps/sys_ptrace/pid_host)                      | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: | :x:                |
+| └─sys_module                                                            | :x:                | :x:                | :x:                 | :x:                | :x:                | :x:                |
+| └─net_admin                                                             | :x:                | :x:                | :x:                 | :x:                | :x:                | :x:                |
+| [naked](./vul/naked)                                                    | :heavy_check_mark: | -                  | :heavy_check_mark:  | :x:                | :x:                | :x:                |
+| namespace                                                               | -                  | -                  | -                   | -                  | -                  | -                  |
+| └─[net](./vul/namespace/net)                                            | -                  | :x:                | :x:                 | :x:                | :x:                | :x:                |
+| &emsp;└─shijack                                                         | -                  | -                  | -                   | -                  | -                  | -                  |
+| &emsp;&emsp;└─basic                                                     | :x:                | :x:                | :x:                 | :x:                | :x:                | :x:                |
+| &emsp;&emsp;└─ali                                                       | :x:                | :x:                | :x:                 | :x:                | :x:                | :x:                |
+| &emsp;&emsp;└─hw                                                        | :x:                | :x:                | :x:                 | :x:                | :x:                | :x:                |
+| &emsp;&emsp;└─gcp                                                       | :x:                | :x:                | :x:                 | :x:                | :x:                | :x:                |
+| &emsp;&emsp;└─aws                                                       | :x:                | :x:                | :x:                 | :x:                | :x:                | :x:                |
+| └─[pid](./vul/namespace/pid)                                            | -                  | -                  | -                   | -                  | -                  | -                  |
+| &emsp;└─[proc_root](./vul/namespace/pid/proc_root)                      | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: | :x:                |
+| fs                                                                      | :x:                | :x:                | :x:                 | :x:                | :x:                | :x:                |
+| └─proc-rw                                                               | :x:                | -                  | -                   | :x:                | :x:                | :x:                |
+| &emsp;└─core_pattern                                                    | :x:                | :x:                | :x:                 | :x:                | :x:                | :x:                |
+| &emsp;└─binfmt                                                          | :x:                | :x:                | :x:                 | :x:                | :x:                | :x:                |
+| └─sys-rw                                                                | :x:                | :x:                | :x:                 | :x:                | :x:                | :x:                |
+| └─lxcfs-rw                                                              | :x:                | :x:                | :x:                 | :x:                | :x:                | :x:                |
+| shared-socket                                                           | -                  | -                  | -                   | -                  | -                  | -                  |
+| └─[docker.sock](./vul/shared-socket/docker-sock)                        | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
+| └─containerd.sock                                                       | :x:                | :x:                | :x:                 | :x:                | :x:                | :x:                |
+| exposed-api                                                             | -                  | -                  | -                   | -                  | -                  | -                  |
+| └─docker-2375                                                           | :x:                | :x:                | :x:                 | :x:                | :x:                | :x:                |
+| lxcfs                                                                   | :x:                | :x:                | :x:                 | :x:                | :x:                | :x:                |
 
 ### helper
 
