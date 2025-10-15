@@ -19,6 +19,10 @@ var (
 	}
 )
 
+type vulnerability struct {
+	vul.BaseVulnerability
+}
+
 var (
 	Vul = vulnerability{
 		BaseVulnerability: vul.BaseVulnerability{
@@ -33,7 +37,3 @@ var (
 		},
 	}
 )
-
-type vulnerability struct {
-	vul.BaseVulnerability
-}
