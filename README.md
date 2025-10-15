@@ -227,6 +227,7 @@ Just execute `ctrsploit checksec` or standalone binary file `checksec` in the co
 | CVE-2022-0847                                                           | :x:                | :heavy_check_mark: | :x:                 | :x:                | :x:                |
 | CVE-2023-28642                                                          | :x:                | :x:                | :x:                 | :x:                | :x:                |
 | [cve-2024-0132](./vul/cve-2024-0132)                                    | :o:                | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: |
+| CVE-2024-21626                                                          | :x:                | :x:                | :x:                 | :x:                | :x:                |
 | [cve-2024-23650](./vul/cve-2024-23650)                                  | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: |
 | [cve-2025-23266](./vul/cve-2025-23266)                                  | :o:                | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: |
 | cve-2025-23267                                                          | :x:                | :x:                | :x:                 | :x:                | :x:                |
