@@ -110,6 +110,8 @@ root         839     816  0 06:57 pts/0    00:00:00 ps -ef
 
 #### (1) Challenge Description
 
+Do you want to be a docker escaper? So you need to be patient. It takes minutes for me to get a docker ready for you. I can’t make it faster without kvm, but I think you can do it locally. from: SpaceSkyNet
+
 #### (2) Env
 
 ```shell
