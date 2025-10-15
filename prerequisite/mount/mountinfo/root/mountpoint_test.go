@@ -1,4 +1,4 @@
-package mountinfo
+package root
 
 import (
 	"fmt"

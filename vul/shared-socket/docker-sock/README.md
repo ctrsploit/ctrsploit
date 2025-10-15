@@ -191,3 +191,6 @@ root         794       1  0 06:56 ?        00:00:00 /usr/bin/containerd-shim-run
 root         816     794  0 06:56 pts/0    00:00:00 /bin/sh
 root         839     816  0 06:57 pts/0    00:00:00 ps -ef
 ```
+
+## 6. case
+

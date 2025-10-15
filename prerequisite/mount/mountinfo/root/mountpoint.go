@@ -1,4 +1,4 @@
-package mountinfo
+package root
 
 import (
 	"fmt"
@@ -9,13 +9,13 @@ import (
 	"github.com/ctrsploit/sploit-spec/pkg/prerequisite"
 )
 
-type RootContains struct {
+type ContainsByMountPoint struct {
 	prerequisite.BasePrerequisite
 	MountPoint string
 	Expected   string
 }
 
-func (p *RootContains) Check() (bool, error) {
+func (p *ContainsByMountPoint) Check() (bool, error) {
 	if p.Checked {
 		return p.Satisfied, nil
 	}
@@ -33,7 +33,7 @@ var (
 	//https://github.com/moby/moby/blob/v28.4.0/daemon/container_operations_unix.go#L552
 	//https://github.com/moby/moby/blob/v28.4.0/daemon/config/config_linux.go#L189
 	//https://github.com/moby/moby/blob/v28.4.0/container/container.go#L407
-	HostsRootContainsDocker = RootContains{
+	HostsRootContainsDocker = ContainsByMountPoint{
 		BasePrerequisite: prerequisite.BasePrerequisite{
 			Name:   "/etc/hosts",
 			Info:   "/etc/hosts's mountinfo root contains 'docker', e.g., 814 696 259:2 /var/lib/docker/containers/44bec6602ccfae7458bcd71279beafc287d9fde509fa861377e162270d4cd92f/hosts /etc/hosts rw,relatime - ext4 /dev/nvme0n1p2 rw,errors=remount-ro",
@@ -47,7 +47,7 @@ var (
 	// https://github.com/containerd/containerd/blob/v2.1.4/internal/cri/server/container_create.go#L1098
 	// https://github.com/containerd/containerd/blob/v2.1.4/internal/cri/server/helpers.go#L86
 	// https://github.com/containerd/containerd/blob/v2.1.4/defaults/defaults_unix.go#L26
-	HostnameRootContainsContainerd = RootContains{
+	HostnameRootContainsContainerd = ContainsByMountPoint{
 		BasePrerequisite: prerequisite.BasePrerequisite{
 			Name:   "/etc/hostname",
 			Info:   "/etc/hostname's mountinfo root contains 'containerd'",
@@ -58,7 +58,7 @@ var (
 	}
 	// HostnameRootContainsNerdctl
 	// https://github.com/containerd/nerdctl/blob/v2.1.6/docs/dir.md?plain=1#L28
-	HostnameRootContainsNerdctl = RootContains{
+	HostnameRootContainsNerdctl = ContainsByMountPoint{
 		BasePrerequisite: prerequisite.BasePrerequisite{
 			Name:   "/etc/hostname",
 			Info:   "/etc/hostname's mountinfo root contains 'nerdctl'",
@@ -67,7 +67,7 @@ var (
 		MountPoint: "/etc/hostname",
 		Expected:   "nerdctl",
 	}
-	HostsRootContainsPods = RootContains{
+	HostsRootContainsPods = ContainsByMountPoint{
 		BasePrerequisite: prerequisite.BasePrerequisite{
 			Name:   "/etc/hosts",
 			Info:   "/etc/hosts's mountinfo root contains 'pods'",

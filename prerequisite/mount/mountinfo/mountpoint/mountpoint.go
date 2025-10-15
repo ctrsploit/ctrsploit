@@ -1,4 +1,4 @@
-package mount
+package mountpoint
 
 import (
 	"os"
@@ -11,9 +11,9 @@ import (
 
 type ContainsMountPoint struct {
 	prerequisite.BasePrerequisite
-	ExpectedMountPoint string
-	Type               os.FileMode
-	realMountPoint     string
+	ExpectedContains string
+	Type             os.FileMode
+	realMountPoint   string
 }
 
 func (p *ContainsMountPoint) RealMountPoint() string {
@@ -30,7 +30,7 @@ func (p *ContainsMountPoint) Check() (bool, error) {
 		return false, err
 	}
 	for _, info := range infos {
-		if strings.Contains(info.Mountpoint, p.ExpectedMountPoint) {
+		if strings.Contains(info.Mountpoint, p.ExpectedContains) {
 			if p.Type == 0 {
 				p.realMountPoint = info.Mountpoint
 				p.Satisfied = true
@@ -41,6 +41,7 @@ func (p *ContainsMountPoint) Check() (bool, error) {
 				awesome_error.CheckWarning(err)
 				continue
 			}
+			// check file type is expected type
 			if fi.Mode()&p.Type != 0 {
 				p.realMountPoint = info.Mountpoint
 				p.Satisfied = true
@@ -53,6 +54,6 @@ func (p *ContainsMountPoint) Check() (bool, error) {
 }
 
 var DockerSock = ContainsMountPoint{
-	ExpectedMountPoint: "docker.sock",
-	Type:               os.ModeSocket,
+	ExpectedContains: "docker.sock",
+	Type:             os.ModeSocket,
 }

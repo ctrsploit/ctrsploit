@@ -8,8 +8,8 @@ import (
 	"github.com/ctrsploit/ctrsploit/prerequisite/env"
 	"github.com/ctrsploit/ctrsploit/prerequisite/file"
 	"github.com/ctrsploit/ctrsploit/prerequisite/hostname"
-	"github.com/ctrsploit/ctrsploit/prerequisite/mount"
-	"github.com/ctrsploit/ctrsploit/prerequisite/mount/mountinfo"
+	"github.com/ctrsploit/ctrsploit/prerequisite/mount/mountinfo/root"
+	"github.com/ctrsploit/ctrsploit/prerequisite/mount/mountinfo/source"
 	"github.com/ctrsploit/ctrsploit/prerequisite/proc/net"
 	"github.com/ctrsploit/sploit-spec/pkg/env/container"
 	"github.com/ctrsploit/sploit-spec/pkg/printer"
@@ -46,19 +46,19 @@ func Human(machine container.Where) (human Result) {
 					Result:      machine.Docker.Rules[file.DockerEnvFileExists.Name],
 				},
 				{
-					Name:        mount.RootMountInfoSourceContainsDocker.Name,
-					Description: mount.RootMountInfoSourceContainsDocker.Info,
-					Result:      machine.Docker.Rules[mount.RootMountInfoSourceContainsDocker.Name],
+					Name:        source.RootMountInfoSourceContainsDocker.Name,
+					Description: source.RootMountInfoSourceContainsDocker.Info,
+					Result:      machine.Docker.Rules[source.RootMountInfoSourceContainsDocker.Name],
 				},
 				{
-					Name:        mount.RootMountInfoVFSOptionsContainsDocker.Name,
-					Description: mount.RootMountInfoVFSOptionsContainsDocker.Info,
-					Result:      machine.Docker.Rules[mount.RootMountInfoVFSOptionsContainsDocker.Name],
+					Name:        source.RootMountInfoVFSOptionsContainsDocker.Name,
+					Description: source.RootMountInfoVFSOptionsContainsDocker.Info,
+					Result:      machine.Docker.Rules[source.RootMountInfoVFSOptionsContainsDocker.Name],
 				},
 				{
-					Name:        mountinfo.HostsRootContainsDocker.Name,
-					Description: mountinfo.HostsRootContainsDocker.Info,
-					Result:      machine.Docker.Rules[mountinfo.HostsRootContainsDocker.Name],
+					Name:        root.HostsRootContainsDocker.Name,
+					Description: root.HostsRootContainsDocker.Info,
+					Result:      machine.Docker.Rules[root.HostsRootContainsDocker.Name],
 				},
 				{
 					Name:        cgroups.ContainsDocker.Name,
@@ -88,19 +88,19 @@ func Human(machine container.Where) (human Result) {
 			},
 			Rules: []item.Bool{
 				{
-					Name:        mount.RootMountInfoVFSOptionsContainsContainerd.Name,
-					Description: mount.RootMountInfoVFSOptionsContainsContainerd.Info,
-					Result:      machine.Containerd.Rules[mount.RootMountInfoVFSOptionsContainsContainerd.Name],
+					Name:        source.RootMountInfoVFSOptionsContainsContainerd.Name,
+					Description: source.RootMountInfoVFSOptionsContainsContainerd.Info,
+					Result:      machine.Containerd.Rules[source.RootMountInfoVFSOptionsContainsContainerd.Name],
 				},
 				{
-					Name:        mountinfo.HostnameRootContainsContainerd.Name,
-					Description: mountinfo.HostnameRootContainsContainerd.Info,
-					Result:      machine.Containerd.Rules[mountinfo.HostnameRootContainsContainerd.Name],
+					Name:        root.HostnameRootContainsContainerd.Name,
+					Description: root.HostnameRootContainsContainerd.Info,
+					Result:      machine.Containerd.Rules[root.HostnameRootContainsContainerd.Name],
 				},
 				{
-					Name:        mountinfo.HostnameRootContainsNerdctl.Name,
-					Description: mountinfo.HostnameRootContainsNerdctl.Info,
-					Result:      machine.Containerd.Rules[mountinfo.HostnameRootContainsNerdctl.Name],
+					Name:        root.HostnameRootContainsNerdctl.Name,
+					Description: root.HostnameRootContainsNerdctl.Info,
+					Result:      machine.Containerd.Rules[root.HostnameRootContainsNerdctl.Name],
 				},
 				{
 					Name:        net.UnixContainsContainerdSock.Name,
@@ -135,9 +135,9 @@ func Human(machine container.Where) (human Result) {
 					Result:      machine.K8s.Rules[file.K8sSecretsExists.Name],
 				},
 				{
-					Name:        mountinfo.HostsRootContainsPods.Name,
-					Description: mountinfo.HostsRootContainsPods.Info,
-					Result:      machine.K8s.Rules[mountinfo.HostsRootContainsPods.Name],
+					Name:        root.HostsRootContainsPods.Name,
+					Description: root.HostsRootContainsPods.Info,
+					Result:      machine.K8s.Rules[root.HostsRootContainsPods.Name],
 				},
 				{
 					Name:        cgroups.ContainsDocker.Name,
@@ -177,9 +177,9 @@ func Human(machine container.Where) (human Result) {
 					Result:      machine.Nerdctl.Rules[file.HostsContainsNerdctlMarker.Name],
 				},
 				{
-					Name:        mountinfo.HostnameRootContainsNerdctl.Name,
-					Description: mountinfo.HostnameRootContainsNerdctl.Info,
-					Result:      machine.Nerdctl.Rules[mountinfo.HostnameRootContainsNerdctl.Name],
+					Name:        root.HostnameRootContainsNerdctl.Name,
+					Description: root.HostnameRootContainsNerdctl.Info,
+					Result:      machine.Nerdctl.Rules[root.HostnameRootContainsNerdctl.Name],
 				},
 			},
 			In: item.Bool{

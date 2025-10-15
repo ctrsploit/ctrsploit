@@ -1,19 +1,18 @@
-name: mount
+name: mountinfo/source
 test_envs:
   - name: docker-v28.3.2
     kind: dqd
     dqd_dir: docker/v28.3.2
-    pkg: github.com/ctrsploit/ctrsploit/prerequisite/mount
+    pkg: github.com/ctrsploit/ctrsploit/prerequisite/mount/mountinfo/source
     cmd: docker run --rm
          -v /ctrsploit.test:/ctrsploit.test
-         -v /var/run/docker.sock:/var/run/docker.sock
          --env TEST_ENV=docker-v28.3.2
          busybox:latest
-         /ctrsploit.test -test.v -test.run '^TestE2E'
+         /ctrsploit.test -test.v -test.run '^TestE2E_RootMountInfoVFSOptionsContainsDocker$'
   - name: docker-v23.0.0-devicemapper
     kind: dqd
     dqd_dir: docker/v23.0.0-devicemapper
-    pkg: github.com/ctrsploit/ctrsploit/prerequisite/mount
+    pkg: github.com/ctrsploit/ctrsploit/prerequisite/mount/mountinfo/source
     cmd: docker run --rm
       -v /ctrsploit.test:/ctrsploit.test
       --env TEST_ENV=docker-v23.0.0-devicemapper
@@ -22,7 +21,7 @@ test_envs:
   - name: nerdctl-v2.1.2
     kind: dqd
     dqd_dir: nerdctl/v2.1.2
-    pkg: github.com/ctrsploit/ctrsploit/prerequisite/mount
+    pkg: github.com/ctrsploit/ctrsploit/prerequisite/mount/mountinfo/source
     cmd: nerdctl run --rm -q
       -v /ctrsploit.test:/ctrsploit.test
       --env TEST_ENV=nerdctl-v2.1.2
