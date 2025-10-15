@@ -9,8 +9,9 @@ import (
 )
 
 var (
-	aliases = []string{"net"}
-	VulCmd  = &cli.Command{
+	aliases     = []string{"net"}
+	CheckSecCmd = getCheckSecCmd(Vul.GetName(), Vul.GetDescription(), aliases)
+	VulCmd      = &cli.Command{
 		Name:    Vul.GetName(),
 		Aliases: aliases,
 		Usage:   Vul.GetDescription(),

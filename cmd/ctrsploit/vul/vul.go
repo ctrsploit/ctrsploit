@@ -1,5 +1,6 @@
 package vul
 
+//goland:noinspection GoSnakeCaseUsage
 import (
 	"github.com/ctrsploit/ctrsploit/vul/caps"
 	cve_2016_8867 "github.com/ctrsploit/ctrsploit/vul/cve-2016-8867"
@@ -23,16 +24,16 @@ var Command = &cli.Command{
 	Aliases: []string{"v"},
 	Usage:   "list vulnerabilities",
 	Subcommands: []*cli.Command{
-		cve_2025_23266.VulCmd,
-		cve_2025_47290.VulCmd,
+		cve_2016_8867.VulCmd,
+		cve_2019_5736.VulCmd,
+		cve_2020_15257.VulCmd,
+		cve_2021_25741.VulCmd,
+		cve_2022_0492.VulCmd,
+		cve_2022_39253.VulCmd,
 		cve_2024_0132.VulCmd,
 		cve_2024_23650.VulCmd,
-		cve_2022_39253.VulCmd,
-		cve_2022_0492.VulCmd,
-		cve_2021_25741.VulCmd,
-		cve_2020_15257.VulCmd,
-		cve_2019_5736.VulCmd,
-		cve_2016_8867.VulCmd,
+		cve_2025_23266.VulCmd,
+		cve_2025_47290.VulCmd,
 		naked.VulCmd,
 		caps.VulCmd,
 		namespace.VulCmd,

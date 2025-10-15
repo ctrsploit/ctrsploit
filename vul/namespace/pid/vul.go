@@ -13,6 +13,7 @@ import (
 var (
 	aliases     = []string{"pid"}
 	CheckSecCmd = getCheckSecCmd(Vul.Name, Vul.Description, aliases)
+	ExploitCmd  = getExploitCmd(Vul.Name, Vul.Description, aliases)
 	VulCmd      = &cli.Command{
 		Name:    Vul.GetName(),
 		Aliases: aliases,

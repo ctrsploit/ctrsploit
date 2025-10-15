@@ -222,9 +222,9 @@ Just execute `ctrsploit checksec` or standalone binary file `checksec` in the co
 | CVE-2021-22555                                                          | :x:                | :heavy_check_mark: | :x:                 | :x:                | :x:                | :x:                |
 | CVE-2021-41091                                                          | :x:                | :heavy_check_mark: | :x:                 | :x:                | :x:                | :x:                |
 | [cve-2021-25741](./vul/cve-2021-25741)                                  | :heavy_check_mark: | :heavy_check_mark: | :x:                 | :heavy_check_mark: | :x:                | :x:                |
-| [cve-2022-39253](./vul/cve-2022-39253)                                  | :o:                | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: | :x:                |
 | [cve-2022-0492](./vul/cve-2022-0492)                                    | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: | :x:                |
 | CVE-2022-0847                                                           | :x:                | :heavy_check_mark: | :x:                 | :x:                | :x:                | :x:                |
+| [cve-2022-39253](./vul/cve-2022-39253)                                  | :o:                | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: | :x:                |
 | CVE-2023-28642                                                          | :x:                | :x:                | :x:                 | :x:                | :x:                | :x:                |
 | [cve-2024-0132](./vul/cve-2024-0132)                                    | :o:                | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: | :x:                |
 | CVE-2024-21626                                                          | :x:                | :x:                | :x:                 | :x:                | :x:                | :x:                |
