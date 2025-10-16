@@ -22,6 +22,7 @@ import (
 	"github.com/ctrsploit/ctrsploit/vul/namespace/pid"
 	docker_sock "github.com/ctrsploit/ctrsploit/vul/shared-socket/docker-sock"
 	"github.com/ctrsploit/sploit-spec/pkg/vul"
+	"github.com/ssst0n3/awesome_libs/awesome_error"
 	"github.com/urfave/cli/v2"
 )
 
@@ -57,7 +58,8 @@ var Auto = &cli.Command{
 		}
 		err = vulnerabilities.Check(context)
 		if err != nil {
-			return
+			awesome_error.CheckWarning(err)
+			err = nil
 		}
 		vulnerabilities.Output()
 		return

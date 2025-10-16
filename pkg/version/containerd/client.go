@@ -17,8 +17,7 @@ func GetVersionBySock() (v containerd.Version, err error) {
 	}
 	client, err := containerd.New(pathContainerdSock)
 	if err != nil {
-		awesome_error.CheckErr(err)
-		return
+		return v, fmt.Errorf("failed to create containerd client: %w", err)
 	}
 	defer client.Close()
 
