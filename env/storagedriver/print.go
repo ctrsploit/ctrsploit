@@ -7,6 +7,7 @@ import (
 	"github.com/ctrsploit/sploit-spec/pkg/printer"
 	"github.com/ctrsploit/sploit-spec/pkg/result"
 	"github.com/ctrsploit/sploit-spec/pkg/result/item"
+	"github.com/ssst0n3/awesome_libs/awesome_error"
 )
 
 type ResultItem struct {
@@ -58,13 +59,15 @@ func Human(machine container.Filesystem) (human Result) {
 
 func Print() (err error) {
 	machine, err := Filesystem()
-	if err != nil {
-		return
-	}
 	u := result.Union{
 		Machine: machine,
 		Human:   Human(machine),
 	}
 	fmt.Println(printer.Printer.Print(u))
+	// handle error after printing, to avoid missing output
+	if err != nil {
+		awesome_error.CheckWarning(err)
+		return
+	}
 	return
 }

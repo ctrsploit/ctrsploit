@@ -28,8 +28,7 @@ type KubeletVersionInfo struct {
 func GetKubeletVersions() ([]KubeletVersionInfo, error) {
 	clientset, err := getKubernetesClient()
 	if err != nil {
-		log.Logger.Errorf("Failed to get Kubernetes client: %v", err)
-		return nil, err
+		return nil, fmt.Errorf("failed to get Kubernetes client: %w", err)
 	}
 
 	nodes, err := clientset.CoreV1().Nodes().List(context.TODO(), metav1.ListOptions{})
@@ -197,9 +196,7 @@ func (p *PodPermission) Check() (bool, error) {
 	log.Logger.Debugf("Checking PodPermission (Action: %s)", p.Action)
 	clientset, err := getKubernetesClient()
 	if err != nil {
-		err = fmt.Errorf("failed to get Kubernetes client: %v", err)
-		awesome_error.CheckErr(err)
-		return false, err
+		return false, fmt.Errorf("failed to get Kubernetes client: %v", err)
 	}
 
 	namespace := os.Getenv("NAMESPACE")

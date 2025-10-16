@@ -46,13 +46,14 @@ func Human(machine container.Env) (human Result) {
 
 func Print() (err error) {
 	machine, err := Auto()
-	if err != nil {
-		return
-	}
 	u := result.Union{
 		Machine: machine,
 		Human:   Human(machine),
 	}
 	fmt.Println(printer.Printer.Print(u))
+	// handle error after printing, so we can print partial results
+	if err != nil {
+		return fmt.Errorf("auto.Print(): %w", err)
+	}
 	return
 }

@@ -17,15 +17,17 @@ type ContainsByMountPoint struct {
 
 func (p *ContainsByMountPoint) Check() (bool, error) {
 	if p.Checked {
-		return p.Satisfied, nil
+		return p.Satisfied, p.Err
 	}
+	p.Checked = true
+
 	info, err := mountinfo.GetMountByMountpoint(p.MountPoint)
 	if err != nil {
-		return false, fmt.Errorf("failed to check %s caused by getting mountinfo of /etc/hosts: %w", p.Name, err)
+		p.Err = fmt.Errorf("failed to check [%s] caused by getting mountinfo of %s: %w", p.Name, p.MountPoint, err)
+		return false, p.Err
 	}
 	p.Satisfied = strings.Contains(info.Root, p.Expected)
-	p.Checked = true
-	return p.Satisfied, nil
+	return p.Satisfied, p.Err
 }
 
 var (
@@ -35,7 +37,7 @@ var (
 	//https://github.com/moby/moby/blob/v28.4.0/container/container.go#L407
 	HostsRootContainsDocker = ContainsByMountPoint{
 		BasePrerequisite: prerequisite.BasePrerequisite{
-			Name:   "/etc/hosts",
+			Name:   "/etc/hosts contains 'docker'",
 			Info:   "/etc/hosts's mountinfo root contains 'docker', e.g., 814 696 259:2 /var/lib/docker/containers/44bec6602ccfae7458bcd71279beafc287d9fde509fa861377e162270d4cd92f/hosts /etc/hosts rw,relatime - ext4 /dev/nvme0n1p2 rw,errors=remount-ro",
 			ExeEnv: exeenv.InContainer,
 		},
@@ -49,7 +51,7 @@ var (
 	// https://github.com/containerd/containerd/blob/v2.1.4/defaults/defaults_unix.go#L26
 	HostnameRootContainsContainerd = ContainsByMountPoint{
 		BasePrerequisite: prerequisite.BasePrerequisite{
-			Name:   "/etc/hostname",
+			Name:   "/etc/hostname contains 'containerd'",
 			Info:   "/etc/hostname's mountinfo root contains 'containerd'",
 			ExeEnv: exeenv.InContainer,
 		},
@@ -60,7 +62,7 @@ var (
 	// https://github.com/containerd/nerdctl/blob/v2.1.6/docs/dir.md?plain=1#L28
 	HostnameRootContainsNerdctl = ContainsByMountPoint{
 		BasePrerequisite: prerequisite.BasePrerequisite{
-			Name:   "/etc/hostname",
+			Name:   "/etc/hostname contains 'nerdctl'",
 			Info:   "/etc/hostname's mountinfo root contains 'nerdctl'",
 			ExeEnv: exeenv.InContainer,
 		},
@@ -69,7 +71,7 @@ var (
 	}
 	HostsRootContainsPods = ContainsByMountPoint{
 		BasePrerequisite: prerequisite.BasePrerequisite{
-			Name:   "/etc/hosts",
+			Name:   "/etc/hosts contains 'pods'",
 			Info:   "/etc/hosts's mountinfo root contains 'pods'",
 			ExeEnv: exeenv.InContainer,
 		},

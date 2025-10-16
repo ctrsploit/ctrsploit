@@ -40,13 +40,9 @@ var (
 				Exploit: exeenv.InContainer,
 			},
 			CheckSecPrerequisites: prerequisite.Or(
-				&capability.CapSysAdminBnd,
 				&capability.CapBpfBnd,
 			),
-			ExploitablePrerequisites: prerequisite.Or(
-				&capability.CapSysAdminEff,
-				&capability.CapBpfEff,
-			),
+			ExploitablePrerequisites: nil,
 		},
 	}
 )
