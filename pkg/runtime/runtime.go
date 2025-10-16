@@ -1,6 +1,8 @@
 package runtime
 
 import (
+	"fmt"
+
 	"github.com/ctrsploit/ctrsploit/prerequisite/apparmor"
 	"github.com/ctrsploit/ctrsploit/prerequisite/cgroups"
 	"github.com/ctrsploit/ctrsploit/prerequisite/env"
@@ -23,7 +25,7 @@ func NewRuntime(prerequisites prerequisite.Set) *Runtime {
 	}
 	_, err := r.Prerequisites.Check()
 	if err != nil {
-		awesome_error.CheckWarning(err)
+		awesome_error.CheckWarning(fmt.Errorf("NewRuntime: %w", err))
 	}
 	return r
 }

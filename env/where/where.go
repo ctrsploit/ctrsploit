@@ -4,7 +4,7 @@ import (
 	"github.com/ctrsploit/ctrsploit/pkg/runtime"
 	"github.com/ctrsploit/ctrsploit/pkg/where"
 	"github.com/ctrsploit/sploit-spec/pkg/env/container"
-	"github.com/ctrsploit/sploit-spec/pkg/prerequisite"
+	"github.com/ssst0n3/awesome_libs/awesome_error"
 )
 
 const CommandName = "where"
@@ -16,8 +16,11 @@ func runtime2Where(r *runtime.Runtime) container.Type {
 		Rules: map[string]bool{},
 	}
 	for pre := range r.Prerequisites.Range() {
-		p := pre.(*prerequisite.BasePrerequisite)
-		t.Rules[p.Name] = p.Satisfied
+		satisfied, err := pre.Check()
+		if err != nil && !pre.GetChecked() {
+			awesome_error.CheckWarning(err)
+		}
+		t.Rules[pre.GetName()] = satisfied
 	}
 	return t
 }

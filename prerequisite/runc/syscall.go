@@ -18,7 +18,7 @@ func (p *ensureCloned) Check() (bool, error) {
 	}
 	p.Checked = true
 	p.Satisfied, p.err = runc.StraceFGetSeals()
-	awesome_error.CheckErr(p.err)
+	awesome_error.CheckWarning(p.err)
 	return p.Satisfied, p.err
 }
 

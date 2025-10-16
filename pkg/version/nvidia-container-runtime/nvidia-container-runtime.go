@@ -7,7 +7,6 @@ import (
 	"regexp"
 
 	"github.com/Masterminds/semver/v3"
-	"github.com/ssst0n3/awesome_libs/awesome_error"
 )
 
 func GetVersion() (ver *semver.Version, err error) {
@@ -18,9 +17,7 @@ func GetVersion() (ver *semver.Version, err error) {
 
 	err = cmd.Run()
 	if err != nil {
-		err = fmt.Errorf("failed to run nvidia-container-runtime: %w", err)
-		awesome_error.CheckErr(err)
-		return
+		return nil, fmt.Errorf("failed to run nvidia-container-runtime: %w", err)
 	}
 	re := regexp.MustCompile(`NVIDIA Container Runtime version ([\w.-]+)`)
 	matches := re.FindStringSubmatch(out.String())
@@ -28,9 +25,7 @@ func GetVersion() (ver *semver.Version, err error) {
 		match := matches[1]
 		ver, err = semver.NewVersion(match)
 	} else {
-		err = fmt.Errorf("failed to parse version from output: %s", out.String())
-		awesome_error.CheckErr(err)
-		return
+		return nil, fmt.Errorf("failed to parse version from output: %s", out.String())
 	}
 	return
 }

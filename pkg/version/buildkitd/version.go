@@ -49,7 +49,7 @@ func GetVersionByAPI(addr string) (ver *semver.Version, err error) {
 func GetVersionByCli() (ver *semver.Version, err error) {
 	output, err := exec.Command("buildkitd", "--version").Output()
 	if err != nil {
-		awesome_error.CheckErr(err)
+		awesome_error.CheckWarning(err)
 		return
 	}
 	re := regexp.MustCompile(`buildkitd github.com/moby/buildkit ([\w.-]+) `)

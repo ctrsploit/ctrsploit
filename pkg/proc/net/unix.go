@@ -3,9 +3,10 @@ package net
 import (
 	"bufio"
 	"fmt"
-	"github.com/ssst0n3/awesome_libs/awesome_error"
 	"os"
 	"strings"
+
+	"github.com/ssst0n3/awesome_libs/awesome_error"
 )
 
 /*
@@ -71,7 +72,7 @@ func ContainerdShimAbstractUnixSocketPath(prefix string) (path string, err error
 		return
 	}
 	if len(paths) == 0 {
-		awesome_error.CheckErr(fmt.Errorf("no containerd-shim abstract unix socket found"))
+		awesome_error.CheckWarning(fmt.Errorf("no containerd-shim abstract unix socket found"))
 		return
 	}
 	path = paths[0]

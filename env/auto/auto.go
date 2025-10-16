@@ -1,9 +1,12 @@
 package auto
 
 import (
+	"errors"
+
 	"github.com/ctrsploit/ctrsploit/env/apparmor"
 	"github.com/ctrsploit/ctrsploit/env/capability"
 	"github.com/ctrsploit/ctrsploit/env/cgroups"
+	"github.com/ctrsploit/ctrsploit/env/kernel"
 	"github.com/ctrsploit/ctrsploit/env/mountinfo"
 	"github.com/ctrsploit/ctrsploit/env/namespace"
 	"github.com/ctrsploit/ctrsploit/env/seccomp"
@@ -13,55 +16,56 @@ import (
 	"github.com/ctrsploit/sploit-spec/pkg/env/container"
 )
 
-func Basic() (basic container.Basic, err error) {
+func Basic() (container.Basic, error) {
+	var errs []error
 	w, err := where.Where()
 	if err != nil {
-		return
+		errs = append(errs, err)
 	}
 	m, err := mountinfo.MountInfo()
 	if err != nil {
-		return
+		errs = append(errs, err)
 	}
-	basic = container.Basic{
-		Where:         w,
-		KernelVersion: "", //TODO
-		MountInfo:     m,
+	basic := container.Basic{
+		Where:     w,
+		MountInfo: m,
 	}
-	return
+	return basic, errors.Join(errs...)
 }
 
-func LinuxSecurityFeature() (lsf container.LinuxSecurityFeature, err error) {
-	cap, err := capability.Capability()
+func LinuxSecurityFeature() (container.LinuxSecurityFeature, error) {
+	var errs []error
+	caps, err := capability.Capability()
 	if err != nil {
-		return
+		errs = append(errs, err)
 	}
 	aa, err := apparmor.Apparmor()
 	if err != nil {
-		return
+		errs = append(errs, err)
 	}
 	se, err := selinux.Selinux()
 	if err != nil {
-		return
+		errs = append(errs, err)
 	}
 	sc, err := seccomp.Seccomp()
 	if err != nil {
-		return
+		errs = append(errs, err)
 	}
 	ns, err := namespace.Namespace()
 	if err != nil {
-		return
+		errs = append(errs, err)
 	}
 	cg, err := cgroups.Cgroups()
 	if err != nil {
-		return
+		errs = append(errs, err)
 	}
 	fs, err := storagedriver.Filesystem()
 	if err != nil {
-		return
+		errs = append(errs, err)
 	}
-	lsf = container.LinuxSecurityFeature{
-		Credential:   container.Credential{}, //TODO
-		Capabilities: cap,
+	lsf := container.LinuxSecurityFeature{
+		Credential:   container.Credential{},
+		Capabilities: caps,
 		LSM: container.LSM{
 			Apparmor: aa,
 			SELinux:  se,
@@ -71,23 +75,29 @@ func LinuxSecurityFeature() (lsf container.LinuxSecurityFeature, err error) {
 		CGroups:    cg,
 		Filesystem: fs,
 	}
-	return
+	return lsf, errors.Join(errs...)
 }
 
-func Auto() (env container.Env, err error) {
+func Auto() (container.Env, error) {
+	var errs []error
 	basic, err := Basic()
 	if err != nil {
-		return
+		errs = append(errs, err)
+	}
+	k, err := kernel.Kernel()
+	if err != nil {
+		errs = append(errs, err)
 	}
 	lsf, err := LinuxSecurityFeature()
 	if err != nil {
-		return
+		errs = append(errs, err)
 	}
-	env = container.Env{
+	env := container.Env{
 		Basic:                basic,
+		Kernel:               k,
 		LinuxSecurityFeature: lsf,
 		Cluster:              container.Cluster{}, //TODO
 		Advance:              container.Advance{}, //TODO
 	}
-	return
+	return env, errors.Join(errs...)
 }
