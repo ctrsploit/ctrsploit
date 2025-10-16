@@ -10,6 +10,10 @@ var Kernel = &cli.Command{
 	Aliases: []string{"k"},
 	Usage:   "collect kernel environment information",
 	Action: func(context *cli.Context) (err error) {
+		err = kernel.Print()
+		if err != nil {
+			return
+		}
 		return
 	},
 }

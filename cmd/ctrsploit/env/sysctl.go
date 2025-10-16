@@ -1,7 +1,7 @@
 package env
 
 import (
-	"github.com/ctrsploit/ctrsploit/env/sysctl"
+	"github.com/ctrsploit/ctrsploit/env/kernel/sysctl"
 	"github.com/urfave/cli/v2"
 )
 
