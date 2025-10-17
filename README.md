@@ -12,58 +12,26 @@ see [here](https://github.com/ctrsploit/ctrsploit/discussions/11)
 
 https://github.com/ctrsploit/ctrsploit/releases
 
-## Self Build
+```shell
+$ wget -q https://github.com/ctrsploit/ctrsploit/releases/latest/download/ctrsploit_linux_amd64 -O /usr/bin/ctrsploit
+$ chmod +x /usr/bin/ctrsploit
+$ ctrsploit --help
+```
+
+## Build
 
 ### Build in Container
 
 ```bash
-make binary && ls -lah bin/release
-```
-
-### Build in Local
-
-```
-make build-ctrsploit
+make binary
 ```
 
 ## Usage
 
-### Quick-Start
+### env
 
-```
-wget -O ctrsploit https://github.com/ctrsploit/ctrsploit/releases/latest/download/ctrsploit_linux_amd64 && chmod +x ctrsploit
-NAME:
-   ctrsploit - A penetration toolkit for container environment
-
-               ctrsploit is a command line ... //TODO
-
-
-USAGE:
-   ctrsploit [global options] command [command options] [arguments...]
-
-COMMANDS:
-   auto, a      auto gathering information, detect vulnerabilities and run exploits
-   env, e       gather information
-   exploit, x   run a exploit
-   checksec, c  check security inside a container
-   helper, he   some helper commands such as local privilege escalation
-   version      Show the sploit version information
-   help, h      Shows a list of commands or help for one command
-
-GLOBAL OPTIONS:
-   --debug         Output information for helping debugging sploit (default: false)
-   --experimental  enable experimental feature (default: false)
-   --colorful      output colorfully (default: false)
-   --json          output in json format (default: false)
-   --help, -h      show help
-```
-
-### gather information
-
-usage
-
-```
-root@ctr:/# ./ctrsploit env
+```shell
+$ ctrsploit env     
 NAME:
    ctrsploit env - gather information
 
@@ -91,109 +59,149 @@ OPTIONS:
    --help, -h  show help
 ```
 
-where
+### vul
 
+```shell
+$ ctrsploit vul    
+NAME:
+   ctrsploit vul - list vulnerabilities
+
+USAGE:
+   ctrsploit vul [command options]
+
+COMMANDS:
+   cve-2016-8867, 8867, amb                        Ambient Capabilities in the Linux kernel allow local users to gain privileges
+   cve-2019-5736, 5736                             escape by overwrite runc executable file via /proc/self/exe
+   cve-2020-15257, 15257                           abuse the containerd-shim's abstract unix socket in a container with host network namespace
+   cve-2021-25741, 25741, kubelet-subpath-symlink  kubelet symlink exchange vulnerability allows mounting node filesystem inside a pod
+   cve-2022-0492, 0492                             escape via cgroup's release agent without CAP_SYS_ADMIN if kernel is vulnerable to CVE-2022-0492
+   cve-2022-39253, 39253                           read host file during docker build via git CVE-2022-39253
+   cve-2024-0132, 0132                             gpu container escape via nvidia-container-toolkit CVE-2024-0132
+   cve-2024-23650, 23650                           dos buildkit via oci exporter by sending a crafted request
+   cve-2025-23266, 23266                           gpu container escape via nvidia-container-toolkit cve-2025-23266 by running a malicious container image
+   cve-2025-47290, 47290                           modify host file via containerd cve-2025-47290 during pulling image
+   naked                                           we call containers running without seccomp, AppArmor, or SELinux enabled 'naked containers', which leaves them highly vulnerable to kernel exploits and potential container escapes
+   capability, caps                                abuse dangerous capabilities in container
+   namespace, ns                                   host level namespaces break the isolations
+   shared-socket, sock                             abuse runtime's api via shared socket
+   help, h                                         Shows a list of commands or help for one command
+
+OPTIONS:
+   --help, -h  show help
 ```
-root@ctr:/# ./ctrsploit  env  w
 
-===========Container===========
-[Y]  Is in Container
+### exploit
 
-===========Docker===========
-[Y]  .dockerenv exists
-[N]  rootfs contains 'docker'   
-[N]  cgroups contains 'docker'
-[Y]  the mount source of /etc/hosts contains 'docker'   
-[Y]  hostname match regex ^[0-9a-f]12$
----
-[Y]  => Is in docker
-
-===========k8s===========
-[N]  /var/run/secrets/kubernetes.io exists
-[N]  hostname match k8s pattern
-[N]  the mount source of /etc/hosts contains 'pods'
-[N]  contains 'kubepods'
----
-[N]  => is in k8s
-```
-
-### run a exploit
-
-```
-root@2aa13a052102:/# ./ctrsploit exploit
+```shell
+$ ctrsploit exploit                                       
 NAME:
    ctrsploit exploit - run a exploit
 
 USAGE:
-   ctrsploit exploit command [command options] [arguments...]
+   ctrsploit exploit [command options]
 
 COMMANDS:
-   cgroupv1-release_agent, ra                       escape tech by using the notify_on_release of cgroup v1
-   cgroupv1-release_agent-unknown_rootfs, ra3       escape tech by using the notify_on_release of cgroup v1 without known rootfs
+   cve-2016-8867, 8867, amb                           Ambient Capabilities in the Linux kernel allow local users to gain privileges
+   cve-2019-5736, 5736                                escape by overwrite runc executable file via /proc/self/exe
+   cve-2020-15257, 15257                              abuse the containerd-shim's abstract unix socket in a container with host network namespace
+   cve-2021-25741, 25741, kubelet-subpath-symlink     kubelet symlink exchange vulnerability allows mounting node filesystem inside a pod
+   cve-2022-0492, 0492                                escape via cgroup's release agent without CAP_SYS_ADMIN if kernel is vulnerable to CVE-2022-0492
+   cve-2022-39253, 39253                              read host file during docker build via git CVE-2022-39253
+   cve-2024-0132, 0132                                gpu container escape via nvidia-container-toolkit CVE-2024-0132
+   cve-2024-23650, 23650                              dos buildkit via oci exporter by sending a crafted request
+   cve-2025-23266, 23266                              gpu container escape via nvidia-container-toolkit cve-2025-23266 by running a malicious container image
+   cve-2025-47290, 47290                              modify host file via containerd cve-2025-47290 during pulling image
+   shocker, cap_dac_read_search, open_by_handle_at    escape by CAP_DAC_READ_SEARCH, alias shocker, found by Sebastian Krahmer (stealth) in 2014
+   cap_sys_admin, sys_admin                           abuse cap_sys_admin
+   release_agent, ra                                  escape by cap_sys_admin via cgroups v1 release_agent
+   ebpf                                               escape by loading evil eBPF programs into the kernel
+   ebpf-bash, bash                                    abuse eBPF to inject malicious commands into bash processes running on host
+   ebpf-execve, execve                                abuse eBPF to hijack execve syscall to run arbitrary commands
+   ebpf-cron, cron                                    abuse eBPF to inject malicious job into host's crontab
+   ebpf-kubelet, kubelet                              abuse eBPF to leak services account token from kubelet
+   cap_bpf, bpf                                       load evil bpf programs via cap_bpf
+   cap_sys_ptrace, sys_ptrace, ptrace                 abuse cap_sys_ptrace
+   ptrace-pid-host, ptrace-pid                        ptrace host processes in a container with cap_sys_ptrace and host pid namespace
+   host-pid, pid                                      shared host pid namespace breaks process isolation
+   host-pid-proc-root, proc                           escape by abusing host pid ns via /proc/[pid]/root
+   docker.sock, docker                                escape by shared docker.sock via running a privileged container
+   CVE-2021-22555, 22555                              escape tech by using the CVE-2021-22555
+   CVE-2020-8555, 8555                                k8s CVE-2020-8555 SSRF
+   CVE-2017-1002101, subPath1, 1002101, 2017-1002101  CVE-2017-1002101
+   dirty-pipe, dp, CVE-2022-0847, 0847                dirty-pipe
+   crash, c                                           make container crash
+   help, h                                            Shows a list of commands or help for one command
+
+OPTIONS:
+   --help, -h  show help
+```
+
+### checksec
+
+```shell
+$ ctrsploit checksec     
+NAME:
+   ctrsploit checksec - check security inside a container
+
+USAGE:
+   ctrsploit checksec [command options]
+
+COMMANDS:
+   auto, a                                          auto check security
+   env, e                                           gather information
+   cve-2016-8867, 8867, amb                         Ambient Capabilities in the Linux kernel allow local users to gain privileges
+   cve-2019-5736, 5736                              
+   cve-2020-15257, 15257                            Abuse the containerd-shim's abstract unix socket when running in a container with host network namespace.
+   cve-2021-25741, 25741, kubelet-subpath-symlink   Kubernetes kubelet symlink exchange vulnerability allows mounting Node filesystem inside POD with read-write privileges
+   cve-2022-0492, 0492                              Container escape using cgroup's release agent without CAP_SYS_ADMIN if kernel has CVE-2022-0492
+   cve-2022-39253, 39253                            docker build host file read by git CVE-2022-39253
+   cve-2024-0132, 0132                              nvidia-container-toolkit CVE-2024-0132 container escape. Affected versions: libnvidia-container >= 1.0.0, <= 1.16.1
+   cve-2024-23650, 23650                            BuildKit OCI exporter DoS vulnerability by sending a crafted request.
+   cve-2025-23266, 23266                            NVIDIA Container Toolkit allows an attacker to execute arbitrary code on the host by running a specially crafted container image.
+   cve-2025-47290, 47290                            TOCTOU vulnerability in containerd that allows modification of the host filesystem during image pull.
+   shocker, cap_dac_read_search, open_by_handle_at  Container escape with CAP_DAC_READ_SEARCH, alias shocker, found by Sebastian Krahmer (stealth) in 2014.
+   cap_sys_admin, sys_admin                         Container can be escaped when has cap_sys_admin
+   cap_bpf, bpf                                     Container can load evil bpf program when has cap_bpf, may cause container escape
+   cap_sys_ptrace, sys_ptrace, ptrace               Container can be escaped when has cap_sys_ptrace
+   ptrace-pid-host, ptrace-pid                      Container can be escaped when has cap_sys_ptrace and host pid namespace
+   naked                                            We call containers running without seccomp, AppArmor, or SELinux enabled 'naked containers', which leaves them highly vulnerable to kernel exploits and potential container escapes
+   host-net, net                                    The network namespace of the host is shared
+   host-pid, pid                                    container can be escaped with host pid namespace
+   docker.sock, docker                              escape by shared docker socket
    help, h                                          Shows a list of commands or help for one command
 
 OPTIONS:
-   --help, -h  show help (default: false)
-
+   --help, -h  show help
 ```
 
-eg. : escape by 'cgroupv1-release_agent' tech.
-
+```shell
+$ ctrsploit --colorful checksec auto
+✘  cve-2025-47290       # TOCTOU vulnerability in containerd that allows modification of the host filesystem during image pull.
+✔  naked        # We call containers running without seccomp, AppArmor, or SELinux enabled 'naked containers', which leaves them highly vulnerable to kernel exploits and potential container escapes
+✘  cve-2019-5736        
+✘  cve-2021-25741       # Kubernetes kubelet symlink exchange vulnerability allows mounting Node filesystem inside POD with read-write privileges
+✘  cve-2022-0492        # Container escape using cgroup's release agent without CAP_SYS_ADMIN if kernel has CVE-2022-0492
+✔  cap_sys_admin        # Container can be escaped when has cap_sys_admin
+✔  cap_bpf      # Container can load evil bpf program when has cap_bpf, may cause container escape
+✔  host-net     # The network namespace of the host is shared
+✘  cve-2016-8867        # Ambient Capabilities in the Linux kernel allow local users to gain privileges
+✘  cve-2022-39253       # docker build host file read by git CVE-2022-39253
+✘  cve-2024-23650       # BuildKit OCI exporter DoS vulnerability by sending a crafted request.
+✘  cve-2025-23266       # NVIDIA Container Toolkit allows an attacker to execute arbitrary code on the host by running a specially crafted container image.
+✔  shocker      # Container escape with CAP_DAC_READ_SEARCH, alias shocker, found by Sebastian Krahmer (stealth) in 2014.
+✔  cap_sys_ptrace       # Container can be escaped when has cap_sys_ptrace
+✘  docker.sock  # escape by shared docker socket
+✘  cve-2020-15257       # Abuse the containerd-shim's abstract unix socket when running in a container with host network namespace.
+✘  cve-2024-0132        # nvidia-container-toolkit CVE-2024-0132 container escape. Affected versions: libnvidia-container >= 1.0.0, <= 1.16.1
+✔  ptrace-pid-host      # Container can be escaped when has cap_sys_ptrace and host pid namespace
+✔  host-pid     # container can be escaped with host pid namespac
 ```
-root@host # docker run -ti --rm --security-opt="apparmor=unconfined" --cap-add="sys_admin" busybox
-root@ctr # wget -O ctrsploit https://github.com/ctrsploit/ctrsploit/releases/download/v0.4/ctrsploit_linux_amd64 && chmod +x ctrsploit
-root@ctr # ./ctrsploit e ra -c "cat /etc/hostname"
-```
 
-### check security
+### helper
 
-Just execute `ctrsploit checksec` or standalone binary file `checksec` in the container.
+// TODO
 
-```
-./checksec_linux_amd64 auto
-[N]  cap_sys_admin      # Container can be escaped when has cap_sys_admin and use cgroups v1
-[N]  host_net_ns        # The network namespace of the host is shared
-...
-```
-
-## Details
-
-### env
-
-| command                               | alias | description                                                              |
-|---------------------------------------|-------|--------------------------------------------------------------------------|
-| [auto](./env/auto)                    |       | auto gather environment information                                      |
-| [where](./env/where)                  | w     | detect whether you are in the container, and which type of the container |
-| [storage-driver](./env/storagedriver) | sd    | detect storage driver type and extend information                        |
-| [cgroups](./env/cgroups)              | c     | gather cgroup information                                                |
-| [capability](./env/capability)        | cap   | show the capability of pid 1 and current process                         |
-| [seccomp](./env/seccomp)              | sc    | show the seccomp info                                                    |
-| [apparmor](./env/apparmor)            | a     | show the apparmor info                                                   |
-| [namespace](./env/namespace)          | n, ns | check namespace is host ns                                               |
-
-### exploit
-
-| exploit                                                                                  | alias               | description                                                                                                                                                                         |
-|------------------------------------------------------------------------------------------|---------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| [cgroupv1-release_agent-unknown_rootfs](./exploit/cgroupv1-release_agent-unknown_rootfs) | ra3                 | escape tech by using the notify_on_release of cgroup v1 without known rootfs                                                                                                        |
-| [cve-2021-22555_ubuntu18.04](./exploit/CVE-2021-22555_ubuntu18.04)                       | 22555               | escape tech by using the CVE-2021-22555 (ubuntu18.04)                                                                                                                               |
-| [cve-2025-23266](./vul/cve-2025-23266)                                                   | 23266               | nvidia-container-toolkit CVE-2025-23266 GPU container escape                                                                                                                        | 
-| [cve-2025-47290](./vul/cve-2025-47290)                                                   | 47290               | containerd cve-2025-47290 host filesystem access during image unpack                                                                                                                | 
-| [cve-2024-0132](./vul/cve-2024-0132)                                                     | 0132                | nvidia-container-toolkit CVE-2024-0132 GPU container escape                                                                                                                         | 
-| [cve-2024-23650](./vul/cve-2024-23650)                                                   | 23650               | buildkitd cve-2024-23650 panic when incorrect parameters sent from frontend                                                                                                         | 
-| [cve-2022-39253](./vul/cve-2022-39253)                                                   | 39253               | docker build host file read by git CVE-2022-39253                                                                                                                                   | 
-| [cve-2020-15257](./vul/cve-2020-15257)                                                   | 15257               | containerd cve-2020-15257 host network container escape                                                                                                                             | 
-| [cve-2016-8867](./vul/cve-2016-8867)                                                     | 8867                | runc cve-2016-8867 container normal user privilege escalation by ambient capabilities                                                                                               | 
-| [release_agent](vul/caps/sys_admin/release_agent)                                        | ra                  | escape tech by using the notify_on_release of cgroup v1                                                                                                                             |
-| [shocker](vul/caps/shocker)                                                              | cap_dac_read_search | Container escape with CAP_DAC_READ_SEARCH, alias shocker, found by Sebastian Krahmer (stealth) in 2014.                                                                             |
-| [naked](./vul/naked)                                                                     |                     | We call containers running without seccomp, AppArmor, or SELinux enabled 'naked containers', which leaves them highly vulnerable to kernel exploits and potential container escapes |
-| [ptrace-pid-host](./vul/caps/sys_ptrace/pid_host)                                        | pid                 | Container can be escaped when has cap_sys_ptrace and host pid namespace                                                                                                             |
-| [host-pid-proc-root](./vul/namespace/pid/proc_root)                                      | proc                | Host level pid ns escape via /proc/[pid]/root, accessing host or other container's filesystem                                                                                       |
-| [docker.sock](./vul/shared-socket/docker-sock)                                           | docker              | Container with shared docker.sock can be escaped via creating privileged containers                                                                                                 |
-| [ebpf-bash](./vul/caps/sys_admin/ebpf/bash)                                              | bash                | Ebpf escape by bash                                                                                                                                                                 |
-| [ebpf-execve](./vul/caps/sys_admin/ebpf/execve)                                          | execve              | Ebpf escape by execve                                                                                                                                                               |
-| [ebpf-cron](./vul/caps/sys_admin/ebpf/cron)                                              | cron                | Ebpf escape by cron                                                                                                                                                                 |
-| [ebpf-kubelet](./vul/caps/sys_admin/ebpf/kubelet)                                        | cron                | Ebpf escape by leaking k8s service account token via kubelet                                                                                                                        |
+## Progress of Development
 
 ### vul
 
@@ -277,14 +285,3 @@ Just execute `ctrsploit checksec` or standalone binary file `checksec` in the co
 | exposed-api                                                 |                                                                                                                                                                                                 | -                  | -                  | -                   | -                  | -                  | -                  |
 | └─docker-2375                                               |                                                                                                                                                                                                 | :x:                | :x:                | :x:                 | :x:                | :x:                | :x:                |
 | lxcfs                                                       |                                                                                                                                                                                                 | :x:                | :x:                | :x:                 | :x:                | :x:                | :x:                |
-
-### helper
-
-| helper                                  | alias                    | description                    |
-|-----------------------------------------|--------------------------|--------------------------------|
-| [cve-2021-3493](./helper/cve-2021-3493) | ubuntu-overlayfs-pe,3493 | Ubuntu OverlayFS Local Privesc |
-| crash                                   |
-
-### checksec
-
-Just execute `ctrsploit checksec` or standalone binary file `checksec`.
