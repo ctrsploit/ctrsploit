@@ -205,13 +205,26 @@ $ ctrsploit --colorful checksec auto
 
 ### vul
 
+status:
+
 * :heavy_check_mark: : Fully Supported
 * :o: : Partially Supported
 * :bug: : Known Bug
 * :x: : Not Supported
 * `-` : Not Applicable
 
-| vul                                                         | desc                                                                                                                                                                                            | check              | exploit            | test                | doc                | video              | case               |
+columns:
+
+* vul: Vulnerability Name
+* desc: Description of Vulnerability
+* c: Checksec Support Status
+* x: Exploit Support Status
+* t: Test Support Status
+* d: Documentation Support Status
+* v: Video Support Status
+* rw: Real World Case Support Status
+
+| vul                                                         | desc                                                                                                                                                                                            | check              | exploit            | test                | doc                | video              | rw                 |
 |-------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------|--------------------|---------------------|--------------------|--------------------|--------------------|
 | [cve-2016-8867](./vul/cve-2016-8867)                        | ambient capabilities allow local <br>users to gain privileges                                                                                                                                   | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: | :x:                |
 | cve-2016-9962                                               |                                                                                                                                                                                                 | :x:                | :x:                | :x:                 | :x:                | :x:                | :x:                |
@@ -241,7 +254,7 @@ $ ctrsploit --colorful checksec auto
 | cve-2025-23267                                              |                                                                                                                                                                                                 | :x:                | :x:                | :x:                 | :x:                | :x:                | :x:                |
 | cve-2025-23359                                              |                                                                                                                                                                                                 | :x:                | :x:                | :x:                 | :x:                | :x:                | :x:                |
 | cve-2025-31133                                              |                                                                                                                                                                                                 | :x:                | :x:                | :x:                 | :x:                | :x:                | :x:                |
-| [cve-2025-47290](./vul/cve-2025-47290)                      | modify host file via containerd cve-2025-47290 <br>during pulling image                                                                                                                         | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: | :x:                |
+| [cve-2025-47290](./vul/cve-2025-47290)                      | modify host file via containerd <br>cve-2025-47290 during pulling image                                                                                                                         | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: | :x:                |
 | cve-2025-52565                                              |                                                                                                                                                                                                 | :x:                | :x:                | :x:                 | :x:                | :x:                | :x:                |
 | caps                                                        | abuse dangerous capabilities in container                                                                                                                                                       | -                  | -                  | -                   | -                  | -                  | -                  |
 | └─[shocker](./vul/caps/shocker)                             | escape by CAP_DAC_READ_SEARCH, alias shocker, <br>found by Sebastian Krahmer (stealth) in 2014                                                                                                  | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:️ | :heavy_check_mark: | :heavy_check_mark: | :x:                |
