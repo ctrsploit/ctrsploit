@@ -23,7 +23,7 @@ type vulnerability struct {
 var Vul = vulnerability{
 	BaseVulnerability: vul.BaseVulnerability{
 		Name:        "ebpf-kubelet",
-		Description: "",
+		Description: "abuse eBPF to leak services account token from kubelet",
 		ExeEnv: exeenv.ExeEnv{
 			Env:     exeenv.InContainer,
 			Check:   exeenv.InContainer,

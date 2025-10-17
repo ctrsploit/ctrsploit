@@ -38,7 +38,7 @@ type vulnerability struct {
 var Vul = vulnerability{
 	BaseVulnerability: vul.BaseVulnerability{
 		Name:        "ebpf-execve",
-		Description: "",
+		Description: "abuse eBPF to hijack execve syscall to run arbitrary commands",
 		ExeEnv: exeenv.ExeEnv{
 			Env:     exeenv.InContainer,
 			Check:   exeenv.InContainer,

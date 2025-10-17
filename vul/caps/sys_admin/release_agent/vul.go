@@ -32,7 +32,7 @@ var (
 	Vul = vulnerability{
 		BaseVulnerability: vul.BaseVulnerability{
 			Name:        "release_agent",
-			Description: "Container can be escaped when has cap_sys_admin and use cgroups v1",
+			Description: "escape by cap_sys_admin via cgroups v1 release_agent",
 			Level:       vul.LevelHigh,
 			ExeEnv: exeenv.ExeEnv{
 				Env:     exeenv.InContainer,

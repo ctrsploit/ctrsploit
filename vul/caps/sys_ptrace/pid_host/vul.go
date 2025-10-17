@@ -53,7 +53,7 @@ var (
 	Vul = vulnerability{
 		BaseVulnerability: vul.BaseVulnerability{
 			Name:        "ptrace-pid-host",
-			Description: "Container can be escaped when has cap_sys_ptrace and host pid namespace",
+			Description: "ptrace host processes in a container with cap_sys_ptrace and host pid namespace",
 			Level:       vul.LevelHigh,
 			ExeEnv: exeenv.ExeEnv{
 				Env:     exeenv.InContainer,

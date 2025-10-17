@@ -35,7 +35,7 @@ type vulnerability struct {
 var Vul = vulnerability{
 	BaseVulnerability: vul.BaseVulnerability{
 		Name:        "ebpf",
-		Description: "",
+		Description: "escape by loading evil eBPF programs into the kernel",
 		ExeEnv: exeenv.ExeEnv{
 			Env:     exeenv.InContainer,
 			Check:   exeenv.InContainer,

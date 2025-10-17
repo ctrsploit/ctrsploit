@@ -33,7 +33,7 @@ var (
 	Vul = vulnerability{
 		BaseVulnerability: vul.BaseVulnerability{
 			Name:        "cap_bpf",
-			Description: "Container can load evil bpf program when has cap_bpf, may cause container escape",
+			Description: "load evil bpf programs via cap_bpf",
 			Level:       vul.LevelHigh,
 			ExeEnv: exeenv.ExeEnv{
 				Check:   exeenv.InContainer,

@@ -33,7 +33,7 @@ var (
 	Vul = vulnerability{
 		BaseVulnerability: vul.BaseVulnerability{
 			Name:        "capability",
-			Description: "Container can be dangerous when has some capabilities",
+			Description: "abuse dangerous capabilities in container",
 			ExeEnv: exeenv.ExeEnv{
 				Env:     exeenv.InContainer,
 				Check:   exeenv.InContainer,

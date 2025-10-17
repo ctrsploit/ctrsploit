@@ -60,7 +60,7 @@ var (
 	Vul = vulnerability{
 		BaseVulnerability: vul.BaseVulnerability{
 			Name:        "docker.sock",
-			Description: "escape by shared docker socket",
+			Description: "escape by shared docker.sock via running a privileged container",
 			Level:       vul.LevelHigh,
 			ExeEnv: exeenv.ExeEnv{
 				Env:     exeenv.InContainer,

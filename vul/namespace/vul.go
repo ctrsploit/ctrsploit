@@ -29,7 +29,7 @@ var (
 	Vul = vulnerability{
 		BaseVulnerability: vul.BaseVulnerability{
 			Name:        "namespace",
-			Description: "Container can be dangerous when has some host level namespaces",
+			Description: "host level namespaces break the isolations",
 			ExeEnv: exeenv.ExeEnv{
 				Env:     exeenv.InContainer,
 				Check:   exeenv.InContainer,
