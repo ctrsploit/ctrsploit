@@ -90,6 +90,12 @@ OPTIONS:
    --help, -h  show help
 ```
 
+* :heavy_check_mark: : Fully Supported
+* :o: : Partially Supported
+* :bug: : Known Bug
+* :x: : Not Supported
+* `-` : Not Applicable
+
 | vul                                                         | desc                                                                                                                                                                                            | check              | exploit            |
 |-------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------|--------------------|
 | [cve-2016-8867](./vul/cve-2016-8867)                        | ambient capabilities allow local users to gain <br>privileges                                                                                                                                   | :heavy_check_mark: | :heavy_check_mark: |
