@@ -143,8 +143,8 @@ OPTIONS:
 | └─net_admin                                                 |                                                                            | :x:                | :x:                |
 | [naked](./vul/naked)                                        | seccomp, AppArmor, SELinux均未启用<br>的容器称作裸奔容器,<br>易受内核漏洞攻击，可致容器逃逸            | :heavy_check_mark: | -                  |
 | [namespace](./vul/namespace)                                | 共享主机命令空间打破了容器的隔离机制                                                         | -                  | -                  |
-| └─[net](./vul/namespace/net)                                | 共享主机net命名空间打破了网络隔离                                                         | -                  | :x:                |
-| &emsp;└─shijack                                             |                                                                            | -                  | -                  |
+| └─[net](./vul/namespace/net)                                | 共享主机net命名空间打破了网络隔离                                                         | :heavy_check_mark: | :x:                |
+| &emsp;└─shijack                                             |                                                                            | :x:                | :x:                |
 | &emsp;&emsp;└─basic                                         |                                                                            | :x:                | :x:                |
 | &emsp;&emsp;└─ali                                           |                                                                            | :x:                | :x:                |
 | &emsp;&emsp;└─hw                                            |                                                                            | :x:                | :x:                |
@@ -339,8 +339,8 @@ $ ctrsploit --colorful checksec auto
 | └─net_admin                                                 | :x:                | :x:                | :x:                 | :x:                | :x:                | :x:                |
 | [naked](./vul/naked)                                        | :heavy_check_mark: | -                  | :heavy_check_mark:  | :x:                | :x:                | :x:                |
 | [namespace](./vul/namespace)                                | -                  | -                  | -                   | -                  | -                  | -                  |
-| └─[net](./vul/namespace/net)                                | -                  | :x:                | :x:                 | :x:                | :x:                | :x:                |
-| &emsp;└─shijack                                             | -                  | -                  | -                   | -                  | -                  | -                  |
+| └─[net](./vul/namespace/net)                                | :heavy_check_mark: | :x:                | :x:                 | :x:                | :x:                | :x:                |
+| &emsp;└─shijack                                             | :x:                | :x:                | :x:                 | :x:                | :x:                | :x:                |
 | &emsp;&emsp;└─basic                                         | :x:                | :x:                | :x:                 | :x:                | :x:                | :x:                |
 | &emsp;&emsp;└─ali                                           | :x:                | :x:                | :x:                 | :x:                | :x:                | :x:                |
 | &emsp;&emsp;└─hw                                            | :x:                | :x:                | :x:                 | :x:                | :x:                | :x:                |
