@@ -30,7 +30,7 @@ var (
 	Vul = vulnerability{
 		BaseVulnerability: vul.BaseVulnerability{
 			Name: "naked",
-			Description: "We call containers running without seccomp, AppArmor, or SELinux enabled 'naked containers', " +
+			Description: "we call containers running without seccomp, AppArmor, or SELinux enabled 'naked containers', " +
 				"which leaves them highly vulnerable to kernel exploits and potential container escapes",
 			Level: vul.LevelHigh,
 			ExeEnv: exeenv.ExeEnv{

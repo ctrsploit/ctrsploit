@@ -27,7 +27,7 @@ var (
 	Vul = vulnerability{
 		BaseVulnerability: vul.BaseVulnerability{
 			Name:        "shared-socket",
-			Description: "Container has access to runtime's socket file, which may lead to container escape",
+			Description: "abuse runtime's api via shared socket",
 			Level:       vul.LevelHigh,
 			ExeEnv: exeenv.ExeEnv{
 				Env:     exeenv.InContainer,

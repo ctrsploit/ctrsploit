@@ -39,7 +39,7 @@ type vulnerability struct {
 var Vul = vulnerability{
 	BaseVulnerability: vul.BaseVulnerability{
 		Name:        "shocker",
-		Description: "Container escape with CAP_DAC_READ_SEARCH, alias shocker, found by Sebastian Krahmer (stealth) in 2014.",
+		Description: "escape by CAP_DAC_READ_SEARCH, alias shocker, found by Sebastian Krahmer (stealth) in 2014",
 		Level:       vul.LevelHigh,
 		ExeEnv: exeenv.ExeEnv{
 			Env:     exeenv.InContainer,

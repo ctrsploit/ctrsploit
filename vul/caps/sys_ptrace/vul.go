@@ -32,7 +32,7 @@ var (
 	Vul = vulnerability{
 		BaseVulnerability: vul.BaseVulnerability{
 			Name:        "cap_sys_ptrace",
-			Description: "Container can be escaped when has cap_sys_ptrace",
+			Description: "abuse cap_sys_ptrace",
 			Level:       vul.LevelHigh,
 			ExeEnv: exeenv.ExeEnv{
 				Env:     exeenv.InContainer,

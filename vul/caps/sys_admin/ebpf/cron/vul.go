@@ -30,7 +30,7 @@ type vulnerability struct {
 var Vul = vulnerability{
 	BaseVulnerability: vul.BaseVulnerability{
 		Name:        "ebpf-cron",
-		Description: "",
+		Description: "abuse eBPF to inject malicious job into host's crontab",
 		ExeEnv: exeenv.ExeEnv{
 			Env:     exeenv.InContainer,
 			Check:   exeenv.InContainer,

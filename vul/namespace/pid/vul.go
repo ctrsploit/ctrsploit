@@ -33,7 +33,7 @@ var (
 	Vul = vulnerability{
 		BaseVulnerability: vul.BaseVulnerability{
 			Name:        "host-pid",
-			Description: "container can be escaped with host pid namespace",
+			Description: "shared host pid namespace breaks process isolation",
 			Level:       vul.LevelHigh,
 			ExeEnv: exeenv.ExeEnv{
 				Env:     exeenv.InContainer,

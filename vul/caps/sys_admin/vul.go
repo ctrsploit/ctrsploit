@@ -33,7 +33,7 @@ var (
 	Vul = SysAdmin{
 		BaseVulnerability: vul.BaseVulnerability{
 			Name:        "cap_sys_admin",
-			Description: "Container can be escaped when has cap_sys_admin",
+			Description: "abuse cap_sys_admin",
 			Level:       vul.LevelHigh,
 			ExeEnv: exeenv.ExeEnv{
 				Env:     exeenv.InContainer,

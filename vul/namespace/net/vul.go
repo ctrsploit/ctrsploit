@@ -30,7 +30,7 @@ var (
 	Vul = vulnerability{
 		vul.BaseVulnerability{
 			Name:        "host-net",
-			Description: "The network namespace of the host is shared",
+			Description: "shared host network namespace breaks the network isolation",
 			Level:       vul.LevelHigh,
 			ExeEnv: exeenv.ExeEnv{
 				Env:     exeenv.InContainer,

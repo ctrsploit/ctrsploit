@@ -43,7 +43,7 @@ type vulnerability struct {
 var Vul = vulnerability{
 	BaseVulnerability: vul.BaseVulnerability{
 		Name:        "ebpf-bash",
-		Description: "",
+		Description: "abuse eBPF to inject malicious commands into bash processes running on host",
 		ExeEnv: exeenv.ExeEnv{
 			Env:     exeenv.InContainer,
 			Check:   exeenv.InContainer,
