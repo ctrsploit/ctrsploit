@@ -122,7 +122,7 @@ OPTIONS:
 | cve-2025-31133                                              |                                                                            | :x:                | :x:                |
 | [cve-2025-47290](./vul/cve-2025-47290)                      | 利用containerd cve-2025-47290在拉取镜像时篡改主机文件                                    | :heavy_check_mark: | :heavy_check_mark: |
 | cve-2025-52565                                              |                                                                            | :x:                | :x:                |
-| caps                                                        | 在容器内滥用高危capability                                                         | -                  | -                  |
+| [caps](./vul/caps)                                          | 在容器内滥用高危capability                                                         | -                  | -                  |
 | └─[shocker](./vul/caps/shocker)                             | 利用CAP_DAC_READ_SEARCH逃逸,又称shocker<br>由Sebastian Krahmer (stealth) 在2014年发现 | :heavy_check_mark: | :heavy_check_mark: |
 | └─[sys_admin](./vul/caps/sys_admin)                         | 滥用CAP_SYS_ADMIN                                                            | :heavy_check_mark: | -                  |
 | &emsp;└─[release_agent](./vul/caps/sys_admin/release_agent) | 在有CAP_SYS_ADMIN时利用<br>cgroups v1 release_agent逃逸                           | :heavy_check_mark: | :heavy_check_mark: |
@@ -142,7 +142,7 @@ OPTIONS:
 | └─sys_module                                                |                                                                            | :x:                | :x:                |
 | └─net_admin                                                 |                                                                            | :x:                | :x:                |
 | [naked](./vul/naked)                                        | seccomp, AppArmor, SELinux均未启用<br>的容器称作裸奔容器,<br>易受内核漏洞攻击，可致容器逃逸            | :heavy_check_mark: | -                  |
-| namespace                                                   | 共享主机命令空间打破了容器的隔离机制                                                         | -                  | -                  |
+| [namespace](./vul/namespace)                                | 共享主机命令空间打破了容器的隔离机制                                                         | -                  | -                  |
 | └─[net](./vul/namespace/net)                                | 共享主机net命名空间打破了网络隔离                                                         | -                  | :x:                |
 | &emsp;└─shijack                                             |                                                                            | -                  | -                  |
 | &emsp;&emsp;└─basic                                         |                                                                            | :x:                | :x:                |
@@ -158,7 +158,7 @@ OPTIONS:
 | &emsp;└─binfmt                                              |                                                                            | :x:                | :x:                |
 | └─sys-rw                                                    |                                                                            | :x:                | :x:                |
 | └─lxcfs-rw                                                  |                                                                            | :x:                | :x:                |
-| shared-socket                                               | 通过共享的socket滥用runtime api                                                   | -                  | -                  |
+| [shared-socket](./vul/shared-socket)                        | 通过共享的socket滥用runtime api                                                   | -                  | -                  |
 | └─[docker.sock](./vul/shared-socket/docker-sock)            | 通过docker.sock运行特权容器逃逸                                                      | :heavy_check_mark: | :heavy_check_mark: |
 | └─containerd.sock                                           |                                                                            | :x:                | :x:                |
 | exposed-api                                                 |                                                                            | -                  | -                  |
@@ -318,7 +318,7 @@ $ ctrsploit --colorful checksec auto
 | cve-2025-31133                                              | :x:                | :x:                | :x:                 | :x:                | :x:                | :x:                |
 | [cve-2025-47290](./vul/cve-2025-47290)                      | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: | :x:                |
 | cve-2025-52565                                              | :x:                | :x:                | :x:                 | :x:                | :x:                | :x:                |
-| caps                                                        | -                  | -                  | -                   | -                  | -                  | -                  |
+| [caps](./vul/caps)                                          | -                  | -                  | -                   | -                  | -                  | -                  |
 | └─[shocker](./vul/caps/shocker)                             | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:️ | :heavy_check_mark: | :heavy_check_mark: | :x:                |
 | └─[sys_admin](./vul/caps/sys_admin)                         | :heavy_check_mark: | -                  | -                   | -                  | -                  | -                  |
 | &emsp;└─[release_agent](./vul/caps/sys_admin/release_agent) | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: | :x:                |
@@ -338,7 +338,7 @@ $ ctrsploit --colorful checksec auto
 | └─sys_module                                                | :x:                | :x:                | :x:                 | :x:                | :x:                | :x:                |
 | └─net_admin                                                 | :x:                | :x:                | :x:                 | :x:                | :x:                | :x:                |
 | [naked](./vul/naked)                                        | :heavy_check_mark: | -                  | :heavy_check_mark:  | :x:                | :x:                | :x:                |
-| namespace                                                   | -                  | -                  | -                   | -                  | -                  | -                  |
+| [namespace](./vul/namespace)                                | -                  | -                  | -                   | -                  | -                  | -                  |
 | └─[net](./vul/namespace/net)                                | -                  | :x:                | :x:                 | :x:                | :x:                | :x:                |
 | &emsp;└─shijack                                             | -                  | -                  | -                   | -                  | -                  | -                  |
 | &emsp;&emsp;└─basic                                         | :x:                | :x:                | :x:                 | :x:                | :x:                | :x:                |
@@ -354,7 +354,7 @@ $ ctrsploit --colorful checksec auto
 | &emsp;└─binfmt                                              | :x:                | :x:                | :x:                 | :x:                | :x:                | :x:                |
 | └─sys-rw                                                    | :x:                | :x:                | :x:                 | :x:                | :x:                | :x:                |
 | └─lxcfs-rw                                                  | :x:                | :x:                | :x:                 | :x:                | :x:                | :x:                |
-| shared-socket                                               | -                  | -                  | -                   | -                  | -                  | -                  |
+| [shared-socket](./vul/shared-socket)                        | -                  | -                  | -                   | -                  | -                  | -                  |
 | └─[docker.sock](./vul/shared-socket/docker-sock)            | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
 | └─containerd.sock                                           | :x:                | :x:                | :x:                 | :x:                | :x:                | :x:                |
 | exposed-api                                                 | -                  | -                  | -                   | -                  | -                  | -                  |
