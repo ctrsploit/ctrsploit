@@ -6,10 +6,6 @@ ctrsploit [kənˈteɪnər splɔɪt] , follows [sploit-spec](https://github.com/c
 
 ![](./docs/images/logo-white-256.png)
 
-## Why ctrsploit
-
-see [here](https://github.com/ctrsploit/ctrsploit/discussions/11)
-
 ## Pre-Built Release
 
 https://github.com/ctrsploit/ctrsploit/releases
