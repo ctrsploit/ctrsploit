@@ -4,6 +4,8 @@
 
 ctrsploit [kənˈteɪnər splɔɪt] , follows [sploit-spec](https://github.com/ctrsploit/sploit-spec) v0.4.3
 
+![](./docs/images/logo-white-256.png)
+
 ## Why ctrsploit
 
 see [here](https://github.com/ctrsploit/ctrsploit/discussions/11)
