@@ -4,6 +4,8 @@
 
 ctrsploit 读作container sploit , 遵循 [sploit-spec](https://github.com/ctrsploit/sploit-spec)
 
+![](./docs/images/logo-white-256.png)
+
 ## 预编译
 
 https://github.com/ctrsploit/ctrsploit/releases
