@@ -1,5 +1,6 @@
 package main
 
+//goland:noinspection GoSnakeCaseUsage
 import (
 	"os"
 
@@ -11,6 +12,7 @@ import (
 	"github.com/ctrsploit/ctrsploit/cmd/ctrsploit/vul"
 	"github.com/ctrsploit/sploit-spec/pkg/app"
 	"github.com/ctrsploit/sploit-spec/pkg/log"
+	spec_version "github.com/ctrsploit/sploit-spec/pkg/spec-version"
 	"github.com/ctrsploit/sploit-spec/pkg/version"
 	"github.com/moby/sys/reexec"
 	"github.com/urfave/cli/v2"
@@ -36,6 +38,7 @@ func main() {
 			vul.Command,
 			helper.Command,
 			version.Command,
+			spec_version.Command,
 		},
 	}
 	app.InstallGlobalFlags(sploit)
