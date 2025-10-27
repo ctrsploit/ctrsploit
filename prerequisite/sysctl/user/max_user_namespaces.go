@@ -14,21 +14,19 @@ type MaxUserNamespaces struct {
 }
 
 func (p *MaxUserNamespaces) Check() (bool, error) {
-	if p.Checked {
-		return p.Satisfied, nil
-	}
-	p.Checked = true
-
-	maxUserNamespaces, err := sysctl.MaxUserNamespaces()
-	if err != nil {
-		return false, fmt.Errorf("unknown the meaning of: %w", err)
-	}
-	p.Satisfied = maxUserNamespaces > p.GreaterThan
-	return p.Satisfied, nil
+	return p.CheckTemplate(func() (bool, error) {
+		maxUserNamespaces, err := sysctl.MaxUserNamespaces()
+		if err != nil {
+			p.Err = fmt.Errorf("failed to check [%s], caused by getting sysctl: %w", p.GetName(), err)
+			return p.Satisfied, p.Err
+		}
+		p.Satisfied = maxUserNamespaces > p.GreaterThan
+		return p.Satisfied, p.Err
+	})
 }
 
+//goland:noinspection GoNameStartsWithPackageName
 var (
-	//goland:noinspection GoNameStartsWithPackageName
 	UserNsEnabled = MaxUserNamespaces{
 		BasePrerequisite: prerequisite.BasePrerequisite{
 			Name:   "user ns enabled",
@@ -37,6 +35,5 @@ var (
 		},
 		GreaterThan: 0,
 	}
-	//goland:noinspection GoNameStartsWithPackageName
 	UserNsDisabled = prerequisite.Not(&UserNsEnabled)
 )
