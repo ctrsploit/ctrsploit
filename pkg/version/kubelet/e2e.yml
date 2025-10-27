@@ -1,4 +1,4 @@
-name: kubernetes-v1.34.0
+name: kubelet-version
 test_envs:
   - name: kubernetes-v1.34.0
     kind: dqd

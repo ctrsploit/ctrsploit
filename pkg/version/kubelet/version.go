@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"os"
 	"os/exec"
 
 	"github.com/Masterminds/semver/v3"
@@ -17,8 +18,8 @@ import (
 // It first attempts to get the versions by querying the Kubernetes API.
 // If that fails, it falls back to getting the version via the kubelet CLI.
 // If both methods fail, it aggregates the errors and returns them.
-func Versions() ([]*semver.Version, error) {
-	type getter func() ([]*semver.Version, error)
+func Versions() (map[string]*semver.Version, error) {
+	type getter func() (map[string]*semver.Version, error)
 	methods := []getter{
 		VersionsByK8sApi,
 		versionsByCli,
@@ -35,7 +36,7 @@ func Versions() ([]*semver.Version, error) {
 	return nil, errors.Join(errs...)
 }
 
-func VersionsByK8sApi() ([]*semver.Version, error) {
+func VersionsByK8sApi() (map[string]*semver.Version, error) {
 	c, err := kubernetes.GetKubernetesClient()
 	if err != nil {
 		return nil, fmt.Errorf("failed to get kubernetes client: %w", err)
@@ -48,7 +49,7 @@ func VersionsByK8sApi() ([]*semver.Version, error) {
 	if len(nodes.Items) == 0 {
 		return nil, fmt.Errorf("no nodes found in the cluster")
 	}
-	var versions []*semver.Version
+	versions := map[string]*semver.Version{}
 	for _, node := range nodes.Items {
 		kubeletVersion := node.Status.NodeInfo.KubeletVersion
 		log.Logger.Debugf("Node %s kubelet version: %s", node.Name, kubeletVersion)
@@ -56,18 +57,24 @@ func VersionsByK8sApi() ([]*semver.Version, error) {
 		if err != nil {
 			return nil, fmt.Errorf("failed to convert kubelet version to semver for node %s: %w", node.Name, err)
 		}
-		versions = append(versions, ver)
+		versions[node.Name] = ver
 	}
 	return versions, nil
 }
 
 // versionsByCli is a helper function makes the code more simple.
-func versionsByCli() ([]*semver.Version, error) {
+func versionsByCli() (map[string]*semver.Version, error) {
+	hostname, err := os.Hostname()
+	if err != nil {
+		return nil, fmt.Errorf("failed to get hostname: %w", err)
+	}
 	version, err := VersionByCli()
 	if err != nil {
 		return nil, err
 	}
-	return []*semver.Version{version}, nil
+	return map[string]*semver.Version{
+		hostname: version,
+	}, nil
 }
 
 func VersionByCli() (*semver.Version, error) {
