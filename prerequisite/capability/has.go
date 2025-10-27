@@ -10,7 +10,7 @@ import (
 	"github.com/ssst0n3/awesome_libs/slice"
 )
 
-type Contains struct {
+type Has struct {
 	ExpectedCapability string
 	Pid                []string
 	// check CapBnd or CapEff, CapBnd for check vul exists, CapEff for check vul exploitable
@@ -18,8 +18,8 @@ type Contains struct {
 	prerequisite.BasePrerequisite
 }
 
-func BndContainsCap(name string) Contains {
-	return Contains{
+func HasBnd(name string) Has {
+	return Has{
 		ExpectedCapability: name,
 		Pid:                []string{"1", "self"},
 		CapType:            cap.Bounding,
@@ -31,8 +31,8 @@ func BndContainsCap(name string) Contains {
 	}
 }
 
-func EffContainsCap(name string) Contains {
-	return Contains{
+func HasEff(name string) Has {
+	return Has{
 		ExpectedCapability: name,
 		Pid:                []string{"self"},
 		CapType:            cap.Effective,
@@ -45,21 +45,23 @@ func EffContainsCap(name string) Contains {
 }
 
 var (
-	CapSysAdminBnd      = BndContainsCap("CAP_SYS_ADMIN")
-	CapSysAdminEff      = EffContainsCap("CAP_SYS_ADMIN")
-	CapDacReadSearchBnd = BndContainsCap("CAP_DAC_READ_SEARCH")
-	CapDacReadSearchEff = EffContainsCap("CAP_DAC_READ_SEARCH")
-	CapSysPtraceBnd     = BndContainsCap("CAP_SYS_PTRACE")
-	CapSysPtraceEff     = EffContainsCap("CAP_SYS_PTRACE")
-	CapBpfBnd           = BndContainsCap("CAP_BPF")
+	CapSysAdminBnd      = HasBnd("CAP_SYS_ADMIN")
+	CapSysAdminEff      = HasEff("CAP_SYS_ADMIN")
+	CapDacReadSearchBnd = HasBnd("CAP_DAC_READ_SEARCH")
+	CapDacReadSearchEff = HasEff("CAP_DAC_READ_SEARCH")
+	CapSysPtraceBnd     = HasBnd("CAP_SYS_PTRACE")
+	CapSysPtraceEff     = HasEff("CAP_SYS_PTRACE")
+	CapBpfBnd           = HasBnd("CAP_BPF")
 	// CapBpfEff CAP_BPF: CAP_BPF load ebpf program
-	CapBpfEff     = EffContainsCap("CAP_BPF")
-	CapPerfmonBnd = BndContainsCap("CAP_PERFMON")
+	CapBpfEff     = HasEff("CAP_BPF")
+	CapPerfmonBnd = HasBnd("CAP_PERFMON")
 	// CapPerfmonEff CAP_PERFMON: attach to kprobes, uprobes, tracepoints
-	CapPerfmonEff = EffContainsCap("CAP_PERFMON")
+	CapPerfmonEff = HasEff("CAP_PERFMON")
+	CapNetRawBnd  = HasBnd("CAP_NET_RAW")
+	CapNetRawEff  = HasEff("CAP_NET_RAW")
 )
 
-func (p *Contains) Check() (bool, error) {
+func (p *Has) Check() (bool, error) {
 	if p.Checked {
 		return p.Satisfied, nil
 	}
