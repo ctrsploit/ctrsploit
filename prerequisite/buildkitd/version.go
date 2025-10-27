@@ -17,39 +17,37 @@ type VersionBetween struct {
 	Max  string
 }
 
-func (vb *VersionBetween) Check() (bool, error) {
-	if vb.Checked {
-		return vb.Satisfied, nil
-	}
-	version, err := buildkitd.Version(vb.Addr)
-	if err != nil {
-		return false, err
-	}
-	constraint, err := semver.NewConstraint(fmt.Sprintf(">= %s, <= %s", vb.Min, vb.Max))
-	if err != nil {
-		awesome_error.CheckErr(err)
-		return false, err
-	}
-	var e []error
-	vb.Satisfied, e = constraint.Validate(version)
-	if len(e) > 0 {
-		err = fmt.Errorf("failed to validate version %s: %v", version.String(), e)
-		awesome_error.CheckErr(err)
-		return false, err
-	}
-	vb.Checked = true
-	return vb.Satisfied, nil
+func (p *VersionBetween) Check() (bool, error) {
+	return p.CheckTemplate(func() (bool, error) {
+		version, err := buildkitd.Version(p.Addr)
+		if err != nil {
+			p.Err = fmt.Errorf("failed to check [%s] caused by getting buildkitd version: %w", p.GetName(), err)
+			return p.Satisfied, p.Err
+		}
+		rule := fmt.Sprintf(">= %s, <= %s", p.Min, p.Max)
+		constraint, err := semver.NewConstraint(rule)
+		if err != nil {
+			err = fmt.Errorf("failed to parse constraint %s: %w", rule, err)
+			// it's fatal if the constraint is invalid, it means the code is wrong
+			awesome_error.CheckFatal(err)
+		}
+		p.Satisfied = constraint.Check(version)
+		return p.Satisfied, p.Err
+	})
 }
 
-var VulnerableToCVE_2024_23650 = func(addr string) *VersionBetween {
-	return &VersionBetween{
-		Addr: addr,
-		Min:  "0.0.0",
-		Max:  "0.12.4",
-		BasePrerequisite: prerequisite.BasePrerequisite{
-			Name:   "BuildKitd Vulnerable to CVE-2024-23650",
-			Info:   "Buildkitd <= v0.12.4 is vulnerable to CVE-2024-23650",
-			ExeEnv: exeenv.Remote,
-		},
+//goland:noinspection GoSnakeCaseUsage
+var (
+	VulnerableToCVE_2024_23650 = func(addr string) *VersionBetween {
+		return &VersionBetween{
+			Addr: addr,
+			Min:  "0.0.0",
+			Max:  "0.12.4",
+			BasePrerequisite: prerequisite.BasePrerequisite{
+				Name:   "BuildKitd Vulnerable to CVE-2024-23650",
+				Info:   "Buildkitd <= v0.12.4 is vulnerable to CVE-2024-23650",
+				ExeEnv: exeenv.Remote,
+			},
+		}
 	}
-}
+)

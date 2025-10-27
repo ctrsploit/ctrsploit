@@ -16,26 +16,25 @@ type Contains struct {
 }
 
 func (p *Contains) Check() (bool, error) {
-	if p.Checked {
-		return p.Satisfied, nil
-	}
-	file, err := os.Open("/proc/1/cgroup")
-	if err != nil {
-		return false, fmt.Errorf("failed to check %s caused by reading /proc/1/cgroup: %w", p.Name, err)
-	}
+	return p.CheckTemplate(func() (bool, error) {
+		file, err := os.Open("/proc/1/cgroup")
+		if err != nil {
+			p.Err = fmt.Errorf("failed to check [%s] caused by reading /proc/1/cgroup: %w", p.GetName(), err)
+			return p.Satisfied, p.Err
+		}
 
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		line := scanner.Text()
-		if len(line) > 0 && line[0] != '0' {
-			p.Satisfied = strings.Contains(line, p.Expected)
-			if p.Satisfied {
-				break
+		scanner := bufio.NewScanner(file)
+		for scanner.Scan() {
+			line := scanner.Text()
+			if len(line) > 0 && line[0] != '0' {
+				p.Satisfied = strings.Contains(line, p.Expected)
+				if p.Satisfied {
+					break
+				}
 			}
 		}
-	}
-	p.Checked = true
-	return p.Satisfied, nil
+		return p.Satisfied, p.Err
+	})
 }
 
 var (

@@ -16,18 +16,15 @@ type ContainsByMountPoint struct {
 }
 
 func (p *ContainsByMountPoint) Check() (bool, error) {
-	if p.Checked {
+	return p.CheckTemplate(func() (bool, error) {
+		info, err := mountinfo.GetMountByMountpoint(p.MountPoint)
+		if err != nil {
+			p.Err = fmt.Errorf("failed to check [%s] caused by getting mountinfo of %s: %w", p.GetName(), p.MountPoint, err)
+			return false, p.Err
+		}
+		p.Satisfied = strings.Contains(info.Root, p.Expected)
 		return p.Satisfied, p.Err
-	}
-	p.Checked = true
-
-	info, err := mountinfo.GetMountByMountpoint(p.MountPoint)
-	if err != nil {
-		p.Err = fmt.Errorf("failed to check [%s] caused by getting mountinfo of %s: %w", p.Name, p.MountPoint, err)
-		return false, p.Err
-	}
-	p.Satisfied = strings.Contains(info.Root, p.Expected)
-	return p.Satisfied, p.Err
+	})
 }
 
 var (

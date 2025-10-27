@@ -11,13 +11,11 @@ type EUidEqualTo struct {
 	prerequisite.BasePrerequisite
 }
 
-func (p *EUidEqualTo) Check() (satisfied bool, err error) {
-	if !p.Checked {
+func (p *EUidEqualTo) Check() (bool, error) {
+	return p.CheckTemplate(func() (bool, error) {
 		p.Satisfied = os.Geteuid() == p.EUid
-		p.Checked = true
-	}
-	satisfied = p.Satisfied
-	return
+		return p.Satisfied, p.Err
+	})
 }
 
 var MustBeRootToWriteReleaseAgent = EUidEqualTo{

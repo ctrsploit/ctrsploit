@@ -7,7 +7,6 @@ import (
 	nvidia_container_runtime "github.com/ctrsploit/ctrsploit/pkg/version/nvidia-container-runtime"
 	"github.com/ctrsploit/sploit-spec/pkg/exeenv"
 	"github.com/ctrsploit/sploit-spec/pkg/prerequisite"
-	"github.com/ssst0n3/awesome_libs/awesome_error"
 )
 
 type Version struct {
@@ -16,21 +15,16 @@ type Version struct {
 }
 
 func (p *Version) Check() (bool, error) {
-	if p.Checked {
-		return p.Satisfied, nil
-	}
-	ver, err := nvidia_container_runtime.GetVersion()
-	if err != nil {
-		return false, err
-	}
-	var errs []error
-	p.Satisfied, errs = p.Constraint.Validate(ver)
-	if len(errs) > 0 {
-		awesome_error.CheckDebug(fmt.Errorf("constraint validation errors: %v", errs))
-		return false, nil
-	}
-	p.Checked = true
-	return p.Satisfied, nil
+	return p.CheckTemplate(func() (bool, error) {
+		ver, err := nvidia_container_runtime.GetVersion()
+		if err != nil {
+			p.Err = fmt.Errorf("failed to check [%s], caused by getting nvidia-container-runtime's version: %w", p.GetName(), err)
+			return p.Satisfied, p.Err
+		}
+		p.Satisfied = p.Constraint.Check(ver)
+		return p.Satisfied, p.Err
+	})
+
 }
 
 var (

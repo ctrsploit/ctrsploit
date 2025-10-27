@@ -15,19 +15,18 @@ type ProfileNameContains struct {
 }
 
 func (p *ProfileNameContains) Check() (bool, error) {
-	if p.Checked {
-		return p.Satisfied, nil
-	}
-	profile, err := os.ReadFile("/proc/self/attr/apparmor/current")
-	if err != nil {
-		if os.IsNotExist(err) {
-			return false, nil
+	return p.CheckTemplate(func() (bool, error) {
+		profile, err := os.ReadFile("/proc/self/attr/apparmor/current")
+		if err != nil {
+			if os.IsNotExist(err) {
+				return p.Satisfied, nil
+			}
+			p.Err = fmt.Errorf("failed to check [%s] caused by reading apparmor profile: %w", p.GetName(), err)
+			return p.Satisfied, p.Err
 		}
-		return false, fmt.Errorf("could not read apparmor profile: %w", err)
-	}
-	p.Satisfied = strings.Contains(string(profile), p.Expected)
-	p.Checked = true
-	return p.Satisfied, nil
+		p.Satisfied = strings.Contains(string(profile), p.Expected)
+		return p.Satisfied, p.Err
+	})
 }
 
 func NewProfileNameContains(name string) *ProfileNameContains {

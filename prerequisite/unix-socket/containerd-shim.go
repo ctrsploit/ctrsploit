@@ -1,6 +1,8 @@
 package unix_socket
 
 import (
+	"fmt"
+
 	"github.com/ctrsploit/ctrsploit/pkg/proc/net"
 	"github.com/ctrsploit/sploit-spec/pkg/prerequisite"
 )
@@ -19,14 +21,13 @@ var ContainerdShimAbstract = Available{
 }
 
 func (p *Available) Check() (bool, error) {
-	if p.Checked {
-		return p.Satisfied, nil
-	}
-	path, err := net.ContainerdShimAbstractUnixSocketPath(p.PrefixSocketName)
-	if err != nil {
-		return false, err
-	}
-	p.Satisfied = path != ""
-	p.Checked = true
-	return p.Satisfied, nil
+	return p.CheckTemplate(func() (bool, error) {
+		path, err := net.ContainerdShimAbstractUnixSocketPath(p.PrefixSocketName)
+		if err != nil {
+			p.Err = fmt.Errorf("failed to check [%s], caused by getting abstract unix socket path: %w", p.GetName(), err)
+			return p.Satisfied, p.Err
+		}
+		p.Satisfied = path != ""
+		return p.Satisfied, p.Err
+	})
 }

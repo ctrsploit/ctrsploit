@@ -1,6 +1,7 @@
 package kernel
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/ctrsploit/ctrsploit/pkg/kernel/uname"
@@ -24,15 +25,14 @@ var (
 )
 
 func (p *Releaser) Check() (bool, error) {
-	if p.Checked {
-		return p.Satisfied, nil
-	}
-	u, err := uname.All()
-	if err != nil {
-		return false, err
-	}
-	log.Logger.Debugf("uname: %s", u)
-	p.Satisfied = strings.Contains(u, p.ExpectedReleaser)
-	p.Checked = true
-	return p.Satisfied, nil
+	return p.CheckTemplate(func() (bool, error) {
+		u, err := uname.All()
+		if err != nil {
+			p.Err = fmt.Errorf("failed to check [%s], caused by getting uname: %w", p.GetName(), err)
+			return p.Satisfied, p.Err
+		}
+		log.Logger.Debugf("uname: %s", u)
+		p.Satisfied = strings.Contains(u, p.ExpectedReleaser)
+		return p.Satisfied, p.Err
+	})
 }

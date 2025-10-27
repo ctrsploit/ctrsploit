@@ -1,0 +1,16 @@
+name: kubelet-version
+test_envs:
+  - name: kubernetes-v1.34.0
+    kind: dqd
+    dqd_dir: kubernetes/v1.34.0
+    pkg: github.com/ctrsploit/ctrsploit/prerequisite/kubernetes
+    cmd: |
+      timeout 60s bash -c "until kubectl wait --for=condition=Ready pod --all -A --field-selector=metadata.namespace=kube-system -l \"k8s-app!=kube-dns\" --timeout=5s; do sleep 1; done"
+      TEST_ENV=kubernetes-v1.34.0-host /ctrsploit.test -test.v -test.run "^TestE2E_FixedCVE_2020_8558$"
+  - name: kubernetes-v1.18.2
+    kind: dqd
+    dqd_dir: kubernetes/v1.18.2
+    pkg: github.com/ctrsploit/ctrsploit/prerequisite/kubernetes
+    cmd: |
+      timeout 60s bash -c "until kubectl wait --for=condition=Ready pod --all -A --field-selector=metadata.namespace=kube-system -l \"k8s-app!=kube-dns\" --timeout=5s; do sleep 1; done"
+      TEST_ENV=kubernetes-v1.18.2-host /ctrsploit.test -test.v -test.run "^TestE2E_FixedCVE_2020_8558$"

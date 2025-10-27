@@ -1,25 +1,27 @@
 package runc
 
 import (
+	"fmt"
+
 	"github.com/ctrsploit/ctrsploit/pkg/version/runc"
 	"github.com/ctrsploit/sploit-spec/pkg/exeenv"
 	"github.com/ctrsploit/sploit-spec/pkg/prerequisite"
-	"github.com/ssst0n3/awesome_libs/awesome_error"
 )
 
 type ensureCloned struct {
 	prerequisite.BasePrerequisite
-	err error
 }
 
 func (p *ensureCloned) Check() (bool, error) {
-	if p.Checked {
-		return p.Satisfied, p.err
-	}
-	p.Checked = true
-	p.Satisfied, p.err = runc.StraceFGetSeals()
-	awesome_error.CheckWarning(p.err)
-	return p.Satisfied, p.err
+	return p.CheckTemplate(func() (bool, error) {
+		var err error
+		p.Satisfied, err = runc.StraceFGetSeals()
+		if err != nil {
+			p.Err = fmt.Errorf("failed to check [%s], caused by strace runc: %w", p.GetName(), err)
+		}
+		return p.Satisfied, p.Err
+	})
+
 }
 
 var (
