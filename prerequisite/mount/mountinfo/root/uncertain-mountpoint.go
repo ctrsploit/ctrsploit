@@ -22,40 +22,35 @@ func (p *ContainsUncertainMountPointWithType) RealMountPoint() string {
 }
 
 func (p *ContainsUncertainMountPointWithType) Check() (bool, error) {
-	if p.Checked {
-		return p.Satisfied, p.Err
-	}
-	p.Checked = true
-	p.Satisfied = false
-	p.Err = nil
-	infos, err := mountinfo.GetMounts(func(info *mountinfo.Info) (skip, stop bool) {
-		skip = !strings.Contains(info.Root, p.ExpectedContains)
-		return skip, false
-	})
-	if err != nil {
-		p.Satisfied = false
-		p.Err = fmt.Errorf("failed to check %s caused by getting mountinfo: %w", p.Name, err)
-		return p.Satisfied, p.Err
-	}
-	for _, info := range infos {
-		if p.Type == 0 {
-			p.realMountPoint = info.Mountpoint
-			p.Satisfied = true
-			break
-		}
-		fi, err := os.Lstat(info.Mountpoint)
+	return p.CheckTemplate(func() (bool, error) {
+		infos, err := mountinfo.GetMounts(func(info *mountinfo.Info) (skip, stop bool) {
+			skip = !strings.Contains(info.Root, p.ExpectedContains)
+			return skip, false
+		})
 		if err != nil {
-			awesome_error.CheckWarning(err)
-			continue
+			p.Err = fmt.Errorf("failed to check [%s], caused by getting mountinfo: %w", p.GetName(), err)
+			return p.Satisfied, p.Err
 		}
-		// check file type is expected type
-		if fi.Mode()&p.Type != 0 {
-			p.realMountPoint = info.Mountpoint
-			p.Satisfied = true
-			break
+		for _, info := range infos {
+			if p.Type == 0 {
+				p.realMountPoint = info.Mountpoint
+				p.Satisfied = true
+				break
+			}
+			fi, err := os.Lstat(info.Mountpoint)
+			if err != nil {
+				awesome_error.CheckWarning(err)
+				continue
+			}
+			// check file type is expected type
+			if fi.Mode()&p.Type != 0 {
+				p.realMountPoint = info.Mountpoint
+				p.Satisfied = true
+				break
+			}
 		}
-	}
-	return p.Satisfied, p.Err
+		return p.Satisfied, p.Err
+	})
 }
 
 var DockerSock = ContainsUncertainMountPointWithType{

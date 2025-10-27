@@ -1,6 +1,8 @@
 package nvidia_container_toolkit
 
 import (
+	"fmt"
+
 	"github.com/Masterminds/semver/v3"
 	nvidia_container_runtime "github.com/ctrsploit/ctrsploit/pkg/version/nvidia-container-runtime"
 	"github.com/ctrsploit/sploit-spec/pkg/exeenv"
@@ -13,16 +15,16 @@ type Version struct {
 }
 
 func (p *Version) Check() (bool, error) {
-	if p.Checked {
-		return p.Satisfied, nil
-	}
-	ver, err := nvidia_container_runtime.GetVersion()
-	if err != nil {
-		return false, err
-	}
-	p.Satisfied = p.Constraint.Check(ver)
-	p.Checked = true
-	return p.Satisfied, nil
+	return p.CheckTemplate(func() (bool, error) {
+		ver, err := nvidia_container_runtime.GetVersion()
+		if err != nil {
+			p.Err = fmt.Errorf("failed to check [%s], caused by getting nvidia-container-runtime's version: %w", p.GetName(), err)
+			return p.Satisfied, p.Err
+		}
+		p.Satisfied = p.Constraint.Check(ver)
+		return p.Satisfied, p.Err
+	})
+
 }
 
 var (

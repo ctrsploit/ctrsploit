@@ -1,6 +1,8 @@
 package cgroups
 
 import (
+	"fmt"
+
 	v1 "github.com/ctrsploit/ctrsploit/pkg/cgroup/v1"
 	"github.com/ctrsploit/ctrsploit/pkg/cgroup/version"
 	"github.com/ctrsploit/sploit-spec/pkg/exeenv"
@@ -20,18 +22,17 @@ var HasTopLevelSubsystem = TopLevelSubsystem{
 }
 
 func (p *TopLevelSubsystem) Check() (bool, error) {
-	if p.Checked {
-		return p.Satisfied, nil
-	}
-	if version.IsCgroupV1() {
-		topLevelSubSystems, err := v1.ListTopLevelSubSystem()
-		if err != nil {
-			return false, err
+	return p.CheckTemplate(func() (bool, error) {
+		if version.IsCgroupV1() {
+			topLevelSubSystems, err := v1.ListTopLevelSubSystem()
+			if err != nil {
+				p.Err = fmt.Errorf("failed to check [%s] caused by listing top level subsystems: %w", p.GetName(), err)
+				return p.Satisfied, p.Err
+			}
+			if len(topLevelSubSystems) > 0 {
+				p.Satisfied = true
+			}
 		}
-		if len(topLevelSubSystems) > 0 {
-			p.Satisfied = true
-		}
-	}
-	p.Checked = true
-	return p.Satisfied, nil
+		return p.Satisfied, p.Err
+	})
 }

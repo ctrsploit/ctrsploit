@@ -1,11 +1,11 @@
 package group
 
 import (
+	"fmt"
 	"os/user"
 	"strconv"
 
 	"github.com/ctrsploit/sploit-spec/pkg/prerequisite"
-	"github.com/ssst0n3/awesome_libs/awesome_error"
 )
 
 type MustBe struct {
@@ -22,20 +22,18 @@ var MustBeRoot = MustBe{
 }
 
 func (p *MustBe) Check() (bool, error) {
-	if p.Checked {
-		return p.Satisfied, nil
-	}
-	current, err := user.Current()
-	if err != nil {
-		awesome_error.CheckErr(err)
-		return false, err
-	}
-	gid, err := strconv.Atoi(current.Gid)
-	if err != nil {
-		awesome_error.CheckErr(err)
-		return false, err
-	}
-	p.Satisfied = uint(gid) == p.ExpectedGroup
-	p.Checked = true
-	return p.Satisfied, nil
+	return p.CheckTemplate(func() (bool, error) {
+		current, err := user.Current()
+		if err != nil {
+			p.Err = fmt.Errorf("failed to check [%s], caused by getting current user: %w", p.GetName(), err)
+			return p.Satisfied, p.Err
+		}
+		gid, err := strconv.Atoi(current.Gid)
+		if err != nil {
+			p.Err = fmt.Errorf("failed to check [%s], caused by converting gid to int: %w", p.GetName(), err)
+			return p.Satisfied, p.Err
+		}
+		p.Satisfied = uint(gid) == p.ExpectedGroup
+		return p.Satisfied, p.Err
+	})
 }

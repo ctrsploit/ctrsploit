@@ -17,9 +17,8 @@ var V1 = Version{
 }
 
 func (p *Version) Check() (bool, error) {
-	if !p.Checked {
+	return p.CheckTemplate(func() (bool, error) {
 		p.Satisfied = version.IsCgroupV1()
-		p.Checked = true
-	}
-	return p.Satisfied, nil
+		return p.Satisfied, p.Err
+	})
 }

@@ -15,20 +15,15 @@ type Version struct {
 }
 
 func (p *Version) Check() (bool, error) {
-	if p.Checked {
+	return p.CheckTemplate(func() (bool, error) {
+		ver, err := runc.GetVersionByCliVersion()
+		if err != nil {
+			p.Err = fmt.Errorf("failed to check [%s], caused by getting version from cli: %w", p.GetName(), err)
+			return p.Satisfied, p.Err
+		}
+		p.Satisfied = p.Constraint.Check(ver)
 		return p.Satisfied, p.Err
-	}
-	p.Checked = true
-	p.Satisfied = false
-	p.Err = nil
-
-	ver, err := runc.GetVersionByCliVersion()
-	if err != nil {
-		p.Err = fmt.Errorf("could not get version from cli: %w", err)
-		return false, p.Err
-	}
-	p.Satisfied = p.Constraint.Check(ver)
-	return p.Satisfied, p.Err
+	})
 }
 
 var (

@@ -12,11 +12,10 @@ type status struct {
 }
 
 func (p *status) Check() (bool, error) {
-	if !p.Checked {
+	return p.CheckTemplate(func() (bool, error) {
 		p.Satisfied = selinux.IsEnabled() == p.expectedStatus
-		p.Checked = true
-	}
-	return p.Satisfied, nil
+		return p.Satisfied, p.Err
+	})
 }
 
 var (

@@ -1,6 +1,8 @@
 package kernel
 
 import (
+	"fmt"
+
 	"github.com/ctrsploit/ctrsploit/pkg/kernel/uname"
 	"github.com/ctrsploit/sploit-spec/pkg/log"
 	"github.com/ctrsploit/sploit-spec/pkg/prerequisite"
@@ -44,14 +46,13 @@ func (p *Version) check(version string) (satisfied bool) {
 }
 
 func (p *Version) Check() (bool, error) {
-	if p.Checked {
-		return p.Satisfied, nil
-	}
-	version, err := uname.Release()
-	if err != nil {
-		return false, err
-	}
-	p.Satisfied = p.check(version)
-	p.Checked = true
-	return p.Satisfied, nil
+	return p.CheckTemplate(func() (bool, error) {
+		version, err := uname.Release()
+		if err != nil {
+			p.Err = fmt.Errorf("failed to check [%s], caused by determining release version: %w", p.GetName(), err)
+			return p.Satisfied, p.Err
+		}
+		p.Satisfied = p.check(version)
+		return p.Satisfied, p.Err
+	})
 }

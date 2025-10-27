@@ -14,14 +14,13 @@ type CompiledBefore struct {
 }
 
 func (p *CompiledBefore) Check() (bool, error) {
-	if p.Checked {
-		return p.Satisfied, nil
-	}
-	actualCompiledDate, err := kernel.GetCompiledDate()
-	if err != nil {
-		return false, fmt.Errorf("failed to determine compiled date: %w", err)
-	}
-	p.Satisfied = actualCompiledDate.Before(p.Expected)
-	p.Checked = true
-	return p.Satisfied, nil
+	return p.CheckTemplate(func() (bool, error) {
+		actualCompiledDate, err := kernel.GetCompiledDate()
+		if err != nil {
+			p.Err = fmt.Errorf("failed to check [%s], caused by unable to determine compiled date: %w", p.GetName(), err)
+			return p.Satisfied, p.Err
+		}
+		p.Satisfied = actualCompiledDate.Before(p.Expected)
+		return p.Satisfied, p.Err
+	})
 }
