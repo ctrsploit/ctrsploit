@@ -30,13 +30,7 @@ func (vb *VersionBetween) Check() (bool, error) {
 		awesome_error.CheckErr(err)
 		return false, err
 	}
-	var e []error
-	vb.Satisfied, e = constraint.Validate(version)
-	if len(e) > 0 {
-		err = fmt.Errorf("failed to validate version %s: %v", version.String(), e)
-		awesome_error.CheckErr(err)
-		return false, err
-	}
+	vb.Satisfied = constraint.Check(version)
 	vb.Checked = true
 	return vb.Satisfied, nil
 }
