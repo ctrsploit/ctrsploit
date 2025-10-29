@@ -28,9 +28,14 @@ while IFS= read -r e2e_file; do
     PKG=$(yq eval ".test_envs[$i].pkg" "$e2e_file")
     CMD=$(yq eval ".test_envs[$i].cmd" "$e2e_file")
     STOP_FLAG=$(yq eval ".test_envs[$i].stop_flag" "$e2e_file")
+    START_TIMEOUT=$(yq eval ".test_envs[$i].start_timeout" "$e2e_file")
 
     if [[ -z "$REMOTE_HOST" || "$REMOTE_HOST" == "null" ]]; then
         REMOTE_HOST="$ENV_NAME"
+    fi
+
+    if [[ -z "$START_TIMEOUT" || "$START_TIMEOUT" == "null" ]]; then
+        START_TIMEOUT=60
     fi
 
     echo "----------------------------------"
@@ -41,13 +46,14 @@ while IFS= read -r e2e_file; do
     echo "PKG = ${PKG}"
     echo "TEST_CMD = ${CMD}"
     echo "STOP_FLAG  = ${STOP_FLAG}"
+    echo "START_TIMEOUT = ${START_TIMEOUT}"
 
     make test.bin PKG=${PKG}
 
     if [[ "${ENV_KIND}" == "plain" ]]; then
       eval "${CMD}"
     elif [[ "${ENV_KIND}" == "dqd" ]]; then
-      ${DIR_SCRIPT}/dqd.sh "${REMOTE_HOST}" "${DQD_DIR}" "${PKG}" "${CMD}" "${STOP_FLAG}"
+      ${DIR_SCRIPT}/dqd.sh "${REMOTE_HOST}" "${DQD_DIR}" "${PKG}" "${CMD}" "${STOP_FLAG}" "${START_TIMEOUT}"
     fi
   done
 done < <(find ${DIR_SEARCH} -type f -name "e2e.yml")

@@ -16,6 +16,7 @@ DQD_DIR=$2
 PKG=$3
 CMD=$4
 STOP_FLAG=$5
+START_TIMEOUT=$6
 
 DIR_DOCKER_ARCHIVE="/tmp/docker_archive"
 DIR_SCRIPT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -36,7 +37,7 @@ up() {
   pushd "${DIR_DOCKER_ARCHIVE}/${dqd_dir}" > /dev/null
   docker compose -f docker-compose.yml -f docker-compose.kvm.yml up -d
   # until 'Reached target multi-user.target' || timeout 30
-  local timeout=60
+  local timeout=${START_TIMEOUT}
   local found=false
   local success_string="Reached target multi-user.target"
   local start_time=$(date +%s)
