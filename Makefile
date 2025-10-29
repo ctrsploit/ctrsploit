@@ -72,6 +72,6 @@ test:
 	docker run --rm -v $(CURDIR):/root/app --env TEST_ENV=$(TEST_ENV) $(DEV_IMAGE) make unittest
 test.bin:
 	mkdir -p bin/test
-	docker run --rm -v $(CURDIR):/root/app --env TEST_ENV=$(TEST_ENV) $(DEV_IMAGE) ./script/test_bin.sh $(PKG)
+	docker run --rm -v $(CURDIR):/root/app $(DEV_IMAGE) ./script/test_bin.sh $(PKG)
 e2e:
 	./test/e2e/e2e.sh $(DIR)
