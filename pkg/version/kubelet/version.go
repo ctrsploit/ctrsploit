@@ -43,7 +43,7 @@ func VersionsByK8sApi() (map[string]*semver.Version, error) {
 	}
 	nodes, err := c.CoreV1().Nodes().List(context.TODO(), metav1.ListOptions{})
 	if err != nil {
-		return nil, fmt.Errorf("failed to list nodes: %v", err)
+		return nil, fmt.Errorf("failed to list nodes: %w", err)
 	}
 	log.Logger.Debugf("Found %d nodes", len(nodes.Items))
 	if len(nodes.Items) == 0 {
