@@ -34,10 +34,10 @@ func GetKubernetesConfig(kubeconfigPath ...string) (*rest.Config, error) {
 
 	config, err := clientConfig.ClientConfig()
 	if err != nil {
-		log.Logger.Infof("Fall back to in-cluster config")
+		log.Logger.Debugf("Fall back to in-cluster config")
 		return rest.InClusterConfig()
 	} else {
-		log.Logger.Infof("Using kubeconfig from default location")
+		log.Logger.Debugf("Using kubeconfig from default location")
 	}
 
 	return config, nil
