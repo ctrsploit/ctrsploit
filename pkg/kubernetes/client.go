@@ -24,7 +24,7 @@ func GetKubernetesClient(kubeconfigPath ...string) (*kubernetes.Clientset, error
 
 func GetKubernetesConfig(kubeconfigPath ...string) (*rest.Config, error) {
 	if len(kubeconfigPath) > 0 && kubeconfigPath[0] != "" {
-		log.Logger.Infof("Using kubeconfig from path: %s", kubeconfigPath[0])
+		log.Logger.Debugf("Using kubeconfig from path: %s", kubeconfigPath[0])
 		return clientcmd.BuildConfigFromFlags("", kubeconfigPath[0])
 	}
 
@@ -37,7 +37,7 @@ func GetKubernetesConfig(kubeconfigPath ...string) (*rest.Config, error) {
 		log.Logger.Infof("Fall back to in-cluster config")
 		return rest.InClusterConfig()
 	} else {
-		log.Logger.Infof("Using kubeconfig from default location")
+		log.Logger.Debugf("Using kubeconfig from default location")
 	}
 
 	return config, nil
