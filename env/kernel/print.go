@@ -1,8 +1,9 @@
 package kernel
 
 import (
+	"github.com/ctrsploit/ctrsploit/env/kernel/rlimit"
 	"github.com/ctrsploit/ctrsploit/env/kernel/sysctl"
-	"github.com/ctrsploit/sploit-spec/pkg/env/container"
+	"github.com/ctrsploit/sploit-spec/pkg/env/container/kernel"
 	"github.com/ctrsploit/sploit-spec/pkg/printer"
 	"github.com/ctrsploit/sploit-spec/pkg/result"
 	"github.com/ctrsploit/sploit-spec/pkg/result/item"
@@ -11,10 +12,11 @@ import (
 type Result struct {
 	Name         result.Title
 	CompiledDate item.Short `json:"compiled_date"`
-	sysctl.Result
+	Sysctl       sysctl.Result
+	Rlimit       rlimit.Result
 }
 
-func Human(machine container.Kernel) (human Result) {
+func Human(machine kernel.Kernel) (human Result) {
 	human = Result{
 		Name: result.Title{
 			Name: "Kernel",
@@ -24,7 +26,8 @@ func Human(machine container.Kernel) (human Result) {
 			Description: "The date when the kernel was compiled.",
 			Result:      machine.CompiledDate.String(),
 		},
-		Result: sysctl.Human(machine.Sysctl),
+		Sysctl: sysctl.Human(machine.Sysctl),
+		Rlimit: rlimit.Human(machine.Rlimit),
 	}
 	return
 }

@@ -21,6 +21,8 @@ var Command = &cli.Command{
 		Selinux,
 		Fdisk,
 		Kernel,
+		Sysctl,
+		Rlimit,
 		Namespace,
 		DockerVersion,
 		Upload,
