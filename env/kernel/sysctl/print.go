@@ -12,9 +12,10 @@ import (
 type Result struct {
 	Name                    result.Title
 	RouteLocalNet           item.Bool  `json:"route_localnet"`
-	MaxUserNamespaces       item.Short `json:"max_user_namespaces"`
 	UnprivilegedUsernsClone item.Bool  `json:"unprivileged_userns_clone"`
+	MaxUserNamespaces       item.Short `json:"max_user_namespaces"`
 	PidMax                  item.Short `json:"pid_max"`
+	ThreadsMax              item.Short `json:"threads-max"`
 }
 
 func Human(machine spec.Sysctl) (human Result) {
@@ -41,6 +42,11 @@ func Human(machine spec.Sysctl) (human Result) {
 			Name:        "kernel.pid_max",
 			Description: "Sets the maximum PID value, controlling how many processes the system can run concurrently.",
 			Result:      fmt.Sprintf("%d", machine.PidMax),
+		},
+		ThreadsMax: item.Short{
+			Name:        "kernel.threads-max",
+			Description: "Specifies the maximum number of concurrent threads on the system.",
+			Result:      fmt.Sprintf("%d", machine.ThreadsMax),
 		},
 	}
 	return

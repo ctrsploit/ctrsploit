@@ -1,6 +1,8 @@
 package cgroup
 
-import "github.com/ctrsploit/ctrsploit/pkg/cgroup/version"
+import (
+	"github.com/ctrsploit/ctrsploit/pkg/cgroup/version"
+)
 
 type Cgroup interface {
 	GetVersion() version.Version

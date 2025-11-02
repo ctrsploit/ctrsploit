@@ -1,27 +1,103 @@
 package user
 
 import (
-	"os"
+	"fmt"
+	"strings"
 
+	"github.com/ctrsploit/sploit-spec/pkg/exeenv"
 	"github.com/ctrsploit/sploit-spec/pkg/prerequisite"
+	"golang.org/x/sys/unix"
 )
 
-type EUidEqualTo struct {
-	EUid int
+// UIDEqualTo check current process's ruid/euid/suid equal to expected values
+type UIDEqualTo struct {
 	prerequisite.BasePrerequisite
+	RUid *int // Optional, nil means not checking
+	EUid *int // Optional, nil means not checking
+	SUid *int // Optional, nil means not checking
 }
 
-func (p *EUidEqualTo) Check() (bool, error) {
+func (p *UIDEqualTo) Check() (bool, error) {
 	return p.CheckTemplate(func() (bool, error) {
-		p.Satisfied = os.Geteuid() == p.EUid
+		ruid, euid, suid := unix.Getresuid()
+
+		checks := []struct {
+			name     string
+			expected *int
+			actual   int
+		}{
+			{"ruid", p.RUid, ruid},
+			{"euid", p.EUid, euid},
+			{"suid", p.SUid, suid},
+		}
+
+		var mismatches []string
+		for _, chk := range checks {
+			if chk.expected != nil && *chk.expected != chk.actual {
+				mismatches = append(mismatches, fmt.Sprintf("%s=%d (expected %d)", chk.name, chk.actual, *chk.expected))
+			}
+		}
+
+		if len(mismatches) > 0 {
+			p.Err = fmt.Errorf(
+				"failed to check [%s], caused by uid mismatch: %s",
+				p.GetName(),
+				strings.Join(mismatches, ", "),
+			)
+			p.Satisfied = false
+		} else {
+			p.Satisfied = true
+		}
 		return p.Satisfied, p.Err
 	})
 }
 
-var MustBeRootToWriteReleaseAgent = EUidEqualTo{
-	EUid: 0,
-	BasePrerequisite: prerequisite.BasePrerequisite{
-		Name: "euid=0",
-		Info: "Current user must be root to write release_agent",
-	},
+type UIDOption func(*UIDEqualTo)
+
+func NewUIDEqualToPrerequisite(name, info string, env int, opts ...UIDOption) UIDEqualTo {
+	p := UIDEqualTo{
+		BasePrerequisite: prerequisite.BasePrerequisite{
+			Name:   name,
+			Info:   info,
+			ExeEnv: env,
+		},
+	}
+	for _, opt := range opts {
+		opt(&p)
+	}
+	return p
 }
+
+func WithRUid(uid int) UIDOption {
+	return func(p *UIDEqualTo) {
+		p.RUid = &uid
+	}
+}
+
+func WithEUid(uid int) UIDOption {
+	return func(p *UIDEqualTo) {
+		p.EUid = &uid
+	}
+}
+
+func WithSUid(uid int) UIDOption {
+	return func(p *UIDEqualTo) {
+		p.SUid = &uid
+	}
+}
+
+var (
+	EUid0 = NewUIDEqualToPrerequisite(
+		"euid=0",
+		"",
+		exeenv.InContainer,
+		WithEUid(0),
+	)
+
+	RUid0 = NewUIDEqualToPrerequisite(
+		"ruid=0",
+		"",
+		exeenv.InContainer,
+		WithRUid(0),
+	)
+)

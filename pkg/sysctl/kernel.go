@@ -3,15 +3,16 @@ package sysctl
 import (
 	"fmt"
 	"os"
-	"strconv"
 	"strings"
 
+	"github.com/ctrsploit/ctrsploit/internal"
 	"github.com/ctrsploit/sploit-spec/pkg/log"
 )
 
 const (
 	PathUnprivilegedUsernsClone = "/proc/sys/kernel/unprivileged_userns_clone"
 	PathPidMax                  = "/proc/sys/kernel/pid_max"
+	PathThreadsMax              = "/proc/sys/kernel/threads-max"
 )
 
 func UnprivilegedUsernsCloneEnabled() (bool, error) {
@@ -27,14 +28,18 @@ func UnprivilegedUsernsCloneEnabled() (bool, error) {
 	return strings.TrimSpace(string(content)) == "1", nil
 }
 
-func PidMax() (int, error) {
-	content, err := os.ReadFile(PathPidMax)
+func PidMax() (uint64, error) {
+	pid, err := internal.ReadUint64(PathPidMax)
 	if err != nil {
-		return 0, fmt.Errorf("failed to read max pid: %w", err)
-	}
-	pid, err := strconv.Atoi(strings.TrimSpace(string(content)))
-	if err != nil {
-		return 0, fmt.Errorf("failed to parse max pid: %w", err)
+		return 0, fmt.Errorf("failed to read pid max: %w", err)
 	}
 	return pid, nil
+}
+
+func ThreadsMax() (uint64, error) {
+	threads, err := internal.ReadUint64(PathThreadsMax)
+	if err != nil {
+		return 0, fmt.Errorf("failed to read threads max: %w", err)
+	}
+	return threads, nil
 }

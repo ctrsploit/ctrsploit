@@ -15,6 +15,7 @@ import (
 	cve_2024_23650 "github.com/ctrsploit/ctrsploit/vul/cve-2024-23650"
 	cve_2025_23266 "github.com/ctrsploit/ctrsploit/vul/cve-2025-23266"
 	cve_2025_47290 "github.com/ctrsploit/ctrsploit/vul/cve-2025-47290"
+	fork_bomb "github.com/ctrsploit/ctrsploit/vul/fork-bomb"
 	"github.com/ctrsploit/ctrsploit/vul/naked"
 	"github.com/ctrsploit/ctrsploit/vul/namespace"
 	shared_socket "github.com/ctrsploit/ctrsploit/vul/shared-socket"
@@ -38,6 +39,7 @@ var Command = &cli.Command{
 		cve_2024_23650.VulCmd,
 		cve_2025_23266.VulCmd,
 		cve_2025_47290.VulCmd,
+		fork_bomb.VulCmd,
 		naked.VulCmd,
 		caps.VulCmd,
 		namespace.VulCmd,

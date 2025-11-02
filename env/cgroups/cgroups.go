@@ -3,9 +3,11 @@ package cgroups
 import (
 	"fmt"
 
+	"github.com/ctrsploit/ctrsploit/pkg/cgroup/pids"
 	v1 "github.com/ctrsploit/ctrsploit/pkg/cgroup/v1"
 	"github.com/ctrsploit/ctrsploit/pkg/cgroup/version"
 	"github.com/ctrsploit/sploit-spec/pkg/env/container"
+	"github.com/ssst0n3/awesome_libs/awesome_error"
 )
 
 const CommandCgroupsName = "cgroups"
@@ -36,6 +38,11 @@ func Cgroups() (cgroups container.CGroups, err error) {
 		if is {
 			cgroups.TopLevelSubSystems = append(cgroups.TopLevelSubSystems, subsystemName)
 		}
+	}
+	cgroups.PidsMax, err = pids.GetMax()
+	if err != nil {
+		awesome_error.CheckWarning(err)
+		return
 	}
 	return
 }

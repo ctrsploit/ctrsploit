@@ -56,9 +56,11 @@ var (
 	CapBpfEff     = HasEff("CAP_BPF")
 	CapPerfmonBnd = HasBnd("CAP_PERFMON")
 	// CapPerfmonEff CAP_PERFMON: attach to kprobes, uprobes, tracepoints
-	CapPerfmonEff = HasEff("CAP_PERFMON")
-	CapNetRawBnd  = HasBnd("CAP_NET_RAW")
-	CapNetRawEff  = HasEff("CAP_NET_RAW")
+	CapPerfmonEff     = HasEff("CAP_PERFMON")
+	CapNetRawBnd      = HasBnd("CAP_NET_RAW")
+	CapNetRawEff      = HasEff("CAP_NET_RAW")
+	CapSysResourceBnd = HasBnd("CAP_SYS_RESOURCE")
+	CapSysResourceEff = HasEff("CAP_SYS_RESOURCE")
 )
 
 func (p *Has) Check() (bool, error) {

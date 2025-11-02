@@ -16,12 +16,10 @@ func Kernel() (k spec.Kernel, err error) {
 		awesome_error.CheckWarning(err)
 		return
 	}
-	k.Sysctl, err = sysctl.Sysctl()
-	if err != nil {
-		return
-	}
+	k.Sysctl, _ = sysctl.Sysctl()
 	k.Rlimit, err = rlimit.Rlimit()
 	if err != nil {
+		awesome_error.CheckWarning(err)
 		return
 	}
 	return

@@ -42,7 +42,7 @@ var (
 			CheckSecPrerequisites: &capability.CapSysAdminBnd,
 			ExploitablePrerequisites: prerequisite.And(
 				&capability.CapSysAdminEff,
-				&user.MustBeRootToWriteReleaseAgent,
+				&user.EUid0,
 				&cgroups.V1,
 				&cgroups.HasTopLevelSubsystem,
 				&apparmor.Disabled,
