@@ -10,7 +10,7 @@ import (
 
 type MaxUserNamespaces struct {
 	prerequisite.BasePrerequisite
-	GreaterThan int
+	GreaterThan uint64
 }
 
 func (p *MaxUserNamespaces) Check() (bool, error) {

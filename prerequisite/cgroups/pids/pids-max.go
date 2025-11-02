@@ -1,0 +1,50 @@
+package pids
+
+import (
+	"fmt"
+
+	"github.com/ctrsploit/ctrsploit/pkg/cgroup/pids"
+	"github.com/ctrsploit/sploit-spec/pkg/exeenv"
+	"github.com/ctrsploit/sploit-spec/pkg/prerequisite"
+)
+
+type pidsLimited struct {
+	prerequisite.BasePrerequisite
+	limited bool
+}
+
+func (p *pidsLimited) Check() (bool, error) {
+	return p.CheckTemplate(func() (bool, error) {
+		pidsMax, err := pids.GetMax()
+		if err != nil {
+			p.Err = fmt.Errorf("failed to check [%s], caused by getting max pids: %w", p.GetName(), err)
+			return p.Satisfied, p.Err
+		}
+		limited := pidsMax >= 0
+		sysctlPidMax, err := pids.GetMax()
+		if err == nil {
+			if pidsMax > sysctlPidMax {
+				limited = false
+			}
+		}
+		sysctlThreadsMax, err := pids.GetMax()
+		if err == nil {
+			if pidsMax > sysctlThreadsMax {
+				limited = false
+			}
+		}
+		p.Satisfied = limited == p.limited
+		return p.Satisfied, p.Err
+	})
+}
+
+var (
+	UnlimitedPidsMax = pidsLimited{
+		BasePrerequisite: prerequisite.BasePrerequisite{
+			Name:   "pids.max unlimited",
+			Info:   "pids.max != max, < kernel.pids_max, < kernel.threads-max",
+			ExeEnv: exeenv.InContainer,
+		},
+		limited: false,
+	}
+)
