@@ -7,7 +7,7 @@ import (
 
 var Rlimit = &cli.Command{
 	Name:  "rlimit",
-	Usage: "",
+	Usage: "get process resource limits",
 	Action: func(c *cli.Context) error {
 		err := rlimit.Print()
 		if err != nil {

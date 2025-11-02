@@ -13,7 +13,7 @@ require (
 	github.com/containerd/ttrpc v1.2.7
 	github.com/containerd/typeurl v1.0.2
 	github.com/coreos/go-iptables v0.8.0
-	github.com/ctrsploit/sploit-spec v0.7.1-rc4
+	github.com/ctrsploit/sploit-spec v0.7.1-rc6
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc
 	github.com/docker/docker v28.4.0+incompatible
 	github.com/go-git/go-git/v6 v6.0.0-20250906064640-2917a7134436

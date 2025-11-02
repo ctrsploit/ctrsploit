@@ -46,6 +46,8 @@ COMMANDS:
    selinux, se         show the selinux info
    fdisk, f            like linux command fdisk or lsblk // TODO
    kernel, k           collect kernel environment information
+   sysctl              display sysctl information
+   rlimit              get process resource limits
    namespace, n, ns    check namespace is host ns
    docker-version, dv  guess dockerd version range
    upload, up          upload <servicename> <filename> <obs> [host]
@@ -71,12 +73,14 @@ COMMANDS:
    cve-2020-8558, 8558                             access services bound to 127.0.0.1 from adjacent hosts
    cve-2020-15257, 15257                           abuse the containerd-shim's abstract unix socket in a container with host network namespace
    cve-2021-25741, 25741, kubelet-subpath-symlink  kubelet symlink exchange vulnerability allows mounting node filesystem inside a pod
+   cve-2021-25748, 25748, ingress-nginx-path-leak  ingress-nginx path validation bypass vulnerability allows credential leakage through newline injection
    cve-2022-0492, 0492                             escape via cgroup's release agent without CAP_SYS_ADMIN if kernel is vulnerable to CVE-2022-0492
    cve-2022-39253, 39253                           read host file during docker build via git CVE-2022-39253
    cve-2024-0132, 0132                             gpu container escape via nvidia-container-toolkit CVE-2024-0132
    cve-2024-23650, 23650                           dos buildkit via oci exporter by sending a crafted request
    cve-2025-23266, 23266                           gpu container escape via nvidia-container-toolkit cve-2025-23266 by running a malicious container image
    cve-2025-47290, 47290                           modify host file via containerd cve-2025-47290 during pulling image
+   fork-bomb                                       
    naked                                           we call containers running without seccomp, AppArmor, or SELinux enabled 'naked containers', which leaves them highly vulnerable to kernel exploits and potential container escapes
    capability, caps                                abuse dangerous capabilities in container
    namespace, ns                                   host level namespaces break the isolations
@@ -84,7 +88,7 @@ COMMANDS:
    help, h                                         Shows a list of commands or help for one command
 
 OPTIONS:
-   --help, -h  show hel
+   --help, -h  show help
 ```
 
 * :heavy_check_mark: : 完全支持
@@ -104,7 +108,7 @@ OPTIONS:
 | CVE-2019-14271                                              |                                                                            | :x:                | :heavy_check_mark: |
 | CVE-2019-16884                                              |                                                                            | :x:                | :heavy_check_mark: |
 | CVE-2020-8555                                               |                                                                            | :x:                | :heavy_check_mark: |
-| CVE-2020-8558                                               | 从相邻主机访问绑定在127.0.0.1上的端口                                                    | :heavy_check_mark: | :heavy_check_mark: |
+| [cve-2020-8558](./vul/cve-2020-8558)                        | 从相邻主机访问绑定在127.0.0.1上的端口                                                    | :heavy_check_mark: | :heavy_check_mark: |
 | CVE-2020-15157                                              |                                                                            | :x:                | :heavy_check_mark: |
 | [cve-2020-15257](./vul/cve-2020-15257)                      | 在共享主机网络命名空间的容器滥用<br>containerd-shim的抽象套接字                                  | :heavy_check_mark: | :heavy_check_mark: |
 | CVE-2021-3493                                               |                                                                            | :x:                | :heavy_check_mark: |
@@ -167,6 +171,7 @@ OPTIONS:
 | exposed-api                                                 |                                                                            | -                  | -                  |
 | └─docker-2375                                               |                                                                            | :x:                | :x:                |
 | lxcfs                                                       |                                                                            | :x:                | :x:                |
+| [fork-bomb](./vul/fork-bomb)                                |                                                                            | :heavy_check_mark: | :heavy_check_mark: |
 
 ### 漏洞利用
 
@@ -184,12 +189,14 @@ COMMANDS:
    cve-2020-8558, 8558                                access services bound to 127.0.0.1 from adjacent hosts
    cve-2020-15257, 15257                              abuse the containerd-shim's abstract unix socket in a container with host network namespace
    cve-2021-25741, 25741, kubelet-subpath-symlink     kubelet symlink exchange vulnerability allows mounting node filesystem inside a pod
+   cve-2021-25748, 25748, ingress-nginx-path-leak     ingress-nginx path validation bypass vulnerability allows credential leakage through newline injection
    cve-2022-0492, 0492                                escape via cgroup's release agent without CAP_SYS_ADMIN if kernel is vulnerable to CVE-2022-0492
    cve-2022-39253, 39253                              read host file during docker build via git CVE-2022-39253
    cve-2024-0132, 0132                                gpu container escape via nvidia-container-toolkit CVE-2024-0132
    cve-2024-23650, 23650                              dos buildkit via oci exporter by sending a crafted request
    cve-2025-23266, 23266                              gpu container escape via nvidia-container-toolkit cve-2025-23266 by running a malicious container image
    cve-2025-47290, 47290                              modify host file via containerd cve-2025-47290 during pulling image
+   fork-bomb                                          
    shocker, cap_dac_read_search, open_by_handle_at    escape by CAP_DAC_READ_SEARCH, alias shocker, found by Sebastian Krahmer (stealth) in 2014
    cap_sys_admin, sys_admin                           abuse cap_sys_admin
    release_agent, ra                                  escape by cap_sys_admin via cgroups v1 release_agent
@@ -233,12 +240,14 @@ COMMANDS:
    cve-2020-8558, 8558                              access services bound to 127.0.0.1 from adjacent hosts
    cve-2020-15257, 15257                            abuse the containerd-shim's abstract unix socket in a container with host network namespace
    cve-2021-25741, 25741, kubelet-subpath-symlink   kubelet symlink exchange vulnerability allows mounting node filesystem inside a pod
+   cve-2021-25748, 25748, ingress-nginx-path-leak   ingress-nginx path validation bypass vulnerability allows credential leakage through newline injection
    cve-2022-0492, 0492                              escape via cgroup's release agent without CAP_SYS_ADMIN if kernel is vulnerable to CVE-2022-0492
    cve-2022-39253, 39253                            read host file during docker build via git CVE-2022-39253
    cve-2024-0132, 0132                              gpu container escape via nvidia-container-toolkit CVE-2024-0132
    cve-2024-23650, 23650                            dos buildkit via oci exporter by sending a crafted request
    cve-2025-23266, 23266                            gpu container escape via nvidia-container-toolkit cve-2025-23266 by running a malicious container image
    cve-2025-47290, 47290                            modify host file via containerd cve-2025-47290 during pulling image
+   fork-bomb                                        
    shocker, cap_dac_read_search, open_by_handle_at  escape by CAP_DAC_READ_SEARCH, alias shocker, found by Sebastian Krahmer (stealth) in 2014
    cap_sys_admin, sys_admin                         abuse cap_sys_admin
    cap_bpf, bpf                                     load evil bpf programs via cap_bpf
@@ -256,26 +265,27 @@ OPTIONS:
 
 ```shell
 $ ctrsploit --colorful checksec auto
-✔  host-net     # shared host network namespace breaks the network isolation
-✘  cve-2016-8867        # Ambient Capabilities in the Linux kernel allow local users to gain privileges
-✘  cve-2019-5736        # escape by overwrite runc executable file via /proc/self/exe
+✔  ptrace-pid-host      # ptrace host processes in a container with cap_sys_ptrace and host pid namespace
 ✔  cap_sys_admin        # abuse cap_sys_admin
-✘  docker.sock  # escape by shared docker.sock via running a privileged container
+✘  cve-2016-8867        # Ambient Capabilities in the Linux kernel allow local users to gain privileges
+✘  cve-2020-8558        # access services bound to 127.0.0.1 from adjacent hosts
 ✘  cve-2021-25741       # kubelet symlink exchange vulnerability allows mounting node filesystem inside a pod
-✘  cve-2024-0132        # gpu container escape via nvidia-container-toolkit CVE-2024-0132
 ✘  cve-2025-23266       # gpu container escape via nvidia-container-toolkit cve-2025-23266 by running a malicious container image
-✘  cve-2025-47290       # modify host file via containerd cve-2025-47290 during pulling image
-✔  cap_bpf      # load evil bpf programs via cap_bpf
+✔  shocker      # escape by CAP_DAC_READ_SEARCH, alias shocker, found by Sebastian Krahmer (stealth) in 2014
+✘  cve-2022-39253       # read host file during docker build via git CVE-2022-39253
+✘  cve-2024-0132        # gpu container escape via nvidia-container-toolkit CVE-2024-0132
+✔  cap_sys_ptrace       # abuse cap_sys_ptrace
 ✔  naked        # we call containers running without seccomp, AppArmor, or SELinux enabled 'naked containers', which leaves them highly vulnerable to kernel exploits and potential container escapes
 ✔  host-pid     # shared host pid namespace breaks process isolation
+✘  cve-2019-5736        # escape by overwrite runc executable file via /proc/self/exe
 ✘  cve-2020-15257       # abuse the containerd-shim's abstract unix socket in a container with host network namespace
-✘  cve-2022-39253       # read host file during docker build via git CVE-2022-39253
-✔  shocker      # escape by CAP_DAC_READ_SEARCH, alias shocker, found by Sebastian Krahmer (stealth) in 2014
-✔  cap_sys_ptrace       # abuse cap_sys_ptrace
-✘  cve-2020-8558        # access services bound to 127.0.0.1 from adjacent hosts
+✘  cve-2025-47290       # modify host file via containerd cve-2025-47290 during pulling image
+✔  cap_bpf      # load evil bpf programs via cap_bpf
+✔  host-net     # shared host network namespace breaks the network isolation
+✘  docker.sock  # escape by shared docker.sock via running a privileged container
 ✘  cve-2022-0492        # escape via cgroup's release agent without CAP_SYS_ADMIN if kernel is vulnerable to CVE-2022-0492
 ✘  cve-2024-23650       # dos buildkit via oci exporter by sending a crafted request
-✔  ptrace-pid-host      # ptrace host processes in a container with cap_sys_ptrace and host pid namespace
+✘  fork-bomb
 ```
 
 ### helper
