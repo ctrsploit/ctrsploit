@@ -18,7 +18,7 @@ type UIDEqualTo struct {
 }
 
 func (p *UIDEqualTo) Check() (bool, error) {
-	return p.CheckTemplate(func() (bool, error) {
+	return p.CheckTemplate(func() {
 		ruid, euid, suid := unix.Getresuid()
 
 		checks := []struct {
@@ -39,16 +39,11 @@ func (p *UIDEqualTo) Check() (bool, error) {
 		}
 
 		if len(mismatches) > 0 {
-			p.Err = fmt.Errorf(
-				"failed to check [%s], caused by uid mismatch: %s",
-				p.GetName(),
-				strings.Join(mismatches, ", "),
-			)
-			p.Satisfied = false
+			p.Err = p.WrapErr(fmt.Errorf("uid mismatch: %s", strings.Join(mismatches, ", ")))
 		} else {
 			p.Satisfied = true
 		}
-		return p.Satisfied, p.Err
+		return
 	})
 }
 

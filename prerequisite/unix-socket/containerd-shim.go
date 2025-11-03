@@ -21,13 +21,13 @@ var ContainerdShimAbstract = Available{
 }
 
 func (p *Available) Check() (bool, error) {
-	return p.CheckTemplate(func() (bool, error) {
+	return p.CheckTemplate(func() {
 		path, err := net.ContainerdShimAbstractUnixSocketPath(p.PrefixSocketName)
 		if err != nil {
-			p.Err = fmt.Errorf("failed to check [%s], caused by getting abstract unix socket path: %w", p.GetName(), err)
-			return p.Satisfied, p.Err
+			p.Err = p.WrapErr(fmt.Errorf("getting abstract unix socket path: %w", err))
+			return
 		}
 		p.Satisfied = path != ""
-		return p.Satisfied, p.Err
+		return
 	})
 }

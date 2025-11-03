@@ -16,11 +16,11 @@ type Contains struct {
 }
 
 func (p *Contains) Check() (bool, error) {
-	return p.CheckTemplate(func() (bool, error) {
+	return p.CheckTemplate(func() {
 		file, err := os.Open("/proc/1/cgroup")
 		if err != nil {
-			p.Err = fmt.Errorf("failed to check [%s] caused by reading /proc/1/cgroup: %w", p.GetName(), err)
-			return p.Satisfied, p.Err
+			p.Err = p.WrapErr(fmt.Errorf("reading /proc/1/cgroup: %w", err))
+			return
 		}
 
 		scanner := bufio.NewScanner(file)
@@ -33,7 +33,7 @@ func (p *Contains) Check() (bool, error) {
 				}
 			}
 		}
-		return p.Satisfied, p.Err
+		return
 	})
 }
 

@@ -22,14 +22,14 @@ func (p *ContainsUncertainMountPointWithType) RealMountPoint() string {
 }
 
 func (p *ContainsUncertainMountPointWithType) Check() (bool, error) {
-	return p.CheckTemplate(func() (bool, error) {
+	return p.CheckTemplate(func() {
 		infos, err := mountinfo.GetMounts(func(info *mountinfo.Info) (skip, stop bool) {
 			skip = !strings.Contains(info.Root, p.ExpectedContains)
 			return skip, false
 		})
 		if err != nil {
-			p.Err = fmt.Errorf("failed to check [%s], caused by getting mountinfo: %w", p.GetName(), err)
-			return p.Satisfied, p.Err
+			p.Err = p.WrapErr(fmt.Errorf("getting mountinfo: %w", err))
+			return
 		}
 		for _, info := range infos {
 			if p.Type == 0 {
@@ -49,7 +49,7 @@ func (p *ContainsUncertainMountPointWithType) Check() (bool, error) {
 				break
 			}
 		}
-		return p.Satisfied, p.Err
+		return
 	})
 }
 

@@ -19,7 +19,7 @@ type AllKubeletVersionConstraint struct {
 
 // Check checks if any kubelet version satisfies the constraint.
 func (p *AllKubeletVersionConstraint) Check() (bool, error) {
-	return p.CheckTemplate(func() (bool, error) {
+	return p.CheckTemplate(func() {
 		p.Satisfied = true
 		cons, err := semver.NewConstraint(p.Constraint)
 		if err != nil {
@@ -29,12 +29,12 @@ func (p *AllKubeletVersionConstraint) Check() (bool, error) {
 		}
 		versions, err := kubelet.Versions()
 		if err != nil {
-			p.Err = err
-			return false, p.Err
+			p.Err = p.WrapErr(fmt.Errorf("failed to list kubelet versions: %w", err))
+			return
 		}
 		if len(versions) == 0 {
 			p.Err = fmt.Errorf("no kubelet versions found")
-			return false, p.Err
+			return
 		}
 		for name, version := range versions {
 			if cons.Check(version) {
@@ -44,7 +44,7 @@ func (p *AllKubeletVersionConstraint) Check() (bool, error) {
 				p.Satisfied = false
 			}
 		}
-		return p.Satisfied, p.Err
+		return
 	})
 }
 

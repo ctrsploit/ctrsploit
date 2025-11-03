@@ -13,9 +13,9 @@ type Exists struct {
 }
 
 func (p *Exists) Check() (bool, error) {
-	return p.CheckTemplate(func() (bool, error) {
+	return p.CheckTemplate(func() {
 		_, p.Satisfied = os.LookupEnv(p.Expected)
-		return p.Satisfied, p.Err
+		return
 	})
 }
 

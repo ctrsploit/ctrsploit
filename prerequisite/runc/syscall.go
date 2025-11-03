@@ -13,13 +13,14 @@ type ensureCloned struct {
 }
 
 func (p *ensureCloned) Check() (bool, error) {
-	return p.CheckTemplate(func() (bool, error) {
+	return p.CheckTemplate(func() {
 		var err error
 		p.Satisfied, err = runc.StraceFGetSeals()
 		if err != nil {
-			p.Err = fmt.Errorf("failed to check [%s], caused by strace runc: %w", p.GetName(), err)
+			p.Err = p.WrapErr(fmt.Errorf("strace runc: %w", err))
+			return
 		}
-		return p.Satisfied, p.Err
+		return
 	})
 
 }

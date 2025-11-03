@@ -46,13 +46,13 @@ func (p *Version) check(version string) (satisfied bool) {
 }
 
 func (p *Version) Check() (bool, error) {
-	return p.CheckTemplate(func() (bool, error) {
+	return p.CheckTemplate(func() {
 		version, err := uname.Release()
 		if err != nil {
-			p.Err = fmt.Errorf("failed to check [%s], caused by determining release version: %w", p.GetName(), err)
-			return p.Satisfied, p.Err
+			p.Err = p.WrapErr(fmt.Errorf("determining release version: %w", err))
+			return
 		}
 		p.Satisfied = p.check(version)
-		return p.Satisfied, p.Err
+		return
 	})
 }

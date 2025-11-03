@@ -44,7 +44,7 @@ type IngressNginxService struct {
 }
 
 func (p *IngressNginxVersionConstraint) Check() (bool, error) {
-	return p.CheckTemplate(func() (bool, error) {
+	return p.CheckTemplate(func() {
 		p.Satisfied = true
 		cons, err := semver.NewConstraint(p.Constraint)
 		if err != nil {
@@ -54,12 +54,12 @@ func (p *IngressNginxVersionConstraint) Check() (bool, error) {
 
 		services, err := GetIngressNginxServices()
 		if err != nil {
-			p.Err = err
-			return false, p.Err
+			p.Err = p.WrapErr(fmt.Errorf("getting ingress-nginx services %w", err))
+			return
 		}
 		if len(services) == 0 {
-			p.Err = fmt.Errorf("no ingress-nginx controller found")
-			return false, p.Err
+			p.Err = p.WrapErr(fmt.Errorf("no ingress-nginx controller found"))
+			return
 		}
 
 		p.matchedPods = nil
@@ -92,7 +92,7 @@ func (p *IngressNginxVersionConstraint) Check() (bool, error) {
 				p.Satisfied = false
 			}
 		}
-		return p.Satisfied, p.Err
+		return
 	})
 }
 

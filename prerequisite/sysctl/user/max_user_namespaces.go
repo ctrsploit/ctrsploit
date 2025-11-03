@@ -14,14 +14,14 @@ type MaxUserNamespaces struct {
 }
 
 func (p *MaxUserNamespaces) Check() (bool, error) {
-	return p.CheckTemplate(func() (bool, error) {
+	return p.CheckTemplate(func() {
 		maxUserNamespaces, err := sysctl.MaxUserNamespaces()
 		if err != nil {
-			p.Err = fmt.Errorf("failed to check [%s], caused by getting sysctl: %w", p.GetName(), err)
-			return p.Satisfied, p.Err
+			p.Err = p.WrapErr(fmt.Errorf("getting sysctl: %w", err))
+			return
 		}
 		p.Satisfied = maxUserNamespaces > p.GreaterThan
-		return p.Satisfied, p.Err
+		return
 	})
 }
 

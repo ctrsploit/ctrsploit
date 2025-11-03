@@ -15,14 +15,14 @@ type Version struct {
 }
 
 func (p *Version) Check() (bool, error) {
-	return p.CheckTemplate(func() (bool, error) {
+	return p.CheckTemplate(func() {
 		ver, err := nvidia_container_runtime.GetVersion()
 		if err != nil {
-			p.Err = fmt.Errorf("failed to check [%s], caused by getting nvidia-container-runtime's version: %w", p.GetName(), err)
-			return p.Satisfied, p.Err
+			p.Err = p.WrapErr(fmt.Errorf("getting nvidia-container-runtime's version: %w", err))
+			return
 		}
 		p.Satisfied = p.Constraint.Check(ver)
-		return p.Satisfied, p.Err
+		return
 	})
 
 }

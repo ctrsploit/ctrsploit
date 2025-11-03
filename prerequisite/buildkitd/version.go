@@ -18,11 +18,11 @@ type VersionBetween struct {
 }
 
 func (p *VersionBetween) Check() (bool, error) {
-	return p.CheckTemplate(func() (bool, error) {
+	return p.CheckTemplate(func() {
 		version, err := buildkitd.Version(p.Addr)
 		if err != nil {
-			p.Err = fmt.Errorf("failed to check [%s] caused by getting buildkitd version: %w", p.GetName(), err)
-			return p.Satisfied, p.Err
+			p.Err = p.WrapErr(fmt.Errorf("getting buildkitd version: %w", err))
+			return
 		}
 		rule := fmt.Sprintf(">= %s, <= %s", p.Min, p.Max)
 		constraint, err := semver.NewConstraint(rule)
@@ -32,7 +32,6 @@ func (p *VersionBetween) Check() (bool, error) {
 			awesome_error.CheckFatal(err)
 		}
 		p.Satisfied = constraint.Check(version)
-		return p.Satisfied, p.Err
 	})
 }
 

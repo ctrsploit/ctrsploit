@@ -22,18 +22,18 @@ var MustBeRoot = MustBe{
 }
 
 func (p *MustBe) Check() (bool, error) {
-	return p.CheckTemplate(func() (bool, error) {
+	return p.CheckTemplate(func() {
 		current, err := user.Current()
 		if err != nil {
-			p.Err = fmt.Errorf("failed to check [%s], caused by getting current user: %w", p.GetName(), err)
-			return p.Satisfied, p.Err
+			p.Err = p.WrapErr(fmt.Errorf("getting current user: %w", err))
+			return
 		}
 		gid, err := strconv.Atoi(current.Gid)
 		if err != nil {
-			p.Err = fmt.Errorf("failed to check [%s], caused by converting gid to int: %w", p.GetName(), err)
-			return p.Satisfied, p.Err
+			p.Err = p.WrapErr(fmt.Errorf("converting gid to int: %w", err))
+			return
 		}
 		p.Satisfied = uint(gid) == p.ExpectedGroup
-		return p.Satisfied, p.Err
+		return
 	})
 }

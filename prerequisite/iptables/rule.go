@@ -14,20 +14,20 @@ type RuleExists struct {
 }
 
 func (p *RuleExists) Check() (bool, error) {
-	return p.CheckTemplate(func() (bool, error) {
+	return p.CheckTemplate(func() {
 		ipt, err := iptables.New()
 		if err != nil {
-			p.Err = fmt.Errorf("failed to check [%s], caused by init iptables: %w", p.GetName(), err)
-			return p.Satisfied, p.Err
+			p.Err = p.WrapErr(fmt.Errorf("init iptables: %w", err))
+			return
 		}
 
 		ok, err := ipt.Exists("filter", "KUBE-FIREWALL", p.rule...)
 		if err != nil {
-			p.Err = fmt.Errorf("failed to check [%s], caused by checking rule '%s': %w", p.GetName(), p.rule, err)
-			return p.Satisfied, p.Err
+			p.Err = p.WrapErr(fmt.Errorf("checking rule '%s': %w", p.rule, err))
+			return
 		}
 		p.Satisfied = ok
-		return p.Satisfied, p.Err
+		return
 	})
 }
 

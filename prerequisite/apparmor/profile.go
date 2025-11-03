@@ -15,17 +15,17 @@ type ProfileNameContains struct {
 }
 
 func (p *ProfileNameContains) Check() (bool, error) {
-	return p.CheckTemplate(func() (bool, error) {
+	return p.CheckTemplate(func() {
 		profile, err := os.ReadFile("/proc/self/attr/apparmor/current")
 		if err != nil {
 			if os.IsNotExist(err) {
-				return p.Satisfied, nil
+				return
 			}
-			p.Err = fmt.Errorf("failed to check [%s] caused by reading apparmor profile: %w", p.GetName(), err)
-			return p.Satisfied, p.Err
+			p.Err = p.WrapErr(fmt.Errorf("reading apparmor profile: %w", err))
+			return
 		}
 		p.Satisfied = strings.Contains(string(profile), p.Expected)
-		return p.Satisfied, p.Err
+		return
 	})
 }
 
