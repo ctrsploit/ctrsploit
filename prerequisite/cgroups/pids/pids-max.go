@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/ctrsploit/ctrsploit/pkg/cgroup/pids"
+	"github.com/ctrsploit/ctrsploit/pkg/sysctl"
 	"github.com/ctrsploit/sploit-spec/pkg/exeenv"
 	"github.com/ctrsploit/sploit-spec/pkg/prerequisite"
 )
@@ -21,15 +22,15 @@ func (p *pidsLimited) Check() (bool, error) {
 			return p.Satisfied, p.Err
 		}
 		limited := pidsMax >= 0
-		sysctlPidMax, err := pids.GetMax()
+		sysctlPidMax, err := sysctl.PidMax()
 		if err == nil {
-			if pidsMax > sysctlPidMax {
+			if pidsMax > int64(sysctlPidMax) {
 				limited = false
 			}
 		}
-		sysctlThreadsMax, err := pids.GetMax()
+		sysctlThreadsMax, err := sysctl.ThreadsMax()
 		if err == nil {
-			if pidsMax > sysctlThreadsMax {
+			if pidsMax > int64(sysctlThreadsMax) {
 				limited = false
 			}
 		}
