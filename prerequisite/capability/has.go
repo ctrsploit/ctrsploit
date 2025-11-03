@@ -64,12 +64,12 @@ var (
 )
 
 func (p *Has) Check() (bool, error) {
-	return p.CheckTemplate(func() (bool, error) {
+	return p.CheckTemplate(func() {
 		for _, pid := range p.Pid {
 			caps, err := capability.GetCapabilityByPid(pid, p.CapType)
 			if err != nil {
-				p.Err = fmt.Errorf("failed to check [%s] caused by getting capability of %s: %w", p.GetName(), pid, err)
-				return p.Satisfied, p.Err
+				p.Err = p.WrapErr(fmt.Errorf("getting capability of %s: %w", pid, err))
+				return
 			}
 			capsParsed, _ := cap.FromBitmap(caps)
 			if slice.In(p.ExpectedCapability, capsParsed) {
@@ -77,6 +77,6 @@ func (p *Has) Check() (bool, error) {
 				break
 			}
 		}
-		return p.Satisfied, p.Err
+		return
 	})
 }

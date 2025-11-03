@@ -15,11 +15,11 @@ type pidsLimited struct {
 }
 
 func (p *pidsLimited) Check() (bool, error) {
-	return p.CheckTemplate(func() (bool, error) {
+	return p.CheckTemplate(func() {
 		pidsMax, err := pids.GetMax()
 		if err != nil {
-			p.Err = fmt.Errorf("failed to check [%s], caused by getting max pids: %w", p.GetName(), err)
-			return p.Satisfied, p.Err
+			p.Err = p.WrapErr(fmt.Errorf("getting max pids: %w", err))
+			return
 		}
 		limited := pidsMax >= 0
 		sysctlPidMax, err := sysctl.PidMax()
@@ -35,7 +35,7 @@ func (p *pidsLimited) Check() (bool, error) {
 			}
 		}
 		p.Satisfied = limited == p.limited
-		return p.Satisfied, p.Err
+		return
 	})
 }
 

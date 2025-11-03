@@ -15,14 +15,14 @@ type RootMountInfoSourceContains struct {
 }
 
 func (p *RootMountInfoSourceContains) Check() (bool, error) {
-	return p.CheckTemplate(func() (bool, error) {
+	return p.CheckTemplate(func() {
 		info, err := mountinfo.RootMount()
 		if err != nil {
-			p.Err = fmt.Errorf("failed to check [%s], getting root's mountinfo: %w", p.GetName(), err)
-			return p.Satisfied, p.Err
+			p.Err = p.WrapErr(fmt.Errorf("getting root's mountinfo: %w", err))
+			return
 		}
 		p.Satisfied = strings.Contains(info.Source, p.Expected)
-		return p.Satisfied, p.Err
+		return
 	})
 }
 

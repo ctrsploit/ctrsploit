@@ -14,14 +14,14 @@ type RouteLocalnet struct {
 }
 
 func (p *RouteLocalnet) Check() (bool, error) {
-	return p.CheckTemplate(func() (bool, error) {
+	return p.CheckTemplate(func() {
 		enabled, err := sysctl.RouteLocalNetEnabled()
 		if err != nil {
-			p.Err = fmt.Errorf("failed to check [%s], caused by getting sysctl: %w", p.GetName(), err)
-			return p.Satisfied, p.Err
+			p.Err = p.WrapErr(fmt.Errorf("getting sysctl: %w", err))
+			return
 		}
 		p.Satisfied = enabled == p.Expected
-		return p.Satisfied, p.Err
+		return
 	})
 }
 

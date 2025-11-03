@@ -25,14 +25,14 @@ var (
 )
 
 func (p *Releaser) Check() (bool, error) {
-	return p.CheckTemplate(func() (bool, error) {
+	return p.CheckTemplate(func() {
 		u, err := uname.All()
 		if err != nil {
-			p.Err = fmt.Errorf("failed to check [%s], caused by getting uname: %w", p.GetName(), err)
-			return p.Satisfied, p.Err
+			p.Err = p.WrapErr(fmt.Errorf("getting uname: %w", err))
+			return
 		}
 		log.Logger.Debugf("uname: %s", u)
 		p.Satisfied = strings.Contains(u, p.ExpectedReleaser)
-		return p.Satisfied, p.Err
+		return
 	})
 }

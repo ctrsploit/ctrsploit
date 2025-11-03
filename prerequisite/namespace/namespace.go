@@ -37,23 +37,23 @@ var (
 )
 
 func (p *Namespace) Check() (bool, error) {
-	return p.CheckTemplate(func() (bool, error) {
+	return p.CheckTemplate(func() {
 		arbitrator, err := namespace.NewInoArbitrator()
 		if err != nil {
-			p.Err = fmt.Errorf("failed to check [%s], caused by creating arbitrator: %w", p.GetName(), err)
-			return p.Satisfied, p.Err
+			p.Err = p.WrapErr(fmt.Errorf("creating arbitrator: %w", err))
+			return
 		}
 		namespaceLevels, _, err := namespace.CheckNamespaceLevel(arbitrator)
 		if err != nil {
-			p.Err = fmt.Errorf("failed to check [%s], caused by checking level: %w", p.GetName(), err)
-			return p.Satisfied, p.Err
+			p.Err = p.WrapErr(fmt.Errorf("checking level: %w", err))
+			return
 		}
 		level, ok := namespaceLevels[container.NamespaceMapType2Name[p.Type]]
 		if !ok {
-			p.Err = fmt.Errorf("failed to check [%s], caused by unknown namespace type %s", p.GetName(), p.Type)
-			return p.Satisfied, p.Err
+			p.Err = p.WrapErr(fmt.Errorf("unknown namespace type %s", p.Type))
+			return
 		}
 		p.Satisfied = level == container.NamespaceLevelHost
-		return p.Satisfied, p.Err
+		return
 	})
 }

@@ -28,12 +28,12 @@ var (
 )
 
 func (p *NotEmpty) Check() (bool, error) {
-	return p.CheckTemplate(func() (bool, error) {
+	return p.CheckTemplate(func() {
 		for _, pid := range p.Pid {
 			caps, err := capability.GetCapabilityByPid(pid, p.CapType)
 			if err != nil {
-				p.Err = fmt.Errorf("failed to check [%s] caused by getting capability for %s: %w", p.GetName(), pid, err)
-				return p.Satisfied, p.Err
+				p.Err = p.WrapErr(fmt.Errorf("getting capability for %s: %w", pid, err))
+				return
 			}
 			capsParsed, _ := cap.FromBitmap(caps)
 			if len(capsParsed) > 0 {
@@ -41,6 +41,6 @@ func (p *NotEmpty) Check() (bool, error) {
 				break
 			}
 		}
-		return p.Satisfied, p.Err
+		return
 	})
 }

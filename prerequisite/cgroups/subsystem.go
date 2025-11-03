@@ -22,17 +22,17 @@ var HasTopLevelSubsystem = TopLevelSubsystem{
 }
 
 func (p *TopLevelSubsystem) Check() (bool, error) {
-	return p.CheckTemplate(func() (bool, error) {
+	return p.CheckTemplate(func() {
 		if version.IsCgroupV1() {
 			topLevelSubSystems, err := v1.ListTopLevelSubSystem()
 			if err != nil {
-				p.Err = fmt.Errorf("failed to check [%s] caused by listing top level subsystems: %w", p.GetName(), err)
-				return p.Satisfied, p.Err
+				p.Err = p.WrapErr(fmt.Errorf("listing top level subsystems: %w", err))
+				return
 			}
 			if len(topLevelSubSystems) > 0 {
 				p.Satisfied = true
 			}
 		}
-		return p.Satisfied, p.Err
+		return
 	})
 }

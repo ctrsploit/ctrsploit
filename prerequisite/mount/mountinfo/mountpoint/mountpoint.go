@@ -22,11 +22,11 @@ func (p *ContainsMountPoint) RealMountPoint() string {
 }
 
 func (p *ContainsMountPoint) Check() (bool, error) {
-	return p.CheckTemplate(func() (bool, error) {
+	return p.CheckTemplate(func() {
 		infos, err := mountinfo.GetMounts(nil)
 		if err != nil {
-			p.Err = fmt.Errorf("failed to check [%s], caused by checking mount points: %v", p.GetName(), err)
-			return p.Satisfied, p.Err
+			p.Err = p.WrapErr(fmt.Errorf("checking mount points: %w", err))
+			return
 		}
 		for _, info := range infos {
 			if strings.Contains(info.Mountpoint, p.ExpectedContains) {
@@ -48,7 +48,7 @@ func (p *ContainsMountPoint) Check() (bool, error) {
 				}
 			}
 		}
-		return p.Satisfied, p.Err
+		return
 	})
 }
 

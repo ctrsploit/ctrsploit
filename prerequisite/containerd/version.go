@@ -12,6 +12,7 @@ type VersionEqualTo struct {
 	prerequisite.BasePrerequisite
 }
 
+//goland:noinspection GoSnakeCaseUsage
 var VersionEqualToV2_1_0 = VersionEqualTo{
 	ExpectedVersion: "v2.1.0",
 	BasePrerequisite: prerequisite.BasePrerequisite{
@@ -21,13 +22,13 @@ var VersionEqualToV2_1_0 = VersionEqualTo{
 }
 
 func (p *VersionEqualTo) Check() (bool, error) {
-	return p.CheckTemplate(func() (bool, error) {
+	return p.CheckTemplate(func() {
 		v, err := containerd.GetVersionBySock()
 		if err != nil {
-			p.Err = fmt.Errorf("failed to check [%s] caused by getting version from containerd: %v", p.GetName(), err)
-			return p.Satisfied, p.Err
+			p.Err = p.WrapErr(fmt.Errorf("getting version from containerd: %v", err))
+			return
 		}
 		p.Satisfied = v.Version == p.ExpectedVersion
-		return p.Satisfied, p.Err
+		return
 	})
 }

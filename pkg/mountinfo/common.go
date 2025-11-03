@@ -7,6 +7,8 @@ import (
 	"github.com/ssst0n3/awesome_libs/awesome_error"
 )
 
+const ErrMountPointNotFound = "mount point not found"
+
 func GetMountByMountpoint(mountpoint string) (info *mountinfo.Info, err error) {
 	mounts, err := mountinfo.GetMounts(func(info *mountinfo.Info) (skip, stop bool) {
 		if info.Mountpoint == mountpoint {
@@ -22,7 +24,7 @@ func GetMountByMountpoint(mountpoint string) (info *mountinfo.Info, err error) {
 		return
 	}
 	if len(mounts) == 0 {
-		err = fmt.Errorf("mount point %s not found", mountpoint)
+		err = fmt.Errorf("%s: %s", ErrMountPointNotFound, mountpoint)
 		awesome_error.CheckDebug(err)
 		return
 	}

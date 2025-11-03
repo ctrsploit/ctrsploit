@@ -18,14 +18,14 @@ type deployment struct {
 }
 
 func (p *deployment) Check() (bool, error) {
-	return p.CheckTemplate(func() (bool, error) {
+	return p.CheckTemplate(func() {
 		hostname, err := os.Hostname()
 		if err != nil {
-			p.Err = fmt.Errorf("failed to check [%s], caused by unable to determine hostname: %w", p.GetName(), err)
-			return p.Satisfied, p.Err
+			p.Err = p.WrapErr(fmt.Errorf("unable to determine hostname: %w", err))
+			return
 		}
 		p.Satisfied = p.check(hostname)
-		return p.Satisfied, p.Err
+		return
 	})
 }
 

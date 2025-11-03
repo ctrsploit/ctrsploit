@@ -16,13 +16,14 @@ type Contains struct {
 }
 
 func (p *Contains) Check() (bool, error) {
-	return p.CheckTemplate(func() (bool, error) {
+	return p.CheckTemplate(func() {
 		content, err := os.ReadFile(p.Target)
 		if err != nil {
-			return false, fmt.Errorf("failed to check [%s], caused by reading file %s: %w", p.GetName(), p.Target, err)
+			p.Err = p.WrapErr(fmt.Errorf("reading file %s: %w", p.Target, err))
+			return
 		}
 		p.Satisfied = strings.Contains(string(content), p.Expected)
-		return p.Satisfied, p.Err
+		return
 	})
 }
 

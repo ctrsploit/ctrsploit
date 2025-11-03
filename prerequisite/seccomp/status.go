@@ -12,9 +12,9 @@ type status struct {
 }
 
 func (p *status) Check() (bool, error) {
-	return p.CheckTemplate(func() (bool, error) {
+	return p.CheckTemplate(func() {
 		p.Satisfied = seccomp.CheckEnabled() == p.expectedStatus
-		return p.Satisfied, p.Err
+		return
 	})
 }
 
