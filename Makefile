@@ -18,6 +18,7 @@ VERSION := $(shell ./script/version.sh)
 BUILD_TIME := $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")
 SLIM_LDFLAGS ?= -s -w
 LDFLAGS := "$(SLIM_LDFLAGS) \
+	-X github.com/ctrsploit/sploit-spec/pkg/version.ProductName=${APP_NAME} \
 	-X github.com/ctrsploit/sploit-spec/pkg/version.Version=${VERSION} \
 	-X github.com/ctrsploit/sploit-spec/pkg/version.GitCommit=${GIT_COMMIT} \
 	-X github.com/ctrsploit/sploit-spec/pkg/version.BuildTime=${BUILD_TIME}"
