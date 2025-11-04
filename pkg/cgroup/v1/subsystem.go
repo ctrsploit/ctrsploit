@@ -8,7 +8,6 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/ctrsploit/sploit-spec/pkg/log"
 	"github.com/ssst0n3/awesome_libs/awesome_error"
 )
 
@@ -140,7 +139,6 @@ func (c CgroupV1) ListSubsystemsQuick(procCgroupPath string) (subsystems map[str
 	if err != nil {
 		return nil, fmt.Errorf("failed to parse %s: %w", procCgroupPath, err)
 	}
-	log.Logger.Infof("%+v", subsystems)
 	for sub := range subsystems {
 		if strings.HasPrefix(sub, "name=") {
 			delete(subsystems, sub)
