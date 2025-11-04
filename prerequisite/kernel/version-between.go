@@ -1,0 +1,58 @@
+package kernel
+
+import (
+	"fmt"
+
+	"github.com/ctrsploit/ctrsploit/pkg/kernel/uname"
+	"github.com/ctrsploit/sploit-spec/pkg/log"
+	"github.com/ctrsploit/sploit-spec/pkg/prerequisite"
+)
+
+type VersionBetween struct {
+	ExpectedMinVersion string
+	ExpectedMaxVersion string
+	prerequisite.BasePrerequisite
+}
+
+var (
+	SupportsCgroupNamespace = VersionBetween{
+		ExpectedMinVersion: "4.6",
+		ExpectedMaxVersion: "",
+		BasePrerequisite: prerequisite.BasePrerequisite{
+			Name: "Kernel Supports Cgroup namespace",
+			Info: "kernel version >= v4.6",
+		},
+	}
+	SupportsTimeNamespace = VersionBetween{
+		ExpectedMinVersion: "5.6",
+		ExpectedMaxVersion: "",
+		BasePrerequisite: prerequisite.BasePrerequisite{
+			Name: "Kernel Supports Time namespace",
+			Info: "kernel version >= v5.6",
+		},
+	}
+)
+
+func (p *VersionBetween) check(version string) (satisfied bool) {
+	satisfied = true
+	if p.ExpectedMinVersion != "" {
+		satisfied = satisfied && (p.ExpectedMinVersion < version || uname.VersionEqual(p.ExpectedMinVersion, version))
+	}
+	if p.ExpectedMaxVersion != "" {
+		satisfied = satisfied && (p.ExpectedMaxVersion > version || uname.VersionEqual(p.ExpectedMaxVersion, version))
+	}
+	log.Logger.Debugf("%s <= %s <= %s: %t\n", p.ExpectedMinVersion, version, p.ExpectedMaxVersion, satisfied)
+	return
+}
+
+func (p *VersionBetween) Check() (bool, error) {
+	return p.CheckTemplate(func() {
+		version, err := uname.Release()
+		if err != nil {
+			p.Err = p.WrapErr(fmt.Errorf("determining release version: %w", err))
+			return
+		}
+		p.Satisfied = p.check(version)
+		return
+	})
+}
