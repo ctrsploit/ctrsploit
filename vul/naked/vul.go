@@ -4,6 +4,7 @@ import (
 	"github.com/ctrsploit/ctrsploit/prerequisite/apparmor"
 	"github.com/ctrsploit/ctrsploit/prerequisite/seccomp"
 	"github.com/ctrsploit/ctrsploit/prerequisite/selinux"
+	"github.com/ctrsploit/ctrsploit/prerequisite/sysctl/user"
 	"github.com/ctrsploit/sploit-spec/pkg/app"
 	"github.com/ctrsploit/sploit-spec/pkg/exeenv"
 	"github.com/ctrsploit/sploit-spec/pkg/prerequisite"
@@ -42,6 +43,7 @@ var (
 				&seccomp.Disabled,
 				&selinux.Disabled,
 				&apparmor.Disabled,
+				&user.UserNsEnabled,
 			),
 			ExploitablePrerequisites: nil,
 		},
