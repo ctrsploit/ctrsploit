@@ -76,7 +76,7 @@ func (c CgroupV1) ListSubsystemsDeprecated(procCgroupPath string) (subsystems ma
 }
 
 /*
-IsTopDeprecated fails in the sub cgroup ns
+IsTopQuick fails in the sub cgroup ns
 root@73313224d1ef:/# unshare -UrCm /bin/bash
 root@73313224d1ef:/# cat /proc/1/cgroup
 12:freezer:/
@@ -93,7 +93,7 @@ root@73313224d1ef:/# cat /proc/1/cgroup
 1:name=systemd:/
 0::/
 */
-func (c CgroupV1) IsTopDeprecated(subsystemPath string) (top bool) {
+func (c CgroupV1) IsTopQuick(subsystemPath string) (top bool) {
 	return subsystemPath == "/"
 }
 
@@ -104,6 +104,10 @@ func ListTopLevelSubSystem() (topLevelSubSystems []string, err error) {
 		return nil, fmt.Errorf("ListTopLevelSubSystem: failed to list sub systems: %w", err)
 	}
 	for _, subsystemName := range subsystemsSupport {
+		// add this to be more accurate on the host
+		if !c.IsTopQuick(subsystemName) {
+			continue
+		}
 		is, err := c.IsTop(DefaultMountPoint, subsystemName)
 		if err != nil {
 			return nil, fmt.Errorf("ListTopLevelSubSystem: failed to list sub system %s: %w", subsystemName, err)
