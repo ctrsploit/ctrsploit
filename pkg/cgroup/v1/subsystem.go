@@ -1,12 +1,13 @@
 package v1
 
 import (
+	"bufio"
 	"fmt"
+	"io"
 	"os"
 	"path/filepath"
 	"strings"
 
-	"github.com/containerd/cgroups"
 	"github.com/ssst0n3/awesome_libs/awesome_error"
 )
 
@@ -58,11 +59,85 @@ func (c CgroupV1) ListSubsystems(mountpoint string) (subsystems []string, err er
 	return
 }
 
+/*
+ParseCgroupFile is copied from github.com/containerd/cgroups/utils.go:parseCgroupFromReaderUnified(), but without splitting ","
+
+because cgroup subsystem cannot be mounted after split by ','
+
+https://github.com/torvalds/linux/blob/v5.4/kernel/cgroup/cgroup-v1.c#L1186
+https://github.com/torvalds/linux/blob/v5.4/kernel/cgroup/cgroup-v1.c#L1141
+
+e.g.: net_prio cannot be mounted in the non-init cgroup ns
+
+root@cve-2022-0492:~# mkdir /tmp/net_prio
+root@cve-2022-0492:~# unshare -UrCm
+root@cve-2022-0492:~# mount -t cgroup -o net_prio none /tmp/net_prio
+mount: /tmp/net_prio: permission denied.
+root@cve-2022-0492:~# bpftrace -e 'kretprobe:cgroup1_get_tree /comm=="mount"/ {printf("%s:%d", comm, retval);printf("%s\n", kstack); }'
+Attaching 1 probe...
+mount:-1
+
+	kretprobe_trampoline+0
+	do_mount+1969
+	ksys_mount+130
+	__x64_sys_mount+37
+	do_syscall_64+87
+	entry_SYSCALL_64_after_hwframe+68
+
+cgroup1_root_to_use() iterate across each hierarchy, net_prio is not a hierarchy:
+
+root@cve-2022-0492:~# cat /proc/self/cgroup
+12:cpu,cpuacct:/
+11:perf_event:/
+10:blkio:/
+9:cpuset:/
+8:pids:/
+7:hugetlb:/
+6:memory:/
+5:freezer:/
+4:rdma:/
+3:net_cls,net_prio:/
+2:devices:/
+1:name=systemd:/
+0::/
+*/
+func ParseCgroupFile(r io.Reader) (map[string]string, error) {
+	var (
+		subsystems = make(map[string]string)
+		s          = bufio.NewScanner(r)
+	)
+	for s.Scan() {
+		var (
+			text  = s.Text()
+			parts = strings.SplitN(text, ":", 3)
+		)
+		if len(parts) < 3 {
+			return nil, fmt.Errorf("invalid cgroup entry: %q", text)
+		}
+		//for _, subs := range strings.Split(parts[1], ",") {
+		//	if subs == "" {
+		//		unified = parts[2]
+		//	} else {
+		//		subsystems[subs] = parts[2]
+		//	}
+		//}
+		subsystems[parts[1]] = parts[2]
+	}
+	if err := s.Err(); err != nil {
+		return nil, err
+	}
+	return subsystems, nil
+}
+
 func (c CgroupV1) ListSubsystemsQuick(procCgroupPath string) (subsystems map[string]string, err error) {
-	subsystems, err = cgroups.ParseCgroupFile(procCgroupPath)
+	f, err := os.Open(procCgroupPath)
 	if err != nil {
-		awesome_error.CheckErr(err)
-		return
+		return nil, fmt.Errorf("failed to open %s: %w", procCgroupPath, err)
+	}
+	defer f.Close()
+	subsystems, err = ParseCgroupFile(f)
+	if err != nil {
+		return nil, fmt.Errorf("failed to parse %s: %w", procCgroupPath, err)
 	}
 	for sub := range subsystems {
 		if strings.HasPrefix(sub, "name=") {
