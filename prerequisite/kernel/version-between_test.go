@@ -1,11 +1,12 @@
 package kernel
 
 import (
-	"github.com/ctrsploit/sploit-spec/pkg/prerequisite"
 	"testing"
+
+	"github.com/ctrsploit/sploit-spec/pkg/prerequisite"
 )
 
-func TestKernelVersion_check(t *testing.T) {
+func TestKernelVersionBetween_check(t *testing.T) {
 	type fields struct {
 		ExpectedMinVersion string
 		ExpectedMaxVersion string
@@ -47,7 +48,7 @@ func TestKernelVersion_check(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			p := &Version{
+			p := &VersionBetween{
 				ExpectedMinVersion: tt.fields.ExpectedMinVersion,
 				ExpectedMaxVersion: tt.fields.ExpectedMaxVersion,
 				BasePrerequisite:   tt.fields.BasePrerequisite,
