@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	PathRouteLocalNet = "/proc/sys/net/ipv4/conf/all/route_localnet"
+	PatternRouteLocalNet = "/proc/sys/net/ipv4/conf/*/route_localnet"
 )
 
 /*
@@ -23,11 +23,23 @@ route_localnet - BOOLEAN
 https://github.com/kubernetes/kubernetes/issues/90259
 */
 func RouteLocalNetEnabled() (bool, error) {
-	content, err := os.ReadFile(PathRouteLocalNet)
+	filePaths, err := filepath.Glob(PatternRouteLocalNet)
 	if err != nil {
-		return false, err
+		return false, fmt.Errorf("failed to glob route_localnet: %w", err)
 	}
-	return strings.TrimSpace(string(content)) == "1", nil
+	if len(filePaths) == 0 {
+		return false, fmt.Errorf("no route_localnet found")
+	}
+	for _, path := range filePaths {
+		content, err := os.ReadFile(path)
+		if err != nil {
+			return false, fmt.Errorf("failed to read %s: %w", path, err)
+		}
+		if strings.TrimSpace(string(content)) == "1" {
+			return true, nil
+		}
+	}
+	return false, nil
 }
 
 // RpFilterMode reads all rp_filter settings from /proc/sys/net/ipv4/conf/*/rp_filter

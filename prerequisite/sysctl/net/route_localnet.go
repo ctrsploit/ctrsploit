@@ -29,7 +29,7 @@ var (
 	RouteLocalNetEnabled = RouteLocalnet{
 		BasePrerequisite: prerequisite.BasePrerequisite{
 			Name:   "route_localnet enabled",
-			Info:   "net.ipv4.conf.all.route_localnet = 1",
+			Info:   "net.ipv4.conf.*.route_localnet = 1",
 			ExeEnv: exeenv.InHost | exeenv.InContainer,
 		},
 		Expected: true,
