@@ -58,7 +58,7 @@ func (c CgroupV1) ListSubsystems(mountpoint string) (subsystems []string, err er
 	return
 }
 
-func (c CgroupV1) ListSubsystemsDeprecated(procCgroupPath string) (subsystems map[string]string, err error) {
+func (c CgroupV1) ListSubsystemsQuick(procCgroupPath string) (subsystems map[string]string, err error) {
 	subsystems, err = cgroups.ParseCgroupFile(procCgroupPath)
 	if err != nil {
 		awesome_error.CheckErr(err)
@@ -97,17 +97,27 @@ func (c CgroupV1) IsTopQuick(subsystemPath string) (top bool) {
 	return subsystemPath == "/"
 }
 
+func listTopLevelSubSystemQuick() (topLevelSubSystems []string, err error) {
+	var c CgroupV1
+	subsystemsSupport, err := c.ListSubsystemsQuick("/proc/self/cgroup")
+	if err != nil {
+		return nil, fmt.Errorf("ListSubsystemsQuick() failed: %w", err)
+	}
+	for name, path := range subsystemsSupport {
+		if c.IsTopQuick(path) {
+			topLevelSubSystems = append(topLevelSubSystems, name)
+		}
+	}
+	return
+}
+
 func ListTopLevelSubSystem() (topLevelSubSystems []string, err error) {
 	var c CgroupV1
-	subsystemsSupport, err := c.ListSubsystems(DefaultMountPoint)
+	subsystems, err := listTopLevelSubSystemQuick()
 	if err != nil {
-		return nil, fmt.Errorf("ListTopLevelSubSystem: failed to list sub systems: %w", err)
+		return nil, fmt.Errorf("listTopLevelSubSystemQuick: failed to list sub systems: %w", err)
 	}
-	for _, subsystemName := range subsystemsSupport {
-		// add this to be more accurate on the host
-		if !c.IsTopQuick(subsystemName) {
-			continue
-		}
+	for _, subsystemName := range subsystems {
 		is, err := c.IsTop(DefaultMountPoint, subsystemName)
 		if err != nil {
 			return nil, fmt.Errorf("ListTopLevelSubSystem: failed to list sub system %s: %w", subsystemName, err)

@@ -1,0 +1,16 @@
+name: pkg/cgroup/v1
+test_envs:
+  - name: cve-2022-0492-host
+    remote_host: cve-2022-0492
+    kind: dqd
+    dqd_dir: vul/cve-2022-0492
+    pkg: github.com/ctrsploit/ctrsploit/pkg/cgroup/v1
+    cmd: TEST_ENV=cve-2022-0492-host /ctrsploit.test -test.v -test.run "^TestE2E_ListTopLevelSubSystem$"
+  - name: cve-2022-0492-ctr
+    remote_host: cve-2022-0492
+    kind: dqd
+    dqd_dir: vul/cve-2022-0492
+    pkg: github.com/ctrsploit/ctrsploit/pkg/cgroup/v1
+    cmd: docker run -u nobody -v /ctrsploit.test:/ctrsploit.test
+      --env TEST_ENV=cve-2022-0492-ctr busybox:latest
+      /ctrsploit.test -test.v -test.run '^TestE2E'
