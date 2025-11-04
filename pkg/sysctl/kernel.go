@@ -19,7 +19,7 @@ func UnprivilegedUsernsCloneEnabled() (bool, error) {
 	content, err := os.ReadFile(PathUnprivilegedUsernsClone)
 	if err != nil {
 		if os.IsNotExist(err) {
-			log.Logger.Warnf("%s does not exist, assuming unprivileged user namespaces are enabled", PathUnprivilegedUsernsClone)
+			log.Logger.Debugf("%s does not exist, assuming unprivileged user namespaces are enabled", PathUnprivilegedUsernsClone)
 			// Assume unprivileged user namespaces are enabled if the sysctl does not exist
 			return true, nil
 		}
