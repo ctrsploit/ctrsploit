@@ -17,7 +17,7 @@ func TestE2E_ListTopLevelSubSystem(t *testing.T) {
 		expected []string
 	}{
 		"cve-2022-0492-host": {
-			expected: []string{"perf_event", "rdma", "hugetlb", "cpuset", "freezer", "net_cls", "net_prio"},
+			expected: []string{"perf_event", "rdma", "hugetlb", "cpuset", "freezer", "net_cls,net_prio"},
 		},
 		"cve-2022-0492-ctr": {
 			expected: []string{"rdma"},

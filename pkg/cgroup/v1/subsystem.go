@@ -172,9 +172,44 @@ func (c CgroupV1) IsTopQuick(subsystemPath string) (top bool) {
 	return subsystemPath == "/"
 }
 
+/*
+use /proc/1/cgroup instead of /proc/self/cgroup
+because when execute in host, /proc/self/cgroup in sub cgroup ns shows top level sub system, but actually not.
+and in host, we can use /proc/1/cgroup to shows real levels.
+
+root@cve-2022-0492:~# unshare -UrCm
+root@cve-2022-0492:~# cat /proc/1/cgroup
+12:perf_event:/
+11:hugetlb:/
+10:net_cls,net_prio:/
+9:rdma:/
+8:pids:/../../..
+7:devices:/..
+6:cpu,cpuacct:/..
+5:memory:/../../..
+4:blkio:/..
+3:cpuset:/
+2:freezer:/
+1:name=systemd:/../../../init.scope
+0::/../../../init.scope
+root@cve-2022-0492:~# cat /proc/self/cgroup
+12:perf_event:/
+11:hugetlb:/
+10:net_cls,net_prio:/
+9:rdma:/
+8:pids:/
+7:devices:/
+6:cpu,cpuacct:/
+5:memory:/
+4:blkio:/
+3:cpuset:/
+2:freezer:/
+1:name=systemd:/
+0::/
+*/
 func listTopLevelSubSystemQuick() (topLevelSubSystems []string, err error) {
 	var c CgroupV1
-	subsystemsSupport, err := c.ListSubsystemsQuick("/proc/self/cgroup")
+	subsystemsSupport, err := c.ListSubsystemsQuick("/proc/1/cgroup")
 	if err != nil {
 		return nil, fmt.Errorf("ListSubsystemsQuick() failed: %w", err)
 	}
