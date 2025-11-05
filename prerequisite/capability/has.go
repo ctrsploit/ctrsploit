@@ -61,6 +61,8 @@ var (
 	CapNetRawEff      = HasEff("CAP_NET_RAW")
 	CapSysResourceBnd = HasBnd("CAP_SYS_RESOURCE")
 	CapSysResourceEff = HasEff("CAP_SYS_RESOURCE")
+	CapSysModuleBnd   = HasBnd("CAP_SYS_MODULE")
+	CapSysModuleEff   = HasEff("CAP_SYS_MODULE")
 )
 
 func (p *Has) Check() (bool, error) {
