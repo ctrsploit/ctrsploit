@@ -139,7 +139,6 @@ token: eyJhbGciOiJSUzI1NiIsImtpZCI6InR1dGsyVGxpOFoyQm1nSV9TaFRkaTFTbTZ3UlRkd2hLa
 #### 5.2.1 CAP_BPF+CAP_PERFMON
 
 ```shell
-```shell
 $ cat <<EOF | kubectl --kubeconfig kubeconfig apply -f -
 apiVersion: v1
 kind: Pod

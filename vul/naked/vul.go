@@ -41,7 +41,7 @@ var (
 			},
 			CheckSecPrerequisites: prerequisite.And(
 				&seccomp.Disabled,
-				&selinux.Disabled,
+				&selinux.Unconfined,
 				&apparmor.Disabled,
 				&user.UserNsEnabled,
 			),
