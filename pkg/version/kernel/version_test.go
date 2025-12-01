@@ -28,3 +28,33 @@ func TestE2E_Version(t *testing.T) {
 		assert.Equal(t, test.ver, ver)
 	})
 }
+
+func Test_parseVersion(t *testing.T) {
+	type args struct {
+		s string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    *semver.Version
+		wantErr assert.ErrorAssertionFunc
+	}{
+		{
+			name: "euler os release",
+			args: args{
+				s: "4.18.0-147.5.1.6.h841.eulerosv2r9.x86_64",
+			},
+			want:    semver.New(4, 18, 0, "147.5.1.6.h841.eulerosv2r9.x86-64", ""),
+			wantErr: assert.NoError,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := parseVersion(tt.args.s)
+			if !tt.wantErr(t, err, fmt.Sprintf("parseVersion(%v)", tt.args.s)) {
+				return
+			}
+			assert.Equalf(t, tt.want, got, "parseVersion(%v)", tt.args.s)
+		})
+	}
+}
