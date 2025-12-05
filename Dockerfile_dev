@@ -20,11 +20,15 @@ WORKDIR /root/app
 RUN --mount=type=cache,sharing=locked,id=ctrsploit-build-aptlib,target=/var/lib/apt \
     --mount=type=cache,sharing=locked,id=ctrsploit-build-aptcache,target=/var/cache/apt \
     apt update && apt install -y \
-    upx \
+    xz-utils \
     jq \
     clang \
     llvm \
     libbpf-dev
+RUN wget -q -O /tmp/upx.tar.xz https://github.com/upx/upx/releases/download/v5.0.2/upx-5.0.2-amd64_linux.tar.xz && \
+    tar -xf /tmp/upx.tar.xz -C /tmp && \
+    mv /tmp/upx-5.0.2-amd64_linux/upx /usr/local/bin/upx && \
+    rm -rf /tmp/upx.tar.xz /tmp/upx-5.0.2-amd64_linux
 RUN --mount=type=bind,target=.,rw \
     --mount=type=cache,target=/root/.cache/go-build,id=ctrsploit-build \
     --mount=type=cache,target=/go/pkg/mod,id=ctrsploit-mod \
