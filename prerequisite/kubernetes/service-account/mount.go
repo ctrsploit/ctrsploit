@@ -8,7 +8,7 @@ import (
 	"github.com/ctrsploit/sploit-spec/pkg/prerequisite"
 )
 
-var ServiceAccount = mountpoint.ContainsMountPoint{
+var Mounted = mountpoint.ContainsMountPoint{
 	BasePrerequisite: prerequisite.BasePrerequisite{
 		Name:   "service-account mounted",
 		Info:   "",
