@@ -47,6 +47,7 @@ var Command = &cli.Command{
 		cve_2024_23650.CheckSecCmd,
 		cve_2025_23266.CheckSecCmd,
 		cve_2025_47290.CheckSecCmd,
+		cve_2025_62725.CheckSecCmd,
 		fork_bomb.CheckSecCmd,
 		shocker.CheckSecCmd,
 		sys_admin.CheckSecCmd,
