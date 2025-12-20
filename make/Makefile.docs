@@ -1,0 +1,9 @@
+# Makefile.docs - Documentation and tool related tasks
+# Contains documentation generation, update and maintenance related tasks
+
+.PHONY: update-vul-table
+
+update-vul-table:
+	@echo "Updating vulnerability table in README.md from vul/README.md..."
+	@python3 script/update_vul_table.py
+
