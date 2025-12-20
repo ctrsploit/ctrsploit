@@ -1,8 +1,6 @@
 # ctrsploit: A penetration toolkit for container environment
 
-[中文文档](./README-ZH.md)
-
-ctrsploit [kənˈteɪnər splɔɪt] , follows [sploit-spec](https://github.com/ctrsploit/sploit-spec) v0.4.3
+ctrsploit [kənˈteɪnər splɔɪt] , follows [sploit-spec](https://github.com/ctrsploit/sploit-spec)
 
 ![](./docs/images/logo-white-256.png)
 
