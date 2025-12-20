@@ -76,3 +76,7 @@ test.bin:
 	docker run --rm -v $(CURDIR):/root/app $(DEV_IMAGE) ./script/test_bin.sh $(PKG)
 e2e:
 	./test/e2e/e2e.sh $(DIR)
+
+update-vul-table:
+	@echo "Updating vulnerability table in README.md from vul/README.md..."
+	@python3 script/update_vul_table.py
