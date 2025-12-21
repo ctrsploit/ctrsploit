@@ -1,0 +1,8 @@
+# Makefile.dev - Development environment related tasks
+# Contains development environment, debugging and interactive tasks
+
+.PHONY: shell
+
+shell: image
+	docker run --rm -ti -v $(CURDIR):/root/app $(DEV_IMAGE) bash
+

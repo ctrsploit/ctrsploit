@@ -1,0 +1,21 @@
+# Makefile.build - Build related tasks
+# Contains all build, compile and install related tasks
+
+.PHONY: build binary image install
+
+# eBPF
+include vul/caps/sys_admin/ebpf/Makefile
+
+build:
+	LDFLAGS=$(LDFLAGS) ./script/release.sh
+
+install: build
+	rm -f /usr/local/bin/${APP_NAME} && ln -s $(CURDIR)/bin/release/${APP_NAME}_linux_amd64 /usr/local/bin/${APP_NAME}
+
+binary:
+	APT_MIRROR="$(APT_MIRROR)" GOPROXY="$(GOPROXY)" SLIM_LDFLAGS="$(SLIM_LDFLAGS)" docker buildx bake binary ${DEBUG_FLAGS}
+
+image:
+	docker buildx build $(BUILD_OPTS) --load -t "$(DEV_IMAGE)" ${DEBUG_FLAGS} .
+	docker tag $(DEV_IMAGE) $(IMAGE_NAME):latest
+

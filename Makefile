@@ -1,78 +1,56 @@
-.PHONY: all shell local build test
+# Makefile - Main build file
+# Includes all modular Makefile fragments
 
-APP_NAME := ctrsploit
+.PHONY: all shell local build test generate vmlinuxh help
 
-# mirror
-DEFAULT_CN_APT_MIRROR := mirrors.tuna.tsinghua.edu.cn
-DEFAULT_CN_GOPROXY := https://goproxy.cn,https://goproxy.io,direct
-APT_MIRROR ?= $(if $(CN),$(DEFAULT_CN_APT_MIRROR),)
-GOPROXY ?= $(if $(CN),$(DEFAULT_CN_GOPROXY),)
+# Include variable definitions
+include make/Makefile.vars
 
-# debug
-PROGRESS_PLAIN := --progress plain
-DEBUG_FLAGS ?= $(if $(DEBUG),$(PROGRESS_PLAIN),)
+# Include build tasks
+include make/Makefile.build
 
-# ldflags
-GIT_COMMIT := $(shell git rev-parse --short HEAD || echo unsupported)
-VERSION := $(shell ./script/version.sh)
-BUILD_TIME := $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")
-SLIM_LDFLAGS ?= -s -w
-LDFLAGS := "$(SLIM_LDFLAGS) \
-	-X github.com/ctrsploit/sploit-spec/pkg/version.ProductName=${APP_NAME} \
-	-X github.com/ctrsploit/sploit-spec/pkg/version.Version=${VERSION} \
-	-X github.com/ctrsploit/sploit-spec/pkg/version.GitCommit=${GIT_COMMIT} \
-	-X github.com/ctrsploit/sploit-spec/pkg/version.BuildTime=${BUILD_TIME}"
+# Include development environment tasks
+include make/Makefile.dev
 
-# image
-IMAGE_NAME := ghcr.io/ctrsploit/ctrsploit-dev
-DEV_IMAGE := $(IMAGE_NAME):$(VERSION)
-DOCKERFILE := Dockerfile_dev
+# Include test tasks
+include make/Makefile.test
 
-# build flags
-BUILD_APT_MIRROR := $(if $(APT_MIRROR),--build-arg APT_MIRROR="$(APT_MIRROR)")
-BUILD_GO_PROXY := $(if $(GOPROXY),--build-arg GOPROXY="$(GOPROXY)")
-BUILD_SLIM_LDFLAGS := $(if $(SLIM_LDFLAGS), --build-arg SLIM_LDFLAGS="$(SLIM_LDFLAGS)")
-BUILD_OPTS := ${BUILD_APT_MIRROR} ${BUILD_GO_PROXY} ${BUILD_SLIM_LDFLAGS} ${DOCKER_BUILD_ARGS} ${DOCKER_BUILD_OPTS} -f "$(DOCKERFILE)"
+# Include documentation tasks
+include make/Makefile.docs
 
-# ebpf
-include vul/caps/sys_admin/ebpf/Makefile
+# Default target
+all: binary
 
-build:
-	LDFLAGS=$(LDFLAGS) ./script/release.sh
-
-install: build
-	rm -f /usr/local/bin/${APP_NAME} && ln -s $(CURDIR)/bin/release/${APP_NAME}_linux_amd64 /usr/local/bin/${APP_NAME}
-
-binary:
-	APT_MIRROR="$(APT_MIRROR)" GOPROXY="$(GOPROXY)" SLIM_LDFLAGS="$(SLIM_LDFLAGS)" docker buildx bake binary ${DEBUG_FLGAS}
-
-image:
-	docker buildx build $(BUILD_OPTS) --load -t "$(DEV_IMAGE)" ${DEBUG_FLAGS} .
-	docker tag $(DEV_IMAGE) $(IMAGE_NAME):latest
-
-shell: image
-	docker run --rm -ti -v $(CURDIR):/root/app $(DEV_IMAGE) bash
-
-# usage:
-# make genereate: generate ebpf .o files
-# make binary
-# make shell
-# make install
-
-# args:
-# SLIM_FLAGS=
-#	default to -s -w, setup to empty to disable slim ldflags
-# CN=1
-#	use cn mirrors
-# DEBUG=1
-#	build --progress=plain
-
-unittest:
-	go test -v github.com/ctrsploit/ctrsploit/...
-test:
-	docker run --rm -v $(CURDIR):/root/app --env TEST_ENV=$(TEST_ENV) $(DEV_IMAGE) make unittest
-test.bin:
-	mkdir -p bin/test
-	docker run --rm -v $(CURDIR):/root/app $(DEV_IMAGE) ./script/test_bin.sh $(PKG)
-e2e:
-	./test/e2e/e2e.sh $(DIR)
+# Help target - show available commands
+help:
+	@echo "Available targets:"
+	@echo ""
+	@echo "Build targets:"
+	@echo "  make build          - Build binary files"
+	@echo "  make binary         - Build binary using docker buildx"
+	@echo "  make image          - Build development Docker image"
+	@echo "  make install        - Install binary to /usr/local/bin"
+	@echo ""
+	@echo "Development targets:"
+	@echo "  make shell          - Start interactive shell in development container"
+	@echo ""
+	@echo "Test targets:"
+	@echo "  make unittest       - Run unit tests locally"
+	@echo "  make test           - Run unit tests in Docker container"
+	@echo "  make test.bin       - Test binary files (requires PKG variable)"
+	@echo "  make e2e            - Run end-to-end tests (requires DIR variable)"
+	@echo ""
+	@echo "eBPF targets:"
+	@echo "  make generate       - Generate eBPF .o files"
+	@echo "  make vmlinuxh       - Generate vmlinux header file"
+	@echo ""
+	@echo "Documentation targets:"
+	@echo "  make update-vul-table - Update vulnerability table in README.md"
+	@echo ""
+	@echo "Environment variables:"
+	@echo "  SLIM_LDFLAGS=       - LDFLAGS for build (default: -s -w)"
+	@echo "  CN=1                - Use Chinese mirrors for apt and Go proxy"
+	@echo "  DEBUG=1             - Enable debug output (--progress=plain)"
+	@echo "  TEST_ENV=           - Test environment variable"
+	@echo "  PKG=                - Package name for test.bin"
+	@echo "  DIR=                - Directory for e2e tests"

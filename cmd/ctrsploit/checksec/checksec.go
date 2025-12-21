@@ -20,6 +20,7 @@ import (
 	cve_2024_23650 "github.com/ctrsploit/ctrsploit/vul/cve-2024-23650"
 	cve_2025_23266 "github.com/ctrsploit/ctrsploit/vul/cve-2025-23266"
 	cve_2025_47290 "github.com/ctrsploit/ctrsploit/vul/cve-2025-47290"
+	cve_2025_62725 "github.com/ctrsploit/ctrsploit/vul/cve-2025-62725"
 	fork_bomb "github.com/ctrsploit/ctrsploit/vul/fork-bomb"
 	"github.com/ctrsploit/ctrsploit/vul/naked"
 	"github.com/ctrsploit/ctrsploit/vul/namespace/net"
