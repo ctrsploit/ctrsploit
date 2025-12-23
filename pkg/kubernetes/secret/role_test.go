@@ -38,7 +38,7 @@ func TestGetRolesWithSecretAccess(t *testing.T) {
 			},
 			rolesByNS: map[string][]*rbacv1.Role{},
 			expectedResult: []RoleWithSecretAccess{
-				{Kind: "clusterrole", Namespace: "", Name: "admin", Verbs: []string{"get", "list", "watch"}},
+				{Kind: "ClusterRole", Namespace: "", Name: "admin", Verbs: []string{"get", "list", "watch"}},
 			},
 			expectError: false,
 		},
@@ -65,7 +65,7 @@ func TestGetRolesWithSecretAccess(t *testing.T) {
 				},
 			},
 			expectedResult: []RoleWithSecretAccess{
-				{Kind: "role", Namespace: "default", Name: "secret-reader", Verbs: []string{"get", "list"}},
+				{Kind: "Role", Namespace: "default", Name: "secret-reader", Verbs: []string{"get", "list"}},
 			},
 			expectError: false,
 		},
@@ -117,9 +117,9 @@ func TestGetRolesWithSecretAccess(t *testing.T) {
 				},
 			},
 			expectedResult: []RoleWithSecretAccess{
-				{Kind: "clusterrole", Namespace: "", Name: "cluster-admin", Verbs: []string{"*"}},
-				{Kind: "role", Namespace: "default", Name: "secret-reader", Verbs: []string{"get", "watch"}},
-				{Kind: "role", Namespace: "kube-system", Name: "system-reader", Verbs: []string{"list"}},
+				{Kind: "ClusterRole", Namespace: "", Name: "cluster-admin", Verbs: []string{"*"}},
+				{Kind: "Role", Namespace: "default", Name: "secret-reader", Verbs: []string{"get", "watch"}},
+				{Kind: "Role", Namespace: "kube-system", Name: "system-reader", Verbs: []string{"list"}},
 			},
 			expectError: false,
 		},
@@ -206,7 +206,7 @@ func TestGetRolesWithSecretAccess(t *testing.T) {
 				},
 			},
 			expectedResult: []RoleWithSecretAccess{
-				{Kind: "role", Namespace: "default", Name: "wildcard-reader", Verbs: []string{"get", "list", "watch", "create"}},
+				{Kind: "Role", Namespace: "default", Name: "wildcard-reader", Verbs: []string{"get", "list", "watch", "create"}},
 			},
 			expectError: false,
 		},
@@ -237,7 +237,7 @@ func TestGetRolesWithSecretAccess(t *testing.T) {
 				},
 			},
 			expectedResult: []RoleWithSecretAccess{
-				{Kind: "role", Namespace: "default", Name: "multi-rule-reader", Verbs: []string{"get", "list", "watch", "patch"}},
+				{Kind: "Role", Namespace: "default", Name: "multi-rule-reader", Verbs: []string{"get", "list", "watch", "patch"}},
 			},
 			expectError: false,
 		},

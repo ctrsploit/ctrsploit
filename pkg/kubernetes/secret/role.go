@@ -16,7 +16,7 @@ var SecretAccessVerbs = []string{"get", "list", "watch", "*"}
 
 // RoleWithSecretAccess represents a role or clusterrole that has access to secrets
 type RoleWithSecretAccess struct {
-	Kind      string   // "clusterrole" or "role"
+	Kind      string   // "ClusterRole" or "Role"
 	Namespace string   // empty for ClusterRole
 	Name      string   // role name
 	Verbs     []string // verbs that grant secret access
@@ -33,7 +33,7 @@ func GetRolesWithSecretAccess(clientset kubernetes.Interface) ([]RoleWithSecretA
 	}
 
 	for _, role := range clusterRoles.Items {
-		if r := buildRoleWithSecretAccess(role.Name, role.Rules, "clusterrole", ""); r != nil {
+		if r := buildRoleWithSecretAccess(role.Name, role.Rules, "ClusterRole", ""); r != nil {
 			result = append(result, *r)
 		}
 	}
@@ -52,7 +52,7 @@ func GetRolesWithSecretAccess(clientset kubernetes.Interface) ([]RoleWithSecretA
 		}
 
 		for _, role := range roles.Items {
-			if r := buildRoleWithSecretAccess(role.Name, role.Rules, "role", role.Namespace); r != nil {
+			if r := buildRoleWithSecretAccess(role.Name, role.Rules, "Role", role.Namespace); r != nil {
 				result = append(result, *r)
 			}
 		}
