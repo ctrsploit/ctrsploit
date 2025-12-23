@@ -81,3 +81,32 @@ func GetPodsWithSecretAccess(clientset kubernetes.Interface, saWithPerms []Servi
 
 	return result, nil
 }
+
+// GetAllPodsWithSecretAccess is a convenience function that chains the three analysis functions together:
+// 1. GetRolesWithSecretAccess - finds all Roles/ClusterRoles with secret access
+// 2. GetServiceAccountsWithSecretAccess - finds all ServiceAccounts bound to those roles
+// 3. GetPodsWithSecretAccess - finds all Pods using those ServiceAccounts
+//
+// This function provides a complete analysis chain from RBAC roles to actual Pods that have
+// secret access permissions through their ServiceAccounts.
+func GetAllPodsWithSecretAccess(clientset kubernetes.Interface) ([]PodWithSecretAccess, error) {
+	// Step 1: Get all roles/clusterroles with secret access
+	roles, err := GetRolesWithSecretAccess(clientset)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get roles with secret access: %w", err)
+	}
+
+	// Step 2: Get all service accounts with secret access permissions
+	serviceAccounts, err := GetServiceAccountsWithSecretAccess(clientset, roles)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get service accounts with secret access: %w", err)
+	}
+
+	// Step 3: Get all pods using those service accounts
+	pods, err := GetPodsWithSecretAccess(clientset, serviceAccounts)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get pods with secret access: %w", err)
+	}
+
+	return pods, nil
+}
