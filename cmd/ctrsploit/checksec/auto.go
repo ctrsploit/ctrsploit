@@ -23,6 +23,7 @@ import (
 	"github.com/ctrsploit/ctrsploit/vul/naked"
 	"github.com/ctrsploit/ctrsploit/vul/namespace/net"
 	"github.com/ctrsploit/ctrsploit/vul/namespace/pid"
+	access_secrets "github.com/ctrsploit/ctrsploit/vul/sa-token/access-secrets"
 	docker_sock "github.com/ctrsploit/ctrsploit/vul/shared-socket/docker-sock"
 	"github.com/ctrsploit/sploit-spec/pkg/vul"
 	"github.com/ssst0n3/awesome_libs/awesome_error"
@@ -55,6 +56,7 @@ var All = vul.Vulnerabilities{
 	&naked.Vul,
 	&net.Vul,
 	&pid.Vul,
+	&access_secrets.Vul,
 	&docker_sock.Vul,
 }
 
