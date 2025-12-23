@@ -85,6 +85,7 @@ COMMANDS:
    capability, caps                                abuse dangerous capabilities in container
    namespace, ns                                   host level namespaces break the isolations
    shared-socket, sock                             abuse runtime's api via shared socket
+   sa-token-access-secrets, secret                 check if service account token can access Kubernetes Secrets
    help, h                                         Shows a list of commands or help for one command
 
 OPTIONS:
@@ -173,6 +174,7 @@ OPTIONS:
 | └─docker-2375 |  | :x: | :x: |
 | lxcfs |  | :x: | :x: |
 | [fork-bomb](./vul/fork-bomb) |  | :heavy_check_mark: | :heavy_check_mark: |
+| [sa-token-access-secrets](./vul/sa-token/access-secrets) | check if service account token can access Kubernetes Secrets | :heavy_check_mark: | - |
 
 ### exploit
 

@@ -80,3 +80,4 @@
 | └─docker-2375 |  | :x: | :x: | :x: | :x: | :x: | :x: |
 | lxcfs |  | :x: | :x: | :x: | :x: | :x: | :x: |
 | [fork-bomb](fork-bomb) |  | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
+| [sa-token-access-secrets](sa-token/access-secrets) | check if service account token can access Kubernetes Secrets | :heavy_check_mark: | - | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
