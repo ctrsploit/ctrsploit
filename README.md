@@ -27,7 +27,7 @@ make binary
 ### env
 
 ```shell
-$ ctrsploit env     
+$ ctrsploit env
 NAME:
    ctrsploit env - gather information
 
@@ -60,7 +60,7 @@ OPTIONS:
 ### vul
 
 ```shell
-$ ctrsploit vul    
+$ ctrsploit vul
 NAME:
    ctrsploit vul - list vulnerabilities
 
@@ -80,10 +80,12 @@ COMMANDS:
    cve-2024-23650, 23650                           dos buildkit via oci exporter by sending a crafted request
    cve-2025-23266, 23266                           gpu container escape via nvidia-container-toolkit cve-2025-23266 by running a malicious container image
    cve-2025-47290, 47290                           modify host file via containerd cve-2025-47290 during pulling image
+   cve-2025-62725, 62725                           path traversal in Docker Compose OCI artifacts allows arbitrary file write via malicious registry
    fork-bomb                                       
    naked                                           we call containers running without seccomp, AppArmor, or SELinux enabled 'naked containers', which leaves them highly vulnerable to kernel exploits and potential container escapes
    capability, caps                                abuse dangerous capabilities in container
    namespace, ns                                   host level namespaces break the isolations
+   sa-token-access-secrets, secret                 Check if service account token can access Kubernetes Secrets
    shared-socket, sock                             abuse runtime's api via shared socket
    help, h                                         Shows a list of commands or help for one command
 
@@ -173,11 +175,12 @@ OPTIONS:
 | └─docker-2375 |  | :x: | :x: |
 | lxcfs |  | :x: | :x: |
 | [fork-bomb](./vul/fork-bomb) |  | :heavy_check_mark: | :heavy_check_mark: |
+| [sa-token-access-secrets](./vul/sa-token/access-secrets) | check if service account token can access Kubernetes Secrets | :heavy_check_mark: | - |
 
 ### exploit
 
 ```shell
-$ ctrsploit exploit                                       
+$ ctrsploit exploit
 NAME:
    ctrsploit exploit - run a exploit
 
@@ -226,7 +229,7 @@ OPTIONS:
 ### checksec
 
 ```shell
-$ ctrsploit checksec     
+$ ctrsploit checksec
 NAME:
    ctrsploit checksec - check security inside a container
 
@@ -248,6 +251,7 @@ COMMANDS:
    cve-2024-23650, 23650                            dos buildkit via oci exporter by sending a crafted request
    cve-2025-23266, 23266                            gpu container escape via nvidia-container-toolkit cve-2025-23266 by running a malicious container image
    cve-2025-47290, 47290                            modify host file via containerd cve-2025-47290 during pulling image
+   cve-2025-62725, 62725                            path traversal in Docker Compose OCI artifacts allows arbitrary file write via malicious registry
    fork-bomb                                        
    shocker, cap_dac_read_search, open_by_handle_at  escape by CAP_DAC_READ_SEARCH, alias shocker, found by Sebastian Krahmer (stealth) in 2014
    cap_sys_admin, sys_admin                         abuse cap_sys_admin
@@ -257,36 +261,12 @@ COMMANDS:
    naked                                            we call containers running without seccomp, AppArmor, or SELinux enabled 'naked containers', which leaves them highly vulnerable to kernel exploits and potential container escapes
    host-net, net                                    shared host network namespace breaks the network isolation
    host-pid, pid                                    shared host pid namespace breaks process isolation
+   sa-token-access-secrets, secret                  Check if service account token can access Kubernetes Secrets
    docker.sock, docker                              escape by shared docker.sock via running a privileged container
    help, h                                          Shows a list of commands or help for one command
 
 OPTIONS:
    --help, -h  show help
-```
-
-```shell
-$ ctrsploit --colorful checksec auto
-✔  ptrace-pid-host      # ptrace host processes in a container with cap_sys_ptrace and host pid namespace
-✔  cap_sys_admin        # abuse cap_sys_admin
-✘  cve-2016-8867        # Ambient Capabilities in the Linux kernel allow local users to gain privileges
-✘  cve-2020-8558        # access services bound to 127.0.0.1 from adjacent hosts
-✘  cve-2021-25741       # kubelet symlink exchange vulnerability allows mounting node filesystem inside a pod
-✘  cve-2025-23266       # gpu container escape via nvidia-container-toolkit cve-2025-23266 by running a malicious container image
-✔  shocker      # escape by CAP_DAC_READ_SEARCH, alias shocker, found by Sebastian Krahmer (stealth) in 2014
-✘  cve-2022-39253       # read host file during docker build via git CVE-2022-39253
-✘  cve-2024-0132        # gpu container escape via nvidia-container-toolkit CVE-2024-0132
-✔  cap_sys_ptrace       # abuse cap_sys_ptrace
-✔  naked        # we call containers running without seccomp, AppArmor, or SELinux enabled 'naked containers', which leaves them highly vulnerable to kernel exploits and potential container escapes
-✔  host-pid     # shared host pid namespace breaks process isolation
-✘  cve-2019-5736        # escape by overwrite runc executable file via /proc/self/exe
-✘  cve-2020-15257       # abuse the containerd-shim's abstract unix socket in a container with host network namespace
-✘  cve-2025-47290       # modify host file via containerd cve-2025-47290 during pulling image
-✔  cap_bpf      # load evil bpf programs via cap_bpf
-✔  host-net     # shared host network namespace breaks the network isolation
-✘  docker.sock  # escape by shared docker.sock via running a privileged container
-✘  cve-2022-0492        # escape via cgroup's release agent without CAP_SYS_ADMIN if kernel is vulnerable to CVE-2022-0492
-✘  cve-2024-23650       # dos buildkit via oci exporter by sending a crafted request
-✘  fork-bomb
 ```
 
 ### helper

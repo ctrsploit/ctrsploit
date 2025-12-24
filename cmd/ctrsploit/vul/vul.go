@@ -19,6 +19,7 @@ import (
 	fork_bomb "github.com/ctrsploit/ctrsploit/vul/fork-bomb"
 	"github.com/ctrsploit/ctrsploit/vul/naked"
 	"github.com/ctrsploit/ctrsploit/vul/namespace"
+	access_secrets "github.com/ctrsploit/ctrsploit/vul/sa-token/access-secrets"
 	shared_socket "github.com/ctrsploit/ctrsploit/vul/shared-socket"
 	"github.com/urfave/cli/v2"
 )
@@ -45,6 +46,7 @@ var Command = &cli.Command{
 		naked.VulCmd,
 		caps.VulCmd,
 		namespace.VulCmd,
+		access_secrets.VulCmd,
 		shared_socket.VulCmd,
 	},
 }

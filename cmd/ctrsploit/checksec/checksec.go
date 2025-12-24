@@ -25,6 +25,7 @@ import (
 	"github.com/ctrsploit/ctrsploit/vul/naked"
 	"github.com/ctrsploit/ctrsploit/vul/namespace/net"
 	"github.com/ctrsploit/ctrsploit/vul/namespace/pid"
+	access_secrets "github.com/ctrsploit/ctrsploit/vul/sa-token/access-secrets"
 	docker_sock "github.com/ctrsploit/ctrsploit/vul/shared-socket/docker-sock"
 	"github.com/urfave/cli/v2"
 )
@@ -58,6 +59,7 @@ var Command = &cli.Command{
 		naked.CheckSecCmd,
 		net.CheckSecCmd,
 		pid.CheckSecCmd,
+		access_secrets.CheckSecCmd,
 		docker_sock.CheckSecCmd,
 	},
 }

@@ -19,10 +19,12 @@ import (
 	cve_2024_23650 "github.com/ctrsploit/ctrsploit/vul/cve-2024-23650"
 	cve_2025_23266 "github.com/ctrsploit/ctrsploit/vul/cve-2025-23266"
 	cve_2025_47290 "github.com/ctrsploit/ctrsploit/vul/cve-2025-47290"
+	cve_2025_62725 "github.com/ctrsploit/ctrsploit/vul/cve-2025-62725"
 	fork_bomb "github.com/ctrsploit/ctrsploit/vul/fork-bomb"
 	"github.com/ctrsploit/ctrsploit/vul/naked"
 	"github.com/ctrsploit/ctrsploit/vul/namespace/net"
 	"github.com/ctrsploit/ctrsploit/vul/namespace/pid"
+	access_secrets "github.com/ctrsploit/ctrsploit/vul/sa-token/access-secrets"
 	docker_sock "github.com/ctrsploit/ctrsploit/vul/shared-socket/docker-sock"
 	"github.com/ctrsploit/sploit-spec/pkg/vul"
 	"github.com/ssst0n3/awesome_libs/awesome_error"
@@ -46,6 +48,7 @@ var All = vul.Vulnerabilities{
 	&cve_2024_23650.Vul,
 	&cve_2025_23266.Vul,
 	&cve_2025_47290.Vul,
+	&cve_2025_62725.Vul,
 	&fork_bomb.Vul,
 	&shocker.Vul,
 	&sys_admin.Vul,
@@ -55,6 +58,7 @@ var All = vul.Vulnerabilities{
 	&naked.Vul,
 	&net.Vul,
 	&pid.Vul,
+	&access_secrets.Vul,
 	&docker_sock.Vul,
 }
 

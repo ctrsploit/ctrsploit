@@ -46,6 +46,7 @@ help:
 	@echo ""
 	@echo "Documentation targets:"
 	@echo "  make update-vul-table - Update vulnerability table in README.md"
+	@echo "  make update-readme    - Update README.md (command help and vulnerability table)"
 	@echo ""
 	@echo "Environment variables:"
 	@echo "  SLIM_LDFLAGS=       - LDFLAGS for build (default: -s -w)"
