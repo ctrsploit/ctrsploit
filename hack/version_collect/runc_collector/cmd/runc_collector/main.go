@@ -1,18 +1,20 @@
 package main
 
 import (
-	"github.com/urfave/cli/v2"
+	"context"
 	"os"
+
+	"github.com/urfave/cli/v3"
 )
 
 func main() {
-	app := &cli.App{
+	app := &cli.Command{
 		Name: "runc_collector",
 		Commands: []*cli.Command{
 			GithubRelease,
 		},
 	}
-	err := app.Run(os.Args)
+	err := app.Run(context.Background(), os.Args)
 	if err != nil {
 		panic(err)
 	}

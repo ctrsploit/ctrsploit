@@ -7,7 +7,7 @@ import (
 	"github.com/ctrsploit/sploit-spec/pkg/app"
 	"github.com/ctrsploit/sploit-spec/pkg/exeenv"
 	"github.com/ctrsploit/sploit-spec/pkg/vul"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 )
 
 var (
@@ -38,8 +38,8 @@ type vulnerability struct {
 	vul.BaseVulnerability
 }
 
-func (v *vulnerability) Exploit(ctx *cli.Context) (err error) {
-	err = v.BaseVulnerability.Exploit(ctx)
+func (v *vulnerability) Exploit(cmd *cli.Command) (err error) {
+	err = v.BaseVulnerability.Exploit(cmd)
 	if err != nil {
 		return
 	}

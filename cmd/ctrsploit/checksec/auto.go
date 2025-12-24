@@ -2,6 +2,8 @@ package checksec
 
 //goland:noinspection GoSnakeCaseUsage
 import (
+	"context"
+
 	"github.com/ctrsploit/ctrsploit/vul/caps/bpf"
 	"github.com/ctrsploit/ctrsploit/vul/caps/shocker"
 	"github.com/ctrsploit/ctrsploit/vul/caps/sys_admin"
@@ -28,7 +30,7 @@ import (
 	docker_sock "github.com/ctrsploit/ctrsploit/vul/shared-socket/docker-sock"
 	"github.com/ctrsploit/sploit-spec/pkg/vul"
 	"github.com/ssst0n3/awesome_libs/awesome_error"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 )
 
 const (
@@ -66,8 +68,8 @@ var Auto = &cli.Command{
 	Name:    CommandNameAuto,
 	Usage:   "auto check security",
 	Aliases: []string{"a"},
-	Action: func(context *cli.Context) (err error) {
-		err = All.Check(context)
+	Action: func(ctx context.Context, cmd *cli.Command) (err error) {
+		err = All.Check(cmd)
 		if err != nil {
 			awesome_error.CheckWarning(err)
 			err = nil

@@ -1,9 +1,11 @@
 package pipe_primitive
 
 import (
+	"context"
 	"fmt"
+
 	"github.com/ssst0n3/awesome_libs/log"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 )
 
 func Command(primitive Primitive, aliases []string, usage string) (cmd *cli.Command) {
@@ -11,12 +13,12 @@ func Command(primitive Primitive, aliases []string, usage string) (cmd *cli.Comm
 		Name:    primitive.GetExpName(),
 		Aliases: aliases,
 		Usage:   usage,
-		Subcommands: []*cli.Command{
+		Commands: []*cli.Command{
 			{
 				Name:    escalateExpName(primitive),
 				Aliases: []string{"pe"},
 				Usage:   fmt.Sprintf("permission escalate by using %s", primitive.GetExpName()),
-				Action: func(context *cli.Context) error {
+				Action: func(ctx context.Context, cmd *cli.Command) error {
 					return InvokeEscalate(primitive)
 				},
 			},
@@ -24,7 +26,7 @@ func Command(primitive Primitive, aliases []string, usage string) (cmd *cli.Comm
 				Name:    escapeExpName(primitive),
 				Aliases: []string{"e"},
 				Usage:   fmt.Sprintf("escape by using %s", primitive.GetExpName()),
-				Action: func(context *cli.Context) error {
+				Action: func(ctx context.Context, cmd *cli.Command) error {
 					return InvokeEscape(primitive)
 				},
 			},
@@ -38,9 +40,9 @@ func Command(primitive Primitive, aliases []string, usage string) (cmd *cli.Comm
 					&cli.StringFlag{Name: "destination", Aliases: []string{"d"}, Required: true,
 						Usage: "the path of file you want to pollution"},
 				},
-				Action: func(context *cli.Context) error {
-					source := context.String("source")
-					dest := context.String("destination")
+				Action: func(ctx context.Context, cmd *cli.Command) error {
+					source := cmd.String("source")
+					dest := cmd.String("destination")
 					log.Logger.Info(fmt.Sprintf("Overwrite %s with %s", source, dest))
 					return InvokeImagePollution(primitive, source, dest)
 				},

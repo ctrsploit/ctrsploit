@@ -9,7 +9,7 @@ import (
 	"github.com/ctrsploit/sploit-spec/pkg/exeenv"
 	"github.com/ctrsploit/sploit-spec/pkg/prerequisite"
 	"github.com/ctrsploit/sploit-spec/pkg/vul"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 )
 
 var (
@@ -17,7 +17,7 @@ var (
 	VulCmd      = &cli.Command{
 		Name:  Vul.Name,
 		Usage: Vul.Description,
-		Subcommands: []*cli.Command{
+		Commands: []*cli.Command{
 			getCheckSecCmd("checksec", "check vulnerability exists"),
 		},
 	}

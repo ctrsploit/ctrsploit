@@ -8,7 +8,7 @@ import (
 	"github.com/ctrsploit/sploit-spec/pkg/exeenv"
 	"github.com/ctrsploit/sploit-spec/pkg/log"
 	"github.com/ctrsploit/sploit-spec/pkg/vul"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 )
 
 var (
@@ -19,7 +19,6 @@ var (
 			Name:    "kubeconfig",
 			Aliases: []string{"k"},
 			Usage:   "Path to kubeconfig file (defaults to in-cluster config, then ~/.kube/config)",
-			EnvVars: []string{"KUBECONFIG"},
 		},
 	}
 
@@ -28,7 +27,7 @@ var (
 		Name:    Vul.Name,
 		Aliases: aliases,
 		Usage:   Vul.Description,
-		Subcommands: []*cli.Command{
+		Commands: []*cli.Command{
 			getCheckSecCmd("checksec", "check vulnerability exists", []string{"c"}),
 		},
 	}
@@ -51,11 +50,11 @@ var Vul = vulnerability{
 	},
 }
 
-func (v *vulnerability) CheckSec(ctx *cli.Context) (satisfied bool, err error) {
+func (v *vulnerability) CheckSec(cmd *cli.Command) (satisfied bool, err error) {
 	log.Logger.Debugf("Starting vulnerability.CheckSec for service account token secrets access")
 
 	// Check prerequisites first
-	satisfied, err = v.BaseVulnerability.CheckSec(ctx)
+	satisfied, err = v.BaseVulnerability.CheckSec(cmd)
 	if err != nil {
 		return false, fmt.Errorf("prerequisite check failed: %w", err)
 	}
