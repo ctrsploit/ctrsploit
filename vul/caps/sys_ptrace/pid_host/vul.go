@@ -1,6 +1,7 @@
 package pid_host
 
 import (
+	"context"
 	"github.com/ctrsploit/ctrsploit/prerequisite/apparmor"
 	"github.com/ctrsploit/ctrsploit/prerequisite/capability"
 	"github.com/ctrsploit/ctrsploit/prerequisite/namespace"
@@ -8,7 +9,7 @@ import (
 	"github.com/ctrsploit/sploit-spec/pkg/exeenv"
 	"github.com/ctrsploit/sploit-spec/pkg/prerequisite"
 	"github.com/ctrsploit/sploit-spec/pkg/vul"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 )
 
 var (
@@ -72,19 +73,28 @@ var (
 	}
 )
 
-func (v *vulnerability) Exploit(context *cli.Context) (err error) {
-	err = v.BaseVulnerability.Exploit(context)
+func (v *vulnerability) Exploit(cmd *cli.Command) (err error) {
+	err = v.BaseVulnerability.Exploit(cmd)
 	if err != nil {
 		return
 	}
-	ip := context.String("ip")
+	ip := cmd.String("ip")
 	if ip == "" {
 		ip, err = getIp()
 		if err != nil {
 			return err
 		}
 	}
-	return Exploit(context.Int("pid"), ip, context.Int("port"), context.Bool("listen"))
+	pid := cmd.Int("pid")
+	if pid == 0 {
+		pid = 1
+	}
+	port := cmd.Int("port")
+	if port == 0 {
+		port = 2333
+	}
+	listen := cmd.Bool("listen")
+	return Exploit(pid, ip, port, listen)
 }
 
 func getCheckSecCmd(name, usage string, aliases []string) (cmd *cli.Command) {
@@ -101,12 +111,12 @@ func GetExploitCmd(name, usage string, aliases []string) (cmd *cli.Command) {
 		Usage:   usage,
 		Aliases: aliases,
 		Flags:   flagsExploit,
-		Action: func(context *cli.Context) (err error) {
-			_, err = Vul.CheckSec(context)
+		Action: func(ctx context.Context, cmd *cli.Command) (err error) {
+			_, err = Vul.CheckSec(cmd)
 			if err != nil {
 				return
 			}
-			err = Vul.Exploit(context)
+			err = Vul.Exploit(cmd)
 			return
 		},
 	}

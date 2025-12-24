@@ -27,14 +27,14 @@ import (
 	"github.com/ctrsploit/ctrsploit/vul/namespace/pid"
 	access_secrets "github.com/ctrsploit/ctrsploit/vul/sa-token/access-secrets"
 	docker_sock "github.com/ctrsploit/ctrsploit/vul/shared-socket/docker-sock"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 )
 
 var Command = &cli.Command{
 	Name:    "checksec",
 	Aliases: []string{"c"},
 	Usage:   "check security inside a container",
-	Subcommands: []*cli.Command{
+	Commands: []*cli.Command{
 		Auto,
 		env.Command,
 		cve_2016_8867.CheckSecCmd,

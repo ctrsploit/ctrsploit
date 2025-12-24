@@ -21,14 +21,14 @@ import (
 	"github.com/ctrsploit/ctrsploit/vul/namespace"
 	access_secrets "github.com/ctrsploit/ctrsploit/vul/sa-token/access-secrets"
 	shared_socket "github.com/ctrsploit/ctrsploit/vul/shared-socket"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 )
 
 var Command = &cli.Command{
 	Name:    "vul",
 	Aliases: []string{"v"},
 	Usage:   "list vulnerabilities",
-	Subcommands: []*cli.Command{
+	Commands: []*cli.Command{
 		cve_2016_8867.VulCmd,
 		cve_2019_5736.VulCmd,
 		cve_2020_8558.VulCmd,

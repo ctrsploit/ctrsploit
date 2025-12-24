@@ -1,12 +1,13 @@
 package fork_bomb
 
 import (
+
 	"github.com/ctrsploit/ctrsploit/prerequisite/cgroups/pids"
 	"github.com/ctrsploit/sploit-spec/pkg/app"
 	"github.com/ctrsploit/sploit-spec/pkg/exeenv"
 	"github.com/ctrsploit/sploit-spec/pkg/prerequisite"
 	"github.com/ctrsploit/sploit-spec/pkg/vul"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 )
 
 var (
@@ -55,8 +56,8 @@ var (
 	}
 )
 
-func (v *vulnerability) Exploit(context *cli.Context) (err error) {
-	err = v.BaseVulnerability.Exploit(context)
+func (v *vulnerability) Exploit(cmd *cli.Command) (err error) {
+	err = v.BaseVulnerability.Exploit(cmd)
 	if err != nil {
 		return
 	}

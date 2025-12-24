@@ -3,7 +3,7 @@ package pkg
 import (
 	"context"
 	"fmt"
-	"github.com/docker/docker/api/types"
+	dockerImage "github.com/docker/docker/api/types/image"
 	"github.com/docker/docker/client"
 	"github.com/google/go-containerregistry/pkg/name"
 	"github.com/google/go-containerregistry/pkg/v1/remote"
@@ -97,7 +97,7 @@ func Pull(image string) (err error) {
 		return
 	}
 
-	out, err := cli.ImagePull(context.Background(), image, types.ImagePullOptions{})
+	out, err := cli.ImagePull(context.Background(), image, dockerImage.PullOptions{})
 	if err != nil {
 		panic(err)
 	}

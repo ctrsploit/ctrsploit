@@ -1,8 +1,9 @@
 package auto
 
 import (
+	"context"
 	"fmt"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 )
 
 const (
@@ -14,7 +15,7 @@ var (
 		Name:    CommandNameAuto,
 		Usage:   "auto gathering information, detect vulnerabilities and run exploits",
 		Aliases: []string{"a"},
-		Action: func(context *cli.Context) (err error) {
+		Action: func(ctx context.Context, cmd *cli.Command) (err error) {
 			fmt.Println("TODO")
 			return
 		},
