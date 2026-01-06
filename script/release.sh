@@ -61,12 +61,23 @@ compress_binaries() {
     cd ${PROJECT_DIR}
     set +x
     
+    # Choose upx compression level:
+    # - release versions (bin/release/*): highest compression (--best)
+    # - other versions (bin/dev/*, dirty, etc.): fastest compression (--fast)
+    local upx_args="-q --fast"
+    if [[ "${RELEASE_DIR}" == bin/release/* ]]; then
+        echo "use upx highest compression for release binaries (--best)"
+        upx_args="-q --best"
+    else
+        echo "use upx fastest compression for non-release binaries (--fast)"
+    fi
+    
     echo "compressing binaries with upx in parallel..."
     for f in bin/latest/*; do
         if [[ -f "$f" ]]; then
             (
                 echo "  [upx] start  $(basename "$f")"
-                upx -q "$f" >/dev/null 2>&1
+                upx ${upx_args} "$f" >/dev/null 2>&1
                 echo "  [upx] done   $(basename "$f")"
             ) &
         fi
