@@ -6,3 +6,4 @@ test/test_data/k8s/kubeconfig.json
 __pycache__/
 *.pyc
 *.pyo
+.cursor
