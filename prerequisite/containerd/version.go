@@ -63,7 +63,7 @@ func (p *Version) Check() (bool, error) {
 //
 //goland:noinspection GoSnakeCaseUsage
 var VulnerableTo40635 = func() *Version {
-	cons, err := semver.NewConstraint("(>= 1.6.0, < 1.6.38) || (>= 1.7.0, < 1.7.27) || (>= 2.0.0, < 2.0.4)")
+	cons, err := semver.NewConstraint(">= 1.6.0, < 1.6.38 || >= 1.7.0, < 1.7.27 || >= 2.0.0, < 2.0.4")
 	if err != nil {
 		panic(err)
 	}

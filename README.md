@@ -32,7 +32,7 @@ NAME:
    ctrsploit env - gather information
 
 USAGE:
-   ctrsploit env [command options]
+   ctrsploit env [command [command options]]
 
 COMMANDS:
    auto                auto
@@ -51,7 +51,6 @@ COMMANDS:
    namespace, n, ns    check namespace is host ns
    docker-version, dv  guess dockerd version range
    upload, up          upload <servicename> <filename> <obs> [host]
-   help, h             Shows a list of commands or help for one command
 
 OPTIONS:
    --help, -h  show help
@@ -65,7 +64,7 @@ NAME:
    ctrsploit vul - list vulnerabilities
 
 USAGE:
-   ctrsploit vul [command options]
+   ctrsploit vul [command [command options]]
 
 COMMANDS:
    cve-2016-8867, 8867, amb                        Ambient Capabilities in the Linux kernel allow local users to gain privileges
@@ -78,6 +77,7 @@ COMMANDS:
    cve-2022-39253, 39253                           read host file during docker build via git CVE-2022-39253
    cve-2024-0132, 0132                             gpu container escape via nvidia-container-toolkit CVE-2024-0132
    cve-2024-23650, 23650                           dos buildkit via oci exporter by sending a crafted request
+   cve-2024-40635, 40635                           bypass runAsNonRoot via integer overflow in User ID handling in containerd
    cve-2025-23266, 23266                           gpu container escape via nvidia-container-toolkit cve-2025-23266 by running a malicious container image
    cve-2025-47290, 47290                           modify host file via containerd cve-2025-47290 during pulling image
    cve-2025-62725, 62725                           path traversal in Docker Compose OCI artifacts allows arbitrary file write via malicious registry
@@ -87,7 +87,6 @@ COMMANDS:
    namespace, ns                                   host level namespaces break the isolations
    sa-token-access-secrets, secret                 Check if service account token can access Kubernetes Secrets
    shared-socket, sock                             abuse runtime's api via shared socket
-   help, h                                         Shows a list of commands or help for one command
 
 OPTIONS:
    --help, -h  show help
@@ -125,6 +124,7 @@ OPTIONS:
 | [cve-2024-0132](./vul/cve-2024-0132) | gpu container escape via nvidia-container-toolkit CVE-2024-0132 | :o: | :heavy_check_mark: |
 | CVE-2024-21626 |  | :x: | :x: |
 | [cve-2024-23650](./vul/cve-2024-23650) | dos buildkit via oci exporter by sending a crafted request | :heavy_check_mark: | :heavy_check_mark: |
+| [cve-2024-40635](./vul/cve-2024-40635) | bypass runAsNonRoot via integer overflow in User ID handling in containerd | :heavy_check_mark: | :heavy_check_mark: |
 | [cve-2025-23266](./vul/cve-2025-23266) | gpu container escape via nvidia-container-toolkit cve-2025-23266 by running a malicious container image | :o: | :heavy_check_mark: |
 | cve-2025-23267 |  | :x: | :x: |
 | cve-2025-23359 |  | :x: | :x: |
@@ -185,7 +185,7 @@ NAME:
    ctrsploit exploit - run a exploit
 
 USAGE:
-   ctrsploit exploit [command options]
+   ctrsploit exploit [command [command options]]
 
 COMMANDS:
    cve-2016-8867, 8867, amb                           Ambient Capabilities in the Linux kernel allow local users to gain privileges
@@ -198,6 +198,7 @@ COMMANDS:
    cve-2022-39253, 39253                              read host file during docker build via git CVE-2022-39253
    cve-2024-0132, 0132                                gpu container escape via nvidia-container-toolkit CVE-2024-0132
    cve-2024-23650, 23650                              dos buildkit via oci exporter by sending a crafted request
+   cve-2024-40635, 40635                              bypass runAsNonRoot via integer overflow in User ID handling in containerd
    cve-2025-23266, 23266                              gpu container escape via nvidia-container-toolkit cve-2025-23266 by running a malicious container image
    cve-2025-47290, 47290                              modify host file via containerd cve-2025-47290 during pulling image
    fork-bomb                                          
@@ -220,7 +221,6 @@ COMMANDS:
    CVE-2017-1002101, subPath1, 1002101, 2017-1002101  CVE-2017-1002101
    dirty-pipe, dp, CVE-2022-0847, 0847                dirty-pipe
    crash, c                                           make container crash
-   help, h                                            Shows a list of commands or help for one command
 
 OPTIONS:
    --help, -h  show help
@@ -234,7 +234,7 @@ NAME:
    ctrsploit checksec - check security inside a container
 
 USAGE:
-   ctrsploit checksec [command options]
+   ctrsploit checksec [command [command options]]
 
 COMMANDS:
    auto, a                                          auto check security
@@ -249,6 +249,7 @@ COMMANDS:
    cve-2022-39253, 39253                            read host file during docker build via git CVE-2022-39253
    cve-2024-0132, 0132                              gpu container escape via nvidia-container-toolkit CVE-2024-0132
    cve-2024-23650, 23650                            dos buildkit via oci exporter by sending a crafted request
+   cve-2024-40635, 40635                            bypass runAsNonRoot via integer overflow in User ID handling in containerd
    cve-2025-23266, 23266                            gpu container escape via nvidia-container-toolkit cve-2025-23266 by running a malicious container image
    cve-2025-47290, 47290                            modify host file via containerd cve-2025-47290 during pulling image
    cve-2025-62725, 62725                            path traversal in Docker Compose OCI artifacts allows arbitrary file write via malicious registry
@@ -263,7 +264,6 @@ COMMANDS:
    host-pid, pid                                    shared host pid namespace breaks process isolation
    sa-token-access-secrets, secret                  Check if service account token can access Kubernetes Secrets
    docker.sock, docker                              escape by shared docker.sock via running a privileged container
-   help, h                                          Shows a list of commands or help for one command
 
 OPTIONS:
    --help, -h  show help
