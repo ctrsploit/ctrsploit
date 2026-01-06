@@ -12,6 +12,7 @@ var Command = &cli.Command{
 	Description: `Classify and operate vulnerabilities by logical module
 such as runc, containerd, or config (e.g. capability).`,
 	Commands: []*cli.Command{
+		Runc,
 		Containerd,
 	},
 }

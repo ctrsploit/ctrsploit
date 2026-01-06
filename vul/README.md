@@ -12,6 +12,14 @@
 |-----|------|-------|---------|------|-----|-------|------|
 | [cve-2024-40635](cve-2024-40635) | bypass runAsNonRoot via integer overflow in User ID handling in containerd | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: | :x: |
 
+### runc
+
+| vul | desc | check | exploit | test | doc | video | case |
+|-----|------|-------|---------|------|-----|-------|------|
+| [cve-2019-5736](cve-2019-5736) | escape by overwrite runc executable file via /proc/self/exe | :heavy_check_mark: | - | - | :heavy_check_mark: | - | :x: |
+| └─[exec](cve-2019-5736/exec) | cve-2019-5736 exploit via runc exec process | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | - | :heavy_check_mark: | :x: |
+| └─[image](cve-2019-5736/image) | cve-2019-5736 exploit via a malicious image | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | - | :heavy_check_mark: | :x: |
+
 ## other
 
 | vul | desc | check | exploit | test | doc | video | case |
@@ -19,9 +27,6 @@
 | [cve-2016-8867](cve-2016-8867) | ambient capabilities allow local users to gain privileges | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
 | cve-2016-9962 |  | :x: | :x: | :x: | :x: | :x: | :x: |
 | CVE-2017-1002101 |  | :x: | :heavy_check_mark: | :x: | :x: | :x: | :x: |
-| [cve-2019-5736](cve-2019-5736) | escape by overwrite runc executable file via /proc/self/exe | :heavy_check_mark: | - | - | :heavy_check_mark: | - | :x: |
-| └─[exec](cve-2019-5736/exec) | cve-2019-5736 exploit via runc exec process | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | - | :heavy_check_mark: | :x: |
-| └─[image](cve-2019-5736/image) | cve-2019-5736 exploit via a malicious image | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | - | :heavy_check_mark: | :x: |
 | CVE-2019-14271 |  | :x: | :heavy_check_mark: | :x: | :x: | :x: | :x: |
 | CVE-2019-16884 |  | :x: | :heavy_check_mark: | :x: | :x: | :x: | :x: |
 | CVE-2020-8555 |  | :x: | :heavy_check_mark: | :x: | :x: | :x: | :x: |
