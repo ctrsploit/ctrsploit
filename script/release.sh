@@ -20,7 +20,20 @@ CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -o checksec_linux_arm64 -ldflags 
 CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -o env_linux_arm64 -ldflags "${LDFLAGS}" github.com/ctrsploit/ctrsploit/cmd/env
 
 cd -
-upx bin/latest/* || echo done
+set +x
+echo "compressing binaries with upx in parallel..."
+for f in bin/latest/*; do
+    if [[ -f "$f" ]]; then
+        (
+            echo "  [upx] start  $(basename "$f")"
+            upx -q "$f" >/dev/null 2>&1
+            echo "  [upx] done   $(basename "$f")"
+        ) &
+    fi
+done
+wait || true
+echo "compressing binaries done."
+set -x
 
 if [[ "${RELEASE_DIR}" == *release* ]]; then
     rm -f bin/release/latest
