@@ -19,6 +19,7 @@ such as kernel, runc, containerd, or config (e.g. capability).`,
 		Buildkit,
 		Kubernetes,
 		IngressNginx,
+		Git,
 		Kernel,
 	},
 }

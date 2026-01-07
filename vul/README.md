@@ -60,6 +60,12 @@
 |-----|------|-------|---------|------|-----|-------|------|
 | [cve-2021-25748](cve-2021-25748) | ingress-nginx path validation bypass vulnerability allows credential leakage through newline injection | :heavy_check_mark: | :heavy_check_mark: | :x: | :heavy_check_mark: | :x: | :x: |
 
+### git
+
+| vul | desc | check | exploit | test | doc | video | case |
+|-----|------|-------|---------|------|-----|-------|------|
+| [cve-2022-39253](cve-2022-39253) | read host file during docker build via git CVE-2022-39253 | :o: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
+
 ## other
 
 | vul | desc | check | exploit | test | doc | video | case |
@@ -76,7 +82,6 @@
 | CVE-2021-22555 |  | :x: | :heavy_check_mark: | :x: | :x: | :x: | :x: |
 | CVE-2021-41091 |  | :x: | :heavy_check_mark: | :x: | :x: | :x: | :x: |
 | CVE-2022-0847 |  | :x: | :heavy_check_mark: | :x: | :x: | :x: | :x: |
-| [cve-2022-39253](cve-2022-39253) | read host file during docker build via git CVE-2022-39253 | :o: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
 | CVE-2023-28642 |  | :x: | :x: | :x: | :x: | :x: | :x: |
 | CVE-2024-21626 |  | :x: | :x: | :x: | :x: | :x: | :x: |
 | cve-2025-23267 |  | :x: | :x: | :x: | :x: | :x: | :x: |
