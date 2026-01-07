@@ -2,6 +2,7 @@ package module
 
 import (
 	fork_bomb "github.com/ctrsploit/ctrsploit/vul/fork-bomb"
+	namespace "github.com/ctrsploit/ctrsploit/vul/namespace"
 	access_secrets "github.com/ctrsploit/ctrsploit/vul/sa-token/access-secrets"
 	shared_socket "github.com/ctrsploit/ctrsploit/vul/shared-socket"
 	"github.com/urfave/cli/v3"
@@ -18,6 +19,7 @@ var Config = &cli.Command{
 	by type (e.g. capability, seccomp, namespace).`,
 	Commands: []*cli.Command{
 		fork_bomb.VulCmd,
+		namespace.VulCmd,
 		access_secrets.VulCmd,
 		shared_socket.VulCmd,
 	},

@@ -15,6 +15,16 @@
 | └─[docker.sock](shared-socket/docker-sock) | escape by shared docker.sock via running a privileged container | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
 | └─containerd.sock |  | :x: | :x: | :x: | :x: | :x: | :x: |
 | [sa-token-access-secrets](sa-token/access-secrets) | check if service account token can access Kubernetes Secrets | :heavy_check_mark: | - | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
+| [namespace](namespace) | shared host namespaces break the isolations | - | - | - | - | - | - |
+| └─[net](namespace/net) | shared host network namespace breaks the network isolation | :heavy_check_mark: | :x: | :x: | :x: | :x: | :x: |
+| &emsp;└─shijack |  | :x: | :x: | :x: | :x: | :x: | :x: |
+| &emsp;&emsp;└─basic |  | :x: | :x: | :x: | :x: | :x: | :x: |
+| &emsp;&emsp;└─ali |  | :x: | :x: | :x: | :x: | :x: | :x: |
+| &emsp;&emsp;└─hw |  | :x: | :x: | :x: | :x: | :x: | :x: |
+| &emsp;&emsp;└─gcp |  | :x: | :x: | :x: | :x: | :x: | :x: |
+| &emsp;&emsp;└─aws |  | :x: | :x: | :x: | :x: | :x: | :x: |
+| └─[pid](namespace/pid) | shared host pid namespace breaks the process isolation | - | - | - | - | - | - |
+| &emsp;└─[proc_root](namespace/pid/proc_root) | escape by abusing host pid ns via /proc/[pid]/root | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
 
 ### runc
 
@@ -118,16 +128,6 @@
 | └─sys_module |  | :x: | :x: | :x: | :x: | :x: | :x: |
 | └─net_admin |  | :x: | :x: | :x: | :x: | :x: | :x: |
 | [naked](naked) | we call containers running without seccomp, AppArmor, or SELinux enabled 'naked containers', which leaves them highly vulnerable to kernel exploits and potential container escapes | :heavy_check_mark: | - | :heavy_check_mark: | :x: | :x: | :x: |
-| [namespace](namespace) | shared host namespaces break the isolations | - | - | - | - | - | - |
-| └─[net](namespace/net) | shared host network namespace breaks the network isolation | :heavy_check_mark: | :x: | :x: | :x: | :x: | :x: |
-| &emsp;└─shijack |  | :x: | :x: | :x: | :x: | :x: | :x: |
-| &emsp;&emsp;└─basic |  | :x: | :x: | :x: | :x: | :x: | :x: |
-| &emsp;&emsp;└─ali |  | :x: | :x: | :x: | :x: | :x: | :x: |
-| &emsp;&emsp;└─hw |  | :x: | :x: | :x: | :x: | :x: | :x: |
-| &emsp;&emsp;└─gcp |  | :x: | :x: | :x: | :x: | :x: | :x: |
-| &emsp;&emsp;└─aws |  | :x: | :x: | :x: | :x: | :x: | :x: |
-| └─[pid](namespace/pid) | shared host pid namespace breaks the process isolation | - | - | - | - | - | - |
-| &emsp;└─[proc_root](namespace/pid/proc_root) | escape by abusing host pid ns via /proc/[pid]/root | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
 | fs |  | :x: | :x: | :x: | :x: | :x: | :x: |
 | └─proc-rw |  | :x: | - | - | :x: | :x: | :x: |
 | &emsp;└─core_pattern |  | :x: | :x: | :x: | :x: | :x: | :x: |
