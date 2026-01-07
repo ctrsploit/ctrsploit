@@ -11,6 +11,9 @@
 | vul | desc | check | exploit | test | doc | video | case |
 |-----|------|-------|---------|------|-----|-------|------|
 | [fork-bomb](fork-bomb) | fork bomb causes denial of service when resource limits or cgroup configs are unsafe | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
+| [shared-socket](shared-socket) | abuse runtime's api via shared socket | - | - | - | - | - | - |
+| └─[docker.sock](shared-socket/docker-sock) | escape by shared docker.sock via running a privileged container | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
+| └─containerd.sock |  | :x: | :x: | :x: | :x: | :x: | :x: |
 
 ### runc
 
@@ -130,9 +133,6 @@
 | &emsp;└─binfmt |  | :x: | :x: | :x: | :x: | :x: | :x: |
 | └─sys-rw |  | :x: | :x: | :x: | :x: | :x: | :x: |
 | └─lxcfs-rw |  | :x: | :x: | :x: | :x: | :x: | :x: |
-| [shared-socket](shared-socket) | abuse runtime's api via shared socket | - | - | - | - | - | - |
-| └─[docker.sock](shared-socket/docker-sock) | escape by shared docker.sock via running a privileged container | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
-| └─containerd.sock |  | :x: | :x: | :x: | :x: | :x: | :x: |
 | exposed-api |  | - | - | - | - | - | - |
 | └─docker-2375 |  | :x: | :x: | :x: | :x: | :x: | :x: |
 | lxcfs |  | :x: | :x: | :x: | :x: | :x: | :x: |

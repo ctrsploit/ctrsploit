@@ -2,6 +2,7 @@ package module
 
 import (
 	fork_bomb "github.com/ctrsploit/ctrsploit/vul/fork-bomb"
+	shared_socket "github.com/ctrsploit/ctrsploit/vul/shared-socket"
 	"github.com/urfave/cli/v3"
 )
 
@@ -16,5 +17,6 @@ namespace sharing. Concrete subcommands will group these config issues
 by type (e.g. capability, seccomp, namespace).`,
 	Commands: []*cli.Command{
 		fork_bomb.VulCmd,
+		shared_socket.VulCmd,
 	},
 }
