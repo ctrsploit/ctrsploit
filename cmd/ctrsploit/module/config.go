@@ -2,6 +2,7 @@ package module
 
 import (
 	fork_bomb "github.com/ctrsploit/ctrsploit/vul/fork-bomb"
+	caps "github.com/ctrsploit/ctrsploit/vul/caps"
 	"github.com/ctrsploit/ctrsploit/vul/naked"
 	namespace "github.com/ctrsploit/ctrsploit/vul/namespace"
 	access_secrets "github.com/ctrsploit/ctrsploit/vul/sa-token/access-secrets"
@@ -20,6 +21,7 @@ var Config = &cli.Command{
 	by type (e.g. capability, seccomp, namespace).`,
 	Commands: []*cli.Command{
 		fork_bomb.VulCmd,
+		caps.VulCmd,
 		naked.VulCmd,
 		namespace.VulCmd,
 		access_secrets.VulCmd,

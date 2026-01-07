@@ -11,6 +11,25 @@
 | vul | desc | check | exploit | test | doc | video | case |
 |-----|------|-------|---------|------|-----|-------|------|
 | [fork-bomb](fork-bomb) | fork bomb causes denial of service when resource limits or cgroup configs are unsafe | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
+| [caps](caps) | abuse dangerous capabilities in container | - | - | - | - | - | - |
+| └─[shocker](caps/shocker) | escape by CAP_DAC_READ_SEARCH, alias shocker, found by Sebastian Krahmer (stealth) in 2014 | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:️ | :heavy_check_mark: | :heavy_check_mark: | :x: |
+| └─[sys_admin](caps/sys_admin) | abuse cap_sys_admin | :heavy_check_mark: | - | - | - | - | - |
+| &emsp;└─[release_agent](caps/sys_admin/release_agent) | escape by cap_sys_admin via cgroups v1 release_agent | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
+| &emsp;└─mount-device |  | :x: | :x: | :x: | :x: | :x: | :x: |
+| &emsp;└─mount-proc |  | :x: | :x: | :x: | :x: | :x: | :x: |
+| &emsp;└─device.allow |  | :x: | :x: | :x: | :x: | :x: | :x: |
+| &emsp;└─[ebpf](caps/sys_admin/ebpf) | escape by loading evil eBPF programs into the kernel | :heavy_check_mark: | - | - | - | - | - |
+| &emsp;&emsp;└─[bash](caps/sys_admin/ebpf/bash) | abuse eBPF to inject malicious commands into bash processes running on host | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
+| &emsp;&emsp;└─[cron](caps/sys_admin/ebpf/cron) | abuse eBPF to inject malicious job into host's crontab | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
+| &emsp;&emsp;└─[execve](caps/sys_admin/ebpf/execve) | abuse eBPF to hijack execve syscall to run arbitrary commands | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
+| &emsp;&emsp;└─[kubelet](caps/sys_admin/ebpf/kubelet) | abuse eBPF to leak services account token from kubelet | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
+| &emsp;&emsp;└─sshd |  | :x: | :x: | :x: | :x: | :x: | :x: |
+| └─[bpf](caps/bpf) | load evil bpf programs via cap_bpf | - | - | - | - | - | - |
+| &emsp;└─[ebpf](caps/sys_admin/ebpf) | same as caps/sys_admin/ebpf | :heavy_check_mark: | - | - | - | - | - |
+| └─[sys_ptrace](caps/sys_ptrace) | abuse cap_sys_ptrace | :heavy_check_mark: | - | - | - | - | - |
+| &emsp;└─[pid_host](caps/sys_ptrace/pid_host) | ptrace host processes in a container with cap_sys_ptrace and host pid namespace | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
+| └─sys_module |  | :x: | :x: | :x: | :x: | :x: | :x: |
+| └─net_admin |  | :x: | :x: | :x: | :x: | :x: | :x: |
 | [naked](naked) | we call containers running without seccomp, AppArmor, or SELinux enabled 'naked containers', which leaves them highly vulnerable to kernel exploits and potential container escapes | :heavy_check_mark: | - | :heavy_check_mark: | :x: | :x: | :x: |
 | [shared-socket](shared-socket) | abuse runtime's api via shared socket | - | - | - | - | - | - |
 | └─[docker.sock](shared-socket/docker-sock) | escape by shared docker.sock via running a privileged container | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
@@ -109,25 +128,6 @@
 | cve-2025-23359 |  | :x: | :x: | :x: | :x: | :x: | :x: |
 | cve-2025-31133 |  | :x: | :x: | :x: | :x: | :x: | :x: |
 | cve-2025-52565 |  | :x: | :x: | :x: | :x: | :x: | :x: |
-| [caps](caps) | abuse dangerous capabilities in container | - | - | - | - | - | - |
-| └─[shocker](caps/shocker) | escape by CAP_DAC_READ_SEARCH, alias shocker, found by Sebastian Krahmer (stealth) in 2014 | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:️ | :heavy_check_mark: | :heavy_check_mark: | :x: |
-| └─[sys_admin](caps/sys_admin) | abuse cap_sys_admin | :heavy_check_mark: | - | - | - | - | - |
-| &emsp;└─[release_agent](caps/sys_admin/release_agent) | escape by cap_sys_admin via cgroups v1 release_agent | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
-| &emsp;└─mount-device |  | :x: | :x: | :x: | :x: | :x: | :x: |
-| &emsp;└─mount-proc |  | :x: | :x: | :x: | :x: | :x: | :x: |
-| &emsp;└─device.allow |  | :x: | :x: | :x: | :x: | :x: | :x: |
-| &emsp;└─[ebpf](caps/sys_admin/ebpf) | escape by loading evil eBPF programs into the kernel | :heavy_check_mark: | - | - | - | - | - |
-| &emsp;&emsp;└─[bash](caps/sys_admin/ebpf/bash) | abuse eBPF to inject malicious commands into bash processes running on host | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
-| &emsp;&emsp;└─[cron](caps/sys_admin/ebpf/cron) | abuse eBPF to inject malicious job into host's crontab | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
-| &emsp;&emsp;└─[execve](caps/sys_admin/ebpf/execve) | abuse eBPF to hijack execve syscall to run arbitrary commands | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
-| &emsp;&emsp;└─[kubelet](caps/sys_admin/ebpf/kubelet) | abuse eBPF to leak services account token from kubelet | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
-| &emsp;&emsp;└─sshd |  | :x: | :x: | :x: | :x: | :x: | :x: |
-| └─[bpf](caps/bpf) | load evil bpf programs via cap_bpf | - | - | - | - | - | - |
-| &emsp;└─[ebpf](caps/sys_admin/ebpf) | same as caps/sys_admin/ebpf | :heavy_check_mark: | - | - | - | - | - |
-| └─[sys_ptrace](caps/sys_ptrace) | abuse cap_sys_ptrace | :heavy_check_mark: | - | - | - | - | - |
-| &emsp;└─[pid_host](caps/sys_ptrace/pid_host) | ptrace host processes in a container with cap_sys_ptrace and host pid namespace | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
-| └─sys_module |  | :x: | :x: | :x: | :x: | :x: | :x: |
-| └─net_admin |  | :x: | :x: | :x: | :x: | :x: | :x: |
 | fs |  | :x: | :x: | :x: | :x: | :x: | :x: |
 | └─proc-rw |  | :x: | - | - | :x: | :x: | :x: |
 | &emsp;└─core_pattern |  | :x: | :x: | :x: | :x: | :x: | :x: |
