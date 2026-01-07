@@ -12,6 +12,7 @@
 |-----|------|-------|---------|------|-----|-------|------|
 | [cve-2020-15257](cve-2020-15257) | abuse the containerd-shim's abstract unix socket in a container with host network namespace | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
 | [cve-2024-40635](cve-2024-40635) | bypass runAsNonRoot via integer overflow in User ID handling in containerd | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: | :x: |
+| [cve-2025-47290](cve-2025-47290) | modify host file via containerd cve-2025-47290 during pulling image | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
 
 ### kernel
 
@@ -59,7 +60,6 @@
 | cve-2025-23267 |  | :x: | :x: | :x: | :x: | :x: | :x: |
 | cve-2025-23359 |  | :x: | :x: | :x: | :x: | :x: | :x: |
 | cve-2025-31133 |  | :x: | :x: | :x: | :x: | :x: | :x: |
-| [cve-2025-47290](cve-2025-47290) | modify host file via containerd cve-2025-47290 during pulling image | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
 | cve-2025-52565 |  | :x: | :x: | :x: | :x: | :x: | :x: |
 | [cve-2025-62725](cve-2025-62725) | path traversal in docker compose oci artifacts allows arbitrary file write via malicious registry | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
 | [caps](caps) | abuse dangerous capabilities in container | - | - | - | - | - | - |
