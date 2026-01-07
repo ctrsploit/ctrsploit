@@ -45,6 +45,7 @@ help:
 	@echo "  make vmlinuxh       - Generate vmlinux header file"
 	@echo ""
 	@echo "Documentation targets:"
+	@echo "  make doc              - Update README.md and vulnerability table"
 	@echo "  make update-vul-table - Update vulnerability table in README.md"
 	@echo "  make update-readme    - Update README.md (command help and vulnerability table)"
 	@echo ""

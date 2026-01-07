@@ -1,7 +1,12 @@
 # Makefile.docs - Documentation and tool related tasks
 # Contains documentation generation, update and maintenance related tasks
 
-.PHONY: update-vul-table update-readme
+.PHONY: doc update-vul-table update-readme
+
+# High-level documentation entrypoint
+doc:
+	@echo "Updating project documentation (README.md and vulnerability table)..."
+	@$(MAKE) update-readme
 
 update-vul-table:
 	@echo "Updating vulnerability table in README.md from vul/README.md..."
