@@ -14,6 +14,7 @@ such as kernel, runc, containerd, or config (e.g. capability).`,
 	Commands: []*cli.Command{
 		Runc,
 		Containerd,
+		NvidiaContainerToolkit,
 		Kernel,
 	},
 }
