@@ -10,6 +10,7 @@
 
 | vul | desc | check | exploit | test | doc | video | case |
 |-----|------|-------|---------|------|-----|-------|------|
+| [cve-2020-15257](cve-2020-15257) | abuse the containerd-shim's abstract unix socket in a container with host network namespace | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
 | [cve-2024-40635](cve-2024-40635) | bypass runAsNonRoot via integer overflow in User ID handling in containerd | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: | :x: |
 
 ### kernel
@@ -44,7 +45,6 @@
 | CVE-2020-8555 |  | :x: | :heavy_check_mark: | :x: | :x: | :x: | :x: |
 | [cve-2020-8558](cve-2020-8558) | access services bound to 127.0.0.1 from adjacent hosts | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
 | CVE-2020-15157 |  | :x: | :heavy_check_mark: | :x: | :x: | :x: | :x: |
-| [cve-2020-15257](cve-2020-15257) | abuse the containerd-shim's abstract unix socket in a container with host network namespace | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
 | CVE-2021-3493 |  | :x: | :heavy_check_mark: | :x: | :x: | :x: | :x: |
 | CVE-2021-21285 |  | :x: | :heavy_check_mark: | :x: | :x: | :x: | :x: |
 | CVE-2021-22555 |  | :x: | :heavy_check_mark: | :x: | :x: | :x: | :x: |
