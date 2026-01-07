@@ -11,6 +11,7 @@
 | vul | desc | check | exploit | test | doc | video | case |
 |-----|------|-------|---------|------|-----|-------|------|
 | [fork-bomb](fork-bomb) | fork bomb causes denial of service when resource limits or cgroup configs are unsafe | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
+| [naked](naked) | we call containers running without seccomp, AppArmor, or SELinux enabled 'naked containers', which leaves them highly vulnerable to kernel exploits and potential container escapes | :heavy_check_mark: | - | :heavy_check_mark: | :x: | :x: | :x: |
 | [shared-socket](shared-socket) | abuse runtime's api via shared socket | - | - | - | - | - | - |
 | └─[docker.sock](shared-socket/docker-sock) | escape by shared docker.sock via running a privileged container | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
 | └─containerd.sock |  | :x: | :x: | :x: | :x: | :x: | :x: |
@@ -127,7 +128,6 @@
 | &emsp;└─[pid_host](caps/sys_ptrace/pid_host) | ptrace host processes in a container with cap_sys_ptrace and host pid namespace | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
 | └─sys_module |  | :x: | :x: | :x: | :x: | :x: | :x: |
 | └─net_admin |  | :x: | :x: | :x: | :x: | :x: | :x: |
-| [naked](naked) | we call containers running without seccomp, AppArmor, or SELinux enabled 'naked containers', which leaves them highly vulnerable to kernel exploits and potential container escapes | :heavy_check_mark: | - | :heavy_check_mark: | :x: | :x: | :x: |
 | fs |  | :x: | :x: | :x: | :x: | :x: | :x: |
 | └─proc-rw |  | :x: | - | - | :x: | :x: | :x: |
 | &emsp;└─core_pattern |  | :x: | :x: | :x: | :x: | :x: | :x: |
