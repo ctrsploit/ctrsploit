@@ -14,32 +14,76 @@ import sys
 from pathlib import Path
 
 
-def extract_table_from_vul_readme(vul_readme_path):
-    """Extract the table from vul/README.md"""
+def extract_module_tables_from_vul_readme(vul_readme_path):
+    """
+    从 vul/README.md 的 `## module` 章节下按模块拆分出各自的表格。
+
+    返回值示例:
+    [
+        ("config", [table_line1, table_line2, ...]),
+        ("runc", [table_line1, ...]),
+        ...
+    ]
+    """
     with open(vul_readme_path, 'r', encoding='utf-8') as f:
         lines = f.readlines()
-    
-    # Find the table start (line with | vul | desc | ...)
-    table_start = None
+
+    module_section_start = None
+    module_section_end = len(lines)
+
+    # 找到 "## module" 章节范围
     for i, line in enumerate(lines):
-        if line.strip().startswith('| vul') and 'desc' in line:
-            table_start = i
-            break
-    
-    if table_start is None:
-        raise ValueError("Could not find table start in vul/README.md")
-    
-    # Extract table lines (skip the header separator line)
-    table_lines = []
-    for i in range(table_start, len(lines)):
-        line = lines[i].strip()
-        if not line or not line.startswith('|'):
-            break
-        if '---' in line:  # Skip separator line
+        if module_section_start is None and line.startswith('## module'):
+            module_section_start = i
             continue
-        table_lines.append(line)
-    
-    return table_lines
+        if module_section_start is not None and line.startswith('## ') and not line.startswith('## module'):
+            module_section_end = i
+            break
+
+    if module_section_start is None:
+        raise ValueError('Could not find "## module" section in vul/README.md')
+
+    modules = []
+    current_module_name = None
+    current_table_lines = []
+    collecting_table = False
+
+    for line in lines[module_section_start + 1:module_section_end]:
+        # 模块小节，如 "### config"
+        if line.startswith('### '):
+            # 收尾前一个模块
+            if current_module_name and current_table_lines:
+                modules.append((current_module_name, current_table_lines))
+            current_module_name = line.strip()[4:]  # 去掉 "### "
+            current_table_lines = []
+            collecting_table = False
+            continue
+
+        if current_module_name is None:
+            # 还没进入第一个模块小节
+            continue
+
+        stripped = line.strip()
+
+        # 表格行
+        if stripped.startswith('|'):
+            collecting_table = True
+            current_table_lines.append(stripped)
+            continue
+
+        # 已经在收集表格，遇到非表格行则结束当前表格
+        if collecting_table:
+            collecting_table = False
+            continue
+
+    # 收尾最后一个模块
+    if current_module_name and current_table_lines:
+        modules.append((current_module_name, current_table_lines))
+
+    if not modules:
+        raise ValueError('Could not find any module tables in vul/README.md')
+
+    return modules
 
 
 def convert_table_row(row):
@@ -80,56 +124,76 @@ def convert_table_row(row):
     return new_row
 
 
-def update_readme_table(main_readme_path, new_table_lines):
-    """Update the table in README.md"""
+def update_readme_table(main_readme_path, module_tables):
+    """根据 vul/README.md 的模块划分，更新 README.md 中的 `### module` 章节"""
     with open(main_readme_path, 'r', encoding='utf-8') as f:
         lines = f.readlines()
     
-    # Find the table start and end
-    table_start = None
-    table_end = None
-    
+    # Find the "### module" section and its end (next "###" header)
+    module_header_idx = None
+    next_header_idx = None
+
     for i, line in enumerate(lines):
-        if table_start is None and line.strip().startswith('| vul') and 'desc' in line:
-            table_start = i
-        elif table_start is not None:
-            # Table ends when we hit a line that doesn't start with | or is empty followed by ###
-            if not line.strip().startswith('|'):
-                # Check if next non-empty line is a section header
-                j = i
-                while j < len(lines) and not lines[j].strip():
-                    j += 1
-                if j < len(lines) and lines[j].startswith('###'):
-                    table_end = i
-                    break
-    
-    if table_start is None:
-        raise ValueError("Could not find table start in README.md")
-    
-    if table_end is None:
-        raise ValueError("Could not find table end in README.md")
-    
-    # Build the new table with optimized header
-    new_table_lines_list = []
-    
-    # Add optimized header (compact format)
-    new_table_lines_list.append('| vul | desc | check | exploit |\n')
-    new_table_lines_list.append('|-----|------|-------|---------|\n')
-    
-    # Add all data rows (skip header from new_table_lines)
-    for line in new_table_lines:
-        if line.strip().startswith('| vul') and 'desc' in line:
-            continue  # Skip header
-        if '---' in line:
-            continue  # Skip separator
-        converted = convert_table_row(line)
-        new_table_lines_list.append(converted + '\n')
-    
-    # Replace the table section
+        if module_header_idx is None and line.startswith('### module'):
+            module_header_idx = i
+            continue
+        if module_header_idx is not None and line.startswith('### ') and not line.startswith('### module'):
+            next_header_idx = i
+            break
+
+    if module_header_idx is None:
+        raise ValueError('Could not find "### module" section in README.md')
+
+    if next_header_idx is None:
+        # If there's no following section header, treat end of file as section end
+        next_header_idx = len(lines)
+
+    # Preserve existing content inside module section *before* any auto-generated
+    # content (旧表格 / 旧模块小节)，方便多次运行脚本。
+    module_block = lines[module_header_idx + 1:next_header_idx]
+    preserved_block = []
+    auto_section_started = False
+
+    for line in module_block:
+        stripped = line.strip()
+        # 旧的自动生成内容可能以表格头或 "#### 模块名" 开始
+        if not auto_section_started and (
+            stripped.startswith('| vul') and 'desc' in stripped
+            or line.startswith('#### ')
+        ):
+            auto_section_started = True
+            continue
+        if auto_section_started:
+            # 丢弃旧的自动生成部分
+            continue
+        preserved_block.append(line)
+
+    # 构建新的模块章节内容：按模块拆分，每个模块一个子标题 + 4 列表
+    new_module_blocks = []
+
+    for module_name, table_lines in module_tables:
+        # 使用 "####" 作为 README 中 module 章节下的子标题
+        new_module_blocks.append(f'#### {module_name}\n\n')
+        new_module_blocks.append('| vul | desc | check | exploit |\n')
+        new_module_blocks.append('|-----|------|-------|---------|\n')
+
+        for line in table_lines:
+            if line.strip().startswith('| vul') and 'desc' in line:
+                continue  # 跳过表头
+            if '---' in line:
+                continue  # 跳过分隔线
+            converted = convert_table_row(line)
+            new_module_blocks.append(converted + '\n')
+
+        new_module_blocks.append('\n')
+
+    # Replace the content inside the "module" section between the preserved
+    # description (if any) and the next "###" header with the new module blocks.
     new_content = (
-        ''.join(lines[:table_start]) +
-        ''.join(new_table_lines_list) +
-        ''.join(lines[table_end:])
+        ''.join(lines[:module_header_idx + 1]) +
+        ''.join(preserved_block) +
+        ''.join(new_module_blocks) +
+        ''.join(lines[next_header_idx:])
     )
     
     # Write back
@@ -158,11 +222,11 @@ def main():
         sys.exit(1)
     
     try:
-        # Extract table from vul/README.md
-        table_lines = extract_table_from_vul_readme(vul_readme)
-        
-        # Update README.md
-        update_readme_table(main_readme, table_lines)
+        # 从 vul/README.md 中按模块拆分表格
+        module_tables = extract_module_tables_from_vul_readme(vul_readme)
+
+        # 更新 README.md 中的 module 章节
+        update_readme_table(main_readme, module_tables)
         
         print("Table update completed successfully!")
     except Exception as e:

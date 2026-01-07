@@ -4,40 +4,13 @@
 * :x: : Not Supported
 * `-` : Not Applicable
 
+## module
+
+### config
+
 | vul | desc | check | exploit | test | doc | video | case |
 |-----|------|-------|---------|------|-----|-------|------|
-| [cve-2016-8867](cve-2016-8867) | ambient capabilities allow local users to gain privileges | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
-| cve-2016-9962 |  | :x: | :x: | :x: | :x: | :x: | :x: |
-| CVE-2017-1002101 |  | :x: | :heavy_check_mark: | :x: | :x: | :x: | :x: |
-| [cve-2019-5736](cve-2019-5736) | escape by overwrite runc executable file via /proc/self/exe | :heavy_check_mark: | - | - | :heavy_check_mark: | - | :x: |
-| └─[exec](cve-2019-5736/exec) | cve-2019-5736 exploit via runc exec process | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | - | :heavy_check_mark: | :x: |
-| └─[image](cve-2019-5736/image) | cve-2019-5736 exploit via a malicious image | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | - | :heavy_check_mark: | :x: |
-| CVE-2019-14271 |  | :x: | :heavy_check_mark: | :x: | :x: | :x: | :x: |
-| CVE-2019-16884 |  | :x: | :heavy_check_mark: | :x: | :x: | :x: | :x: |
-| CVE-2020-8555 |  | :x: | :heavy_check_mark: | :x: | :x: | :x: | :x: |
-| [cve-2020-8558](cve-2020-8558) | access services bound to 127.0.0.1 from adjacent hosts | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
-| CVE-2020-15157 |  | :x: | :heavy_check_mark: | :x: | :x: | :x: | :x: |
-| [cve-2020-15257](cve-2020-15257) | abuse the containerd-shim's abstract unix socket in a container with host network namespace | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
-| CVE-2021-3493 |  | :x: | :heavy_check_mark: | :x: | :x: | :x: | :x: |
-| CVE-2021-21285 |  | :x: | :heavy_check_mark: | :x: | :x: | :x: | :x: |
-| CVE-2021-22555 |  | :x: | :heavy_check_mark: | :x: | :x: | :x: | :x: |
-| CVE-2021-41091 |  | :x: | :heavy_check_mark: | :x: | :x: | :x: | :x: |
-| [cve-2021-25741](cve-2021-25741) | kubelet symlink exchange vulnerability allows mounting node filesystem inside a pod | :heavy_check_mark: | :heavy_check_mark: | :x: | :heavy_check_mark: | :x: | :x: |
-| [cve-2022-0492](cve-2022-0492) | escape via cgroup's release agent without CAP_SYS_ADMIN if kernel is vulnerable to CVE-2022-0492 | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
-| CVE-2022-0847 |  | :x: | :heavy_check_mark: | :x: | :x: | :x: | :x: |
-| [cve-2022-39253](cve-2022-39253) | read host file during docker build via git CVE-2022-39253 | :o: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
-| CVE-2023-28642 |  | :x: | :x: | :x: | :x: | :x: | :x: |
-| [cve-2024-0132](cve-2024-0132) | gpu container escape via nvidia-container-toolkit CVE-2024-0132 | :o: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
-| CVE-2024-21626 |  | :x: | :x: | :x: | :x: | :x: | :x: |
-| [cve-2024-23650](cve-2024-23650) | dos buildkit via oci exporter by sending a crafted request | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
-| [cve-2024-40635](cve-2024-40635) | bypass runAsNonRoot via integer overflow in User ID handling in containerd | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: | :x: |
-| [cve-2025-23266](cve-2025-23266) | gpu container escape via nvidia-container-toolkit cve-2025-23266 by running a malicious container image | :o: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
-| cve-2025-23267 |  | :x: | :x: | :x: | :x: | :x: | :x: |
-| cve-2025-23359 |  | :x: | :x: | :x: | :x: | :x: | :x: |
-| cve-2025-31133 |  | :x: | :x: | :x: | :x: | :x: | :x: |
-| [cve-2025-47290](cve-2025-47290) | modify host file via containerd cve-2025-47290 during pulling image | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
-| cve-2025-52565 |  | :x: | :x: | :x: | :x: | :x: | :x: |
-| [cve-2025-62725](cve-2025-62725) | path traversal in docker compose oci artifacts allows arbitrary file write via malicious registry | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
+| [fork-bomb](fork-bomb) | fork bomb causes denial of service when resource limits or cgroup configs are unsafe | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
 | [caps](caps) | abuse dangerous capabilities in container | - | - | - | - | - | - |
 | └─[shocker](caps/shocker) | escape by CAP_DAC_READ_SEARCH, alias shocker, found by Sebastian Krahmer (stealth) in 2014 | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:️ | :heavy_check_mark: | :heavy_check_mark: | :x: |
 | └─[sys_admin](caps/sys_admin) | abuse cap_sys_admin | :heavy_check_mark: | - | - | - | - | - |
@@ -57,7 +30,12 @@
 | &emsp;└─[pid_host](caps/sys_ptrace/pid_host) | ptrace host processes in a container with cap_sys_ptrace and host pid namespace | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
 | └─sys_module |  | :x: | :x: | :x: | :x: | :x: | :x: |
 | └─net_admin |  | :x: | :x: | :x: | :x: | :x: | :x: |
+| └─[cve-2016-8867](cve-2016-8867) | ambient capabilities allow local users to gain privileges | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
 | [naked](naked) | we call containers running without seccomp, AppArmor, or SELinux enabled 'naked containers', which leaves them highly vulnerable to kernel exploits and potential container escapes | :heavy_check_mark: | - | :heavy_check_mark: | :x: | :x: | :x: |
+| [shared-socket](shared-socket) | abuse runtime's api via shared socket | - | - | - | - | - | - |
+| └─[docker.sock](shared-socket/docker-sock) | escape by shared docker.sock via running a privileged container | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
+| └─containerd.sock |  | :x: | :x: | :x: | :x: | :x: | :x: |
+| [sa-token-access-secrets](sa-token/access-secrets) | check if service account token can access Kubernetes Secrets | :heavy_check_mark: | - | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
 | [namespace](namespace) | shared host namespaces break the isolations | - | - | - | - | - | - |
 | └─[net](namespace/net) | shared host network namespace breaks the network isolation | :heavy_check_mark: | :x: | :x: | :x: | :x: | :x: |
 | &emsp;└─shijack |  | :x: | :x: | :x: | :x: | :x: | :x: |
@@ -74,11 +52,91 @@
 | &emsp;└─binfmt |  | :x: | :x: | :x: | :x: | :x: | :x: |
 | └─sys-rw |  | :x: | :x: | :x: | :x: | :x: | :x: |
 | └─lxcfs-rw |  | :x: | :x: | :x: | :x: | :x: | :x: |
-| [shared-socket](shared-socket) | abuse runtime's api via shared socket | - | - | - | - | - | - |
-| └─[docker.sock](shared-socket/docker-sock) | escape by shared docker.sock via running a privileged container | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
-| └─containerd.sock |  | :x: | :x: | :x: | :x: | :x: | :x: |
 | exposed-api |  | - | - | - | - | - | - |
 | └─docker-2375 |  | :x: | :x: | :x: | :x: | :x: | :x: |
 | lxcfs |  | :x: | :x: | :x: | :x: | :x: | :x: |
-| [fork-bomb](fork-bomb) |  | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
-| [sa-token-access-secrets](sa-token/access-secrets) | check if service account token can access Kubernetes Secrets | :heavy_check_mark: | - | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
+
+### runc
+
+| vul | desc | check | exploit | test | doc | video | case |
+|-----|------|-------|---------|------|-----|-------|------|
+| [cve-2016-8867](cve-2016-8867) | ambient capabilities allow local users to gain privileges | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
+| [cve-2019-5736](cve-2019-5736) | escape by overwrite runc executable file via /proc/self/exe | :heavy_check_mark: | - | - | :heavy_check_mark: | - | :x: |
+| └─[exec](cve-2019-5736/exec) | cve-2019-5736 exploit via runc exec process | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | - | :heavy_check_mark: | :x: |
+| └─[image](cve-2019-5736/image) | cve-2019-5736 exploit via a malicious image | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | - | :heavy_check_mark: | :x: |
+| cve-2019-16884 |  | :x: | :heavy_check_mark: | :x: | :x: | :x: | :x: |
+| cve-2023-28642 |  | :x: | :x: | :x: | :x: | :x: | :x: |
+| cve-2024-21626 |  | :x: | :x: | :x: | :x: | :x: | :x: |
+| cve-2025-31133 |  | :x: | :x: | :x: | :x: | :x: | :x: |
+| cve-2025-52565 |  | :x: | :x: | :x: | :x: | :x: | :x: |
+| cve-2025-52881 |  | :x: | :x: | :x: | :x: | :x: | :x: |
+
+### containerd
+
+| vul | desc | check | exploit | test | doc | video | case |
+|-----|------|-------|---------|------|-----|-------|------|
+| cve-2020-15157 |  | :x: | :heavy_check_mark: | :x: | :x: | :x: | :x: |
+| [cve-2020-15257](cve-2020-15257) | abuse the containerd-shim's abstract unix socket in a container with host network namespace | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
+| [cve-2024-40635](cve-2024-40635) | bypass runAsNonRoot via integer overflow in User ID handling in containerd | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: | :x: |
+| [cve-2025-47290](cve-2025-47290) | modify host file via containerd cve-2025-47290 during pulling image | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
+
+### docker
+
+| vul | desc | check | exploit | test | doc | video | case |
+|-----|------|-------|---------|------|-----|-------|------|
+| [docker.sock](shared-socket/docker-sock) | escape by shared docker.sock via running a privileged container | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
+| cve-2016-9962 |  | :x: | :x: | :x: | :x: | :x: | :x: |
+| cve-2019-14271 |  | :x: | :heavy_check_mark: | :x: | :x: | :x: | :x: |
+| cve-2021-41091 |  | :x: | :heavy_check_mark: | :x: | :x: | :x: | :x: |
+| cve-2021-21285 |  | :x: | :heavy_check_mark: | :x: | :x: | :x: | :x: |
+
+### nvidia-container-toolkit
+
+| vul | desc | check | exploit | test | doc | video | case |
+|-----|------|-------|---------|------|-----|-------|------|
+| [cve-2024-0132](cve-2024-0132) | gpu container escape via nvidia-container-toolkit CVE-2024-0132 | :o: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
+| [cve-2025-23266](cve-2025-23266) | gpu container escape via nvidia-container-toolkit cve-2025-23266 by running a malicious container image | :o: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
+| cve-2025-23267 |  | :x: | :x: | :x: | :x: | :x: | :x: |
+| cve-2025-23359 |  | :x: | :x: | :x: | :x: | :x: | :x: |
+
+### docker-compose
+
+| vul | desc | check | exploit | test | doc | video | case |
+|-----|------|-------|---------|------|-----|-------|------|
+| [cve-2025-62725](cve-2025-62725) | path traversal in docker compose oci artifacts allows arbitrary file write via malicious registry | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
+
+### buildkit
+
+| vul | desc | check | exploit | test | doc | video | case |
+|-----|------|-------|---------|------|-----|-------|------|
+| [cve-2024-23650](cve-2024-23650) | dos buildkit via oci exporter by sending a crafted request | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
+
+### kubernetes
+
+| vul | desc | check | exploit | test | doc | video | case |
+|-----|------|-------|---------|------|-----|-------|------|
+| cve-2017-1002101 |  | :x: | :heavy_check_mark: | :x: | :x: | :x: | :x: |
+| cve-2020-8555 |  | :x: | :heavy_check_mark: | :x: | :x: | :x: | :x: |
+| [cve-2020-8558](cve-2020-8558) | access services bound to 127.0.0.1 from adjacent hosts | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
+| [cve-2021-25741](cve-2021-25741) | kubelet symlink exchange vulnerability allows mounting node filesystem inside a pod | :heavy_check_mark: | :heavy_check_mark: | :x: | :heavy_check_mark: | :x: | :x: |
+
+### ingress-nginx
+
+| vul | desc | check | exploit | test | doc | video | case |
+|-----|------|-------|---------|------|-----|-------|------|
+| [cve-2021-25748](cve-2021-25748) | ingress-nginx path validation bypass vulnerability allows credential leakage through newline injection | :heavy_check_mark: | :heavy_check_mark: | :x: | :heavy_check_mark: | :x: | :x: |
+
+### git
+
+| vul | desc | check | exploit | test | doc | video | case |
+|-----|------|-------|---------|------|-----|-------|------|
+| [cve-2022-39253](cve-2022-39253) | read host file during docker build via git CVE-2022-39253 | :o: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
+
+### kernel
+
+| vul | desc | check | exploit | test | doc | video | case |
+|-----|------|-------|---------|------|-----|-------|------|
+| cve-2021-22555 |  | :x: | :heavy_check_mark: | :x: | :x: | :x: | :x: |
+| cve-2021-3493 |  | :x: | :heavy_check_mark: | :x: | :x: | :x: | :x: |
+| [cve-2022-0492](cve-2022-0492) | escape via cgroup's release agent without CAP_SYS_ADMIN if kernel is vulnerable to CVE-2022-0492 | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
+| cve-2022-0847 |  | :x: | :heavy_check_mark: | :x: | :x: | :x: | :x: |

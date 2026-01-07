@@ -13,12 +13,12 @@ import (
 )
 
 var (
-	CheckSecCmd = getCheckSecCmd(Vul.Name, Vul.Description)
+	CheckSecCmd = getCheckSecCmd(Vul.Name, Vul.Description, []string{})
 	VulCmd      = &cli.Command{
 		Name:  Vul.Name,
 		Usage: Vul.Description,
 		Commands: []*cli.Command{
-			getCheckSecCmd("checksec", "check vulnerability exists"),
+			getCheckSecCmd("checksec", "check vulnerability exists", []string{"c"}),
 		},
 	}
 )
@@ -50,9 +50,10 @@ var (
 	}
 )
 
-func getCheckSecCmd(name, usage string) (cmd *cli.Command) {
+func getCheckSecCmd(name, usage string, aliases []string) (cmd *cli.Command) {
 	cmd = app.Vul2ChecksecCmd(&Vul, nil, nil)
 	cmd.Name = name
 	cmd.Usage = usage
+	cmd.Aliases = aliases
 	return
 }
