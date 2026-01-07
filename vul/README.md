@@ -46,6 +46,19 @@
 |-----|------|-------|---------|------|-----|-------|------|
 | [cve-2024-23650](cve-2024-23650) | dos buildkit via oci exporter by sending a crafted request | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
 
+### kubernetes
+
+| vul | desc | check | exploit | test | doc | video | case |
+|-----|------|-------|---------|------|-----|-------|------|
+| [cve-2020-8558](cve-2020-8558) | access services bound to 127.0.0.1 from adjacent hosts | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
+| [cve-2021-25741](cve-2021-25741) | kubelet symlink exchange vulnerability allows mounting node filesystem inside a pod | :heavy_check_mark: | :heavy_check_mark: | :x: | :heavy_check_mark: | :x: | :x: |
+
+### ingress-nginx
+
+| vul | desc | check | exploit | test | doc | video | case |
+|-----|------|-------|---------|------|-----|-------|------|
+| [cve-2021-25748](cve-2021-25748) | ingress-nginx path validation bypass vulnerability allows credential leakage through newline injection | :heavy_check_mark: | :heavy_check_mark: | :x: | :heavy_check_mark: | :x: | :x: |
+
 ## other
 
 | vul | desc | check | exploit | test | doc | video | case |
@@ -56,13 +69,11 @@
 | CVE-2019-14271 |  | :x: | :heavy_check_mark: | :x: | :x: | :x: | :x: |
 | CVE-2019-16884 |  | :x: | :heavy_check_mark: | :x: | :x: | :x: | :x: |
 | CVE-2020-8555 |  | :x: | :heavy_check_mark: | :x: | :x: | :x: | :x: |
-| [cve-2020-8558](cve-2020-8558) | access services bound to 127.0.0.1 from adjacent hosts | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
 | CVE-2020-15157 |  | :x: | :heavy_check_mark: | :x: | :x: | :x: | :x: |
 | CVE-2021-3493 |  | :x: | :heavy_check_mark: | :x: | :x: | :x: | :x: |
 | CVE-2021-21285 |  | :x: | :heavy_check_mark: | :x: | :x: | :x: | :x: |
 | CVE-2021-22555 |  | :x: | :heavy_check_mark: | :x: | :x: | :x: | :x: |
 | CVE-2021-41091 |  | :x: | :heavy_check_mark: | :x: | :x: | :x: | :x: |
-| [cve-2021-25741](cve-2021-25741) | kubelet symlink exchange vulnerability allows mounting node filesystem inside a pod | :heavy_check_mark: | :heavy_check_mark: | :x: | :heavy_check_mark: | :x: | :x: |
 | CVE-2022-0847 |  | :x: | :heavy_check_mark: | :x: | :x: | :x: | :x: |
 | [cve-2022-39253](cve-2022-39253) | read host file during docker build via git CVE-2022-39253 | :o: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
 | CVE-2023-28642 |  | :x: | :x: | :x: | :x: | :x: | :x: |

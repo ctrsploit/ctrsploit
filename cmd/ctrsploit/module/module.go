@@ -17,6 +17,8 @@ such as kernel, runc, containerd, or config (e.g. capability).`,
 		NvidiaContainerToolkit,
 		DockerCompose,
 		Buildkit,
+		Kubernetes,
+		IngressNginx,
 		Kernel,
 	},
 }
