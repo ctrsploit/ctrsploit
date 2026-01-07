@@ -34,6 +34,12 @@
 |-----|------|-------|---------|------|-----|-------|------|
 | [cve-2024-0132](cve-2024-0132) | gpu container escape via nvidia-container-toolkit CVE-2024-0132 | :o: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
 
+### docker-compose
+
+| vul | desc | check | exploit | test | doc | video | case |
+|-----|------|-------|---------|------|-----|-------|------|
+| [cve-2025-62725](cve-2025-62725) | path traversal in docker compose oci artifacts allows arbitrary file write via malicious registry | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
+
 ## other
 
 | vul | desc | check | exploit | test | doc | video | case |
@@ -61,7 +67,6 @@
 | cve-2025-23359 |  | :x: | :x: | :x: | :x: | :x: | :x: |
 | cve-2025-31133 |  | :x: | :x: | :x: | :x: | :x: | :x: |
 | cve-2025-52565 |  | :x: | :x: | :x: | :x: | :x: | :x: |
-| [cve-2025-62725](cve-2025-62725) | path traversal in docker compose oci artifacts allows arbitrary file write via malicious registry | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
 | [caps](caps) | abuse dangerous capabilities in container | - | - | - | - | - | - |
 | └─[shocker](caps/shocker) | escape by CAP_DAC_READ_SEARCH, alias shocker, found by Sebastian Krahmer (stealth) in 2014 | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:️ | :heavy_check_mark: | :heavy_check_mark: | :x: |
 | └─[sys_admin](caps/sys_admin) | abuse cap_sys_admin | :heavy_check_mark: | - | - | - | - | - |
