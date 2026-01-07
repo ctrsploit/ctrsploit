@@ -1,6 +1,9 @@
 package module
 
-import "github.com/urfave/cli/v3"
+import (
+	fork_bomb "github.com/ctrsploit/ctrsploit/vul/fork-bomb"
+	"github.com/urfave/cli/v3"
+)
 
 var Config = &cli.Command{
 	Name:      "config",
@@ -11,5 +14,7 @@ var Config = &cli.Command{
 such as over-privileged capabilities, weak seccomp profiles, or unsafe
 namespace sharing. Concrete subcommands will group these config issues
 by type (e.g. capability, seccomp, namespace).`,
-	Commands: []*cli.Command{},
+	Commands: []*cli.Command{
+		fork_bomb.VulCmd,
+	},
 }
