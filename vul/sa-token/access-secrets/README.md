@@ -46,7 +46,7 @@ $ docker compose -f docker-compose.yml -f docker-compose.kvm.yml up -d
 $ ./ssh
 root@kubernetes-1-34-0:~# wget -q https://github.com/ctrsploit/ctrsploit/releases/latest/download/ctrsploit_linux_amd64 -O /usr/bin/ctrsploit
 root@kubernetes-1-34-0:~# chmod +x /usr/bin/ctrsploit
-root@kubernetes-1-34-0:~# ctrsploit vul secert c
+root@kubernetes-1-34-0:~# ctrsploit vul secret c
 INFO[0001]                                              
 INFO[0001] === Cluster-wide Pods with Secret Access === 
 INFO[0001] Found 1 pod(s) with secret access permissions across the cluster 
