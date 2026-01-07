@@ -33,6 +33,7 @@
 | vul | desc | check | exploit | test | doc | video | case |
 |-----|------|-------|---------|------|-----|-------|------|
 | [cve-2024-0132](cve-2024-0132) | gpu container escape via nvidia-container-toolkit CVE-2024-0132 | :o: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
+| [cve-2025-23266](cve-2025-23266) | gpu container escape via nvidia-container-toolkit cve-2025-23266 by running a malicious container image | :o: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
 
 ### docker-compose
 
@@ -78,7 +79,6 @@
 | [cve-2022-39253](cve-2022-39253) | read host file during docker build via git CVE-2022-39253 | :o: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
 | CVE-2023-28642 |  | :x: | :x: | :x: | :x: | :x: | :x: |
 | CVE-2024-21626 |  | :x: | :x: | :x: | :x: | :x: | :x: |
-| [cve-2025-23266](cve-2025-23266) | gpu container escape via nvidia-container-toolkit cve-2025-23266 by running a malicious container image | :o: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
 | cve-2025-23267 |  | :x: | :x: | :x: | :x: | :x: | :x: |
 | cve-2025-23359 |  | :x: | :x: | :x: | :x: | :x: | :x: |
 | cve-2025-31133 |  | :x: | :x: | :x: | :x: | :x: | :x: |
