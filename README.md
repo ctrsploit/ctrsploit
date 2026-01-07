@@ -94,6 +94,38 @@ OPTIONS:
 
 ### module
 
+Group vulnerabilities by component or configuration type, and use the
+tables below to see their check/exploit support status.
+
+```shell
+$ ctrsploit module
+NAME:
+   ctrsploit module - group vulnerabilities by component or config type
+
+USAGE:
+   ctrsploit module [component|config] [name]
+
+DESCRIPTION:
+   Classify and operate vulnerabilities by logical module
+   such as kernel, runc, containerd, or config (e.g. capability).
+
+COMMANDS:
+   config, cfg                            insecure configuration and misconfiguration issues
+   runc, r                                runc related vulnerabilities
+   containerd, c                          containerd related vulnerabilities
+   docker, d                              docker related vulnerabilities
+   nvidia-container-toolkit, nvidia, nct  nvidia-container-toolkit related vulnerabilities
+   docker-compose, compose                docker-compose related vulnerabilities
+   buildkit, bk                           buildkit related vulnerabilities
+   kubernetes, k8s                        kubernetes related vulnerabilities
+   ingress-nginx, ingress                 ingress-nginx related vulnerabilities
+   git, g                                 git related vulnerabilities
+   kernel, k                              kernel related vulnerabilities
+
+OPTIONS:
+   --help, -h  show help
+```
+
 * :heavy_check_mark: : Fully Supported
 * :o: : Partially Supported
 * :bug: : Known Bug

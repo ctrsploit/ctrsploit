@@ -23,6 +23,11 @@ COMMANDS = {
         "command": "env",
         "prompt": "$ ctrsploit env"
     },
+    "module": {
+        "section": "### module",
+        "command": "module",
+        "prompt": "$ ctrsploit module",
+    },
     "vul": {
         "section": "### vul",
         "command": "vul",
@@ -113,7 +118,7 @@ def update_command_section_in_content(content, command_name, command_info):
     
     code_block_match = re.search(code_block_pattern, remaining_content, re.DOTALL)
     if code_block_match:
-        # Replace the code block content
+        # Replace the existing code block content
         new_code_block = f"```shell\n{new_code_block_content}\n```"
         new_content = (
             content[:section_start + code_block_match.start(1)] +
@@ -123,8 +128,22 @@ def update_command_section_in_content(content, command_name, command_info):
         print(f"Updated {command_name} section")
         return new_content
     else:
-        print(f"Warning: Could not find code block for {command_name} section")
-        return None
+        # No existing code block found for this section; insert a new one
+        # right after the section header line.
+        newline_index = content.find("\n", section_start)
+        if newline_index == -1:
+            insert_pos = len(content)
+        else:
+            insert_pos = newline_index + 1
+        
+        new_code_block = f"\n```shell\n{new_code_block_content}\n```\n"
+        new_content = (
+            content[:insert_pos] +
+            new_code_block +
+            content[insert_pos:]
+        )
+        print(f"Inserted code block for {command_name} section")
+        return new_content
 
 
 def update_example_output_in_content(content, command_name, command_info):
