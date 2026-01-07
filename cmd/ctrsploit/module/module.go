@@ -12,6 +12,7 @@ var Command = &cli.Command{
 	Description: `Classify and operate vulnerabilities by logical module
 such as kernel, runc, containerd, or config (e.g. capability).`,
 	Commands: []*cli.Command{
+		Config,
 		Runc,
 		Containerd,
 		NvidiaContainerToolkit,
