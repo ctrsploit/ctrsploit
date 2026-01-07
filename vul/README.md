@@ -30,6 +30,7 @@
 | &emsp;└─[pid_host](caps/sys_ptrace/pid_host) | ptrace host processes in a container with cap_sys_ptrace and host pid namespace | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
 | └─sys_module |  | :x: | :x: | :x: | :x: | :x: | :x: |
 | └─net_admin |  | :x: | :x: | :x: | :x: | :x: | :x: |
+| └─[cve-2016-8867](cve-2016-8867) | ambient capabilities allow local users to gain privileges | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
 | [naked](naked) | we call containers running without seccomp, AppArmor, or SELinux enabled 'naked containers', which leaves them highly vulnerable to kernel exploits and potential container escapes | :heavy_check_mark: | - | :heavy_check_mark: | :x: | :x: | :x: |
 | [shared-socket](shared-socket) | abuse runtime's api via shared socket | - | - | - | - | - | - |
 | └─[docker.sock](shared-socket/docker-sock) | escape by shared docker.sock via running a privileged container | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |

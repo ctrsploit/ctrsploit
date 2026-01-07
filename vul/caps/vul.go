@@ -5,6 +5,7 @@ import (
 	"github.com/ctrsploit/ctrsploit/vul/caps/shocker"
 	"github.com/ctrsploit/ctrsploit/vul/caps/sys_admin"
 	"github.com/ctrsploit/ctrsploit/vul/caps/sys_ptrace"
+	cve_2016_8867 "github.com/ctrsploit/ctrsploit/vul/cve-2016-8867"
 	"github.com/ctrsploit/sploit-spec/pkg/exeenv"
 	"github.com/ctrsploit/sploit-spec/pkg/vul"
 	"github.com/urfave/cli/v3"
@@ -21,6 +22,7 @@ var (
 			sys_admin.VulCmd,
 			sys_ptrace.VulCmd,
 			shocker.VulCmd,
+			cve_2016_8867.VulCmd,
 		},
 	}
 )
