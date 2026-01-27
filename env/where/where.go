@@ -15,13 +15,13 @@ func runtime2Where(r *runtime.Runtime) container.Type {
 		In:    in,
 		Rules: map[string]bool{},
 	}
-	// Directly use the Prerequisites name and check result
-	// instead of iterating with Range() to avoid type conversion issues
-	satisfied, err := r.Prerequisites.Check()
-	if err != nil && !r.Prerequisites.GetChecked() {
-		awesome_error.CheckWarning(err)
+	for pre := range r.Prerequisites.Range() {
+		satisfied, err := pre.Check()
+		if err != nil && !pre.GetChecked() {
+			awesome_error.CheckWarning(err)
+		}
+		t.Rules[pre.GetName()] = satisfied
 	}
-	t.Rules[r.Prerequisites.GetName()] = satisfied
 	return t
 }
 
