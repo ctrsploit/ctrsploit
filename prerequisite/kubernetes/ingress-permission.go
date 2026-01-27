@@ -42,7 +42,8 @@ func (p *IngressPermission) Check() (bool, error) {
 		return p.Satisfied, nil
 	}
 	log.Logger.Debugf("Checking IngressPermission (Action: %s)", p.Action)
-	clientset, err := kubernetes.GetKubernetesClient()
+	clientset, err := kubernetes.
+		GetKubernetesClient()
 	if err != nil {
 		return false, fmt.Errorf("failed to get Kubernetes client: %v", err)
 	}

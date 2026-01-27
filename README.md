@@ -86,6 +86,7 @@ COMMANDS:
    capability, caps                                abuse dangerous capabilities in container
    namespace, ns                                   host level namespaces break the isolations
    sa-token-access-secrets, secret                 Check if service account token can access Kubernetes Secrets
+   sa-token-policy, policy, dp                     Check if service account token has dangerous permissions
    shared-socket, sock                             abuse runtime's api via shared socket
 
 OPTIONS:
@@ -161,7 +162,9 @@ OPTIONS:
 | [shared-socket](./vul/shared-socket) | abuse runtime's api via shared socket | - | - |
 | └─[docker.sock](./vul/shared-socket/docker-sock) | escape by shared docker.sock via running a privileged container | :heavy_check_mark: | :heavy_check_mark: |
 | └─containerd.sock |  | :x: | :x: |
-| [sa-token-access-secrets](./vul/sa-token/access-secrets) | check if service account token can access Kubernetes Secrets | :heavy_check_mark: | - |
+| sa-token | ServiceAccount token security checks | - | - |
+| └─[access-secrets](./vul/sa-token/access-secrets) | check if service account token can access Kubernetes Secrets | :heavy_check_mark: | - |
+| └─[policy](./vul/sa-token/policy) | check if service account token has dangerous RBAC permissions (nodes/proxy, pods/exec, etc.) | :heavy_check_mark: | - |
 | [namespace](./vul/namespace) | shared host namespaces break the isolations | - | - |
 | └─[net](./vul/namespace/net) | shared host network namespace breaks the network isolation | :heavy_check_mark: | :x: |
 | &emsp;└─shijack |  | :x: | :x: |
@@ -353,6 +356,7 @@ COMMANDS:
    host-net, net                                    shared host network namespace breaks the network isolation
    host-pid, pid                                    shared host pid namespace breaks process isolation
    sa-token-access-secrets, secret                  Check if service account token can access Kubernetes Secrets
+   sa-token-policy, policy, dp                      Check if service account token has dangerous permissions
    docker.sock, docker                              escape by shared docker.sock via running a privileged container
 
 OPTIONS:

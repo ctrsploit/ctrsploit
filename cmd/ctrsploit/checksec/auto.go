@@ -27,6 +27,7 @@ import (
 	"github.com/ctrsploit/ctrsploit/vul/namespace/net"
 	"github.com/ctrsploit/ctrsploit/vul/namespace/pid"
 	access_secrets "github.com/ctrsploit/ctrsploit/vul/sa-token/access-secrets"
+	sa_token_policy "github.com/ctrsploit/ctrsploit/vul/sa-token/policy"
 	docker_sock "github.com/ctrsploit/ctrsploit/vul/shared-socket/docker-sock"
 	"github.com/ctrsploit/sploit-spec/pkg/vul"
 	"github.com/ssst0n3/awesome_libs/awesome_error"
@@ -61,6 +62,7 @@ var All = vul.Vulnerabilities{
 	&net.Vul,
 	&pid.Vul,
 	&access_secrets.Vul,
+	&sa_token_policy.Vul,
 	&docker_sock.Vul,
 }
 
