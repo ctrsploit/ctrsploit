@@ -2,14 +2,14 @@ package env
 
 import (
 	"github.com/ctrsploit/ctrsploit/env"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 )
 
 var Command = &cli.Command{
 	Name:    env.SubCommandName,
 	Aliases: []string{"e"},
 	Usage:   "gather information",
-	Subcommands: []*cli.Command{
+	Commands: []*cli.Command{
 		Auto,
 		Where,
 		Mountinfo,
@@ -21,6 +21,8 @@ var Command = &cli.Command{
 		Selinux,
 		Fdisk,
 		Kernel,
+		Sysctl,
+		Rlimit,
 		Namespace,
 		DockerVersion,
 		Upload,

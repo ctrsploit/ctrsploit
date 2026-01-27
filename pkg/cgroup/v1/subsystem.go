@@ -1,12 +1,13 @@
 package v1
 
 import (
+	"bufio"
 	"fmt"
+	"io"
 	"os"
 	"path/filepath"
 	"strings"
 
-	"github.com/containerd/cgroups"
 	"github.com/ssst0n3/awesome_libs/awesome_error"
 )
 
@@ -58,11 +59,85 @@ func (c CgroupV1) ListSubsystems(mountpoint string) (subsystems []string, err er
 	return
 }
 
-func (c CgroupV1) ListSubsystemsDeprecated(procCgroupPath string) (subsystems map[string]string, err error) {
-	subsystems, err = cgroups.ParseCgroupFile(procCgroupPath)
+/*
+ParseCgroupFile is copied from github.com/containerd/cgroups/utils.go:parseCgroupFromReaderUnified(), but without splitting ","
+
+because cgroup subsystem cannot be mounted after split by ','
+
+https://github.com/torvalds/linux/blob/v5.4/kernel/cgroup/cgroup-v1.c#L1186
+https://github.com/torvalds/linux/blob/v5.4/kernel/cgroup/cgroup-v1.c#L1141
+
+e.g.: net_prio cannot be mounted in the non-init cgroup ns
+
+root@cve-2022-0492:~# mkdir /tmp/net_prio
+root@cve-2022-0492:~# unshare -UrCm
+root@cve-2022-0492:~# mount -t cgroup -o net_prio none /tmp/net_prio
+mount: /tmp/net_prio: permission denied.
+root@cve-2022-0492:~# bpftrace -e 'kretprobe:cgroup1_get_tree /comm=="mount"/ {printf("%s:%d", comm, retval);printf("%s\n", kstack); }'
+Attaching 1 probe...
+mount:-1
+
+	kretprobe_trampoline+0
+	do_mount+1969
+	ksys_mount+130
+	__x64_sys_mount+37
+	do_syscall_64+87
+	entry_SYSCALL_64_after_hwframe+68
+
+cgroup1_root_to_use() iterate across each hierarchy, net_prio is not a hierarchy:
+
+root@cve-2022-0492:~# cat /proc/self/cgroup
+12:cpu,cpuacct:/
+11:perf_event:/
+10:blkio:/
+9:cpuset:/
+8:pids:/
+7:hugetlb:/
+6:memory:/
+5:freezer:/
+4:rdma:/
+3:net_cls,net_prio:/
+2:devices:/
+1:name=systemd:/
+0::/
+*/
+func ParseCgroupFile(r io.Reader) (map[string]string, error) {
+	var (
+		subsystems = make(map[string]string)
+		s          = bufio.NewScanner(r)
+	)
+	for s.Scan() {
+		var (
+			text  = s.Text()
+			parts = strings.SplitN(text, ":", 3)
+		)
+		if len(parts) < 3 {
+			return nil, fmt.Errorf("invalid cgroup entry: %q", text)
+		}
+		//for _, subs := range strings.Split(parts[1], ",") {
+		//	if subs == "" {
+		//		unified = parts[2]
+		//	} else {
+		//		subsystems[subs] = parts[2]
+		//	}
+		//}
+		subsystems[parts[1]] = parts[2]
+	}
+	if err := s.Err(); err != nil {
+		return nil, err
+	}
+	return subsystems, nil
+}
+
+func (c CgroupV1) ListSubsystemsQuick(procCgroupPath string) (subsystems map[string]string, err error) {
+	f, err := os.Open(procCgroupPath)
 	if err != nil {
-		awesome_error.CheckErr(err)
-		return
+		return nil, fmt.Errorf("failed to open %s: %w", procCgroupPath, err)
+	}
+	defer f.Close()
+	subsystems, err = ParseCgroupFile(f)
+	if err != nil {
+		return nil, fmt.Errorf("failed to parse %s: %w", procCgroupPath, err)
 	}
 	for sub := range subsystems {
 		if strings.HasPrefix(sub, "name=") {
@@ -76,7 +151,7 @@ func (c CgroupV1) ListSubsystemsDeprecated(procCgroupPath string) (subsystems ma
 }
 
 /*
-IsTopDeprecated fails in the sub cgroup ns
+IsTopQuick fails in the sub cgroup ns
 root@73313224d1ef:/# unshare -UrCm /bin/bash
 root@73313224d1ef:/# cat /proc/1/cgroup
 12:freezer:/
@@ -93,17 +168,66 @@ root@73313224d1ef:/# cat /proc/1/cgroup
 1:name=systemd:/
 0::/
 */
-func (c CgroupV1) IsTopDeprecated(subsystemPath string) (top bool) {
+func (c CgroupV1) IsTopQuick(subsystemPath string) (top bool) {
 	return subsystemPath == "/"
+}
+
+/*
+use /proc/1/cgroup instead of /proc/self/cgroup
+because when execute in host, /proc/self/cgroup in sub cgroup ns shows top level sub system, but actually not.
+and in host, we can use /proc/1/cgroup to shows real levels.
+
+root@cve-2022-0492:~# unshare -UrCm
+root@cve-2022-0492:~# cat /proc/1/cgroup
+12:perf_event:/
+11:hugetlb:/
+10:net_cls,net_prio:/
+9:rdma:/
+8:pids:/../../..
+7:devices:/..
+6:cpu,cpuacct:/..
+5:memory:/../../..
+4:blkio:/..
+3:cpuset:/
+2:freezer:/
+1:name=systemd:/../../../init.scope
+0::/../../../init.scope
+root@cve-2022-0492:~# cat /proc/self/cgroup
+12:perf_event:/
+11:hugetlb:/
+10:net_cls,net_prio:/
+9:rdma:/
+8:pids:/
+7:devices:/
+6:cpu,cpuacct:/
+5:memory:/
+4:blkio:/
+3:cpuset:/
+2:freezer:/
+1:name=systemd:/
+0::/
+*/
+func listTopLevelSubSystemQuick() (topLevelSubSystems []string, err error) {
+	var c CgroupV1
+	subsystemsSupport, err := c.ListSubsystemsQuick("/proc/1/cgroup")
+	if err != nil {
+		return nil, fmt.Errorf("ListSubsystemsQuick() failed: %w", err)
+	}
+	for name, path := range subsystemsSupport {
+		if c.IsTopQuick(path) {
+			topLevelSubSystems = append(topLevelSubSystems, name)
+		}
+	}
+	return
 }
 
 func ListTopLevelSubSystem() (topLevelSubSystems []string, err error) {
 	var c CgroupV1
-	subsystemsSupport, err := c.ListSubsystems(DefaultMountPoint)
+	subsystems, err := listTopLevelSubSystemQuick()
 	if err != nil {
-		return nil, fmt.Errorf("ListTopLevelSubSystem: failed to list sub systems: %w", err)
+		return nil, fmt.Errorf("listTopLevelSubSystemQuick: failed to list sub systems: %w", err)
 	}
-	for _, subsystemName := range subsystemsSupport {
+	for _, subsystemName := range subsystems {
 		is, err := c.IsTop(DefaultMountPoint, subsystemName)
 		if err != nil {
 			return nil, fmt.Errorf("ListTopLevelSubSystem: failed to list sub system %s: %w", subsystemName, err)

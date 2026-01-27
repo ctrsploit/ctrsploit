@@ -7,7 +7,6 @@ import (
 	"github.com/ctrsploit/sploit-spec/pkg/env/container"
 	"github.com/ctrsploit/sploit-spec/pkg/exeenv"
 	"github.com/ctrsploit/sploit-spec/pkg/prerequisite"
-	"github.com/ssst0n3/awesome_libs/awesome_error"
 )
 
 type Namespace struct {
@@ -38,24 +37,23 @@ var (
 )
 
 func (p *Namespace) Check() (bool, error) {
-	if p.Checked {
-		return p.Satisfied, nil
-	}
-	arbitrator, err := namespace.NewInoArbitrator()
-	if err != nil {
-		return false, err
-	}
-	namespaceLevels, _, err := namespace.CheckNamespaceLevel(arbitrator)
-	if err != nil {
-		return false, err
-	}
-	level, ok := namespaceLevels[container.NamespaceMapType2Name[p.Type]]
-	if !ok {
-		err = fmt.Errorf("unknown namespace type %s", p.Type)
-		awesome_error.CheckErr(err)
-		return false, err
-	}
-	p.Satisfied = level == container.NamespaceLevelHost
-	p.Checked = true
-	return p.Satisfied, nil
+	return p.CheckTemplate(func() {
+		arbitrator, err := namespace.NewInoArbitrator()
+		if err != nil {
+			p.Err = p.WrapErr(fmt.Errorf("creating arbitrator: %w", err))
+			return
+		}
+		namespaceLevels, _, err := namespace.CheckNamespaceLevel(arbitrator)
+		if err != nil {
+			p.Err = p.WrapErr(fmt.Errorf("checking level: %w", err))
+			return
+		}
+		level, ok := namespaceLevels[container.NamespaceMapType2Name[p.Type]]
+		if !ok {
+			p.Err = p.WrapErr(fmt.Errorf("unknown namespace type %s", p.Type))
+			return
+		}
+		p.Satisfied = level == container.NamespaceLevelHost
+		return
+	})
 }

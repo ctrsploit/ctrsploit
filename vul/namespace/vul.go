@@ -5,7 +5,7 @@ import (
 	"github.com/ctrsploit/ctrsploit/vul/namespace/pid"
 	"github.com/ctrsploit/sploit-spec/pkg/exeenv"
 	"github.com/ctrsploit/sploit-spec/pkg/vul"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 )
 
 var (
@@ -14,7 +14,7 @@ var (
 		Name:    Vul.GetName(),
 		Aliases: aliases,
 		Usage:   Vul.GetDescription(),
-		Subcommands: []*cli.Command{
+		Commands: []*cli.Command{
 			pid.VulCmd,
 			net.VulCmd,
 		},

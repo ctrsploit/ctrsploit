@@ -1,6 +1,8 @@
 package capability
 
 import (
+	"fmt"
+
 	"github.com/containerd/containerd/pkg/cap"
 	"github.com/ctrsploit/ctrsploit/pkg/capability"
 	"github.com/ctrsploit/sploit-spec/pkg/exeenv"
@@ -26,20 +28,19 @@ var (
 )
 
 func (p *NotEmpty) Check() (bool, error) {
-	if p.Checked {
-		return p.Satisfied, nil
-	}
-	for _, pid := range p.Pid {
-		caps, err := capability.GetCapabilityByPid(pid, p.CapType)
-		if err != nil {
-			return false, err
+	return p.CheckTemplate(func() {
+		for _, pid := range p.Pid {
+			caps, err := capability.GetCapabilityByPid(pid, p.CapType)
+			if err != nil {
+				p.Err = p.WrapErr(fmt.Errorf("getting capability for %s: %w", pid, err))
+				return
+			}
+			capsParsed, _ := cap.FromBitmap(caps)
+			if len(capsParsed) > 0 {
+				p.Satisfied = true
+				break
+			}
 		}
-		capsParsed, _ := cap.FromBitmap(caps)
-		if len(capsParsed) > 0 {
-			p.Satisfied = true
-			break
-		}
-	}
-	p.Checked = true
-	return p.Satisfied, nil
+		return
+	})
 }

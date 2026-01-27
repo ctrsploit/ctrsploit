@@ -3,7 +3,7 @@ package sysctl
 import (
 	"fmt"
 
-	"github.com/ctrsploit/sploit-spec/pkg/env/container"
+	spec "github.com/ctrsploit/sploit-spec/pkg/env/container/kernel/sysctl"
 	"github.com/ctrsploit/sploit-spec/pkg/printer"
 	"github.com/ctrsploit/sploit-spec/pkg/result"
 	"github.com/ctrsploit/sploit-spec/pkg/result/item"
@@ -12,11 +12,13 @@ import (
 type Result struct {
 	Name                    result.Title
 	RouteLocalNet           item.Bool  `json:"route_localnet"`
-	MaxUserNamespaces       item.Short `json:"max_user_namespaces"`
 	UnprivilegedUsernsClone item.Bool  `json:"unprivileged_userns_clone"`
+	MaxUserNamespaces       item.Short `json:"max_user_namespaces"`
+	PidMax                  item.Short `json:"pid_max"`
+	ThreadsMax              item.Short `json:"threads-max"`
 }
 
-func Human(machine container.Sysctl) (human Result) {
+func Human(machine spec.Sysctl) (human Result) {
 	human = Result{
 		Name: result.Title{
 			Name: "Sysctl",
@@ -28,13 +30,23 @@ func Human(machine container.Sysctl) (human Result) {
 		},
 		MaxUserNamespaces: item.Short{
 			Name:        "user.max_user_namespaces",
-			Description: "",
+			Description: "Specifies the maximum number of user namespaces that may exist on the system.",
 			Result:      fmt.Sprintf("%d", machine.MaxUserNamespaces),
 		},
 		UnprivilegedUsernsClone: item.Bool{
 			Name:        "kernel.unprivileged_userns_clone",
-			Description: "allow unprivileged process create user namespace",
+			Description: "Allow unprivileged process create user namespace",
 			Result:      machine.UnprivilegedUsernsClone,
+		},
+		PidMax: item.Short{
+			Name:        "kernel.pid_max",
+			Description: "Sets the maximum PID value, controlling how many processes the system can run concurrently.",
+			Result:      fmt.Sprintf("%d", machine.PidMax),
+		},
+		ThreadsMax: item.Short{
+			Name:        "kernel.threads-max",
+			Description: "Specifies the maximum number of concurrent threads on the system.",
+			Result:      fmt.Sprintf("%d", machine.ThreadsMax),
 		},
 	}
 	return

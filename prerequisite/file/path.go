@@ -12,12 +12,9 @@ type Exists struct {
 }
 
 func (p *Exists) Check() (bool, error) {
-	if p.Checked {
-		return p.Satisfied, nil
-	}
-	p.Satisfied, _ = internal.CheckPathExists(p.Path)
-	p.Checked = true
-	return p.Satisfied, nil
+	return p.CheckTemplate(func() {
+		p.Satisfied, _ = internal.CheckPathExists(p.Path)
+	})
 }
 
 var (

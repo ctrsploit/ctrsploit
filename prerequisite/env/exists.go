@@ -13,12 +13,10 @@ type Exists struct {
 }
 
 func (p *Exists) Check() (bool, error) {
-	if p.Checked {
-		return p.Satisfied, nil
-	}
-	_, p.Satisfied = os.LookupEnv(p.Expected)
-	p.Checked = true
-	return p.Satisfied, nil
+	return p.CheckTemplate(func() {
+		_, p.Satisfied = os.LookupEnv(p.Expected)
+		return
+	})
 }
 
 var (

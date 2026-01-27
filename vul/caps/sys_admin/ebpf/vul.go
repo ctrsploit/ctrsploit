@@ -10,7 +10,7 @@ import (
 	"github.com/ctrsploit/sploit-spec/pkg/exeenv"
 	"github.com/ctrsploit/sploit-spec/pkg/prerequisite"
 	"github.com/ctrsploit/sploit-spec/pkg/vul"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 )
 
 var (
@@ -21,7 +21,7 @@ var (
 		Name:    Vul.GetName(),
 		Aliases: aliases,
 		Usage:   Vul.GetDescription(),
-		Subcommands: []*cli.Command{
+		Commands: []*cli.Command{
 			GetCheckSecCmd("checksec", "check vulnerability exists", []string{"c"}),
 			GetExploitCmd("exploit", "run the exploit", []string{"x"}),
 		},
@@ -65,7 +65,7 @@ func GetExploitCmd(name, usage string, aliases []string) *cli.Command {
 		Name:    name,
 		Aliases: aliases,
 		Usage:   usage,
-		Subcommands: []*cli.Command{
+		Commands: []*cli.Command{
 			execve.ExploitCmd,
 			bash.ExploitCmd,
 			cron.ExploitCmd,

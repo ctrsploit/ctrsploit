@@ -48,3 +48,16 @@ func ReplaceContent(path string, old, new []byte) (err error) {
 	}
 	return
 }
+
+func ReadUint64(file string) (uint64, error) {
+	content, err := os.ReadFile(file)
+	if err != nil {
+		return 0, fmt.Errorf("ReadUint64(%s): failed to read file: %w", file, err)
+	}
+	content = bytes.TrimSpace(content)
+	result, err := strconv.ParseUint(string(content), 10, 64)
+	if err != nil {
+		return 0, fmt.Errorf("ReadUint64(%s): failed to parse content: %w", file, err)
+	}
+	return result, nil
+}

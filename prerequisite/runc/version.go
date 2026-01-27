@@ -7,7 +7,6 @@ import (
 	"github.com/ctrsploit/ctrsploit/pkg/version/runc"
 	"github.com/ctrsploit/sploit-spec/pkg/exeenv"
 	"github.com/ctrsploit/sploit-spec/pkg/prerequisite"
-	"github.com/ssst0n3/awesome_libs/awesome_error"
 )
 
 type Version struct {
@@ -16,21 +15,15 @@ type Version struct {
 }
 
 func (p *Version) Check() (bool, error) {
-	if p.Checked {
-		return p.Satisfied, nil
-	}
-	p.Checked = true
-	ver, err := runc.GetVersionByCliVersion()
-	if err != nil {
-		return false, fmt.Errorf("could not get version from cli: %w", err)
-	}
-	var errs []error
-	p.Satisfied, errs = p.Constraint.Validate(ver)
-	if len(errs) > 0 {
-		awesome_error.CheckDebug(fmt.Errorf("constraint validation errors: %v", errs))
-		return false, nil
-	}
-	return p.Satisfied, nil
+	return p.CheckTemplate(func() {
+		ver, err := runc.GetVersionByCliVersion()
+		if err != nil {
+			p.Err = p.WrapErr(fmt.Errorf("getting version from cli: %w", err))
+			return
+		}
+		p.Satisfied = p.Constraint.Check(ver)
+		return
+	})
 }
 
 var (

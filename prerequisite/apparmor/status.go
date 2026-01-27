@@ -12,11 +12,10 @@ type status struct {
 }
 
 func (p *status) Check() (bool, error) {
-	if !p.Checked {
+	return p.CheckTemplate(func() {
 		p.Satisfied = apparmor.IsEnabled() == p.expectedStatus
-		p.Checked = true
-	}
-	return p.Satisfied, nil
+		return
+	})
 }
 
 var (

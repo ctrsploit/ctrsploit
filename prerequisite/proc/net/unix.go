@@ -15,16 +15,15 @@ type UnixContains struct {
 }
 
 func (p *UnixContains) Check() (bool, error) {
-	if p.Checked {
-		return p.Satisfied, nil
-	}
-	content, err := os.ReadFile("/proc/net/unix")
-	if err != nil {
-		return false, fmt.Errorf("failed to check %s, caused by reading /proc/net/unix: %w", p.Name, err)
-	}
-	p.Satisfied = strings.Contains(string(content), p.Expected)
-	p.Checked = true
-	return p.Satisfied, nil
+	return p.CheckTemplate(func() {
+		content, err := os.ReadFile("/proc/net/unix")
+		if err != nil {
+			p.Err = p.WrapErr(fmt.Errorf("reading /proc/net/unix: %w", err))
+			return
+		}
+		p.Satisfied = strings.Contains(string(content), p.Expected)
+		return
+	})
 }
 
 var (

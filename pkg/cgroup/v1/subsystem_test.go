@@ -2,13 +2,37 @@ package v1
 
 import (
 	"fmt"
-	"github.com/google/uuid"
-	"github.com/stretchr/testify/assert"
 	"os"
 	"path/filepath"
 	"reflect"
 	"testing"
+
+	"github.com/google/uuid"
+	"github.com/stretchr/testify/assert"
 )
+
+func TestE2E_ListTopLevelSubSystem(t *testing.T) {
+	testEnv := os.Getenv("TEST_ENV")
+	tests := map[string]struct {
+		expected []string
+	}{
+		"cve-2022-0492-host": {
+			expected: []string{"perf_event", "rdma", "hugetlb", "cpuset", "freezer", "net_cls,net_prio"},
+		},
+		"cve-2022-0492-ctr": {
+			expected: []string{"rdma"},
+		},
+	}
+	test, ok := tests[testEnv]
+	if !ok {
+		t.Skipf("Skipping test for unsupported environment: %s", testEnv)
+	}
+	t.Run(testEnv, func(t *testing.T) {
+		subsystems, err := ListTopLevelSubSystem()
+		assert.NoError(t, err)
+		assert.ElementsMatch(t, test.expected, subsystems)
+	})
+}
 
 func TestIsTopOld(t *testing.T) {
 	type args struct {
@@ -178,11 +202,11 @@ func TestCgroupV1_ListSubsystemsOld(t *testing.T) {
 			}
 			gotSubsystems, err := c.ListSubsystems(tt.args.mountpoint)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("ListSubsystemsDeprecated() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("ListSubsystemsQuick() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if !reflect.DeepEqual(gotSubsystems, tt.wantSubsystems) {
-				t.Errorf("ListSubsystemsDeprecated() gotSubsystems = %v, want %v", gotSubsystems, tt.wantSubsystems)
+				t.Errorf("ListSubsystemsQuick() gotSubsystems = %v, want %v", gotSubsystems, tt.wantSubsystems)
 			}
 			if tt.cleanEnvFunc != nil {
 				assert.NoError(t, tt.cleanEnvFunc(tt.args.mountpoint))
@@ -270,13 +294,13 @@ func TestCgroupV1_ListSubsystems(t *testing.T) {
 			defer func() {
 				assert.NoError(t, os.Remove(procCgroupPath))
 			}()
-			gotSubsystems, err := c.ListSubsystemsDeprecated(procCgroupPath)
+			gotSubsystems, err := c.ListSubsystemsQuick(procCgroupPath)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("ListSubsystemsDeprecated() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("ListSubsystemsQuick() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if !reflect.DeepEqual(gotSubsystems, tt.wantSubsystems) {
-				t.Errorf("ListSubsystemsDeprecated() gotSubsystems = %v, want %v", gotSubsystems, tt.wantSubsystems)
+				t.Errorf("ListSubsystemsQuick() gotSubsystems = %v, want %v", gotSubsystems, tt.wantSubsystems)
 			}
 		})
 	}

@@ -14,15 +14,13 @@ type HasPerm struct {
 }
 
 func (p *HasPerm) Check() (bool, error) {
-	if p.Checked {
-		return p.Satisfied, nil
-	}
-	const invalidArgument = ^uintptr(0)
-	_, _, errno := syscall.Syscall(uintptr(p.SyscallNumber), invalidArgument, 0, 0)
-	// TODO: if syscall unsupported by kernel?
-	p.Satisfied = !errors.Is(errno, syscall.EPERM)
-	p.Checked = true
-	return p.Satisfied, nil
+	return p.CheckTemplate(func() {
+		const invalidArgument = ^uintptr(0)
+		_, _, errno := syscall.Syscall(uintptr(p.SyscallNumber), invalidArgument, 0, 0)
+		// TODO: if syscall unsupported by kernel?
+		p.Satisfied = !errors.Is(errno, syscall.EPERM)
+		return
+	})
 }
 
 var (

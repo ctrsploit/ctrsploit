@@ -1,8 +1,14 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
+	"io"
+	"net/http"
+	"os"
+	"strings"
+
 	"github.com/ctrsploit/ctrsploit/hack/version_collect/runc_collector/pkg"
 	"github.com/ctrsploit/ctrsploit/pkg/version/libseccomp"
 	"github.com/ctrsploit/ctrsploit/pkg/version/runc"
@@ -10,11 +16,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/ssst0n3/awesome_libs"
 	"github.com/ssst0n3/awesome_libs/awesome_error"
-	"github.com/urfave/cli/v2"
-	"io"
-	"net/http"
-	"os"
-	"strings"
+	"github.com/urfave/cli/v3"
 )
 
 type Asset struct {
@@ -67,7 +69,7 @@ var (
 	GithubRelease = &cli.Command{
 		Name:    "github-release",
 		Aliases: []string{"g"},
-		Action: func(context *cli.Context) (err error) {
+		Action: func(ctx context.Context, cmd *cli.Command) (err error) {
 			resp, err := http.DefaultClient.Get("https://api.github.com/repos/opencontainers/runc/releases?per_page=1000")
 			if err != nil {
 				awesome_error.CheckErr(err)

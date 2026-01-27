@@ -1,6 +1,7 @@
 package docker_sock
 
 import (
+	"context"
 	"fmt"
 	"os"
 
@@ -10,7 +11,7 @@ import (
 	"github.com/ctrsploit/sploit-spec/pkg/exeenv"
 	"github.com/ctrsploit/sploit-spec/pkg/prerequisite"
 	"github.com/ctrsploit/sploit-spec/pkg/vul"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 )
 
 var (
@@ -84,8 +85,8 @@ type mountPointProvider interface {
 	RealMountPoint() string
 }
 
-func (v *vulnerability) getSockPath(ctx *cli.Context) (string, error) {
-	sock := ctx.String("sock")
+func (v *vulnerability) getSockPath(cmd *cli.Command) (string, error) {
+	sock := cmd.String("sock")
 	if sock != "" {
 		if _, err := os.Stat(sock); err == nil {
 			return sock, nil
@@ -105,17 +106,18 @@ func (v *vulnerability) getSockPath(ctx *cli.Context) (string, error) {
 	return "", fmt.Errorf("[UNLIKELY] no prerequisites satisfied")
 }
 
-func (v *vulnerability) Exploit(ctx *cli.Context) (err error) {
-	if err := v.BaseVulnerability.Exploit(ctx); err != nil {
+func (v *vulnerability) Exploit(cmd *cli.Command) (err error) {
+	if err := v.BaseVulnerability.Exploit(cmd); err != nil {
 		return err
 	}
-	sock, err := v.getSockPath(ctx)
+	sock, err := v.getSockPath(cmd)
 	if err != nil {
 		return err
 	}
-	image := ctx.String("image")
-	pull := ctx.Bool("pull")
-	tty := ctx.Bool("tty")
-	clean := ctx.Bool("clean")
-	return Exploit(ctx.Context, sock, image, pull, tty, clean, os.Stdin, os.Stdout, os.Stderr)
+	image := cmd.String("image")
+	pull := cmd.Bool("pull")
+	tty := cmd.Bool("tty")
+	clean := cmd.Bool("clean")
+	ctx := context.Background()
+	return Exploit(ctx, sock, image, pull, tty, clean, os.Stdin, os.Stdout, os.Stderr)
 }

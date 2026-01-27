@@ -1,28 +1,44 @@
 package sysctl
 
 import (
+	"errors"
+
 	"github.com/ctrsploit/ctrsploit/pkg/sysctl"
-	"github.com/ctrsploit/sploit-spec/pkg/env/container"
+	spec "github.com/ctrsploit/sploit-spec/pkg/env/container/kernel/sysctl"
 	"github.com/ssst0n3/awesome_libs/awesome_error"
 )
 
 const CommandName = "sysctl"
 
-func Sysctl() (s container.Sysctl, err error) {
-	s.RouteLocalNet, err = sysctl.RouteLocalNetEnabled()
+func assign[T any](dest *T, fn func() (T, error)) func() error {
+	return func() error {
+		var err error
+		*dest, err = fn()
+		return err
+	}
+}
+
+func runTasks(tasks ...func() error) error {
+	var errs []error
+	for _, task := range tasks {
+		if err := task(); err != nil {
+			errs = append(errs, err)
+		}
+	}
+	return errors.Join(errs...)
+}
+
+func Sysctl() (spec.Sysctl, error) {
+	var s spec.Sysctl
+	err := runTasks(
+		assign(&s.RouteLocalNet, sysctl.RouteLocalNetEnabled),
+		assign(&s.MaxUserNamespaces, sysctl.MaxUserNamespaces),
+		assign(&s.UnprivilegedUsernsClone, sysctl.UnprivilegedUsernsCloneEnabled),
+		assign(&s.PidMax, sysctl.PidMax),
+		assign(&s.ThreadsMax, sysctl.ThreadsMax),
+	)
 	if err != nil {
 		awesome_error.CheckWarning(err)
-		return
 	}
-	s.MaxUserNamespaces, err = sysctl.MaxUserNamespaces()
-	if err != nil {
-		awesome_error.CheckWarning(err)
-		return
-	}
-	s.UnprivilegedUsernsClone, err = sysctl.UnprivilegedUsernsCloneEnabled()
-	if err != nil {
-		awesome_error.CheckWarning(err)
-		return
-	}
-	return
+	return s, err
 }

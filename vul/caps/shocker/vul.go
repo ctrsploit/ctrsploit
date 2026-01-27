@@ -7,7 +7,7 @@ import (
 	"github.com/ctrsploit/sploit-spec/pkg/app"
 	"github.com/ctrsploit/sploit-spec/pkg/exeenv"
 	"github.com/ctrsploit/sploit-spec/pkg/vul"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 )
 
 var (
@@ -51,12 +51,12 @@ var Vul = vulnerability{
 	},
 }
 
-func (v *vulnerability) Exploit(context *cli.Context) (err error) {
-	err = v.BaseVulnerability.Exploit(context)
+func (v *vulnerability) Exploit(cmd *cli.Command) (err error) {
+	err = v.BaseVulnerability.Exploit(cmd)
 	if err != nil {
 		return
 	}
-	inode := context.Int("inode")
-	ref := context.String("ref")
+	inode := cmd.Int("inode")
+	ref := cmd.String("reference")
 	return Exploit(inode, ref, os.Stdin, os.Stdout, os.Stderr)
 }

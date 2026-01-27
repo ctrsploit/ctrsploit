@@ -65,5 +65,5 @@ INFO[0000] Restored original code.
 INFO[0000] Restored original registers.                 
 INFO[0000] received connection from 172.17.0.1:37770    
 ls -lah /usr/bin/docker
-
+-rwxr-xr-x 1 root root 44M Jul  9 16:13 /usr/bin/docker
 ```

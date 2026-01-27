@@ -4,20 +4,21 @@ import (
 	"github.com/ctrsploit/ctrsploit/prerequisite/apparmor"
 	"github.com/ctrsploit/ctrsploit/prerequisite/seccomp"
 	"github.com/ctrsploit/ctrsploit/prerequisite/selinux"
+	"github.com/ctrsploit/ctrsploit/prerequisite/sysctl/user"
 	"github.com/ctrsploit/sploit-spec/pkg/app"
 	"github.com/ctrsploit/sploit-spec/pkg/exeenv"
 	"github.com/ctrsploit/sploit-spec/pkg/prerequisite"
 	"github.com/ctrsploit/sploit-spec/pkg/vul"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 )
 
 var (
-	CheckSecCmd = getCheckSecCmd(Vul.Name, Vul.Description)
+	CheckSecCmd = getCheckSecCmd(Vul.Name, Vul.Description, []string{})
 	VulCmd      = &cli.Command{
 		Name:  Vul.Name,
 		Usage: Vul.Description,
-		Subcommands: []*cli.Command{
-			getCheckSecCmd("checksec", "check vulnerability exists"),
+		Commands: []*cli.Command{
+			getCheckSecCmd("checksec", "check vulnerability exists", []string{"c"}),
 		},
 	}
 )
@@ -40,17 +41,19 @@ var (
 			},
 			CheckSecPrerequisites: prerequisite.And(
 				&seccomp.Disabled,
-				&selinux.Disabled,
+				&selinux.Unconfined,
 				&apparmor.Disabled,
+				&user.UserNsEnabled,
 			),
 			ExploitablePrerequisites: nil,
 		},
 	}
 )
 
-func getCheckSecCmd(name, usage string) (cmd *cli.Command) {
+func getCheckSecCmd(name, usage string, aliases []string) (cmd *cli.Command) {
 	cmd = app.Vul2ChecksecCmd(&Vul, nil, nil)
 	cmd.Name = name
 	cmd.Usage = usage
+	cmd.Aliases = aliases
 	return
 }

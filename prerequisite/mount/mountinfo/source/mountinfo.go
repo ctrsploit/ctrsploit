@@ -15,16 +15,15 @@ type RootMountInfoSourceContains struct {
 }
 
 func (p *RootMountInfoSourceContains) Check() (bool, error) {
-	if p.Checked {
-		return p.Satisfied, nil
-	}
-	info, err := mountinfo.RootMount()
-	if err != nil {
-		return false, fmt.Errorf("failed to check rootfs's mountinfo source caused by getting root's mountinfo: %w", err)
-	}
-	p.Satisfied = strings.Contains(info.Source, p.Expected)
-	p.Checked = true
-	return p.Satisfied, nil
+	return p.CheckTemplate(func() {
+		info, err := mountinfo.RootMount()
+		if err != nil {
+			p.Err = p.WrapErr(fmt.Errorf("getting root's mountinfo: %w", err))
+			return
+		}
+		p.Satisfied = strings.Contains(info.Source, p.Expected)
+		return
+	})
 }
 
 var (
@@ -51,7 +50,7 @@ func (p *RootMountInfoVFSOptionsContains) Check() (bool, error) {
 	}
 	info, err := mountinfo.RootMount()
 	if err != nil {
-		return false, fmt.Errorf("failed to check rootfs's mountinfo vfs options caused by getting root's mountinfo: %w", err)
+		return false, fmt.Errorf("failed to check [%s], caused by getting root's mountinfo: %w", p.GetName(), err)
 	}
 	p.Satisfied = strings.Contains(info.VFSOptions, p.Expected)
 	p.Checked = true

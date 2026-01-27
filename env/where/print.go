@@ -17,7 +17,7 @@ import (
 	"github.com/ctrsploit/sploit-spec/pkg/result/item"
 )
 
-type Result map[string]struct {
+type Result []struct {
 	Name  result.Title `json:"name"`
 	Rules []item.Bool  `json:"rules"`
 	In    item.Bool    `json:"in"`
@@ -25,7 +25,7 @@ type Result map[string]struct {
 
 func Human(machine container.Where) (human Result) {
 	human = Result{
-		"container": {
+		{
 			Name: result.Title{
 				Name: "Container",
 			},
@@ -35,7 +35,7 @@ func Human(machine container.Where) (human Result) {
 				Result:      machine.Container.In,
 			},
 		},
-		"docker": {
+		{
 			Name: result.Title{
 				Name: "Docker",
 			},
@@ -82,7 +82,7 @@ func Human(machine container.Where) (human Result) {
 				Result:      machine.Docker.In,
 			},
 		},
-		"containerd": {
+		{
 			Name: result.Title{
 				Name: "containerd",
 			},
@@ -124,7 +124,7 @@ func Human(machine container.Where) (human Result) {
 				Result:      machine.Containerd.In,
 			},
 		},
-		"k8s": {
+		{
 			Name: result.Title{
 				Name: "K8S",
 			},
@@ -161,7 +161,7 @@ func Human(machine container.Where) (human Result) {
 				Result:      machine.K8s.In,
 			},
 		},
-		"nerdctl": {
+		{
 			Name: result.Title{
 				Name: "Nerdctl",
 			},

@@ -1,12 +1,8 @@
 # ctrsploit: A penetration toolkit for container environment
 
-[中文文档](./README-ZH.md)
+ctrsploit [kənˈteɪnər splɔɪt] , follows [sploit-spec](https://github.com/ctrsploit/sploit-spec)
 
-ctrsploit [kənˈteɪnər splɔɪt] , follows [sploit-spec](https://github.com/ctrsploit/sploit-spec) v0.4.3
-
-## Why ctrsploit
-
-see [here](https://github.com/ctrsploit/ctrsploit/discussions/11)
+![](./docs/images/logo-white-256.png)
 
 ## Pre-Built Release
 
@@ -31,12 +27,12 @@ make binary
 ### env
 
 ```shell
-$ ctrsploit env     
+$ ctrsploit env
 NAME:
    ctrsploit env - gather information
 
 USAGE:
-   ctrsploit env [command options]
+   ctrsploit env [command [command options]]
 
 COMMANDS:
    auto                auto
@@ -50,10 +46,11 @@ COMMANDS:
    selinux, se         show the selinux info
    fdisk, f            like linux command fdisk or lsblk // TODO
    kernel, k           collect kernel environment information
+   sysctl              display sysctl information
+   rlimit              get process resource limits
    namespace, n, ns    check namespace is host ns
    docker-version, dv  guess dockerd version range
    upload, up          upload <servicename> <filename> <obs> [host]
-   help, h             Shows a list of commands or help for one command
 
 OPTIONS:
    --help, -h  show help
@@ -62,29 +59,68 @@ OPTIONS:
 ### vul
 
 ```shell
-$ ctrsploit vul    
+$ ctrsploit vul
 NAME:
    ctrsploit vul - list vulnerabilities
 
 USAGE:
-   ctrsploit vul [command options]
+   ctrsploit vul [command [command options]]
 
 COMMANDS:
    cve-2016-8867, 8867, amb                        Ambient Capabilities in the Linux kernel allow local users to gain privileges
    cve-2019-5736, 5736                             escape by overwrite runc executable file via /proc/self/exe
+   cve-2020-8558, 8558                             access services bound to 127.0.0.1 from adjacent hosts
    cve-2020-15257, 15257                           abuse the containerd-shim's abstract unix socket in a container with host network namespace
    cve-2021-25741, 25741, kubelet-subpath-symlink  kubelet symlink exchange vulnerability allows mounting node filesystem inside a pod
+   cve-2021-25748, 25748, ingress-nginx-path-leak  ingress-nginx path validation bypass vulnerability allows credential leakage through newline injection
    cve-2022-0492, 0492                             escape via cgroup's release agent without CAP_SYS_ADMIN if kernel is vulnerable to CVE-2022-0492
    cve-2022-39253, 39253                           read host file during docker build via git CVE-2022-39253
    cve-2024-0132, 0132                             gpu container escape via nvidia-container-toolkit CVE-2024-0132
    cve-2024-23650, 23650                           dos buildkit via oci exporter by sending a crafted request
+   cve-2024-40635, 40635                           bypass runAsNonRoot via integer overflow in User ID handling in containerd
    cve-2025-23266, 23266                           gpu container escape via nvidia-container-toolkit cve-2025-23266 by running a malicious container image
    cve-2025-47290, 47290                           modify host file via containerd cve-2025-47290 during pulling image
+   cve-2025-62725, 62725                           path traversal in Docker Compose OCI artifacts allows arbitrary file write via malicious registry
+   fork-bomb                                       
    naked                                           we call containers running without seccomp, AppArmor, or SELinux enabled 'naked containers', which leaves them highly vulnerable to kernel exploits and potential container escapes
    capability, caps                                abuse dangerous capabilities in container
    namespace, ns                                   host level namespaces break the isolations
+   sa-token-access-secrets, secret                 Check if service account token can access Kubernetes Secrets
    shared-socket, sock                             abuse runtime's api via shared socket
-   help, h                                         Shows a list of commands or help for one command
+
+OPTIONS:
+   --help, -h  show help
+```
+
+### module
+
+Group vulnerabilities by component or configuration type, and use the
+tables below to see their check/exploit support status.
+
+```shell
+$ ctrsploit module
+NAME:
+   ctrsploit module - group vulnerabilities by component or config type
+
+USAGE:
+   ctrsploit module [component|config] [name]
+
+DESCRIPTION:
+   Classify and operate vulnerabilities by logical module
+   such as kernel, runc, containerd, or config (e.g. capability).
+
+COMMANDS:
+   config, cfg                            insecure configuration and misconfiguration issues
+   runc, r                                runc related vulnerabilities
+   containerd, c                          containerd related vulnerabilities
+   docker, d                              docker related vulnerabilities
+   nvidia-container-toolkit, nvidia, nct  nvidia-container-toolkit related vulnerabilities
+   docker-compose, compose                docker-compose related vulnerabilities
+   buildkit, bk                           buildkit related vulnerabilities
+   kubernetes, k8s                        kubernetes related vulnerabilities
+   ingress-nginx, ingress                 ingress-nginx related vulnerabilities
+   git, g                                 git related vulnerabilities
+   kernel, k                              kernel related vulnerabilities
 
 OPTIONS:
    --help, -h  show help
@@ -96,102 +132,166 @@ OPTIONS:
 * :x: : Not Supported
 * `-` : Not Applicable
 
-| vul                                                         | desc                                                                                                                                                                                            | check              | exploit            |
-|-------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------|--------------------|
-| [cve-2016-8867](./vul/cve-2016-8867)                        | ambient capabilities allow local users to gain <br>privileges                                                                                                                                   | :heavy_check_mark: | :heavy_check_mark: |
-| cve-2016-9962                                               |                                                                                                                                                                                                 | :x:                | :x:                |
-| CVE-2017-1002101                                            |                                                                                                                                                                                                 | :x:                | :heavy_check_mark: |
-| [cve-2019-5736](./vul/cve-2019-5736)                        | escape by overwrite runc executable file via <br>/proc/self/exe                                                                                                                                 | :heavy_check_mark: | -                  |
-| └─[exec](./vul/cve-2019-5736/exec)                          | cve-2019-5736 exploit via runc exec process                                                                                                                                      w              | :heavy_check_mark: | :heavy_check_mark: |
-| └─[image](./vul/cve-2019-5736/image)                        | cve-2019-5736 exploit via a malicious image                                                                                                                                                     | :heavy_check_mark: | :heavy_check_mark: |
-| CVE-2019-14271                                              |                                                                                                                                                                                                 | :x:                | :heavy_check_mark: |
-| CVE-2019-16884                                              |                                                                                                                                                                                                 | :x:                | :heavy_check_mark: |
-| CVE-2020-8555                                               |                                                                                                                                                                                                 | :x:                | :heavy_check_mark: |
-| CVE-2020-8558                                               |                                                                                                                                                                                                 | :x:                | :heavy_check_mark: |
-| CVE-2020-15157                                              |                                                                                                                                                                                                 | :x:                | :heavy_check_mark: |
-| [cve-2020-15257](./vul/cve-2020-15257)                      | abuse the containerd-shim's abstract unix socket <br>in a container with host network namespace                                                                                                 | :heavy_check_mark: | :heavy_check_mark: |
-| CVE-2021-3493                                               |                                                                                                                                                                                                 | :x:                | :heavy_check_mark: |
-| CVE-2021-21285                                              |                                                                                                                                                                                                 | :x:                | :heavy_check_mark: |
-| CVE-2021-22555                                              |                                                                                                                                                                                                 | :x:                | :heavy_check_mark: |
-| CVE-2021-41091                                              |                                                                                                                                                                                                 | :x:                | :heavy_check_mark: |
-| [cve-2021-25741](./vul/cve-2021-25741)                      | kubelet symlink exchange vulnerability allows <br>mounting node filesystem inside a pod                                                                                                         | :heavy_check_mark: | :heavy_check_mark: |
-| [cve-2022-0492](./vul/cve-2022-0492)                        | escape via cgroup's release agent without <br>CAP_SYS_ADMIN if kernel is vulnerable to <br>CVE-2022-0492                                                                                        | :heavy_check_mark: | :heavy_check_mark: |
-| CVE-2022-0847                                               |                                                                                                                                                                                                 | :x:                | :heavy_check_mark: |
-| [cve-2022-39253](./vul/cve-2022-39253)                      | read host file during docker build via git <br>CVE-2022-39253                                                                                                                                   | :o:                | :heavy_check_mark: |
-| CVE-2023-28642                                              |                                                                                                                                                                                                 | :x:                | :x:                |
-| [cve-2024-0132](./vul/cve-2024-0132)                        | gpu container escape via nvidia-container-toolkit <br>CVE-2024-0132                                                                                                                             | :o:                | :heavy_check_mark: |
-| CVE-2024-21626                                              |                                                                                                                                                                                                 | :x:                | :x:                |
-| [cve-2024-23650](./vul/cve-2024-23650)                      | dos buildkit via oci exporter by sending a crafted <br>request                                                                                                                                  | :heavy_check_mark: | :heavy_check_mark: |
-| [cve-2025-23266](./vul/cve-2025-23266)                      | gpu container escape via nvidia-container-toolkit <br>cve-2025-23266 by running a malicious container image                                                                                     | :o:                | :heavy_check_mark: |
-| cve-2025-23267                                              |                                                                                                                                                                                                 | :x:                | :x:                |
-| cve-2025-23359                                              |                                                                                                                                                                                                 | :x:                | :x:                |
-| cve-2025-31133                                              |                                                                                                                                                                                                 | :x:                | :x:                |
-| [cve-2025-47290](./vul/cve-2025-47290)                      | modify host file via containerd cve-2025-47290 <br>during pulling image                                                                                                                         | :heavy_check_mark: | :heavy_check_mark: |
-| cve-2025-52565                                              |                                                                                                                                                                                                 | :x:                | :x:                |
-| [caps](./vul/caps)                                          | abuse dangerous capabilities in container                                                                                                                                                       | -                  | -                  |
-| └─[shocker](./vul/caps/shocker)                             | escape by CAP_DAC_READ_SEARCH, alias shocker, <br>found by Sebastian Krahmer (stealth) in 2014                                                                                                  | :heavy_check_mark: | :heavy_check_mark: |
-| └─[sys_admin](./vul/caps/sys_admin)                         | abuse cap_sys_admin                                                                                                                                                                             | :heavy_check_mark: | -                  |
-| &emsp;└─[release_agent](./vul/caps/sys_admin/release_agent) | escape by cap_sys_admin via cgroups v1 <br>release_agent                                                                                                                                        | :heavy_check_mark: | :heavy_check_mark: |
-| &emsp;└─mount-device                                        |                                                                                                                                                                                                 | :x:                | :x:                |
-| &emsp;└─mount-proc                                          |                                                                                                                                                                                                 | :x:                | :x:                |
-| &emsp;└─device.allow                                        |                                                                                                                                                                                                 | :x:                | :x:                |
-| &emsp;└─[ebpf](./vul/caps/sys_admin/ebpf)                   | escape by loading evil eBPF programs into the <br>kernel                                                                                                                                        | :heavy_check_mark: | -                  |
-| &emsp;&emsp;└─[bash](./vul/caps/sys_admin/ebpf/bash)        | abuse eBPF to inject malicious commands into <br>bash processes running on host                                                                                                                 | :heavy_check_mark: | :heavy_check_mark: |
-| &emsp;&emsp;└─[cron](./vul/caps/sys_admin/ebpf/cron)        | abuse eBPF to inject malicious job into host's <br>crontab                                                                                                                                      | :heavy_check_mark: | :heavy_check_mark: |
-| &emsp;&emsp;└─[execve](./vul/caps/sys_admin/ebpf/execve)    | abuse eBPF to hijack execve syscall to run <br>arbitrary commands                                                                                                                               | :heavy_check_mark: | :heavy_check_mark: |
-| &emsp;&emsp;└─[kubelet](./vul/caps/sys_admin/ebpf/kubelet)  | abuse eBPF to leak services account token from <br>kubelet                                                                                                                                      | :heavy_check_mark: | :heavy_check_mark: |
-| &emsp;&emsp;└─sshd                                          |                                                                                                                                                                                                 | :x:                | :x:                |
-| └─[bpf](./vul/caps/bpf)                                     | load evil bpf programs via cap_bpf                                                                                                                                                              | -                  | -                  |
-| &emsp;└─[ebpf](./vul/caps/sys_admin/ebpf)                   | same as caps/sys_admin/ebpf                                                                                                                                                                     | :heavy_check_mark: | -                  |
-| └─[sys_ptrace](./vul/caps/sys_ptrace)                       | abuse cap_sys_ptrace                                                                                                                                                                            | :heavy_check_mark: | -                  |
-| &emsp;└─[pid_host](./vul/caps/sys_ptrace/pid_host)          | ptrace host processes in a container with <br>cap_sys_ptrace and host pid namespace                                                                                                             | :heavy_check_mark: | :heavy_check_mark: |
-| └─sys_module                                                |                                                                                                                                                                                                 | :x:                | :x:                |
-| └─net_admin                                                 |                                                                                                                                                                                                 | :x:                | :x:                |
-| [naked](./vul/naked)                                        | we call containers running without seccomp, <br>AppArmor, or SELinux enabled 'naked containers', <br>which leaves them highly vulnerable to <br>kernel exploits and potential container escapes | :heavy_check_mark: | -                  |
-| [namespace](./vul/namespace)                                | shared host namespaces break the isolations                                                                                                                                                     | -                  | -                  |
-| └─[net](./vul/namespace/net)                                | shared host network namespace breaks the network <br>isolation                                                                                                                                  | :heavy_check_mark: | :x:                |
-| &emsp;└─shijack                                             |                                                                                                                                                                                                 | :x:                | :x:                |
-| &emsp;&emsp;└─basic                                         |                                                                                                                                                                                                 | :x:                | :x:                |
-| &emsp;&emsp;└─ali                                           |                                                                                                                                                                                                 | :x:                | :x:                |
-| &emsp;&emsp;└─hw                                            |                                                                                                                                                                                                 | :x:                | :x:                |
-| &emsp;&emsp;└─gcp                                           |                                                                                                                                                                                                 | :x:                | :x:                |
-| &emsp;&emsp;└─aws                                           |                                                                                                                                                                                                 | :x:                | :x:                |
-| └─[pid](./vul/namespace/pid)                                | shared host pid namespace breaks the process <br>isolation                                                                                                                                      | -                  | -                  |
-| &emsp;└─[proc_root](./vul/namespace/pid/proc_root)          | escape by abusing host pid ns via /proc/[pid]/root                                                                                                                                              | :heavy_check_mark: | :heavy_check_mark: |
-| fs                                                          |                                                                                                                                                                                                 | :x:                | :x:                |
-| └─proc-rw                                                   |                                                                                                                                                                                                 | :x:                | -                  |
-| &emsp;└─core_pattern                                        |                                                                                                                                                                                                 | :x:                | :x:                |
-| &emsp;└─binfmt                                              |                                                                                                                                                                                                 | :x:                | :x:                |
-| └─sys-rw                                                    |                                                                                                                                                                                                 | :x:                | :x:                |
-| └─lxcfs-rw                                                  |                                                                                                                                                                                                 | :x:                | :x:                |
-| [shared-socket](./vul/shared-socket)                        | abuse runtime's api via shared socket                                                                                                                                                           | -                  | -                  |
-| └─[docker.sock](./vul/shared-socket/docker-sock)            | escape by shared docker.sock via running a <br>privileged container                                                                                                                             | :heavy_check_mark: | :heavy_check_mark: |
-| └─containerd.sock                                           |                                                                                                                                                                                                 | :x:                | :x:                |
-| exposed-api                                                 |                                                                                                                                                                                                 | -                  | -                  |
-| └─docker-2375                                               |                                                                                                                                                                                                 | :x:                | :x:                |
-| lxcfs                                                       |                                                                                                                                                                                                 | :x:                | :x:                |
+#### config
+
+| vul | desc | check | exploit |
+|-----|------|-------|---------|
+| [fork-bomb](./vul/fork-bomb) | fork bomb causes denial of service when resource limits or cgroup configs are unsafe | :heavy_check_mark: | :heavy_check_mark: |
+| [caps](./vul/caps) | abuse dangerous capabilities in container | - | - |
+| └─[shocker](./vul/caps/shocker) | escape by CAP_DAC_READ_SEARCH, alias shocker, found by Sebastian Krahmer (stealth) in 2014 | :heavy_check_mark: | :heavy_check_mark: |
+| └─[sys_admin](./vul/caps/sys_admin) | abuse cap_sys_admin | :heavy_check_mark: | - |
+| &emsp;└─[release_agent](./vul/caps/sys_admin/release_agent) | escape by cap_sys_admin via cgroups v1 release_agent | :heavy_check_mark: | :heavy_check_mark: |
+| &emsp;└─mount-device |  | :x: | :x: |
+| &emsp;└─mount-proc |  | :x: | :x: |
+| &emsp;└─device.allow |  | :x: | :x: |
+| &emsp;└─[ebpf](./vul/caps/sys_admin/ebpf) | escape by loading evil eBPF programs into the kernel | :heavy_check_mark: | - |
+| &emsp;&emsp;└─[bash](./vul/caps/sys_admin/ebpf/bash) | abuse eBPF to inject malicious commands into bash processes running on host | :heavy_check_mark: | :heavy_check_mark: |
+| &emsp;&emsp;└─[cron](./vul/caps/sys_admin/ebpf/cron) | abuse eBPF to inject malicious job into host's crontab | :heavy_check_mark: | :heavy_check_mark: |
+| &emsp;&emsp;└─[execve](./vul/caps/sys_admin/ebpf/execve) | abuse eBPF to hijack execve syscall to run arbitrary commands | :heavy_check_mark: | :heavy_check_mark: |
+| &emsp;&emsp;└─[kubelet](./vul/caps/sys_admin/ebpf/kubelet) | abuse eBPF to leak services account token from kubelet | :heavy_check_mark: | :heavy_check_mark: |
+| &emsp;&emsp;└─sshd |  | :x: | :x: |
+| └─[bpf](./vul/caps/bpf) | load evil bpf programs via cap_bpf | - | - |
+| &emsp;└─[ebpf](./vul/caps/sys_admin/ebpf) | same as caps/sys_admin/ebpf | :heavy_check_mark: | - |
+| └─[sys_ptrace](./vul/caps/sys_ptrace) | abuse cap_sys_ptrace | :heavy_check_mark: | - |
+| &emsp;└─[pid_host](./vul/caps/sys_ptrace/pid_host) | ptrace host processes in a container with cap_sys_ptrace and host pid namespace | :heavy_check_mark: | :heavy_check_mark: |
+| └─sys_module |  | :x: | :x: |
+| └─net_admin |  | :x: | :x: |
+| └─[cve-2016-8867](./vul/cve-2016-8867) | ambient capabilities allow local users to gain privileges | :heavy_check_mark: | :heavy_check_mark: |
+| [naked](./vul/naked) | we call containers running without seccomp, AppArmor, or SELinux enabled 'naked containers', which leaves them highly vulnerable to kernel exploits and potential container escapes | :heavy_check_mark: | - |
+| [shared-socket](./vul/shared-socket) | abuse runtime's api via shared socket | - | - |
+| └─[docker.sock](./vul/shared-socket/docker-sock) | escape by shared docker.sock via running a privileged container | :heavy_check_mark: | :heavy_check_mark: |
+| └─containerd.sock |  | :x: | :x: |
+| [sa-token-access-secrets](./vul/sa-token/access-secrets) | check if service account token can access Kubernetes Secrets | :heavy_check_mark: | - |
+| [namespace](./vul/namespace) | shared host namespaces break the isolations | - | - |
+| └─[net](./vul/namespace/net) | shared host network namespace breaks the network isolation | :heavy_check_mark: | :x: |
+| &emsp;└─shijack |  | :x: | :x: |
+| &emsp;&emsp;└─basic |  | :x: | :x: |
+| &emsp;&emsp;└─ali |  | :x: | :x: |
+| &emsp;&emsp;└─hw |  | :x: | :x: |
+| &emsp;&emsp;└─gcp |  | :x: | :x: |
+| &emsp;&emsp;└─aws |  | :x: | :x: |
+| └─[pid](./vul/namespace/pid) | shared host pid namespace breaks the process isolation | - | - |
+| &emsp;└─[proc_root](./vul/namespace/pid/proc_root) | escape by abusing host pid ns via /proc/[pid]/root | :heavy_check_mark: | :heavy_check_mark: |
+| fs |  | :x: | :x: |
+| └─proc-rw |  | :x: | - |
+| &emsp;└─core_pattern |  | :x: | :x: |
+| &emsp;└─binfmt |  | :x: | :x: |
+| └─sys-rw |  | :x: | :x: |
+| └─lxcfs-rw |  | :x: | :x: |
+| exposed-api |  | - | - |
+| └─docker-2375 |  | :x: | :x: |
+| lxcfs |  | :x: | :x: |
+
+#### runc
+
+| vul | desc | check | exploit |
+|-----|------|-------|---------|
+| [cve-2016-8867](./vul/cve-2016-8867) | ambient capabilities allow local users to gain privileges | :heavy_check_mark: | :heavy_check_mark: |
+| [cve-2019-5736](./vul/cve-2019-5736) | escape by overwrite runc executable file via /proc/self/exe | :heavy_check_mark: | - |
+| └─[exec](./vul/cve-2019-5736/exec) | cve-2019-5736 exploit via runc exec process | :heavy_check_mark: | :heavy_check_mark: |
+| └─[image](./vul/cve-2019-5736/image) | cve-2019-5736 exploit via a malicious image | :heavy_check_mark: | :heavy_check_mark: |
+| cve-2019-16884 |  | :x: | :heavy_check_mark: |
+| cve-2023-28642 |  | :x: | :x: |
+| cve-2024-21626 |  | :x: | :x: |
+| cve-2025-31133 |  | :x: | :x: |
+| cve-2025-52565 |  | :x: | :x: |
+| cve-2025-52881 |  | :x: | :x: |
+
+#### containerd
+
+| vul | desc | check | exploit |
+|-----|------|-------|---------|
+| cve-2020-15157 |  | :x: | :heavy_check_mark: |
+| [cve-2020-15257](./vul/cve-2020-15257) | abuse the containerd-shim's abstract unix socket in a container with host network namespace | :heavy_check_mark: | :heavy_check_mark: |
+| [cve-2024-40635](./vul/cve-2024-40635) | bypass runAsNonRoot via integer overflow in User ID handling in containerd | :heavy_check_mark: | :heavy_check_mark: |
+| [cve-2025-47290](./vul/cve-2025-47290) | modify host file via containerd cve-2025-47290 during pulling image | :heavy_check_mark: | :heavy_check_mark: |
+
+#### docker
+
+| vul | desc | check | exploit |
+|-----|------|-------|---------|
+| [docker.sock](./vul/shared-socket/docker-sock) | escape by shared docker.sock via running a privileged container | :heavy_check_mark: | :heavy_check_mark: |
+| cve-2016-9962 |  | :x: | :x: |
+| cve-2019-14271 |  | :x: | :heavy_check_mark: |
+| cve-2021-41091 |  | :x: | :heavy_check_mark: |
+| cve-2021-21285 |  | :x: | :heavy_check_mark: |
+
+#### nvidia-container-toolkit
+
+| vul | desc | check | exploit |
+|-----|------|-------|---------|
+| [cve-2024-0132](./vul/cve-2024-0132) | gpu container escape via nvidia-container-toolkit CVE-2024-0132 | :o: | :heavy_check_mark: |
+| [cve-2025-23266](./vul/cve-2025-23266) | gpu container escape via nvidia-container-toolkit cve-2025-23266 by running a malicious container image | :o: | :heavy_check_mark: |
+| cve-2025-23267 |  | :x: | :x: |
+| cve-2025-23359 |  | :x: | :x: |
+
+#### docker-compose
+
+| vul | desc | check | exploit |
+|-----|------|-------|---------|
+| [cve-2025-62725](./vul/cve-2025-62725) | path traversal in docker compose oci artifacts allows arbitrary file write via malicious registry | :heavy_check_mark: | :heavy_check_mark: |
+
+#### buildkit
+
+| vul | desc | check | exploit |
+|-----|------|-------|---------|
+| [cve-2024-23650](./vul/cve-2024-23650) | dos buildkit via oci exporter by sending a crafted request | :heavy_check_mark: | :heavy_check_mark: |
+
+#### kubernetes
+
+| vul | desc | check | exploit |
+|-----|------|-------|---------|
+| cve-2017-1002101 |  | :x: | :heavy_check_mark: |
+| cve-2020-8555 |  | :x: | :heavy_check_mark: |
+| [cve-2020-8558](./vul/cve-2020-8558) | access services bound to 127.0.0.1 from adjacent hosts | :heavy_check_mark: | :heavy_check_mark: |
+| [cve-2021-25741](./vul/cve-2021-25741) | kubelet symlink exchange vulnerability allows mounting node filesystem inside a pod | :heavy_check_mark: | :heavy_check_mark: |
+
+#### ingress-nginx
+
+| vul | desc | check | exploit |
+|-----|------|-------|---------|
+| [cve-2021-25748](./vul/cve-2021-25748) | ingress-nginx path validation bypass vulnerability allows credential leakage through newline injection | :heavy_check_mark: | :heavy_check_mark: |
+
+#### git
+
+| vul | desc | check | exploit |
+|-----|------|-------|---------|
+| [cve-2022-39253](./vul/cve-2022-39253) | read host file during docker build via git CVE-2022-39253 | :o: | :heavy_check_mark: |
+
+#### kernel
+
+| vul | desc | check | exploit |
+|-----|------|-------|---------|
+| cve-2021-22555 |  | :x: | :heavy_check_mark: |
+| cve-2021-3493 |  | :x: | :heavy_check_mark: |
+| [cve-2022-0492](./vul/cve-2022-0492) | escape via cgroup's release agent without CAP_SYS_ADMIN if kernel is vulnerable to CVE-2022-0492 | :heavy_check_mark: | :heavy_check_mark: |
+| cve-2022-0847 |  | :x: | :heavy_check_mark: |
 
 ### exploit
 
 ```shell
-$ ctrsploit exploit                                       
+$ ctrsploit exploit
 NAME:
    ctrsploit exploit - run a exploit
 
 USAGE:
-   ctrsploit exploit [command options]
+   ctrsploit exploit [command [command options]]
 
 COMMANDS:
    cve-2016-8867, 8867, amb                           Ambient Capabilities in the Linux kernel allow local users to gain privileges
    cve-2019-5736, 5736                                escape by overwrite runc executable file via /proc/self/exe
+   cve-2020-8558, 8558                                access services bound to 127.0.0.1 from adjacent hosts
    cve-2020-15257, 15257                              abuse the containerd-shim's abstract unix socket in a container with host network namespace
    cve-2021-25741, 25741, kubelet-subpath-symlink     kubelet symlink exchange vulnerability allows mounting node filesystem inside a pod
+   cve-2021-25748, 25748, ingress-nginx-path-leak     ingress-nginx path validation bypass vulnerability allows credential leakage through newline injection
    cve-2022-0492, 0492                                escape via cgroup's release agent without CAP_SYS_ADMIN if kernel is vulnerable to CVE-2022-0492
    cve-2022-39253, 39253                              read host file during docker build via git CVE-2022-39253
    cve-2024-0132, 0132                                gpu container escape via nvidia-container-toolkit CVE-2024-0132
    cve-2024-23650, 23650                              dos buildkit via oci exporter by sending a crafted request
+   cve-2024-40635, 40635                              bypass runAsNonRoot via integer overflow in User ID handling in containerd
    cve-2025-23266, 23266                              gpu container escape via nvidia-container-toolkit cve-2025-23266 by running a malicious container image
    cve-2025-47290, 47290                              modify host file via containerd cve-2025-47290 during pulling image
+   fork-bomb                                          
    shocker, cap_dac_read_search, open_by_handle_at    escape by CAP_DAC_READ_SEARCH, alias shocker, found by Sebastian Krahmer (stealth) in 2014
    cap_sys_admin, sys_admin                           abuse cap_sys_admin
    release_agent, ra                                  escape by cap_sys_admin via cgroups v1 release_agent
@@ -211,7 +311,6 @@ COMMANDS:
    CVE-2017-1002101, subPath1, 1002101, 2017-1002101  CVE-2017-1002101
    dirty-pipe, dp, CVE-2022-0847, 0847                dirty-pipe
    crash, c                                           make container crash
-   help, h                                            Shows a list of commands or help for one command
 
 OPTIONS:
    --help, -h  show help
@@ -220,62 +319,44 @@ OPTIONS:
 ### checksec
 
 ```shell
-$ ctrsploit checksec     
+$ ctrsploit checksec
 NAME:
    ctrsploit checksec - check security inside a container
 
 USAGE:
-   ctrsploit checksec [command options]
+   ctrsploit checksec [command [command options]]
 
 COMMANDS:
    auto, a                                          auto check security
    env, e                                           gather information
    cve-2016-8867, 8867, amb                         Ambient Capabilities in the Linux kernel allow local users to gain privileges
-   cve-2019-5736, 5736                              
-   cve-2020-15257, 15257                            Abuse the containerd-shim's abstract unix socket when running in a container with host network namespace.
-   cve-2021-25741, 25741, kubelet-subpath-symlink   Kubernetes kubelet symlink exchange vulnerability allows mounting Node filesystem inside POD with read-write privileges
-   cve-2022-0492, 0492                              Container escape using cgroup's release agent without CAP_SYS_ADMIN if kernel has CVE-2022-0492
-   cve-2022-39253, 39253                            docker build host file read by git CVE-2022-39253
-   cve-2024-0132, 0132                              nvidia-container-toolkit CVE-2024-0132 container escape. Affected versions: libnvidia-container >= 1.0.0, <= 1.16.1
-   cve-2024-23650, 23650                            BuildKit OCI exporter DoS vulnerability by sending a crafted request.
-   cve-2025-23266, 23266                            NVIDIA Container Toolkit allows an attacker to execute arbitrary code on the host by running a specially crafted container image.
-   cve-2025-47290, 47290                            TOCTOU vulnerability in containerd that allows modification of the host filesystem during image pull.
-   shocker, cap_dac_read_search, open_by_handle_at  Container escape with CAP_DAC_READ_SEARCH, alias shocker, found by Sebastian Krahmer (stealth) in 2014.
-   cap_sys_admin, sys_admin                         Container can be escaped when has cap_sys_admin
-   cap_bpf, bpf                                     Container can load evil bpf program when has cap_bpf, may cause container escape
-   cap_sys_ptrace, sys_ptrace, ptrace               Container can be escaped when has cap_sys_ptrace
-   ptrace-pid-host, ptrace-pid                      Container can be escaped when has cap_sys_ptrace and host pid namespace
-   naked                                            We call containers running without seccomp, AppArmor, or SELinux enabled 'naked containers', which leaves them highly vulnerable to kernel exploits and potential container escapes
-   host-net, net                                    The network namespace of the host is shared
-   host-pid, pid                                    container can be escaped with host pid namespace
-   docker.sock, docker                              escape by shared docker socket
-   help, h                                          Shows a list of commands or help for one command
+   cve-2019-5736, 5736                              escape by overwrite runc executable file via /proc/self/exe
+   cve-2020-8558, 8558                              access services bound to 127.0.0.1 from adjacent hosts
+   cve-2020-15257, 15257                            abuse the containerd-shim's abstract unix socket in a container with host network namespace
+   cve-2021-25741, 25741, kubelet-subpath-symlink   kubelet symlink exchange vulnerability allows mounting node filesystem inside a pod
+   cve-2021-25748, 25748, ingress-nginx-path-leak   ingress-nginx path validation bypass vulnerability allows credential leakage through newline injection
+   cve-2022-0492, 0492                              escape via cgroup's release agent without CAP_SYS_ADMIN if kernel is vulnerable to CVE-2022-0492
+   cve-2022-39253, 39253                            read host file during docker build via git CVE-2022-39253
+   cve-2024-0132, 0132                              gpu container escape via nvidia-container-toolkit CVE-2024-0132
+   cve-2024-23650, 23650                            dos buildkit via oci exporter by sending a crafted request
+   cve-2024-40635, 40635                            bypass runAsNonRoot via integer overflow in User ID handling in containerd
+   cve-2025-23266, 23266                            gpu container escape via nvidia-container-toolkit cve-2025-23266 by running a malicious container image
+   cve-2025-47290, 47290                            modify host file via containerd cve-2025-47290 during pulling image
+   cve-2025-62725, 62725                            path traversal in Docker Compose OCI artifacts allows arbitrary file write via malicious registry
+   fork-bomb                                        
+   shocker, cap_dac_read_search, open_by_handle_at  escape by CAP_DAC_READ_SEARCH, alias shocker, found by Sebastian Krahmer (stealth) in 2014
+   cap_sys_admin, sys_admin                         abuse cap_sys_admin
+   cap_bpf, bpf                                     load evil bpf programs via cap_bpf
+   cap_sys_ptrace, sys_ptrace, ptrace               abuse cap_sys_ptrace
+   ptrace-pid-host, ptrace-pid                      ptrace host processes in a container with cap_sys_ptrace and host pid namespace
+   naked                                            we call containers running without seccomp, AppArmor, or SELinux enabled 'naked containers', which leaves them highly vulnerable to kernel exploits and potential container escapes
+   host-net, net                                    shared host network namespace breaks the network isolation
+   host-pid, pid                                    shared host pid namespace breaks process isolation
+   sa-token-access-secrets, secret                  Check if service account token can access Kubernetes Secrets
+   docker.sock, docker                              escape by shared docker.sock via running a privileged container
 
 OPTIONS:
    --help, -h  show help
-```
-
-```shell
-$ ctrsploit --colorful checksec auto
-✘  cve-2025-47290       # TOCTOU vulnerability in containerd that allows modification of the host filesystem during image pull.
-✔  naked        # We call containers running without seccomp, AppArmor, or SELinux enabled 'naked containers', which leaves them highly vulnerable to kernel exploits and potential container escapes
-✘  cve-2019-5736        
-✘  cve-2021-25741       # Kubernetes kubelet symlink exchange vulnerability allows mounting Node filesystem inside POD with read-write privileges
-✘  cve-2022-0492        # Container escape using cgroup's release agent without CAP_SYS_ADMIN if kernel has CVE-2022-0492
-✔  cap_sys_admin        # Container can be escaped when has cap_sys_admin
-✔  cap_bpf      # Container can load evil bpf program when has cap_bpf, may cause container escape
-✔  host-net     # The network namespace of the host is shared
-✘  cve-2016-8867        # Ambient Capabilities in the Linux kernel allow local users to gain privileges
-✘  cve-2022-39253       # docker build host file read by git CVE-2022-39253
-✘  cve-2024-23650       # BuildKit OCI exporter DoS vulnerability by sending a crafted request.
-✘  cve-2025-23266       # NVIDIA Container Toolkit allows an attacker to execute arbitrary code on the host by running a specially crafted container image.
-✔  shocker      # Container escape with CAP_DAC_READ_SEARCH, alias shocker, found by Sebastian Krahmer (stealth) in 2014.
-✔  cap_sys_ptrace       # Container can be escaped when has cap_sys_ptrace
-✘  docker.sock  # escape by shared docker socket
-✘  cve-2020-15257       # Abuse the containerd-shim's abstract unix socket when running in a container with host network namespace.
-✘  cve-2024-0132        # nvidia-container-toolkit CVE-2024-0132 container escape. Affected versions: libnvidia-container >= 1.0.0, <= 1.16.1
-✔  ptrace-pid-host      # Container can be escaped when has cap_sys_ptrace and host pid namespace
-✔  host-pid     # container can be escaped with host pid namespac
 ```
 
 ### helper

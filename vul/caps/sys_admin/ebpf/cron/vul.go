@@ -6,7 +6,7 @@ import (
 	"github.com/ctrsploit/sploit-spec/pkg/exeenv"
 	"github.com/ctrsploit/sploit-spec/pkg/prerequisite"
 	"github.com/ctrsploit/sploit-spec/pkg/vul"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 )
 
 var (
@@ -44,11 +44,11 @@ var Vul = vulnerability{
 	},
 }
 
-func (v *vulnerability) Exploit(context *cli.Context) (err error) {
-	if err := v.BaseVulnerability.Exploit(context); err != nil {
+func (v *vulnerability) Exploit(cmd *cli.Command) (err error) {
+	if err := v.BaseVulnerability.Exploit(cmd); err != nil {
 		return err
 	}
-	job := context.String("job")
+	job := cmd.String("job")
 	return Exploit(job)
 }
 

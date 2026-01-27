@@ -1,57 +1,31 @@
 package kernel
 
 import (
-	"github.com/ctrsploit/ctrsploit/pkg/kernel/uname"
-	"github.com/ctrsploit/sploit-spec/pkg/log"
+	"fmt"
+
+	"github.com/Masterminds/semver/v3"
+	"github.com/ctrsploit/ctrsploit/pkg/version/kernel"
 	"github.com/ctrsploit/sploit-spec/pkg/prerequisite"
+	"github.com/ssst0n3/awesome_libs/awesome_error"
 )
 
-type Version struct {
-	ExpectedMinVersion string
-	ExpectedMaxVersion string
+type VersionConstraint struct {
 	prerequisite.BasePrerequisite
+	Constraint string
 }
 
-var (
-	SupportsCgroupNamespace = Version{
-		ExpectedMinVersion: "4.6",
-		ExpectedMaxVersion: "",
-		BasePrerequisite: prerequisite.BasePrerequisite{
-			Name: "Kernel Supports Cgroup namespace",
-			Info: "kernel version >= v4.6",
-		},
-	}
-	SupportsTimeNamespace = Version{
-		ExpectedMinVersion: "5.6",
-		ExpectedMaxVersion: "",
-		BasePrerequisite: prerequisite.BasePrerequisite{
-			Name: "Kernel Supports Time namespace",
-			Info: "kernel version >= v5.6",
-		},
-	}
-)
-
-func (p *Version) check(version string) (satisfied bool) {
-	satisfied = true
-	if p.ExpectedMinVersion != "" {
-		satisfied = satisfied && (p.ExpectedMinVersion < version || uname.VersionEqual(p.ExpectedMinVersion, version))
-	}
-	if p.ExpectedMaxVersion != "" {
-		satisfied = satisfied && (p.ExpectedMaxVersion > version || uname.VersionEqual(p.ExpectedMaxVersion, version))
-	}
-	log.Logger.Debugf("%s <= %s <= %s: %t\n", p.ExpectedMinVersion, version, p.ExpectedMaxVersion, satisfied)
-	return
-}
-
-func (p *Version) Check() (bool, error) {
-	if p.Checked {
-		return p.Satisfied, nil
-	}
-	version, err := uname.Release()
-	if err != nil {
-		return false, err
-	}
-	p.Satisfied = p.check(version)
-	p.Checked = true
-	return p.Satisfied, nil
+func (p *VersionConstraint) Check() (bool, error) {
+	return p.CheckTemplate(func() {
+		cons, err := semver.NewConstraint(p.Constraint)
+		if err != nil {
+			err = fmt.Errorf("failed to parse constraint %s: %w", p.Constraint, err)
+			awesome_error.CheckFatal(err)
+		}
+		version, err := kernel.Version()
+		if err != nil {
+			p.Err = p.WrapErr(fmt.Errorf("get kernel version: %w", err))
+			return
+		}
+		p.Satisfied = cons.Check(version)
+	})
 }

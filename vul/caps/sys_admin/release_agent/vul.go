@@ -1,6 +1,7 @@
 package release_agent
 
 import (
+
 	"github.com/ctrsploit/ctrsploit/prerequisite/apparmor"
 	"github.com/ctrsploit/ctrsploit/prerequisite/capability"
 	"github.com/ctrsploit/ctrsploit/prerequisite/cgroups"
@@ -11,7 +12,7 @@ import (
 	"github.com/ctrsploit/sploit-spec/pkg/prerequisite"
 	"github.com/ctrsploit/sploit-spec/pkg/vul"
 	"github.com/ssst0n3/awesome_libs/awesome_error"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 )
 
 var (
@@ -42,7 +43,7 @@ var (
 			CheckSecPrerequisites: &capability.CapSysAdminBnd,
 			ExploitablePrerequisites: prerequisite.And(
 				&capability.CapSysAdminEff,
-				&user.MustBeRootToWriteReleaseAgent,
+				&user.EUid0,
 				&cgroups.V1,
 				&cgroups.HasTopLevelSubsystem,
 				&apparmor.Disabled,
@@ -51,14 +52,14 @@ var (
 	}
 )
 
-func (v *vulnerability) Exploit(context *cli.Context) (err error) {
-	err = v.BaseVulnerability.Exploit(context)
+func (v *vulnerability) Exploit(cmd *cli.Command) (err error) {
+	err = v.BaseVulnerability.Exploit(cmd)
 	if err != nil {
 		return
 	}
-	cmd := context.String("cmd")
-	log.Logger.Debug("cmd: ", cmd)
-	result, err := Exploit(cmd)
+	cmdStr := cmd.String("cmd")
+	log.Logger.Debug("cmd: ", cmdStr)
+	result, err := Exploit(cmdStr)
 	awesome_error.CheckErr(err)
 	log.Logger.Infof("result:\n%s", result)
 	return
