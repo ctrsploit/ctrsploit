@@ -67,27 +67,26 @@ USAGE:
    ctrsploit vul [command [command options]]
 
 COMMANDS:
-   cve-2016-8867, 8867, amb                            Ambient Capabilities in the Linux kernel allow local users to gain privileges
-   cve-2019-5736, 5736                                 escape by overwrite runc executable file via /proc/self/exe
-   cve-2020-8558, 8558                                 access services bound to 127.0.0.1 from adjacent hosts
-   cve-2020-15257, 15257                               abuse the containerd-shim's abstract unix socket in a container with host network namespace
-   cve-2021-25741, 25741, kubelet-subpath-symlink      kubelet symlink exchange vulnerability allows mounting node filesystem inside a pod
-   cve-2021-25748, 25748, ingress-nginx-path-leak      ingress-nginx path validation bypass vulnerability allows credential leakage through newline injection
-   cve-2022-0492, 0492                                 escape via cgroup's release agent without CAP_SYS_ADMIN if kernel is vulnerable to CVE-2022-0492
-   cve-2022-39253, 39253                               read host file during docker build via git CVE-2022-39253
-   cve-2024-0132, 0132                                 gpu container escape via nvidia-container-toolkit CVE-2024-0132
-   cve-2024-23650, 23650                               dos buildkit via oci exporter by sending a crafted request
-   cve-2024-40635, 40635                               bypass runAsNonRoot via integer overflow in User ID handling in containerd
-   cve-2025-23266, 23266                               gpu container escape via nvidia-container-toolkit cve-2025-23266 by running a malicious container image
-   cve-2025-47290, 47290                               modify host file via containerd cve-2025-47290 during pulling image
-   cve-2025-62725, 62725                               path traversal in Docker Compose OCI artifacts allows arbitrary file write via malicious registry
-   fork-bomb                                           
-   naked                                               we call containers running without seccomp, AppArmor, or SELinux enabled 'naked containers', which leaves them highly vulnerable to kernel exploits and potential container escapes
-   capability, caps                                    abuse dangerous capabilities in container
-   namespace, ns                                       host level namespaces break the isolations
-   sa-token-access-secrets, secret                     Check if service account token can access Kubernetes Secrets
-   sa-token-policy, policy, dangerous-permissions, dp  Check if service account token has dangerous permissions
-   shared-socket, sock                                 abuse runtime's api via shared socket
+   cve-2016-8867, 8867, amb                        Ambient Capabilities in the Linux kernel allow local users to gain privileges
+   cve-2019-5736, 5736                             escape by overwrite runc executable file via /proc/self/exe
+   cve-2020-8558, 8558                             access services bound to 127.0.0.1 from adjacent hosts
+   cve-2020-15257, 15257                           abuse the containerd-shim's abstract unix socket in a container with host network namespace
+   cve-2021-25741, 25741, kubelet-subpath-symlink  kubelet symlink exchange vulnerability allows mounting node filesystem inside a pod
+   cve-2021-25748, 25748, ingress-nginx-path-leak  ingress-nginx path validation bypass vulnerability allows credential leakage through newline injection
+   cve-2022-0492, 0492                             escape via cgroup's release agent without CAP_SYS_ADMIN if kernel is vulnerable to CVE-2022-0492
+   cve-2022-39253, 39253                           read host file during docker build via git CVE-2022-39253
+   cve-2024-0132, 0132                             gpu container escape via nvidia-container-toolkit CVE-2024-0132
+   cve-2024-23650, 23650                           dos buildkit via oci exporter by sending a crafted request
+   cve-2024-40635, 40635                           bypass runAsNonRoot via integer overflow in User ID handling in containerd
+   cve-2025-23266, 23266                           gpu container escape via nvidia-container-toolkit cve-2025-23266 by running a malicious container image
+   cve-2025-47290, 47290                           modify host file via containerd cve-2025-47290 during pulling image
+   cve-2025-62725, 62725                           path traversal in Docker Compose OCI artifacts allows arbitrary file write via malicious registry
+   fork-bomb                                       
+   naked                                           we call containers running without seccomp, AppArmor, or SELinux enabled 'naked containers', which leaves them highly vulnerable to kernel exploits and potential container escapes
+   capability, caps                                abuse dangerous capabilities in container
+   namespace, ns                                   host level namespaces break the isolations
+   service-account-token, sa-token, token          check service account token related vulnerabilities
+   shared-socket, sock                             abuse runtime's api via shared socket
 
 OPTIONS:
    --help, -h  show help
