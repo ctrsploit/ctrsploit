@@ -1,0 +1,135 @@
+# Dangerous Kubernetes RBAC Permissions
+# High-risk Kubernetes RBAC Permission Definitions
+#
+# Level Description:
+#   - critical: Can directly lead to full cluster control or arbitrary code execution
+#   - high: Can lead to sensitive data leakage or privilege escalation
+#   - medium: May be abused but with limited impact
+#
+# Field Descriptions:
+#   - resource: Resource name, e.g. pods, secrets, nodes
+#   - subresource: Subresource name, e.g. exec, proxy, log (optional)
+#   - group: API Group, e.g. "" (core), "apps", "rbac.authorization.k8s.io" (optional, default "")
+#   - verbs: Verb list, e.g. [get], [create], [*]
+#   - level: Risk level critical/high/medium
+#   - description: Risk description
+#   - reference: Reference link (optional)
+
+permissions:
+  # ============ Critical Level ============
+
+  # nodes/proxy - RCE via WebSocket
+  - resource: nodes
+    subresource: proxy
+    verbs: [get, "*"]
+    level: critical
+    description: "nodes/proxy GET allows RCE in any Pod via WebSocket bypass"
+    reference: "https://grahamhelton.com/blog/nodes-proxy-rce"
+
+  # pods/exec - Command execution in other Pods
+  - resource: pods
+    subresource: exec
+    verbs: [create, "*"]
+    level: critical
+    description: "pods/exec allows command execution in other Pods"
+
+  # pods/attach - Attach to running containers
+  - resource: pods
+    subresource: attach
+    verbs: [create, "*"]
+    level: critical
+    description: "pods/attach allows attaching to processes in other Pods"
+
+  # Wildcard - Full cluster control
+  - resource: "*"
+    verbs: ["*"]
+    level: critical
+    description: "Wildcard permission grants full cluster control"
+
+  # ClusterRole manipulation - Privilege escalation
+  - resource: clusterroles
+    group: rbac.authorization.k8s.io
+    verbs: [create, update, patch, "*"]
+    level: critical
+    description: "Can create/modify ClusterRoles to escalate privileges"
+
+  # ClusterRoleBinding manipulation - Privilege escalation
+  - resource: clusterrolebindings
+    group: rbac.authorization.k8s.io
+    verbs: [create, update, patch, "*"]
+    level: critical
+    description: "Can bind high-privilege roles to any ServiceAccount"
+
+  # ============ High Level ============
+
+  # pods/create - Can create privileged containers
+  - resource: pods
+    verbs: [create, "*"]
+    level: high
+    description: "Can create privileged containers for container escape"
+
+  # secrets - Read sensitive credentials
+  - resource: secrets
+    verbs: [get, list, "*"]
+    level: high
+    description: "Can read sensitive credentials and tokens"
+
+  # serviceaccounts/token - Create tokens for any SA
+  - resource: serviceaccounts
+    subresource: token
+    verbs: [create, "*"]
+    level: high
+    description: "Can create tokens for any ServiceAccount"
+
+  # configmaps - May contain sensitive configuration
+  - resource: configmaps
+    verbs: [get, list, "*"]
+    level: high
+    description: "ConfigMaps may contain sensitive configuration data"
+
+  # Role/RoleBinding manipulation - Namespace-level privilege escalation
+  - resource: roles
+    group: rbac.authorization.k8s.io
+    verbs: [create, update, patch, "*"]
+    level: high
+    description: "Can create/modify Roles to escalate privileges in namespace"
+
+  - resource: rolebindings
+    group: rbac.authorization.k8s.io
+    verbs: [create, update, patch, "*"]
+    level: high
+    description: "Can bind roles to ServiceAccounts in namespace"
+
+  # Wildcard create - Can create any resource
+  - resource: "*"
+    verbs: [create]
+    level: high
+    description: "Can create any resource type"
+
+  # ============ Medium Level ============
+
+  # pods/log - Read container logs
+  - resource: pods
+    subresource: log
+    verbs: [get, "*"]
+    level: medium
+    description: "Can read container logs which may contain sensitive data"
+
+  # pods/portforward - Network access to Pods
+  - resource: pods
+    subresource: portforward
+    verbs: [create, "*"]
+    level: medium
+    description: "Can forward ports to access Pod network services"
+
+  # nodes - Read node information
+  - resource: nodes
+    verbs: [get, list, "*"]
+    level: medium
+    description: "Can read node information and metadata"
+
+  # persistentvolumes - Access to storage
+  - resource: persistentvolumes
+    verbs: [create, "*"]
+    level: medium
+    description: "Can create PVs potentially accessing host storage"
