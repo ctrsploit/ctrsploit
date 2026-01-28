@@ -12,7 +12,7 @@ import (
 var defaultPermissionsYAML []byte
 
 var (
-	// DefaultPermissions 默认的高危权限列表（从嵌入的 YAML 加载）
+	// DefaultPermissions default high-risk permission list (loaded from embedded YAML)
 	DefaultPermissions []DangerousPermission
 )
 
@@ -24,7 +24,7 @@ func init() {
 	}
 }
 
-// LoadPermissionsFromBytes 从字节数组加载权限配置
+// LoadPermissionsFromBytes loads permissions configuration from byte array
 func LoadPermissionsFromBytes(data []byte) ([]DangerousPermission, error) {
 	var config DangerousPermissionsConfig
 	if err := yaml.Unmarshal(data, &config); err != nil {
@@ -33,7 +33,7 @@ func LoadPermissionsFromBytes(data []byte) ([]DangerousPermission, error) {
 	return config.Permissions, nil
 }
 
-// LoadPermissionsFromFile 从文件加载权限配置
+// LoadPermissionsFromFile loads permissions configuration from file
 func LoadPermissionsFromFile(path string) ([]DangerousPermission, error) {
 	data, err := os.ReadFile(path)
 	if err != nil {
@@ -42,14 +42,14 @@ func LoadPermissionsFromFile(path string) ([]DangerousPermission, error) {
 	return LoadPermissionsFromBytes(data)
 }
 
-// MergePermissions 合并多个权限列表（用于自定义扩展）
+// MergePermissions merges multiple permission lists (for custom extensions)
 func MergePermissions(base, custom []DangerousPermission) []DangerousPermission {
 	result := make([]DangerousPermission, len(base))
 	copy(result, base)
 	return append(result, custom...)
 }
 
-// FilterByLevel 按级别过滤权限
+// FilterByLevel filters permissions by level
 func FilterByLevel(permissions []DangerousPermission, minLevel Level) []DangerousPermission {
 	levelOrder := map[Level]int{
 		LevelCritical: 3,
@@ -67,7 +67,7 @@ func FilterByLevel(permissions []DangerousPermission, minLevel Level) []Dangerou
 	return result
 }
 
-// GroupResultsByLevel 按级别分组结果
+// GroupResultsByLevel groups results by level
 func GroupResultsByLevel(results []CheckResult) map[Level][]CheckResult {
 	grouped := make(map[Level][]CheckResult)
 	for _, r := range results {

@@ -1,19 +1,19 @@
 # Dangerous Kubernetes RBAC Permissions
-# 高危 Kubernetes RBAC 权限定义
+# High-risk Kubernetes RBAC Permission Definitions
 #
-# Level 说明:
-#   - critical: 可直接导致集群完全控制或任意代码执行
-#   - high: 可导致敏感数据泄露或权限提升
-#   - medium: 可能被滥用但影响有限
+# Level Description:
+#   - critical: Can directly lead to full cluster control or arbitrary code execution
+#   - high: Can lead to sensitive data leakage or privilege escalation
+#   - medium: May be abused but with limited impact
 #
-# 字段说明:
-#   - resource: 资源名称，如 pods, secrets, nodes
-#   - subresource: 子资源名称，如 exec, proxy, log（可选）
-#   - group: API Group，如 "" (core), "apps", "rbac.authorization.k8s.io"（可选，默认 ""）
-#   - verbs: 动词列表，如 [get], [create], [*]
-#   - level: 危险级别 critical/high/medium
-#   - description: 风险描述
-#   - reference: 参考链接（可选）
+# Field Descriptions:
+#   - resource: Resource name, e.g. pods, secrets, nodes
+#   - subresource: Subresource name, e.g. exec, proxy, log (optional)
+#   - group: API Group, e.g. "" (core), "apps", "rbac.authorization.k8s.io" (optional, default "")
+#   - verbs: Verb list, e.g. [get], [create], [*]
+#   - level: Risk level critical/high/medium
+#   - description: Risk description
+#   - reference: Reference link (optional)
 
 permissions:
   # ============ Critical Level ============

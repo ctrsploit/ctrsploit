@@ -8,7 +8,7 @@ import (
 	"k8s.io/client-go/kubernetes"
 )
 
-// CheckDangerousPermissions 检测当前 Token 的高危权限
+// CheckDangerousPermissions detects high-risk permissions of the current token
 func CheckDangerousPermissions(clientset kubernetes.Interface, namespace string, permissions []DangerousPermission) ([]CheckResult, error) {
 	var results []CheckResult
 
@@ -25,7 +25,7 @@ func CheckDangerousPermissions(clientset kubernetes.Interface, namespace string,
 					Namespace:   namespace,
 					MatchedVerb: verb,
 				})
-				break // 只记录第一个匹配的动词
+				break // Only record the first matched verb
 			}
 		}
 	}
@@ -33,7 +33,7 @@ func CheckDangerousPermissions(clientset kubernetes.Interface, namespace string,
 	return results, nil
 }
 
-// CanI 使用 SelfSubjectAccessReview 检测权限
+// CanI uses SelfSubjectAccessReview to detect permissions
 func CanI(clientset kubernetes.Interface, verb, group, resource, subresource, namespace string) (bool, error) {
 	sar := &authorizationv1.SelfSubjectAccessReview{
 		Spec: authorizationv1.SelfSubjectAccessReviewSpec{
