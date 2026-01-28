@@ -1,3 +1,15 @@
+---
+
+tags: sploit
+author:
+    - Hpd0ger
+version: v0.1.1
+changelog:
+    - v0.1.1: add reproduce steps
+    - v0.1.0: init
+
+---
+
 # Service Account Token Dangerous Permissions
 
 ## 1. Vulnerability Overview
@@ -47,33 +59,77 @@ The module checks for the following dangerous permissions (defined in YAML confi
 * Running inside a Kubernetes Pod with a mounted ServiceAccount token
 * Or access to a kubeconfig file
 
-## 4. Usage
+## 4. Reproduce
 
-### Basic Usage
-
-```shell
-# Check for dangerous permissions
-ctrsploit checksec sa-token-policy
-
-# Or use alias
-ctrsploit checksec policy
-ctrsploit checksec dp
-```
-
-### Command Options
+### 4.1 Reproduce Environment
 
 ```shell
-# Check specific namespace only
-ctrsploit checksec sa-token-policy --namespace kube-system
-
-# Only report critical level permissions
-ctrsploit checksec sa-token-policy --level critical
-
-# Use custom permissions YAML file
-ctrsploit checksec sa-token-policy --config /path/to/custom.yaml
+$ git clone https://github.com/ssst0n3/docker_archive.git
+$ cd docker_archive/kubernetes/v1.34.0-calico
+$ docker compose -f docker-compose.yml -f docker-compose.kvm.yml up -d
 ```
 
-### Options
+### 4.2 Reproduce Steps
+
+```shell
+$ ./ssh
+root@kubernetes-1-34-0:~# wget -q https://github.com/ctrsploit/ctrsploit/releases/latest/download/ctrsploit_linux_amd64 -O /usr/bin/ctrsploit
+root@kubernetes-1-34-0:~# chmod +x /usr/bin/ctrsploit
+root@kubernetes-1-34-0:~# ctrsploit checksec sa-token-policy
+INFO[0001]                                              
+INFO[0001] === ServiceAccount Token Dangerous Permissions === 
+ERRO[0001]                                              
+ERRO[0001] [CRITICAL] 6 critical permissions found:     
+INFO[0001]   - nodes/proxy [get] Cluster-Wide           
+INFO[0001]     Risk: nodes/proxy GET allows RCE in any Pod via WebSocket bypass 
+INFO[0001]     Ref: https://grahamhelton.com/blog/nodes-proxy-rce 
+INFO[0001]   - pods/exec [create] Cluster-Wide          
+INFO[0001]     Risk: pods/exec allows command execution in other Pods 
+INFO[0001]   - pods/attach [create] Cluster-Wide        
+INFO[0001]     Risk: pods/attach allows attaching to processes in other Pods 
+INFO[0001]   - * [*] Cluster-Wide                       
+INFO[0001]     Risk: Wildcard permission grants full cluster control 
+INFO[0001]   - clusterroles [create] Cluster-Wide       
+INFO[0001]     Risk: Can create/modify ClusterRoles to escalate privileges 
+INFO[0001]   - clusterrolebindings [create] Cluster-Wide 
+INFO[0001]     Risk: Can bind high-privilege roles to any ServiceAccount 
+WARN[0001]                                              
+WARN[0001] [HIGH] 7 high-risk permissions found:        
+INFO[0001]   - pods [create] Cluster-Wide               
+INFO[0001]     Risk: Can create privileged containers for container escape 
+INFO[0001]   - secrets [get] Cluster-Wide               
+INFO[0001]     Risk: Can read sensitive credentials and tokens 
+INFO[0001]   - serviceaccounts/token [create] Cluster-Wide 
+INFO[0001]     Risk: Can create tokens for any ServiceAccount 
+INFO[0001]   - configmaps [get] Cluster-Wide            
+INFO[0001]     Risk: ConfigMaps may contain sensitive configuration data 
+INFO[0001]   - roles [create] Cluster-Wide              
+INFO[0001]     Risk: Can create/modify Roles to escalate privileges in namespace 
+INFO[0001]   - rolebindings [create] Cluster-Wide       
+INFO[0001]     Risk: Can bind roles to ServiceAccounts in namespace 
+INFO[0001]   - * [create] Cluster-Wide                  
+INFO[0001]     Risk: Can create any resource type       
+INFO[0001]                                              
+INFO[0001] [MEDIUM] 4 medium-risk permissions found:    
+INFO[0001]   - pods/log [get] Cluster-Wide              
+INFO[0001]     Risk: Can read container logs which may contain sensitive data 
+INFO[0001]   - pods/portforward [create] Cluster-Wide   
+INFO[0001]     Risk: Can forward ports to access Pod network services 
+INFO[0001]   - nodes [get] Cluster-Wide                 
+INFO[0001]     Risk: Can read node information and metadata 
+INFO[0001]   - persistentvolumes [create] Cluster-Wide  
+INFO[0001]     Risk: Can create PVs potentially accessing host storage 
+INFO[0001]                                              
+INFO[0001] === Summary ===                              
+INFO[0001] Critical: 6, High: 7, Medium: 4              
+
+
+[Y]  sa-token-policy	# Check if service account token has dangerous permissions
+```
+
+## 5. Advanced Usage
+
+### 5.1 Options
 
 | Flag | Alias | Description | Default |
 |------|-------|-------------|---------|
@@ -81,28 +137,7 @@ ctrsploit checksec sa-token-policy --config /path/to/custom.yaml
 | `--level` | `-l` | Minimum level to report: critical, high, medium | medium |
 | `--config` | `-c` | Path to custom dangerous permissions YAML file | - |
 
-## 5. Output Example
-
-```
-INFO === ServiceAccount Token Dangerous Permissions ===
-
-ERRO [CRITICAL] 2 critical permissions found:
-INFO   - nodes/proxy [get] Cluster-Wide
-INFO     Risk: nodes/proxy GET allows RCE in any Pod via WebSocket bypass
-INFO     Ref: https://grahamhelton.com/blog/nodes-proxy-rce
-INFO   - pods/exec [create] Namespace: default
-INFO     Risk: pods/exec allows command execution in other Pods
-
-WARN [HIGH] 1 high-risk permission found:
-INFO   - secrets [get] Namespace: kube-system
-INFO     Risk: Can read sensitive credentials and tokens
-
-INFO === Summary ===
-INFO Critical: 2, High: 1, Medium: 0
-[Y]  sa-token-policy    # Check if service account token has dangerous permissions
-```
-
-## 6. Custom Permissions Configuration
+### 5.2 Custom Permissions Configuration
 
 You can create a custom YAML file to define additional dangerous permissions:
 
@@ -123,7 +158,7 @@ Use with `--config` flag:
 ctrsploit checksec sa-token-policy --config custom_permissions.yaml
 ```
 
-## 7. References
+## 6. References
 
 * [Kubernetes RBAC Good Practices](https://kubernetes.io/docs/concepts/security/rbac-good-practices/)
 * [nodes/proxy RCE via WebSocket](https://grahamhelton.com/blog/nodes-proxy-rce)
