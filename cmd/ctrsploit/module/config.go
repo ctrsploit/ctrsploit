@@ -1,11 +1,11 @@
 package module
 
 import (
-	fork_bomb "github.com/ctrsploit/ctrsploit/vul/fork-bomb"
 	caps "github.com/ctrsploit/ctrsploit/vul/caps"
+	fork_bomb "github.com/ctrsploit/ctrsploit/vul/fork-bomb"
 	"github.com/ctrsploit/ctrsploit/vul/naked"
 	namespace "github.com/ctrsploit/ctrsploit/vul/namespace"
-	access_secrets "github.com/ctrsploit/ctrsploit/vul/sa-token/access-secrets"
+	sa_token "github.com/ctrsploit/ctrsploit/vul/sa-token"
 	shared_socket "github.com/ctrsploit/ctrsploit/vul/shared-socket"
 	"github.com/urfave/cli/v3"
 )
@@ -24,7 +24,7 @@ var Config = &cli.Command{
 		caps.VulCmd,
 		naked.VulCmd,
 		namespace.VulCmd,
-		access_secrets.VulCmd,
+		sa_token.VulCmd,
 		shared_socket.VulCmd,
 	},
 }
