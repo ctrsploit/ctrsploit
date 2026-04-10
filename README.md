@@ -50,10 +50,42 @@ COMMANDS:
    rlimit              get process resource limits
    namespace, n, ns    check namespace is host ns
    docker-version, dv  guess dockerd version range
+   services, svc       discover K8s cluster services and ports via env vars and DNS
    upload, up          upload <servicename> <filename> <obs> [host]
 
 OPTIONS:
    --help, -h  show help
+```
+
+#### env services
+
+Discover K8s cluster services and their ports without API server access, using multiple layered techniques:
+
+| Method | Technique | Speed | Scope |
+|--------|-----------|-------|-------|
+| `env` | Parse K8s-injected env vars (`*_SERVICE_HOST`, `*_PORT_*_TCP`, …) | Instant | Same namespace only |
+| `wildcard` | CoreDNS wildcard SRV (`any.any.svc.<zone>`) | Fast | All namespaces |
+| `axfr` | DNS zone transfer from `ns.dns.<zone>:53` | Fast | All namespaces (if enabled) |
+| `cidr` | PTR scan service CIDR + SRV enrichment | Slow (65536 IPs for /16) | All namespaces |
+
+```shell
+# Discover all services (default: all methods)
+$ ctrsploit env services
+
+# Quick scan - env vars only (zero network, milliseconds)
+$ ctrsploit env services --methods env
+
+# Skip slow CIDR scan
+$ ctrsploit env services --methods env,wildcard,axfr
+
+# Custom CIDR with more threads
+$ ctrsploit env services --cidr 10.96.0.0/24 --threads 64
+
+# Export results as NDJSON
+$ ctrsploit env services --output /tmp/services.json
+
+# Custom DNS zone
+$ ctrsploit env services --zone mycluster.local
 ```
 
 ### vul

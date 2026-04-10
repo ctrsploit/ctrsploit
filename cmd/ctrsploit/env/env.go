@@ -25,6 +25,7 @@ var Command = &cli.Command{
 		Rlimit,
 		Namespace,
 		DockerVersion,
+		Services,
 		Upload,
 	},
 }
