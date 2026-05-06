@@ -22,6 +22,17 @@ DIR_DQD="/tmp/dqd"
 DIR_SCRIPT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DIR_PROJECT=$(dirname $(dirname "${DIR_SCRIPT}"))
 
+normalize_dqd_host() {
+  local remote_host="$1"
+  if [[ "${remote_host}" == dqd-* ]]; then
+    echo "${remote_host}"
+  else
+    echo "dqd-${remote_host}"
+  fi
+}
+
+REMOTE_HOST=$(normalize_dqd_host "${REMOTE_HOST}")
+
 up() {
   local dqd_dir="$1"
 
