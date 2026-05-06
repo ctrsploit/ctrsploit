@@ -14,7 +14,7 @@ func escapeName(primitive Primitive) string {
 }
 
 func escalateName(primitive Primitive) string {
-	return fmt.Sprintf("%s-permission-escalate", primitive.GetExpName())
+	return fmt.Sprintf("%s-privilege-escalate", primitive.GetExpName())
 }
 
 func imagePollutionName(primitive Primitive) string {

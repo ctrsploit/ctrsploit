@@ -15,8 +15,8 @@ func Command(primitive Primitive, aliases []string, usage string) *cli.Command {
 		Commands: []*cli.Command{
 			{
 				Name:    escalateName(primitive),
-				Aliases: []string{"pe"},
-				Usage:   fmt.Sprintf("permission escalate by using %s", primitive.GetExpName()),
+				Aliases: []string{"p"},
+				Usage:   fmt.Sprintf("privilege escalate by using %s", primitive.GetExpName()),
 				Action: func(ctx context.Context, cmd *cli.Command) error {
 					return Escalate(primitive)
 				},

