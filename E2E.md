@@ -10,7 +10,7 @@ The e2e test script is designed to:
 
 - **Verify Required Tools:** Ensure the necessary commands (such as `yq`, `git`, `docker`, `scp`, and `ssh`) are installed.
 - **Package & Upload Codebase:** Bundle the project code (excluding certain directories) into a tarball and upload it to a remote host.
-- **Set Up Test Environments:** Clone/update a Docker archive repository and launch specified containers using `docker-compose`.
+- **Set Up Test Environments:** Clone/update the dqd repository and launch specified containers using `docker-compose`.
 - **Execute Test Commands:** Run predefined test commands on the remote host after deploying the code and loading Docker images.
 
 The script iterates over all `e2e.yml` files found recursively in the project directory and performs actions defined within.
@@ -22,7 +22,7 @@ The script iterates over all `e2e.yml` files found recursively in the project di
 1. **Prepare Your Configuration:**
 
     - Place one or more `e2e.yml` files within the project tree.
-    - Update each file with the necessary `test_envs` details (i.e., remote host, command, and Docker archive directory).
+    - Update each file with the necessary `test_envs` details (i.e., remote host, command, and dqd directory).
 
 2. **Run the Script:**
 
@@ -81,11 +81,11 @@ yq
 go install github.com/mikefarah/yq/v4@latest
 ```
 
-docker_archive
+dqd
 
 ```shell
-git clone https://github.com/ssst0n3/docker_archive.git /tmp/docker_archive
-/tmp/docker_archive/script/install_ssh_config.sh
+git clone https://github.com/ctrsploit/dqd.git /tmp/dqd
+/tmp/dqd/script/install_ssh_config.sh
 ```
 
 
@@ -113,7 +113,7 @@ The script consists of several key sections:
   Prepares the test environment on the remote host by managing Docker containers.
 
 - **Details:**
-    - Checks if a local directory (`/tmp/docker_archive`) exists; if not, clones the Docker archive repository.
+    - Checks if a local directory (`/tmp/dqd`) exists; if not, clones the dqd repository.
     - If the directory exists, it pulls the latest changes.
     - Uses `docker compose` (by combining `docker-compose.yml` and `docker-compose.kvm.yml`) to start the containers in detached mode.
 
@@ -134,7 +134,7 @@ The script searches for all files named `e2e.yml` recursively in the current dir
 - For each test environment, it extracts:
     - **Environment Name (`ENV_NAME`):** Expected to be the remote host's address or identifier.
     - **Test Command (`ENV_CMD`):** The command to run on the remote host for executing tests.
-    - **Docker Archive Directory (`DQD_DIR`):** Specifies the subdirectory in the Docker archive repository to configure the environment.
+    - **dqd Directory (`DQD_DIR`):** Specifies the subdirectory in the dqd repository to configure the environment.
 - It then sequentially calls:
     - `startup_testEnv` to set up the Docker environment.
     - `upload_codebase` to transfer the project.

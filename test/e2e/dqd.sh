@@ -1,9 +1,9 @@
 #!/bin/bash
 #
-# dqd.sh: Manages the lifecycle of a docker_archive test environment.
+# dqd.sh: Manages the lifecycle of a dqd test environment.
 #
 # This script is responsible for:
-# 1. Starting services using docker_archive from a specified directory.
+# 1. Starting services using dqd from a specified directory.
 # 2. Running pre-test, main test, and post-test commands.
 # 3. Ensuring the environment is torn down cleanly, regardless of test success or failure.
 #
@@ -18,23 +18,23 @@ CMD=$4
 STOP_FLAG=$5
 START_TIMEOUT=$6
 
-DIR_DOCKER_ARCHIVE="/tmp/docker_archive"
+DIR_DQD="/tmp/dqd"
 DIR_SCRIPT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DIR_PROJECT=$(dirname $(dirname "${DIR_SCRIPT}"))
 
 up() {
   local dqd_dir="$1"
 
-  if [ ! -d "${DIR_DOCKER_ARCHIVE}" ]; then
-    git clone https://github.com/ssst0n3/docker_archive.git "${DIR_DOCKER_ARCHIVE}"
-    ${DIR_DOCKER_ARCHIVE}/script/install_ssh_config.sh
+  if [ ! -d "${DIR_DQD}" ]; then
+    git clone https://github.com/ctrsploit/dqd.git "${DIR_DQD}"
+    ${DIR_DQD}/script/install_ssh_config.sh
   else
-    pushd "${DIR_DOCKER_ARCHIVE}" > /dev/null
+    pushd "${DIR_DQD}" > /dev/null
     git pull
     popd > /dev/null
   fi
 
-  pushd "${DIR_DOCKER_ARCHIVE}/${dqd_dir}" > /dev/null
+  pushd "${DIR_DQD}/${dqd_dir}" > /dev/null
   docker compose -f docker-compose.yml -f docker-compose.kvm.yml up -d
   # until 'Reached target multi-user.target' || timeout 30
   local timeout=${START_TIMEOUT}
@@ -49,16 +49,16 @@ up() {
     sleep 2
   done
   if [ "${found}" = true ]; then
-    echo "docker_archive started successfully"
+    echo "dqd started successfully"
   else
-    echo "docker_archive started timeout $(( $(date +%s) - $start_time ))"
+    echo "dqd started timeout $(( $(date +%s) - $start_time ))"
   fi
   popd > /dev/null
 }
 
 down() {
   local dqd_dir="$1"
-  pushd "${DIR_DOCKER_ARCHIVE}/${dqd_dir}" > /dev/null
+  pushd "${DIR_DQD}/${dqd_dir}" > /dev/null
   docker compose -f docker-compose.yml -f docker-compose.kvm.yml down
   popd > /dev/null
 }
