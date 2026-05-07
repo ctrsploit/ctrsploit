@@ -17,6 +17,7 @@ PKG=$3
 CMD=$4
 STOP_FLAG=$5
 START_TIMEOUT=$6
+TEST_ENV_NAME=${7:-}
 
 DIR_DQD="/tmp/dqd"
 DIR_SCRIPT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -74,6 +75,13 @@ down() {
   popd > /dev/null
 }
 
+cleanup() {
+  local status=$?
+  set +e
+  down "${DQD_DIR}"
+  exit "${status}"
+}
+
 upload_test_bin() {
   local remote_host="$1"
   local pkg="$2"
@@ -85,18 +93,21 @@ upload_test_bin() {
 
 test_cmd() {
   local remote_host="$1"
-  local cmd="$2"
-  ssh "$remote_host" bash -c "'
-    set -euo pipefail;
-    $cmd
-  '"
+  local test_env="$2"
+  local cmd="$3"
+  {
+    printf 'set -euo pipefail\n'
+    printf 'export TEST_ENV=%q\n' "${test_env}"
+    printf '%s\n' "${cmd}"
+  } | ssh "$remote_host" bash -s
 }
 
 do_test() {
     local remote_host="$1"
-    local cmd="$2"
-    local stop_flag="$3"
-    if [[ -z "$stop_flag" ]]; then
+    local test_env="$2"
+    local cmd="$3"
+    local stop_flag="$4"
+    if [[ -z "$stop_flag" || "$stop_flag" == "null" ]]; then
       echo "No stop flag provided."
       # We explicitly redirect its standard input from /dev/null using '< /dev/null'.
       # This redirection is important because:
@@ -109,11 +120,11 @@ do_test() {
       #    preventing it from interfering with the loop's ability to read remaining file names.
       #
       # This safeguard is necessary even if test_cmd itself does not seem to require any input.
-      test_cmd "${remote_host}" "${cmd}" < /dev/null
+      test_cmd "${remote_host}" "${test_env}" "${cmd}" < /dev/null
     else
       fifo="/tmp/command_fifo.$$"
       mkfifo "$fifo"
-      test_cmd "${remote_host}" "${cmd}" < /dev/null > "$fifo" &
+      test_cmd "${remote_host}" "${test_env}" "${cmd}" < /dev/null > "$fifo" &
       # stop until the stop_flag
       while IFS= read -r line; do
         echo "$line"
@@ -126,6 +137,6 @@ do_test() {
 }
 
 up "${DQD_DIR}"
+trap cleanup EXIT
 upload_test_bin "${REMOTE_HOST}" "${PKG}"
-do_test "${REMOTE_HOST}" "${CMD}" "${STOP_FLAG}"
-down "${DQD_DIR}"
+do_test "${REMOTE_HOST}" "${TEST_ENV_NAME}" "${CMD}" "${STOP_FLAG}"

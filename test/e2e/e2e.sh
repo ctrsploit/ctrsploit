@@ -59,9 +59,12 @@ while IFS= read -r e2e_file; do
     make test.bin PKG=${PKG}
 
     if [[ "${ENV_KIND}" == "plain" ]]; then
-      eval "${CMD}"
+      (
+        export TEST_ENV="${ENV_NAME}"
+        eval "${CMD}"
+      )
     elif [[ "${ENV_KIND}" == "dqd" ]]; then
-      ${DIR_SCRIPT}/dqd.sh "${REMOTE_HOST}" "${DQD_DIR}" "${PKG}" "${CMD}" "${STOP_FLAG}" "${START_TIMEOUT}"
+      ${DIR_SCRIPT}/dqd.sh "${REMOTE_HOST}" "${DQD_DIR}" "${PKG}" "${CMD}" "${STOP_FLAG}" "${START_TIMEOUT}" "${ENV_NAME}"
     fi
   done
 done < <(find ${DIR_SEARCH} -type f -name "e2e.yml")
