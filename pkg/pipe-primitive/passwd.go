@@ -24,7 +24,7 @@ func passwdPasswordOffset(content []byte, username string) (int, error) {
 		}
 
 		if bytes.HasPrefix(line, prefix) {
-			return offset + len(prefix) - 1, nil
+			return offset + len(prefix), nil
 		}
 
 		if len(line) == len(content) {

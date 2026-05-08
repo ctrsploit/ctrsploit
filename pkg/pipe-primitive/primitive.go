@@ -1,7 +1,5 @@
 package pipeprimitive
 
-import "fmt"
-
 // Primitive writes content into a file without opening it writable.
 type Primitive interface {
 	GetExpName() string
@@ -9,14 +7,22 @@ type Primitive interface {
 	Write(path string, offset int64, content []byte) error
 }
 
+type EscapeImageWriterProvider interface {
+	EscapeImageWriter() []byte
+}
+
+type EscapeImageExtraFileProvider interface {
+	EscapeImageExtraFiles() map[string][]byte
+}
+
 func escapeName(primitive Primitive) string {
-	return fmt.Sprintf("%s-escape", primitive.GetExpName())
+	return "escape"
 }
 
 func escalateName(primitive Primitive) string {
-	return fmt.Sprintf("%s-privilege-escalate", primitive.GetExpName())
+	return "privilege-escalate"
 }
 
 func imagePollutionName(primitive Primitive) string {
-	return fmt.Sprintf("%s-image-pollution", primitive.GetExpName())
+	return "image-pollution"
 }

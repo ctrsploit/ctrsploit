@@ -12,17 +12,17 @@ func TestPasswdPasswordOffset(t *testing.T) {
 		{
 			name:    "root first line",
 			content: "root:x:0:0:root:/root:/bin/bash\n",
-			want:    len("root:") - 1,
+			want:    len("root:"),
 		},
 		{
 			name:    "root after another user",
 			content: "daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin\nroot:x:0:0:root:/root:/bin/bash\n",
-			want:    len("daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin\nroot:") - 1,
+			want:    len("daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin\nroot:"),
 		},
 		{
 			name:    "root without trailing newline",
 			content: "root:x:0:0:root:/root:/bin/bash",
-			want:    len("root:") - 1,
+			want:    len("root:"),
 		},
 		{
 			name:    "missing root",
