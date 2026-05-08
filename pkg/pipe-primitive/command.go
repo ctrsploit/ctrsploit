@@ -14,7 +14,7 @@ func Command(primitive Primitive, aliases []string, usage string) *cli.Command {
 		Usage:   usage,
 		Commands: []*cli.Command{
 			{
-				Name:    escalateName(primitive),
+				Name:    "privilege-escalate",
 				Aliases: []string{"p"},
 				Usage:   fmt.Sprintf("local privilege escalate by using %s", primitive.GetExpName()),
 				Action: func(ctx context.Context, cmd *cli.Command) error {
@@ -22,7 +22,7 @@ func Command(primitive Primitive, aliases []string, usage string) *cli.Command {
 				},
 			},
 			{
-				Name:    imagePollutionName(primitive),
+				Name:    "image-pollution",
 				Aliases: []string{"i"},
 				Usage:   fmt.Sprintf("image pollution using %s", primitive.GetExpName()),
 				Flags: []cli.Flag{
@@ -36,7 +36,7 @@ func Command(primitive Primitive, aliases []string, usage string) *cli.Command {
 				},
 			},
 			{
-				Name:    escapeName(primitive),
+				Name:    "escape",
 				Aliases: []string{"e"},
 				Usage:   fmt.Sprintf("container escape by using %s", primitive.GetExpName()),
 				Commands: []*cli.Command{

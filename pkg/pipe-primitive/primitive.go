@@ -14,15 +14,3 @@ type EscapeImageWriterProvider interface {
 type EscapeImageExtraFileProvider interface {
 	EscapeImageExtraFiles() map[string][]byte
 }
-
-func escapeName(primitive Primitive) string {
-	return "escape"
-}
-
-func escalateName(primitive Primitive) string {
-	return "privilege-escalate"
-}
-
-func imagePollutionName(primitive Primitive) string {
-	return "image-pollution"
-}
