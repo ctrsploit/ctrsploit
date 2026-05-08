@@ -93,11 +93,9 @@ func Command(primitive Primitive, aliases []string, usage string) *cli.Command {
 								Usage: "pid whose executable should be overwritten and killed"},
 							&cli.StringFlag{Name: "cmd", Aliases: []string{"c"}, Required: true,
 								Usage: "host command to execute after runc is overwritten"},
-							&cli.DurationFlag{Name: "timeout",
-								Usage: "timeout for waiting to capture runc; 0 means wait forever"},
 						},
 						Action: func(ctx context.Context, cmd *cli.Command) error {
-							return EscapeRestart(primitive, cmd.Int("pid"), ShellPayload(cmd.String("cmd")), cmd.Duration("timeout"))
+							return EscapeRestart(primitive, cmd.Int("pid"), ShellPayload(cmd.String("cmd")), 0)
 						},
 					},
 				},

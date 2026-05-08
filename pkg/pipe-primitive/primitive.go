@@ -14,3 +14,7 @@ type EscapeImageWriterProvider interface {
 type EscapeImageExtraFileProvider interface {
 	EscapeImageExtraFiles() map[string][]byte
 }
+
+type RestartWriterProvider interface {
+	RestartWriter() []byte
+}
