@@ -8,5 +8,5 @@ import (
 func Test_getRootPasswdOffset(t *testing.T) {
 	offset, err := getRootPasswdOffset()
 	assert.NoError(t, err)
-	assert.Equal(t, 4, offset)
+	assert.Equal(t, 5, offset)
 }

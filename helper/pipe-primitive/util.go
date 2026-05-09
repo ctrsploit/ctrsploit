@@ -12,6 +12,6 @@ func getRootPasswdOffset() (offset int, err error) {
 		awesome_error.CheckErr(err)
 		return
 	}
-	offset = strings.Index(string(content), "root:") + len("root:") - 1
+	offset = strings.Index(string(content), "root:") + len("root:")
 	return
 }

@@ -53,6 +53,6 @@ help:
 	@echo "  SLIM_LDFLAGS=       - LDFLAGS for build (default: -s -w)"
 	@echo "  CN=1                - Use Chinese mirrors for apt and Go proxy"
 	@echo "  DEBUG=1             - Enable debug output (--progress=plain)"
-	@echo "  TEST_ENV=           - Test environment variable"
+	@echo "  TEST_ENV=           - Test environment variable; filters e2e test_envs by name"
 	@echo "  PKG=                - Package name for test.bin"
 	@echo "  DIR=                - Directory for e2e tests"

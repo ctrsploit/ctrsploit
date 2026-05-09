@@ -1,0 +1,15 @@
+FROM golang:1.16 AS builder
+WORKDIR /src
+COPY . .
+RUN CGO_ENABLED=0 go build -o /writer ./writer.go
+RUN CGO_ENABLED=0 go build -o /runc-capture ./runc-capture.go
+
+FROM ubuntu:16.04
+COPY --from=builder /runc-capture /
+COPY --from=builder /writer /
+COPY payload /payload
+# exec mode targets runc exec. Docker HEALTHCHECK creates recurring runc exec
+# events. Executing /proc/self/exe keeps the healthcheck process on the host
+# runc path so /runc-capture can open the runc fd.
+HEALTHCHECK --interval=1s --timeout=3s --retries=60 CMD ["/proc/self/exe"]
+ENTRYPOINT ["/runc-capture"]

@@ -1,9 +1,9 @@
 #!/bin/bash
 #
-# dqd.sh: Manages the lifecycle of a docker_archive test environment.
+# dqd.sh: Manages the lifecycle of a dqd test environment.
 #
 # This script is responsible for:
-# 1. Starting services using docker_archive from a specified directory.
+# 1. Starting services using dqd from a specified directory.
 # 2. Running pre-test, main test, and post-test commands.
 # 3. Ensuring the environment is torn down cleanly, regardless of test success or failure.
 #
@@ -17,24 +17,36 @@ PKG=$3
 CMD=$4
 STOP_FLAG=$5
 START_TIMEOUT=$6
+TEST_ENV_NAME=${7:-}
 
-DIR_DOCKER_ARCHIVE="/tmp/docker_archive"
+DIR_DQD="/tmp/dqd"
 DIR_SCRIPT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DIR_PROJECT=$(dirname $(dirname "${DIR_SCRIPT}"))
+
+normalize_dqd_host() {
+  local remote_host="$1"
+  if [[ "${remote_host}" == dqd-* ]]; then
+    echo "${remote_host}"
+  else
+    echo "dqd-${remote_host}"
+  fi
+}
+
+REMOTE_HOST=$(normalize_dqd_host "${REMOTE_HOST}")
 
 up() {
   local dqd_dir="$1"
 
-  if [ ! -d "${DIR_DOCKER_ARCHIVE}" ]; then
-    git clone https://github.com/ssst0n3/docker_archive.git "${DIR_DOCKER_ARCHIVE}"
-    ${DIR_DOCKER_ARCHIVE}/script/install_ssh_config.sh
+  if [ ! -d "${DIR_DQD}" ]; then
+    git clone https://github.com/ctrsploit/dqd.git "${DIR_DQD}"
+    ${DIR_DQD}/script/install_ssh_config.sh
   else
-    pushd "${DIR_DOCKER_ARCHIVE}" > /dev/null
+    pushd "${DIR_DQD}" > /dev/null
     git pull
     popd > /dev/null
   fi
 
-  pushd "${DIR_DOCKER_ARCHIVE}/${dqd_dir}" > /dev/null
+  pushd "${DIR_DQD}/${dqd_dir}" > /dev/null
   docker compose -f docker-compose.yml -f docker-compose.kvm.yml up -d
   # until 'Reached target multi-user.target' || timeout 30
   local timeout=${START_TIMEOUT}
@@ -49,18 +61,25 @@ up() {
     sleep 2
   done
   if [ "${found}" = true ]; then
-    echo "docker_archive started successfully"
+    echo "dqd started successfully"
   else
-    echo "docker_archive started timeout $(( $(date +%s) - $start_time ))"
+    echo "dqd started timeout $(( $(date +%s) - $start_time ))"
   fi
   popd > /dev/null
 }
 
 down() {
   local dqd_dir="$1"
-  pushd "${DIR_DOCKER_ARCHIVE}/${dqd_dir}" > /dev/null
+  pushd "${DIR_DQD}/${dqd_dir}" > /dev/null
   docker compose -f docker-compose.yml -f docker-compose.kvm.yml down
   popd > /dev/null
+}
+
+cleanup() {
+  local status=$?
+  set +e
+  down "${DQD_DIR}"
+  exit "${status}"
 }
 
 upload_test_bin() {
@@ -74,18 +93,21 @@ upload_test_bin() {
 
 test_cmd() {
   local remote_host="$1"
-  local cmd="$2"
-  ssh "$remote_host" bash -c "'
-    set -euo pipefail;
-    $cmd
-  '"
+  local test_env="$2"
+  local cmd="$3"
+  {
+    printf 'set -euo pipefail\n'
+    printf 'export TEST_ENV=%q\n' "${test_env}"
+    printf '%s\n' "${cmd}"
+  } | ssh "$remote_host" bash -s
 }
 
 do_test() {
     local remote_host="$1"
-    local cmd="$2"
-    local stop_flag="$3"
-    if [[ -z "$stop_flag" ]]; then
+    local test_env="$2"
+    local cmd="$3"
+    local stop_flag="$4"
+    if [[ -z "$stop_flag" || "$stop_flag" == "null" ]]; then
       echo "No stop flag provided."
       # We explicitly redirect its standard input from /dev/null using '< /dev/null'.
       # This redirection is important because:
@@ -98,11 +120,11 @@ do_test() {
       #    preventing it from interfering with the loop's ability to read remaining file names.
       #
       # This safeguard is necessary even if test_cmd itself does not seem to require any input.
-      test_cmd "${remote_host}" "${cmd}" < /dev/null
+      test_cmd "${remote_host}" "${test_env}" "${cmd}" < /dev/null
     else
       fifo="/tmp/command_fifo.$$"
       mkfifo "$fifo"
-      test_cmd "${remote_host}" "${cmd}" < /dev/null > "$fifo" &
+      test_cmd "${remote_host}" "${test_env}" "${cmd}" < /dev/null > "$fifo" &
       # stop until the stop_flag
       while IFS= read -r line; do
         echo "$line"
@@ -115,6 +137,6 @@ do_test() {
 }
 
 up "${DQD_DIR}"
+trap cleanup EXIT
 upload_test_bin "${REMOTE_HOST}" "${PKG}"
-do_test "${REMOTE_HOST}" "${CMD}" "${STOP_FLAG}"
-down "${DQD_DIR}"
+do_test "${REMOTE_HOST}" "${TEST_ENV_NAME}" "${CMD}" "${STOP_FLAG}"
