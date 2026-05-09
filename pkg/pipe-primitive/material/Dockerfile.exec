@@ -4,7 +4,7 @@ COPY . .
 RUN CGO_ENABLED=0 go build -o /writer ./writer.go
 RUN CGO_ENABLED=0 go build -o /runc-capture ./runc-capture.go
 
-FROM ubuntu:16.04
+FROM ubuntu:22.04
 COPY --from=builder /runc-capture /
 COPY --from=builder /writer /
 COPY payload /payload

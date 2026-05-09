@@ -34,9 +34,12 @@ provider interfaces below.
 
 `escape restart` prepares a running victim container for the next restart. It
 writes a small ELF over the image dynamic loader path, overwrites the victim's
-current PID 1 executable with `#!/proc/self/exe`, and kills that process. When
-Docker restarts the container, runc becomes the script interpreter and the fake
-loader captures `/proc/self/exe` as a host runc fd.
+current PID 1 executable with `#!/proc/self/exe`, and then runs configurable
+restart triggers from `pkg/crash`. The default trigger chain tries cgroup v2
+`cgroup.kill` first, then falls back to `SIGKILL` for PID 1 and `kill-all` for
+child-process-driven entrypoints. Use `--restart-method all` to also try OOM
+after those methods. When Docker restarts the container, runc becomes the script
+interpreter and the fake loader captures `/proc/self/exe` as a host runc fd.
 
 The preferred integration is a self-contained restart loader:
 
