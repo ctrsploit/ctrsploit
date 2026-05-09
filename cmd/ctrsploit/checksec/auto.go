@@ -23,6 +23,7 @@ import (
 	cve_2025_47290 "github.com/ctrsploit/ctrsploit/vul/cve-2025-47290"
 	cve_2025_62725 "github.com/ctrsploit/ctrsploit/vul/cve-2025-62725"
 	cve_2026_31431 "github.com/ctrsploit/ctrsploit/vul/cve-2026-31431"
+	cve_2026_43284 "github.com/ctrsploit/ctrsploit/vul/cve-2026-43284"
 	fork_bomb "github.com/ctrsploit/ctrsploit/vul/fork-bomb"
 	"github.com/ctrsploit/ctrsploit/vul/naked"
 	"github.com/ctrsploit/ctrsploit/vul/namespace/net"
@@ -54,6 +55,7 @@ var All = vul.Vulnerabilities{
 	&cve_2025_47290.Vul,
 	&cve_2025_62725.Vul,
 	&cve_2026_31431.Vul,
+	&cve_2026_43284.Vul,
 	&fork_bomb.Vul,
 	&shocker.Vul,
 	&sys_admin.Vul,
