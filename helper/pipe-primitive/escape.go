@@ -45,5 +45,5 @@ func WriteImageEntrypoint(primitive Primitive, payload []byte) (err error) {
 }
 
 func makeCrash() (err error) {
-	return crash.MakeContainerCrash(crash.NewSig())
+	return crash.MakeContainerCrash()
 }
