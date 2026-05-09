@@ -1,0 +1,4 @@
+interface:
+  display_name: "Record Terminal Session"
+  short_description: "Record asciinema demos for ctrsploit"
+  default_prompt: "Use $record-terminal-session to record and convert a ctrsploit terminal demo."
