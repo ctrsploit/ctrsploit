@@ -1,6 +1,6 @@
 ---
 name: record-terminal-session
-description: Record terminal demonstrations for ctrsploit vulnerabilities and convert asciinema .cast captures into project-style video.svg or video.gif artifacts. Use when asked to record, re-record, edit, clean, convert, or validate terminal demo assets under vul/**/cast/*.cast, vul/**/video.svg, or *.gif, following the workflow from ctrsploit issue #291.
+description: Record terminal demonstrations for ctrsploit vulnerabilities and convert asciinema .cast captures into project-style SVG or GIF artifacts. Use when asked to record, re-record, edit, clean, convert, or validate terminal demo assets under vul/**/cast/*.cast, vul/**/*.svg, vul/**/video.svg, or *.gif, following the workflow from ctrsploit issue #291.
 ---
 
 # Record Terminal Session
@@ -20,6 +20,11 @@ and `vul/**/cast/*.cast` artifacts.
 - Write the primary SVG next to the target directory as `video.svg`, unless the
   local pattern uses a specific name such as `exec.svg`, `image.svg`, or
   `checksec.svg`.
+- If a vulnerability README demonstrates multiple exploit modes, checks, or
+  trigger paths, prefer one named SVG per README subsection instead of forcing
+  every path into a single `video.svg`. Use names that match the subsection,
+  such as `checksec.svg`, `privilege-escalate.svg`, `image-pollution.svg`, or
+  `escape-exec.svg`.
 - For GIF output, place `video.gif` in `cast/` unless the user requests another
   path.
 - When creating or updating `video.svg` for a vulnerability README, update that
@@ -37,6 +42,9 @@ vulnerability's `README.md` or `e2e.yml`.
   needed, running `ctrsploit ... check` or `checksec`, running the exploit
   command, and verifying a concrete proof such as modified file content,
   created proof file, root shell, or `[Y]` result.
+- Keep the README commands, the recording, and the verified manual run on the
+  same logical path. Do not let the README show one installation or trigger
+  method while the SVG shows another.
 - Do not assume a source-tree or locally built `ctrsploit` binary should be
   used just because the task originates from this repository. First verify
   whether the installation path documented in the target `README.md` is
@@ -51,6 +59,11 @@ vulnerability's `README.md` or `e2e.yml`.
   or note the concrete reason for the deviation, such as a missing module,
   unreleased feature, or behavior mismatch, and keep the local build/upload
   step visible in the recording.
+- Match the install location to where the exploit actually runs. If the exploit
+  is demonstrated inside a container, prefer downloading or copying `ctrsploit`
+  into that container and creating input files there. Do not mount host-side
+  tools or source files into the container unless that is the realistic,
+  documented setup being demonstrated.
 - Do not use `make e2e` or test binaries as the main recorded content unless the
   user explicitly asks for an e2e/test demonstration. E2E is useful before or
   after recording to validate behavior, but it hides the exploit steps and is not
@@ -58,6 +71,10 @@ vulnerability's `README.md` or `e2e.yml`.
 - Prefer a concise exploit path that proves the vulnerability clearly and avoids
   unnecessary noise. If several exploit modes exist, pick the shortest
   understandable proof unless the user specifies a mode.
+- For waiting or trigger-based exploits, record the full causal chain:
+  setup, waiting state, trigger command, post-trigger exploit output, and final
+  proof. Do not stop at a `Waiting...` message, and do not show the final
+  validation before the primary exploit pane has visibly completed.
 - For destructive flows such as runc overwrite or host file modification, use
   only disposable lab VMs/containers and make the final proof line explicit.
 
@@ -75,6 +92,20 @@ shell transcript.
 - Avoid recording dynamic progress output when it distracts from the exploit.
   For Docker commands, prefer cached images, `--quiet` where useful, or concise
   proof commands after the noisy operation completes.
+- Do not reuse one fixed terminal height for every SVG. Render each SVG with a
+  height that fits its content. For short subsection demos, crop to the smallest
+  useful height; for larger demos, increase height only as needed to preserve
+  the key commands and proof.
+- For multi-terminal flows, prefer a single tmux recording with split panes over
+  separate SVGs unless the user asks for separate files. Size pane ratios to the
+  content, giving the main exploit or waiting pane enough rows to avoid hiding
+  key output.
+- In split-pane recordings, align the timing so the reader can follow cause and
+  effect: trigger appears after the waiting state, post-trigger output remains
+  visible long enough to read, and proof commands run after the exploit visibly
+  completes.
+- Leave enough dwell time on the final proof line and final prompt for a reader
+  to understand the result.
 - After rendering, inspect the SVG or a screenshot for wrapped words, split
   command lines, spinner/progress artifacts, local hostnames, and overlapping or
   visually garbled text. Re-record or edit the cast if the demo is hard to read.
@@ -87,6 +118,8 @@ shell transcript.
      theme when possible.
    - Prefer dimensions already used by the target; common examples are
      `width: 118`, `height: 55` and SVG width `2130`.
+   - If the README has multiple reproduction subsections, decide whether each
+     subsection needs its own named SVG before recording.
    - Decide the `ctrsploit` install source before recording:
      start from the target `README.md` install command, usually a release
      download. Switch to a local build only after verifying the README path is
@@ -119,8 +152,13 @@ shell transcript.
    ```bash
    cat cast/3.cast | svg-term --out video.svg
    ```
+   Use the final cast dimensions and rendered content to choose SVG height; do
+   not blindly reuse a fixed height from another demo if it cuts off content or
+   leaves excessive empty space.
 8. If the SVG is intended for a vulnerability README, add or refresh the local
-   README reference to it, usually `![](./video.svg)` under `## 5. Reproduce`.
+   README reference to it, usually near the subsection it demonstrates. For a
+   single-flow README this is often `![](./video.svg)` under `## 5. Reproduce`;
+   for multi-flow READMEs, place each named SVG next to the matching subsection.
 9. Optionally render a GIF with `agg`:
    ```bash
    docker pull ghcr.io/asciinema/agg:1.7.0
@@ -130,15 +168,25 @@ shell transcript.
    - `head -n 1 cast/<final>.cast` shows asciicast v2 metadata.
    - `video.svg` begins with `<svg` and uses project-like terminal dimensions.
    - The relevant README references the generated SVG when project convention
-     calls for it.
+     calls for it. For multi-flow READMEs, each recorded exploit mode is
+     referenced near the subsection it demonstrates.
+   - The README, recording, and real verified command path agree on install
+     location, input-file location, trigger command, and proof command.
    - If the recording used a local build instead of the documented release
      install path, the reason for the deviation was verified and the upload or
      install step is visible in the demo.
+   - If the demo uses multiple terminals, the SVG is a tmux split-pane recording
+     unless there is a clear reason to use separate files.
+   - Split panes have enough visible rows for their roles; the main exploit pane
+     does not lose key output because of an even but unsuitable split.
+   - Waiting or trigger-based demos show setup, waiting, trigger, post-trigger
+     output, and proof in a readable order.
    - The rendered demo does not include local-only hostnames unless intentionally
      shown.
    - Visible command lines are not accidentally hard-wrapped or visually
      garbled.
-   - The final frames visibly show the vulnerability result or proof.
+   - The final frames visibly show the vulnerability result or proof and stay on
+     screen long enough to read.
 
 ## Cleaning Casts
 

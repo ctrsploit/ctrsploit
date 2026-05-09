@@ -1,0 +1,4 @@
+interface:
+  display_name: "DQD Lab"
+  short_description: "Manage ctrsploit dqd lab environments"
+  default_prompt: "Use $dqd-lab to start a dqd-backed ctrsploit lab and verify SSH access."
