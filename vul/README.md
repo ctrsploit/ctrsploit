@@ -142,3 +142,4 @@
 | cve-2021-3493 |  | :x: | :heavy_check_mark: | :x: | :x: | :x: | :x: |
 | [cve-2022-0492](cve-2022-0492) | escape via cgroup's release agent without CAP_SYS_ADMIN if kernel is vulnerable to CVE-2022-0492 | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
 | cve-2022-0847 |  | :x: | :heavy_check_mark: | :x: | :x: | :x: | :x: |
+| [cve-2026-31431](cve-2026-31431) | local privilege escalation and container escape in Linux kernel AF_ALG AEAD interface | :o: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
