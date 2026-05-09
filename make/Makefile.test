@@ -1,15 +1,25 @@
 # Makefile.test - Test related tasks
 # Contains unit tests, integration tests and E2E tests
 
-.PHONY: unittest test test.bin e2e
+.PHONY: unittest test test.bin e2e ensure-image
 
 unittest:
 	go test -v github.com/ctrsploit/ctrsploit/...
 
-test:
+ensure-image:
+	@if docker image inspect "$(DEV_IMAGE)" >/dev/null 2>&1; then \
+		echo "Using local image $(DEV_IMAGE)"; \
+	elif docker pull "$(DEV_IMAGE)"; then \
+		echo "Pulled image $(DEV_IMAGE)"; \
+	else \
+		echo "Failed to pull $(DEV_IMAGE); building it locally"; \
+		$(MAKE) image; \
+	fi
+
+test: ensure-image
 	docker run --rm -v $(CURDIR):/root/app --env TEST_ENV=$(TEST_ENV) $(DEV_IMAGE) make unittest
 
-test.bin:
+test.bin: ensure-image
 	mkdir -p bin/test
 	docker run --rm -v $(CURDIR):/root/app $(DEV_IMAGE) ./script/test_bin.sh $(PKG)
 
