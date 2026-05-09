@@ -30,32 +30,25 @@ The package should stay generic. CVE-specific code belongs in the vulnerability
 package and is injected through the `Primitive` interface or the escape image
 provider interfaces below.
 
-## Escape Restart Writer
+## Escape Restart Loader
 
 `escape restart` prepares a running victim container for the next restart. It
-writes these helper files into the victim rootfs:
+writes a small ELF over the image dynamic loader path, overwrites the victim's
+current PID 1 executable with `#!/proc/self/exe`, and kills that process. When
+Docker restarts the container, runc becomes the script interpreter and the fake
+loader captures `/proc/self/exe` as a host runc fd.
 
-- a tiny amd64 ELF loader over the image dynamic loader path
-- a primitive-specific restart writer at `/writer`
-- the requested shell payload and primitive name metadata
-
-The victim's current PID 1 executable is then overwritten with
-`#!/proc/self/exe` and killed. When Docker restarts the container, runc becomes
-the script interpreter, the victim's fake loader opens `/proc/self/exe`, and
-`/writer` writes the payload into the captured runc fd.
-
-Each primitive that supports restart escape must provide a small restart writer:
+The preferred integration is a self-contained restart loader:
 
 ```go
-type RestartWriterProvider interface {
-	RestartWriter() []byte
+type RestartLoaderProvider interface {
+	RestartLoader(payload []byte) ([]byte, error)
 }
 ```
 
-The restart writer runs as `/writer /proc/self/fd/3` inside the restarted
-container. It should read `/payload` and write it into the target fd using the
-primitive-specific write path. Keep it small: pipe-based primitives may fail
-when preparing large files in the victim image.
+The returned loader should contain the primitive-specific write path and the
+requested payload. This path does not require special helper files in the
+victim image.
 
 Because this path relies on the image dynamic loader, it is intended for
 dynamically linked runc.

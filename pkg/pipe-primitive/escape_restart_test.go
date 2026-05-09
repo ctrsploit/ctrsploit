@@ -1,8 +1,6 @@
 package pipeprimitive
 
 import (
-	"bytes"
-	"debug/elf"
 	"os"
 	"path/filepath"
 	"strings"
@@ -11,28 +9,26 @@ import (
 
 type restartRecordingPrimitive struct {
 	recordingPrimitive
-	writer []byte
+	loader []byte
 }
 
-func (p *restartRecordingPrimitive) RestartWriter() []byte {
-	return p.writer
+func (p *restartRecordingPrimitive) RestartLoader(payload []byte) ([]byte, error) {
+	if len(p.loader) == 0 {
+		return nil, nil
+	}
+	return append(append([]byte{}, p.loader...), payload...), nil
 }
 
-func TestWriteRestartMaterial(t *testing.T) {
+func TestWriteRestartMaterialWithSelfContainedLoader(t *testing.T) {
 	dir := t.TempDir()
 	paths := restartMaterialPaths{
-		writer:    filepath.Join(dir, "writer"),
-		payload:   filepath.Join(dir, "payload"),
-		primitive: filepath.Join(dir, "primitive"),
-		loaders:   []string{filepath.Join(dir, "missing-loader"), filepath.Join(dir, "loader")},
+		loaders: []string{filepath.Join(dir, "missing-loader"), filepath.Join(dir, "loader")},
 	}
-	for _, path := range []string{paths.writer, paths.payload, paths.primitive, paths.loaders[1]} {
-		if err := os.WriteFile(path, make([]byte, 16<<20), 0o644); err != nil {
-			t.Fatalf("write %s fixture: %v", path, err)
-		}
+	if err := os.WriteFile(paths.loaders[1], make([]byte, 16<<20), 0o644); err != nil {
+		t.Fatalf("write loader fixture: %v", err)
 	}
 
-	primitive := &restartRecordingPrimitive{writer: []byte("restart-writer")}
+	primitive := &restartRecordingPrimitive{loader: []byte("restart-loader:")}
 	payload := []byte("restart-payload")
 	if err := writeRestartMaterial(primitive, payload, paths); err != nil {
 		t.Fatalf("writeRestartMaterial returned error: %v", err)
@@ -42,46 +38,35 @@ func TestWriteRestartMaterial(t *testing.T) {
 	for _, write := range primitive.writes {
 		seen[write.path] = write.content
 	}
-	if seen[paths.loaders[1]] != string(restartLoaderPayload()) {
-		t.Fatalf("loader write length = %d, want %d", len(seen[paths.loaders[1]]), len(restartLoaderPayload()))
+	if seen[paths.loaders[1]] != "restart-loader:restart-payload" {
+		t.Fatalf("loader write = %q", seen[paths.loaders[1]])
 	}
-	if _, err := os.Stat(paths.loaders[0]); !os.IsNotExist(err) {
-		t.Fatalf("missing loader should not be created: %v", err)
+	if _, ok := seen[filepath.Join(dir, "writer")]; ok {
+		t.Fatalf("self-contained loader path should not write restart writer: %+v", seen)
 	}
-	if seen[paths.payload] != string(payload) {
-		t.Fatalf("payload write = %q, want %q", seen[paths.payload], payload)
+	if _, ok := seen[filepath.Join(dir, "payload")]; ok {
+		t.Fatalf("self-contained loader path should not write payload file: %+v", seen)
 	}
-	if seen[paths.primitive] != "recording\n15\n" {
-		t.Fatalf("primitive config = %q", seen[paths.primitive])
-	}
-	if seen[paths.writer] != "restart-writer" {
-		t.Fatalf("restart writer = %q", seen[paths.writer])
+	if _, ok := seen[filepath.Join(dir, "primitive")]; ok {
+		t.Fatalf("self-contained loader path should not write primitive config: %+v", seen)
 	}
 }
 
-func TestRestartLoaderPayloadIsSmallELF(t *testing.T) {
-	payload := restartLoaderPayload()
-	if len(payload) == 0 {
-		t.Fatal("restart loader payload is empty")
+func TestWriteRestartMaterialWithEmptySelfContainedLoaderFails(t *testing.T) {
+	dir := t.TempDir()
+	paths := restartMaterialPaths{
+		loaders: []string{filepath.Join(dir, "loader")},
 	}
-	if len(payload) > 16<<10 {
-		t.Fatalf("restart loader payload length = %d, want <= 16 KiB", len(payload))
+	if err := os.WriteFile(paths.loaders[0], make([]byte, 16<<20), 0o644); err != nil {
+		t.Fatalf("write loader fixture: %v", err)
 	}
-	if !strings.HasPrefix(string(payload[:4]), "\x7fELF") {
-		t.Fatalf("restart loader payload does not start with ELF magic: % x", payload[:4])
-	}
-	if !strings.Contains(string(payload), "/writer") || !strings.Contains(string(payload), "3") {
-		t.Fatal("restart loader payload does not contain expected writer arguments")
-	}
-}
 
-func TestRestartLoaderPayloadIsSharedObject(t *testing.T) {
-	payload := restartLoaderPayload()
-	f, err := elf.NewFile(bytes.NewReader(payload))
-	if err != nil {
-		t.Fatalf("parse restart loader elf: %v", err)
+	primitive := &restartRecordingPrimitive{}
+	err := writeRestartMaterial(primitive, []byte("restart-payload"), paths)
+	if err == nil || !strings.Contains(err.Error(), "restart loader is empty") {
+		t.Fatalf("writeRestartMaterial error = %v, want empty loader error", err)
 	}
-	if f.Type != elf.ET_DYN {
-		t.Fatalf("restart loader elf type = %v, want %v", f.Type, elf.ET_DYN)
+	if len(primitive.writes) != 0 {
+		t.Fatalf("empty self-contained loader should not write files: %+v", primitive.writes)
 	}
 }

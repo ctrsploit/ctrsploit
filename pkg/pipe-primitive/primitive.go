@@ -15,6 +15,6 @@ type EscapeImageExtraFileProvider interface {
 	EscapeImageExtraFiles() map[string][]byte
 }
 
-type RestartWriterProvider interface {
-	RestartWriter() []byte
+type RestartLoaderProvider interface {
+	RestartLoader(payload []byte) ([]byte, error)
 }
