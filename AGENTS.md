@@ -14,6 +14,9 @@ follow its instructions:
   convert asciinema `.cast` captures into project-style `video.svg` or
   `video.gif` artifacts.
   File: `.opencode/skills/record-terminal-session/SKILL.md`
+- `dqd-lab`: Start, stop, inspect, and connect to ctrsploit dqd lab
+  environments from github.com/ctrsploit/dqd.
+  File: `.opencode/skills/dqd-lab/SKILL.md`
 
 If a skill references files such as `references/`, resolve them relative to that
 skill directory.
