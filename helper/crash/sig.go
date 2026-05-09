@@ -1,11 +1,11 @@
 package crash
 
 import (
+	"context"
 	"github.com/ctrsploit/ctrsploit/internal"
+	pkgcrash "github.com/ctrsploit/ctrsploit/pkg/crash"
 	"github.com/pkg/errors"
-	"github.com/ssst0n3/awesome_libs/awesome_error"
 	"os"
-	"syscall"
 )
 
 type Sig struct {
@@ -36,13 +36,5 @@ func (c Sig) Valid() (valid bool, err error) {
 }
 
 func (c Sig) Crash() (err error) {
-	for i := 1; i < 10; i++ {
-		err = syscall.Kill(1, syscall.Signal(i))
-		if err != nil {
-			awesome_error.CheckErr(err)
-			continue
-		}
-	}
-	err = internal.KillAll()
-	return
+	return pkgcrash.TriggerFirst(context.Background(), pkgcrash.Sigkill{PID: 1})
 }
