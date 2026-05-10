@@ -106,6 +106,13 @@ shell transcript.
   completes.
 - Leave enough dwell time on the final proof line and final prompt for a reader
   to understand the result.
+- Quantify the final-frame dwell time for generated SVGs instead of only
+  checking the exported text. Parse the SVG `animation-duration` and final
+  keyframe percentage, and require the last proof/prompt frame to remain visible
+  for at least 3 seconds, preferably around 4 seconds for proof output.
+- For headless or scripted recordings, do not let the command exit immediately
+  after printing the final prompt. Add an explicit final wait or adjust the cast
+  exit event, and ensure `idle_time_limit` does not compress that wait away.
 - After rendering, inspect the SVG or a screenshot for wrapped words, split
   command lines, spinner/progress artifacts, local hostnames, and overlapping or
   visually garbled text. Re-record or edit the cast if the demo is hard to read.
@@ -187,6 +194,9 @@ shell transcript.
      garbled.
    - The final frames visibly show the vulnerability result or proof and stay on
      screen long enough to read.
+   - The final SVG frame dwell has been measured, not guessed. For SVGs generated
+     by `svg-term`, compute dwell from `animation-duration` and the final
+     keyframe percentage; fix any value under 3 seconds before finishing.
 
 ## Cleaning Casts
 
