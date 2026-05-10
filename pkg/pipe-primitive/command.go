@@ -37,6 +37,18 @@ func Command(primitive Primitive, aliases []string, usage string) *cli.Command {
 				},
 			},
 			{
+				Name:    "clean",
+				Aliases: []string{"c"},
+				Usage:   "drop host page cache to clear page-cache-only primitive effects",
+				Flags: []cli.Flag{
+					&cli.BoolFlag{Name: "sync",
+						Usage: "call sync before dropping page cache"},
+				},
+				Action: func(ctx context.Context, cmd *cli.Command) error {
+					return Clean(cmd.Bool("sync"))
+				},
+			},
+			{
 				Name:    "escape",
 				Aliases: []string{"e"},
 				Usage:   fmt.Sprintf("container escape by using %s", primitive.GetExpName()),

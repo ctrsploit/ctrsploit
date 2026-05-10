@@ -22,6 +22,7 @@ primitive:
 
 - `privilege-escalate`: write `/etc/passwd` to make local root escalation easy.
 - `image-pollution`: write into a file from a container image layer.
+- `clean`: drop host page cache to clear page-cache-only primitive effects.
 - `escape image`: generate a Docker build context for image-based runc capture.
 - `escape exec`: wait for `docker exec` to capture and overwrite host runc.
 - `escape restart`: trigger container restart to capture and overwrite host runc.
@@ -29,6 +30,22 @@ primitive:
 The package should stay generic. CVE-specific code belongs in the vulnerability
 package and is injected through the `Primitive` interface or the escape image
 provider interfaces below.
+
+## Clean
+
+`clean` writes `3` to `/proc/sys/vm/drop_caches`, which asks the kernel to drop
+page cache plus reclaimable dentry and inode slab objects. This can clear the
+visible effect of pipe-primitive exploits that only polluted clean page-cache
+entries.
+
+This is not a file restore or rollback operation. It does not undo payloads
+that already executed, files that were genuinely written to disk, or other side
+effects such as proof files created by an overwritten runc payload.
+
+Use `--sync` to call `sync` before dropping caches. This can make more clean
+objects eligible to drop, but it may also flush unrelated dirty data and has a
+system-wide performance impact. The command requires permission to write the
+host's `/proc/sys/vm/drop_caches`.
 
 ## Escape Restart Loader
 
