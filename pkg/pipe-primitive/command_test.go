@@ -9,7 +9,7 @@ func TestCommandExploitSubcommandsUseShortNames(t *testing.T) {
 	for _, sub := range cmd.Commands {
 		topLevel[sub.Name] = true
 	}
-	for _, want := range []string{"privilege-escalate", "escape", "image-pollution"} {
+	for _, want := range []string{"privilege-escalate", "escape", "image-pollution", "clean"} {
 		if !topLevel[want] {
 			t.Fatalf("top-level exploit subcommand %q missing from %+v", want, topLevel)
 		}
