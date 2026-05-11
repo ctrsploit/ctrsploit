@@ -52,6 +52,32 @@ func TestWriteRestartMaterialWithSelfContainedLoader(t *testing.T) {
 	}
 }
 
+func TestWriteRestartMaterialSkipsDuplicateLoaderFiles(t *testing.T) {
+	dir := t.TempDir()
+	target := filepath.Join(dir, "loader")
+	link := filepath.Join(dir, "loader-link")
+	if err := os.WriteFile(target, make([]byte, 16<<20), 0o644); err != nil {
+		t.Fatalf("write loader fixture: %v", err)
+	}
+	if err := os.Symlink(target, link); err != nil {
+		t.Fatalf("symlink loader fixture: %v", err)
+	}
+
+	paths := restartMaterialPaths{
+		loaders: []string{link, target},
+	}
+	primitive := &restartRecordingPrimitive{loader: []byte("restart-loader:")}
+	if err := writeRestartMaterial(primitive, []byte("restart-payload"), paths); err != nil {
+		t.Fatalf("writeRestartMaterial returned error: %v", err)
+	}
+	if len(primitive.writes) != 1 {
+		t.Fatalf("writes = %d, want 1: %+v", len(primitive.writes), primitive.writes)
+	}
+	if primitive.writes[0].path != link {
+		t.Fatalf("write path = %q, want first loader path %q", primitive.writes[0].path, link)
+	}
+}
+
 func TestWriteRestartMaterialWithEmptySelfContainedLoaderFails(t *testing.T) {
 	dir := t.TempDir()
 	paths := restartMaterialPaths{
