@@ -77,20 +77,36 @@ func writeRestartLoaders(primitive Primitive, loader []byte, paths restartMateri
 	}
 
 	writtenLoader := false
+	var writtenLoaderInfos []os.FileInfo
 	for _, target := range paths.loaders {
-		if _, err := os.Stat(target); err != nil {
+		info, err := os.Stat(target)
+		if err != nil {
 			if os.IsNotExist(err) {
 				continue
 			}
 			return fmt.Errorf("stat restart loader %q: %w", target, err)
 		}
+		if sameFileSeen(info, writtenLoaderInfos) {
+			log.Logger.Infof("Skipping duplicate restart loader path %s", target)
+			continue
+		}
 		if err := WriteImage(primitive, target, loader); err != nil {
 			return fmt.Errorf("write restart loader %q: %w", target, err)
 		}
+		writtenLoaderInfos = append(writtenLoaderInfos, info)
 		writtenLoader = true
 	}
 	if !writtenLoader {
 		return fmt.Errorf("no supported restart loader path exists")
 	}
 	return nil
+}
+
+func sameFileSeen(info os.FileInfo, seen []os.FileInfo) bool {
+	for _, existing := range seen {
+		if os.SameFile(info, existing) {
+			return true
+		}
+	}
+	return false
 }

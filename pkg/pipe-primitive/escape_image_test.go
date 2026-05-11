@@ -31,6 +31,14 @@ func TestGenerateEscapeImage(t *testing.T) {
 	if string(payload) != "#!/bin/bash\ntouch /escaped\n" {
 		t.Fatalf("payload = %q", payload)
 	}
+
+	dockerfile, err := os.ReadFile(filepath.Join(dir, "Dockerfile"))
+	if err != nil {
+		t.Fatalf("read Dockerfile: %v", err)
+	}
+	if !strings.Contains(string(dockerfile), "FROM golang:1.17 AS builder") {
+		t.Fatalf("Dockerfile does not use expected Go builder:\n%s", dockerfile)
+	}
 }
 
 func TestGenerateEscapeImageExecMode(t *testing.T) {
@@ -54,7 +62,7 @@ func TestGenerateEscapeImageExecMode(t *testing.T) {
 		t.Fatalf("read Dockerfile: %v", err)
 	}
 	content := string(dockerfile)
-	for _, want := range []string{"HEALTHCHECK", "CMD [\"/proc/self/exe\"]", "ENTRYPOINT [\"/runc-capture\"]", "runc exec"} {
+	for _, want := range []string{"FROM golang:1.17 AS builder", "HEALTHCHECK", "CMD [\"/proc/self/exe\"]", "ENTRYPOINT [\"/runc-capture\"]", "runc exec"} {
 		if !strings.Contains(content, want) {
 			t.Fatalf("Dockerfile does not contain %q:\n%s", want, content)
 		}

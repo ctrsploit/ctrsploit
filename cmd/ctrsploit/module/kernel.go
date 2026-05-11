@@ -3,6 +3,7 @@ package module
 import (
 	cve_2022_0492 "github.com/ctrsploit/ctrsploit/vul/cve-2022-0492"
 	cve_2026_31431 "github.com/ctrsploit/ctrsploit/vul/cve-2026-31431"
+	cve_2026_43284 "github.com/ctrsploit/ctrsploit/vul/cve-2026-43284"
 	"github.com/urfave/cli/v3"
 )
 
@@ -16,5 +17,6 @@ grouped as a logical module entrypoint.`,
 	Commands: []*cli.Command{
 		cve_2022_0492.VulCmd,
 		cve_2026_31431.VulCmd,
+		cve_2026_43284.VulCmd,
 	},
 }
