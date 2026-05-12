@@ -1,0 +1,4 @@
+interface:
+  display_name: "Release Notes"
+  short_description: "Draft ctrsploit release notes by module and PR"
+  default_prompt: "Use $release-notes to draft release notes for a ctrsploit version."
