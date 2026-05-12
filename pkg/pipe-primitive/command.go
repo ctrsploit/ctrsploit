@@ -19,7 +19,7 @@ func Command(primitive Primitive, aliases []string, usage string) *cli.Command {
 				Aliases: []string{"p"},
 				Usage:   fmt.Sprintf("local privilege escalate by using %s", primitive.GetExpName()),
 				Action: func(ctx context.Context, cmd *cli.Command) error {
-					return Escalate(primitive)
+					return EscalateWithIO(primitive, cmd.Reader, cmd.Writer, cmd.ErrWriter)
 				},
 			},
 			{

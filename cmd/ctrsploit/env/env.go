@@ -24,6 +24,8 @@ var Command = &cli.Command{
 		Sysctl,
 		Rlimit,
 		Namespace,
+		NoNewPrivs,
+		SUID,
 		DockerVersion,
 		Services,
 		Upload,

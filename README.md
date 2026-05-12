@@ -49,12 +49,36 @@ COMMANDS:
    sysctl              display sysctl information
    rlimit              get process resource limits
    namespace, n, ns    check namespace is host ns
+   no-new-privs, nnp   show NoNewPrivs status for the current process
+   suid, setuid        find and list SUID files
    docker-version, dv  guess dockerd version range
    services, svc       discover K8s cluster services and ports via env vars and DNS
    upload, up          upload <servicename> <filename> <obs> [host]
 
 OPTIONS:
    --help, -h  show help
+```
+
+#### env no-new-privs
+
+Check whether the current process has `NoNewPrivs` enabled. When enabled, SUID
+programs and file capabilities cannot grant new privileges across `execve`.
+
+```shell
+$ ctrsploit env no-new-privs
+$ ctrsploit env nnp
+```
+
+#### env suid
+
+List SUID files visible to the current process. By default, the command scans
+common executable directories; use `--all` to scan from `/`, or `--path` for
+explicit paths.
+
+```shell
+$ ctrsploit env suid
+$ ctrsploit env suid --all
+$ ctrsploit env suid --path /bin,/usr/bin
 ```
 
 #### env services

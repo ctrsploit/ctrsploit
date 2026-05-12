@@ -20,7 +20,8 @@ type Primitive interface {
 This package owns the generic CLI and orchestration built on top of that
 primitive:
 
-- `privilege-escalate`: write `/etc/passwd` to make local root escalation easy.
+- `privilege-escalate`: obtain a local root shell using `/etc/passwd` plus
+  `su`, or a root-owned SUID helper fallback when `su` is unavailable.
 - `image-pollution`: write into a file from a container image layer.
 - `clean`: drop host page cache to clear page-cache-only primitive effects.
 - `escape image`: generate a Docker build context for image-based runc capture.
@@ -30,6 +31,24 @@ primitive:
 The package should stay generic. CVE-specific code belongs in the vulnerability
 package and is injected through the `Primitive` interface or the escape image
 provider interfaces below.
+
+## Privilege Escalation
+
+`privilege-escalate` first checks for a usable SUID `su` implementation,
+including BusyBox `su`. Only after that preflight succeeds does it patch the
+root password field in `/etc/passwd` and invoke `su` for a root shell.
+
+If no `su`-compatible helper is available, the command tries a fallback based
+on other root-owned SUID executables such as `chfn`, `chsh`, `gpasswd`,
+`mount`, `newgrp`, `passwd`, `sudo`, or `umount`. That fallback overwrites the
+helper's page cache from offset `0` with an embedded linux/amd64 SUID shell
+payload and then executes the helper path. It requires a primitive with
+`MinOffset() == 0`, a root-owned executable with the SUID bit set, and an
+environment that allows SUID execution.
+
+The fallback avoids modifying `/etc/passwd` when `su` is missing, but it is
+still destructive to the selected helper's cached executable image. Run it only
+in disposable labs or on systems where that side effect is acceptable.
 
 ## Clean
 
