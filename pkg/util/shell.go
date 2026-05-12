@@ -22,16 +22,32 @@ type rootShellCandidate struct {
 }
 
 func InvokeRootShellBySu() error {
+	return InvokeRootShell(os.Stdin, os.Stdout, os.Stderr)
+}
+
+func InvokeRootShell(stdin io.Reader, stdout, stderr io.Writer) error {
 	candidate, err := selectRootShellBySu(rootShellCandidates())
 	if err != nil {
 		return err
 	}
-	return invokeRootShellBySu([]rootShellCandidate{candidate}, os.Stdin, os.Stdout, os.Stderr)
+	return invokeRootShellBySu([]rootShellCandidate{candidate}, stdin, stdout, stderr)
 }
 
 func CheckRootShellBySu() error {
 	_, err := selectRootShellBySu(rootShellCandidates())
 	return err
+}
+
+func CheckSetuidExecutionAllowed() error {
+	return checkSetuidAllowed()
+}
+
+func CheckSetuidRootExecutable(path string) error {
+	return checkSetuidRootExecutable(path)
+}
+
+func CheckRootOwnedSetuidExecutable(path string) error {
+	return checkRootOwnedSetuidExecutable(path)
 }
 
 func rootShellCandidates() []rootShellCandidate {
@@ -152,6 +168,16 @@ func checkSetuidAllowed() error {
 }
 
 func checkSetuidRootExecutable(path string) error {
+	if err := checkExecutableFile(path); err != nil {
+		return err
+	}
+	if os.Geteuid() == 0 {
+		return nil
+	}
+	return checkRootOwnedSetuidExecutable(path)
+}
+
+func checkRootOwnedSetuidExecutable(path string) error {
 	info, err := os.Stat(path)
 	if err != nil {
 		return err
@@ -161,9 +187,6 @@ func checkSetuidRootExecutable(path string) error {
 	}
 	if info.Mode()&0o111 == 0 {
 		return fmt.Errorf("%s is not executable", path)
-	}
-	if os.Geteuid() == 0 {
-		return nil
 	}
 
 	stat, ok := info.Sys().(*syscall.Stat_t)
@@ -178,6 +201,20 @@ func checkSetuidRootExecutable(path string) error {
 	}
 	if err := checkNoSuidMount(path); err != nil {
 		return err
+	}
+	return nil
+}
+
+func checkExecutableFile(path string) error {
+	info, err := os.Stat(path)
+	if err != nil {
+		return err
+	}
+	if info.IsDir() {
+		return fmt.Errorf("%s is a directory", path)
+	}
+	if info.Mode()&0o111 == 0 {
+		return fmt.Errorf("%s is not executable", path)
 	}
 	return nil
 }
