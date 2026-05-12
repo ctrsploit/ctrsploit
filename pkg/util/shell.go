@@ -1,22 +1,249 @@
 package util
 
 import (
+	"errors"
+	"fmt"
 	"io"
 	"net"
 	"os"
 	"os/exec"
+	"path/filepath"
+	"strings"
 	"syscall"
 
 	"github.com/ctrsploit/sploit-spec/pkg/log"
 	"github.com/ssst0n3/awesome_libs/awesome_error"
 )
 
-func InvokeRootShellBySu() {
-	shell := exec.Command("su", "-", "root")
-	shell.Stdout = os.Stdout
-	shell.Stdin = os.Stdin
-	shell.Stderr = os.Stderr
-	shell.Run()
+type rootShellCandidate struct {
+	label string
+	path  string
+	args  []string
+}
+
+func InvokeRootShellBySu() error {
+	candidate, err := selectRootShellBySu(rootShellCandidates())
+	if err != nil {
+		return err
+	}
+	return invokeRootShellBySu([]rootShellCandidate{candidate}, os.Stdin, os.Stdout, os.Stderr)
+}
+
+func CheckRootShellBySu() error {
+	_, err := selectRootShellBySu(rootShellCandidates())
+	return err
+}
+
+func rootShellCandidates() []rootShellCandidate {
+	return []rootShellCandidate{
+		{label: "su", path: "su", args: []string{"-", "root"}},
+		{label: "/bin/su", path: "/bin/su", args: []string{"-", "root"}},
+		{label: "/usr/bin/su", path: "/usr/bin/su", args: []string{"-", "root"}},
+		{label: "busybox su", path: "busybox", args: []string{"su", "-", "root"}},
+		{label: "/bin/busybox su", path: "/bin/busybox", args: []string{"su", "-", "root"}},
+		{label: "/usr/bin/busybox su", path: "/usr/bin/busybox", args: []string{"su", "-", "root"}},
+	}
+}
+
+func invokeRootShellBySu(candidates []rootShellCandidate, stdin io.Reader, stdout, stderr io.Writer) error {
+	if len(candidates) == 0 {
+		return errors.New("no su-compatible helper configured")
+	}
+
+	var failures []string
+	seen := make(map[string]struct{}, len(candidates))
+	for _, candidate := range candidates {
+		path, err := resolveRootShellCommand(candidate.path)
+		if err != nil {
+			failures = append(failures, fmt.Sprintf("%s unavailable: %v", candidate.name(), err))
+			continue
+		}
+
+		key := path + "\x00" + strings.Join(candidate.args, "\x00")
+		if _, ok := seen[key]; ok {
+			continue
+		}
+		seen[key] = struct{}{}
+
+		shell := exec.Command(path, candidate.args...)
+		shell.Stdout = stdout
+		shell.Stdin = stdin
+		shell.Stderr = stderr
+		if err := shell.Run(); err != nil {
+			failures = append(failures, fmt.Sprintf("%s failed: %v", candidate.name(), err))
+			continue
+		}
+		return nil
+	}
+
+	return fmt.Errorf("no su-compatible helper succeeded: %s", strings.Join(failures, "; "))
+}
+
+func selectRootShellBySu(candidates []rootShellCandidate) (rootShellCandidate, error) {
+	if len(candidates) == 0 {
+		return rootShellCandidate{}, errors.New("no su-compatible helper configured")
+	}
+	if err := checkSetuidAllowed(); err != nil {
+		return rootShellCandidate{}, err
+	}
+
+	var failures []string
+	seen := make(map[string]struct{}, len(candidates))
+	for _, candidate := range candidates {
+		path, err := resolveRootShellCommand(candidate.path)
+		if err != nil {
+			failures = append(failures, fmt.Sprintf("%s unavailable: %v", candidate.name(), err))
+			continue
+		}
+
+		key := path + "\x00" + strings.Join(candidate.args, "\x00")
+		if _, ok := seen[key]; ok {
+			continue
+		}
+		seen[key] = struct{}{}
+
+		if err := checkSetuidRootExecutable(path); err != nil {
+			failures = append(failures, fmt.Sprintf("%s unusable: %v", candidate.name(), err))
+			continue
+		}
+		candidate.path = path
+		return candidate, nil
+	}
+
+	return rootShellCandidate{}, fmt.Errorf("no su-compatible helper appears usable: %s", strings.Join(failures, "; "))
+}
+
+func resolveRootShellCommand(path string) (string, error) {
+	if !strings.Contains(path, "/") {
+		return exec.LookPath(path)
+	}
+
+	info, err := os.Stat(path)
+	if err != nil {
+		return "", err
+	}
+	if info.IsDir() {
+		return "", fmt.Errorf("%s is a directory", path)
+	}
+	if info.Mode()&0o111 == 0 {
+		return "", fmt.Errorf("%s is not executable", path)
+	}
+	return path, nil
+}
+
+func checkSetuidAllowed() error {
+	if os.Geteuid() == 0 {
+		return nil
+	}
+
+	content, err := os.ReadFile("/proc/self/status")
+	if err != nil {
+		if errors.Is(err, os.ErrNotExist) {
+			return nil
+		}
+		return fmt.Errorf("check no_new_privs from /proc/self/status: %w", err)
+	}
+	for _, line := range strings.Split(string(content), "\n") {
+		if strings.HasPrefix(line, "NoNewPrivs:") && strings.TrimSpace(strings.TrimPrefix(line, "NoNewPrivs:")) != "0" {
+			return errors.New("current process has NoNewPrivs set, so setuid helpers cannot elevate privileges")
+		}
+	}
+	return nil
+}
+
+func checkSetuidRootExecutable(path string) error {
+	info, err := os.Stat(path)
+	if err != nil {
+		return err
+	}
+	if info.IsDir() {
+		return fmt.Errorf("%s is a directory", path)
+	}
+	if info.Mode()&0o111 == 0 {
+		return fmt.Errorf("%s is not executable", path)
+	}
+	if os.Geteuid() == 0 {
+		return nil
+	}
+
+	stat, ok := info.Sys().(*syscall.Stat_t)
+	if !ok {
+		return fmt.Errorf("cannot inspect owner for %s", path)
+	}
+	if stat.Uid != 0 {
+		return fmt.Errorf("%s is owned by uid %d, not root", path, stat.Uid)
+	}
+	if info.Mode()&os.ModeSetuid == 0 {
+		return fmt.Errorf("%s is not setuid", path)
+	}
+	if err := checkNoSuidMount(path); err != nil {
+		return err
+	}
+	return nil
+}
+
+func checkNoSuidMount(path string) error {
+	mountPoint, options, err := mountInfoForPath(path)
+	if err != nil {
+		return err
+	}
+	for _, option := range strings.Split(options, ",") {
+		if option == "nosuid" {
+			return fmt.Errorf("%s is on nosuid mount %s", path, mountPoint)
+		}
+	}
+	return nil
+}
+
+func mountInfoForPath(path string) (mountPoint, options string, err error) {
+	content, err := os.ReadFile("/proc/self/mountinfo")
+	if err != nil {
+		if errors.Is(err, os.ErrNotExist) {
+			return "", "", nil
+		}
+		return "", "", fmt.Errorf("read /proc/self/mountinfo: %w", err)
+	}
+
+	absPath, err := filepath.Abs(path)
+	if err != nil {
+		return "", "", err
+	}
+	bestLen := -1
+	for _, line := range strings.Split(string(content), "\n") {
+		fields := strings.Split(line, " ")
+		if len(fields) < 6 {
+			continue
+		}
+		candidate := unescapeMountInfoPath(fields[4])
+		if !pathWithinMount(absPath, candidate) || len(candidate) <= bestLen {
+			continue
+		}
+		bestLen = len(candidate)
+		mountPoint = candidate
+		options = fields[5]
+	}
+	return mountPoint, options, nil
+}
+
+func pathWithinMount(path, mountPoint string) bool {
+	if mountPoint == "" {
+		return false
+	}
+	cleanPath := filepath.Clean(path)
+	cleanMountPoint := filepath.Clean(mountPoint)
+	return cleanPath == cleanMountPoint || strings.HasPrefix(cleanPath, strings.TrimRight(cleanMountPoint, string(os.PathSeparator))+string(os.PathSeparator))
+}
+
+func unescapeMountInfoPath(path string) string {
+	replacer := strings.NewReplacer(`\040`, " ", `\011`, "\t", `\012`, "\n", `\134`, `\`)
+	return replacer.Replace(path)
+}
+
+func (candidate rootShellCandidate) name() string {
+	if candidate.label != "" {
+		return candidate.label
+	}
+	return strings.Join(append([]string{candidate.path}, candidate.args...), " ")
 }
 
 func InvokeRootShellBySetuid(i io.Reader, o, e io.Writer) (err error) {
