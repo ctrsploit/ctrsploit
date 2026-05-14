@@ -6,7 +6,7 @@ BTFFILE = /sys/kernel/btf/vmlinux
 DBGVMLINUX = /usr/lib/debug/boot/vmlinux-$(shell uname -r)
 VMLINUXH = $(EBPF_DIR)headers/vmlinux.h
 
-.PHONY: vmlinuxh
+.PHONY: vmlinuxh generate-ebpf
 vmlinuxh: $(VMLINUXH)
 
 $(VMLINUXH):
@@ -28,5 +28,5 @@ endif
 	fi
 
 BPF_CFLAGS = -target bpf -D__TARGET_ARCH_x86
-generate: vmlinuxh
-	BPF_CFLAGS="$(BPF_CFLAGS)" go generate -x ./...
+generate-ebpf: vmlinuxh
+	BPF_CFLAGS="$(BPF_CFLAGS)" go generate -x ./vul/caps/sys_admin/ebpf/...
