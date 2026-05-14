@@ -1,7 +1,7 @@
 # Makefile - Main build file
 # Includes all modular Makefile fragments
 
-.PHONY: all shell local build test generate generate-pipe-primitive vmlinuxh help
+.PHONY: all shell local build test generate generate-pipe-primitive generate-cve-2026-31431 vmlinuxh help
 
 # Include variable definitions
 include make/Makefile.vars
@@ -21,10 +21,13 @@ include make/Makefile.docs
 # Default target
 all: binary
 
-generate: generate-pipe-primitive generate-ebpf
+generate: generate-pipe-primitive generate-cve-2026-31431 generate-ebpf
 
 generate-pipe-primitive:
 	go generate ./pkg/pipe-primitive
+
+generate-cve-2026-31431:
+	go generate ./vul/cve-2026-31431
 
 # Help target - show available commands
 help:
@@ -48,6 +51,7 @@ help:
 	@echo "Generate targets:"
 	@echo "  make generate                - Generate all checked-in generated artifacts"
 	@echo "  make generate-pipe-primitive - Generate pipe-primitive payload artifacts"
+	@echo "  make generate-cve-2026-31431 - Generate cve-2026-31431 payload artifacts"
 	@echo "  make generate-ebpf           - Generate eBPF .o files"
 	@echo "  make vmlinuxh                - Generate vmlinux header file"
 	@echo ""
