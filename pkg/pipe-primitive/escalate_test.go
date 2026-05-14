@@ -133,6 +133,32 @@ func TestEscalateReportsAllStrategyFailures(t *testing.T) {
 	}
 }
 
+func TestPreflightSuidOverwriteRejectsPrimitiveMinOffset(t *testing.T) {
+	_, _, err := PreflightSuidOverwrite(&recordingPrimitive{minOffset: 8})
+	if err == nil {
+		t.Fatal("expected error")
+	}
+	if !strings.Contains(err.Error(), "cannot overwrite an executable ELF header") {
+		t.Fatalf("error = %q, want ELF header context", err)
+	}
+}
+
+func TestSuidShellPayloadAMD64IsSmallELF(t *testing.T) {
+	payload, err := suidShellPayload()
+	if err != nil {
+		t.Fatalf("suidShellPayload returned error: %v", err)
+	}
+	if len(payload) >= 190 {
+		t.Fatalf("payload length = %d, want < 190 for constrained byte writers", len(payload))
+	}
+	if len(payload) < 4 || string(payload[:4]) != "\x7fELF" {
+		t.Fatalf("payload does not start with ELF magic: % x", payload[:4])
+	}
+	if !strings.Contains(string(payload), "/bin/sh") {
+		t.Fatalf("payload does not contain /bin/sh")
+	}
+}
+
 func TestSelectSuidOverwriteTargetRejectsTooSmallCandidate(t *testing.T) {
 	dir := t.TempDir()
 	helper := filepath.Join(dir, "helper")

