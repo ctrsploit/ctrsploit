@@ -137,9 +137,10 @@ COMMANDS:
    cve-2025-23266, 23266                           gpu container escape via nvidia-container-toolkit cve-2025-23266 by running a malicious container image
    cve-2025-47290, 47290                           modify host file via containerd cve-2025-47290 during pulling image
    cve-2025-62725, 62725                           path traversal in Docker Compose OCI artifacts allows arbitrary file write via malicious registry
-   cve-2026-31431, 31431, copy-fail                local privilege escalation and container escape in Linux kernel AF_ALG AEAD interface
-   cve-2026-43500, 43500, dirty-frag-rxrpc, dirtyfrag-rxrpc  local privilege escalation in Linux kernel RxRPC/rxkad Dirty Frag path
-   fork-bomb                                       
+    cve-2026-31431, 31431, copy-fail                local privilege escalation and container escape in Linux kernel AF_ALG AEAD interface
+    cve-2026-43284, 43284, dirty-frag, dirtyfrag    local privilege escalation and container escape in Linux kernel xfrm ESP Dirty Frag path
+    cve-2026-43500, 43500, dirty-frag-rxrpc, dirtyfrag-rxrpc  local privilege escalation in Linux kernel RxRPC/rxkad Dirty Frag path
+    fork-bomb                                       
    naked                                           we call containers running without seccomp, AppArmor, or SELinux enabled 'naked containers', which leaves them highly vulnerable to kernel exploits and potential container escapes
    capability, caps                                abuse dangerous capabilities in container
    namespace, ns                                   host level namespaces break the isolations
@@ -327,6 +328,7 @@ OPTIONS:
 | [cve-2022-0492](./vul/cve-2022-0492) | escape via cgroup's release agent without CAP_SYS_ADMIN if kernel is vulnerable to CVE-2022-0492 | :heavy_check_mark: | :heavy_check_mark: |
 | cve-2022-0847 |  | :x: | :heavy_check_mark: |
 | [cve-2026-31431](./vul/cve-2026-31431) | local privilege escalation and container escape in Linux kernel AF_ALG AEAD interface | :o: | :heavy_check_mark: |
+| [cve-2026-43284](./vul/cve-2026-43284) | local privilege escalation and container escape in Linux kernel xfrm ESP Dirty Frag path | :o: | :o: |
 | [cve-2026-43500](./vul/cve-2026-43500) | local privilege escalation in Linux kernel RxRPC/rxkad Dirty Frag path | :o: | :heavy_check_mark: |
 
 ### exploit
@@ -354,6 +356,7 @@ COMMANDS:
    cve-2025-23266, 23266                              gpu container escape via nvidia-container-toolkit cve-2025-23266 by running a malicious container image
    cve-2025-47290, 47290                              modify host file via containerd cve-2025-47290 during pulling image
    cve-2026-31431, 31431, copy-fail                   local privilege escalation and container escape in Linux kernel AF_ALG AEAD interface
+   cve-2026-43284, 43284, dirty-frag, dirtyfrag       local privilege escalation and container escape in Linux kernel xfrm ESP Dirty Frag path
    cve-2026-43500, 43500, dirty-frag-rxrpc, dirtyfrag-rxrpc  local privilege escalation in Linux kernel RxRPC/rxkad Dirty Frag path
    fork-bomb                                          
    shocker, cap_dac_read_search, open_by_handle_at    escape by CAP_DAC_READ_SEARCH, alias shocker, found by Sebastian Krahmer (stealth) in 2014
@@ -407,10 +410,11 @@ COMMANDS:
    cve-2025-23266, 23266                               gpu container escape via nvidia-container-toolkit cve-2025-23266 by running a malicious container image
    cve-2025-47290, 47290                               modify host file via containerd cve-2025-47290 during pulling image
    cve-2025-62725, 62725                               path traversal in Docker Compose OCI artifacts allows arbitrary file write via malicious registry
-   cve-2026-31431, 31431, copy-fail                    local privilege escalation and container escape in Linux kernel AF_ALG AEAD interface
-   cve-2026-43500, 43500, dirty-frag-rxrpc, dirtyfrag-rxrpc  local privilege escalation in Linux kernel RxRPC/rxkad Dirty Frag path
-   fork-bomb                                           
-   shocker, cap_dac_read_search, open_by_handle_at     escape by CAP_DAC_READ_SEARCH, alias shocker, found by Sebastian Krahmer (stealth) in 2014
+    cve-2026-31431, 31431, copy-fail                    local privilege escalation and container escape in Linux kernel AF_ALG AEAD interface
+    cve-2026-43284, 43284, dirty-frag, dirtyfrag        local privilege escalation and container escape in Linux kernel xfrm ESP Dirty Frag path
+    cve-2026-43500, 43500, dirty-frag-rxrpc, dirtyfrag-rxrpc  local privilege escalation in Linux kernel RxRPC/rxkad Dirty Frag path
+    fork-bomb                                           
+    shocker, cap_dac_read_search, open_by_handle_at     escape by CAP_DAC_READ_SEARCH, alias shocker, found by Sebastian Krahmer (stealth) in 2014
    cap_sys_admin, sys_admin                            abuse cap_sys_admin
    cap_bpf, bpf                                        load evil bpf programs via cap_bpf
    cap_sys_ptrace, sys_ptrace, ptrace                  abuse cap_sys_ptrace
