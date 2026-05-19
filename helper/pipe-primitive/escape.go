@@ -1,7 +1,6 @@
 package pipe_primitive
 
 import (
-	"github.com/ctrsploit/ctrsploit/helper/crash"
 	"github.com/ctrsploit/ctrsploit/internal"
 	"github.com/ssst0n3/awesome_libs/awesome_error"
 	"os"
@@ -42,8 +41,4 @@ func WriteImageEntrypoint(primitive Primitive, payload []byte) (err error) {
 		path = string(comm)
 	}
 	return WriteImage(primitive, string(path), payload)
-}
-
-func makeCrash() (err error) {
-	return crash.MakeContainerCrash()
 }

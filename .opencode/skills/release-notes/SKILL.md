@@ -11,7 +11,8 @@ version summaries.
 ## Workflow
 
 1. Identify the target version and previous release.
-   - Prefer explicit user input, for example `v0.26.0` since `v0.25.1`.
+   - Prefer explicit user input, for example `v0.26.0-beta.5` since
+     `v0.25.1`.
    - If missing, inspect tags with `git tag --sort=version:refname`.
    - Do not assume beta tags are the previous release for a stable release.
 2. Inspect the release range.
@@ -27,9 +28,15 @@ version summaries.
    - If one object includes both PR changes and direct-push commits, list both
      in the heading. Example: `### suid ([#368], [58afd74])`.
 4. Write notes under `docs/release-notes/<version>.md`.
-   - Use one file per release, for example `docs/release-notes/v0.26.0.md`.
+   - Use one file per release, for example
+     `docs/release-notes/v0.26.0-beta.5.md`.
    - Do not create root-level `changelog.md` unless the repo has adopted a
      persistent root `CHANGELOG.md` convention.
+   - Link changed objects to existing repository docs when available.
+     Use GitHub absolute `blob/<version>/...` links for release notes that will
+     be pasted into GitHub Releases, because release bodies are not rendered
+     relative to `docs/release-notes/<version>.md`.
+   - Add a `Contributors` section before link reference definitions.
 5. Validate.
    - Run `git diff --check -- docs/release-notes/<version>.md`.
    - Review that major commits in the range are represented.
@@ -91,6 +98,19 @@ notes harder to scan.
 - Keep implementation details only when they explain behavior users will see.
 - Include tests and e2e coverage, but keep them after feature/fix content.
 - Use concrete paths for important docs or generated assets when helpful.
+- Prefer linking the object heading to its README, SKILL, or documented section
+  when the repository already has one. For GitHub Release body compatibility,
+  use versioned absolute links such as
+  `https://github.com/ctrsploit/ctrsploit/blob/<version>/pkg/pipe-primitive/README.md#clean`.
+  Do not invent links for commands or objects that do not have a clear
+  documentation target.
+- Include release contributors from git authors in the compared range. Normalize
+  duplicate casing for the same email, exclude bot/merge committers such as
+  `GitHub <noreply@github.com>`, and do not treat tool footers such as
+  `Made-with: ...` as contributors.
+- Prefer GitHub `@username` mentions in the `Contributors` section when the
+  contributor account is known, so GitHub release pages can render linked
+  contributor profiles and avatars.
 
 ## PR Mapping Heuristics
 

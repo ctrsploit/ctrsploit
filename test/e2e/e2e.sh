@@ -23,20 +23,20 @@ while IFS= read -r e2e_file; do
   fi
 
   for (( i = 0; i < num_envs; i++ )); do
-    # Extract the test environment details.
+    # Extract the test environment details, falling back to defaults.
     ENV_NAME=$(yq eval ".test_envs[$i].name" "$e2e_file")
     if [[ -n "${TARGET_TEST_ENV}" && "${ENV_NAME}" != "${TARGET_TEST_ENV}" ]]; then
       continue
     fi
     MATCHED_TEST_ENV=true
 
-    REMOTE_HOST=$(yq eval ".test_envs[$i].remote_host" "$e2e_file")
-    ENV_KIND=$(yq eval ".test_envs[$i].kind" "$e2e_file")
-    DQD_DIR=$(yq eval ".test_envs[$i].dqd_dir" "$e2e_file")
-    PKG=$(yq eval ".test_envs[$i].pkg" "$e2e_file")
-    CMD=$(yq eval ".test_envs[$i].cmd" "$e2e_file")
-    STOP_FLAG=$(yq eval ".test_envs[$i].stop_flag" "$e2e_file")
-    START_TIMEOUT=$(yq eval ".test_envs[$i].start_timeout" "$e2e_file")
+    REMOTE_HOST=$(yq eval ".test_envs[$i].remote_host // .defaults.remote_host" "$e2e_file")
+    ENV_KIND=$(yq eval ".test_envs[$i].kind // .defaults.kind" "$e2e_file")
+    DQD_DIR=$(yq eval ".test_envs[$i].dqd_dir // .defaults.dqd_dir" "$e2e_file")
+    PKG=$(yq eval ".test_envs[$i].pkg // .defaults.pkg" "$e2e_file")
+    CMD=$(yq eval ".test_envs[$i].cmd // .defaults.cmd" "$e2e_file")
+    STOP_FLAG=$(yq eval ".test_envs[$i].stop_flag // .defaults.stop_flag" "$e2e_file")
+    START_TIMEOUT=$(yq eval ".test_envs[$i].start_timeout // .defaults.start_timeout" "$e2e_file")
 
     if [[ -z "$REMOTE_HOST" || "$REMOTE_HOST" == "null" ]]; then
         REMOTE_HOST="$ENV_NAME"
