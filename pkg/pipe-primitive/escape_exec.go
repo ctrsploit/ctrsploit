@@ -43,27 +43,48 @@ func WriteProcessEntrypoint(primitive Primitive, pid int, payload []byte) error 
 }
 
 func processEntrypointPath(pid int) (string, error) {
-	if path, err := processArgv0Path(pid); err == nil {
-		return path, nil
-	}
-
 	shebang, err := internal.IsSheBang(pid)
 	if err != nil {
 		return "", fmt.Errorf("detect whether /proc/%d uses shebang: %w", pid, err)
 	}
 	if shebang {
-		comm, err := os.ReadFile(fmt.Sprintf("/proc/%d/comm", pid))
-		if err != nil {
-			return "", fmt.Errorf("read /proc/%d/comm for shebang entrypoint: %w", pid, err)
-		}
-		path := strings.TrimSpace(string(comm))
-		if filepath.IsAbs(path) {
-			return filepath.EvalSymlinks(path)
-		}
-		return filepath.EvalSymlinks(filepath.Join("/", path))
+		return processShebangScriptPath(pid)
+	}
+
+	if path, err := processArgv0Path(pid); err == nil {
+		return path, nil
 	}
 
 	return fmt.Sprintf("/proc/%d/exe", pid), nil
+}
+
+func processShebangScriptPath(pid int) (string, error) {
+	cmdline, err := os.ReadFile(fmt.Sprintf("/proc/%d/cmdline", pid))
+	if err != nil {
+		return "", fmt.Errorf("read /proc/%d/cmdline: %w", pid, err)
+	}
+	argv := splitProcessCmdline(cmdline)
+	if len(argv) < 2 {
+		return "", fmt.Errorf("/proc/%d/cmdline has no shebang script argument", pid)
+	}
+
+	comm, err := os.ReadFile(fmt.Sprintf("/proc/%d/comm", pid))
+	if err != nil {
+		return "", fmt.Errorf("read /proc/%d/comm for shebang entrypoint: %w", pid, err)
+	}
+	processName := strings.TrimSpace(string(comm))
+	for _, arg := range argv[1:] {
+		path := string(arg)
+		if path == "" {
+			continue
+		}
+		if processName != "" && !matchesShebangProcessName(path, processName) {
+			continue
+		}
+		return resolveProcessPathArgument(pid, path)
+	}
+
+	return resolveProcessPathArgument(pid, string(argv[1]))
 }
 
 func processArgv0Path(pid int) (string, error) {
@@ -71,12 +92,24 @@ func processArgv0Path(pid int) (string, error) {
 	if err != nil {
 		return "", fmt.Errorf("read /proc/%d/cmdline: %w", pid, err)
 	}
-	argv := bytes.Split(bytes.TrimRight(cmdline, "\x00"), []byte{0})
+	argv := splitProcessCmdline(cmdline)
 	if len(argv) == 0 || len(argv[0]) == 0 {
 		return "", fmt.Errorf("/proc/%d/cmdline has no argv0", pid)
 	}
 
-	path := string(argv[0])
+	return resolveProcessPathArgument(pid, string(argv[0]))
+}
+
+func splitProcessCmdline(cmdline []byte) [][]byte {
+	return bytes.Split(bytes.TrimRight(cmdline, "\x00"), []byte{0})
+}
+
+func matchesShebangProcessName(path, processName string) bool {
+	base := filepath.Base(path)
+	return base == processName || strings.HasPrefix(base, processName) || strings.Contains(path, processName)
+}
+
+func resolveProcessPathArgument(pid int, path string) (string, error) {
 	if path == "/proc/self/exe" {
 		return fmt.Sprintf("/proc/%d/exe", pid), nil
 	}

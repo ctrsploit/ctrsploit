@@ -18,3 +18,7 @@ type EscapeImageExtraFileProvider interface {
 type RestartLoaderProvider interface {
 	RestartLoader(payload []byte) ([]byte, error)
 }
+
+type RuncOverwritePayloadProvider interface {
+	RuncOverwritePayload(cmd string) ([]byte, error)
+}

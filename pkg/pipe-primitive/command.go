@@ -70,6 +70,10 @@ func Command(primitive Primitive, aliases []string, usage string) *cli.Command {
 								}},
 						},
 						Action: func(ctx context.Context, cmd *cli.Command) error {
+							payload, err := resolveRuncOverwritePayload(primitive, cmd.String("cmd"))
+							if err != nil {
+								return err
+							}
 							provider, ok := primitive.(EscapeImageWriterProvider)
 							if !ok {
 								return fmt.Errorf("%s does not provide an escape image writer", primitive.GetExpName())
@@ -78,7 +82,7 @@ func Command(primitive Primitive, aliases []string, usage string) *cli.Command {
 							if provider, ok := primitive.(EscapeImageExtraFileProvider); ok {
 								extraFiles = provider.EscapeImageExtraFiles()
 							}
-							return GenerateEscapeImageWithMode(cmd.String("dir"), cmd.String("mode"), provider.EscapeImageWriter(), ShellPayload(cmd.String("cmd")), extraFiles)
+							return GenerateEscapeImageWithMode(cmd.String("dir"), cmd.String("mode"), provider.EscapeImageWriter(), payload, extraFiles)
 						},
 					},
 					{
@@ -94,7 +98,11 @@ func Command(primitive Primitive, aliases []string, usage string) *cli.Command {
 								Usage: "timeout for waiting to capture runc; 0 means wait forever"},
 						},
 						Action: func(ctx context.Context, cmd *cli.Command) error {
-							return EscapeExec(primitive, cmd.String("target"), ShellPayload(cmd.String("cmd")), cmd.Duration("timeout"))
+							payload, err := resolveRuncOverwritePayload(primitive, cmd.String("cmd"))
+							if err != nil {
+								return err
+							}
+							return EscapeExec(primitive, cmd.String("target"), payload, cmd.Duration("timeout"))
 						},
 					},
 					{
@@ -114,7 +122,11 @@ func Command(primitive Primitive, aliases []string, usage string) *cli.Command {
 						},
 						Action: func(ctx context.Context, cmd *cli.Command) error {
 							methods := crash.ParseMethods(cmd.String("restart-method"))
-							return EscapeRestart(primitive, cmd.Int("pid"), ShellPayload(cmd.String("cmd")), cmd.Duration("timeout"), methods...)
+							payload, err := resolveRuncOverwritePayload(primitive, cmd.String("cmd"))
+							if err != nil {
+								return err
+							}
+							return EscapeRestart(primitive, cmd.Int("pid"), payload, cmd.Duration("timeout"), methods...)
 						},
 					},
 				},
