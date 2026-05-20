@@ -16,6 +16,7 @@ import (
 	cve_2021_25741 "github.com/ctrsploit/ctrsploit/vul/cve-2021-25741"
 	cve_2021_25748 "github.com/ctrsploit/ctrsploit/vul/cve-2021-25748"
 	cve_2022_0492 "github.com/ctrsploit/ctrsploit/vul/cve-2022-0492"
+	cve_2022_0847 "github.com/ctrsploit/ctrsploit/vul/cve-2022-0847"
 	cve_2022_39253 "github.com/ctrsploit/ctrsploit/vul/cve-2022-39253"
 	cve_2024_0132 "github.com/ctrsploit/ctrsploit/vul/cve-2024-0132"
 	cve_2024_23650 "github.com/ctrsploit/ctrsploit/vul/cve-2024-23650"
@@ -49,6 +50,7 @@ var All = vul.Vulnerabilities{
 	&cve_2021_25741.Vul,
 	&cve_2021_25748.Vul,
 	&cve_2022_0492.Vul,
+	&cve_2022_0847.Vul,
 	&cve_2022_39253.Vul,
 	&cve_2024_0132.Vul,
 	&cve_2024_23650.Vul,

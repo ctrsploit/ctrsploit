@@ -2,6 +2,7 @@ package module
 
 import (
 	cve_2022_0492 "github.com/ctrsploit/ctrsploit/vul/cve-2022-0492"
+	cve_2022_0847 "github.com/ctrsploit/ctrsploit/vul/cve-2022-0847"
 	cve_2026_31431 "github.com/ctrsploit/ctrsploit/vul/cve-2026-31431"
 	cve_2026_43284 "github.com/ctrsploit/ctrsploit/vul/cve-2026-43284"
 	cve_2026_43500 "github.com/ctrsploit/ctrsploit/vul/cve-2026-43500"
@@ -17,6 +18,7 @@ var Kernel = &cli.Command{
 grouped as a logical module entrypoint.`,
 	Commands: []*cli.Command{
 		cve_2022_0492.VulCmd,
+		cve_2022_0847.VulCmd,
 		cve_2026_31431.VulCmd,
 		cve_2026_43284.VulCmd,
 		cve_2026_43500.VulCmd,
