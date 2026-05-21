@@ -63,6 +63,25 @@ jobs:
             exit 1
           fi
 
+      - name: Prepare release notes
+        id: release_notes
+        shell: bash
+        run: |
+          notes="${{ steps.release.outputs.notes }}"
+          body="${RUNNER_TEMP}/release-notes-body.md"
+          title="$(head -n 1 "${notes}" | sed -E 's/^#[[:space:]]*//; s/^[[:space:]]+//; s/[[:space:]]+$//')"
+
+          if [[ -z "${title}" ]]; then
+            echo "release note title is empty: ${notes}" >&2
+            exit 1
+          fi
+
+          tail -n +2 "${notes}" | sed '1{/^$/d;}' > "${body}"
+
+          echo "Release title: ${title}"
+          echo "title=${title}" >> "${GITHUB_OUTPUT}"
+          echo "body=${body}" >> "${GITHUB_OUTPUT}"
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
@@ -99,8 +118,8 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.release.outputs.tag }}
-          name: ${{ steps.release.outputs.tag }}
-          body_path: ${{ steps.release.outputs.notes }}
+          name: ${{ steps.release_notes.outputs.title }}
+          body_path: ${{ steps.release_notes.outputs.body }}
           prerelease: ${{ contains(steps.release.outputs.tag, '-') }}
           make_latest: ${{ contains(steps.release.outputs.tag, '-') && 'false' || 'true' }}
           fail_on_unmatched_files: true

@@ -330,8 +330,8 @@ OPTIONS:
 | [cve-2022-0492](./vul/cve-2022-0492) | escape via cgroup's release agent without CAP_SYS_ADMIN if kernel is vulnerable to CVE-2022-0492 | :heavy_check_mark: | :heavy_check_mark: |
 | [cve-2022-0847](./vul/cve-2022-0847) | local privilege escalation and container escape in Linux kernel Dirty Pipe | :o: | :heavy_check_mark: |
 | [cve-2026-31431](./vul/cve-2026-31431) | local privilege escalation and container escape in Linux kernel AF_ALG AEAD interface | :o: | :heavy_check_mark: |
-| [cve-2026-43284](./vul/cve-2026-43284) | local privilege escalation and container escape in Linux kernel xfrm ESP Dirty Frag path | :o: | :o: |
-| [cve-2026-43500](./vul/cve-2026-43500) | local privilege escalation in Linux kernel RxRPC/rxkad Dirty Frag path | :o: | :o: |
+| [cve-2026-43284](./vul/cve-2026-43284) | local privilege escalation and container escape in Linux kernel xfrm ESP Dirty Frag path | :o: | :heavy_check_mark: |
+| [cve-2026-43500](./vul/cve-2026-43500) | local privilege escalation in Linux kernel RxRPC/rxkad Dirty Frag path | :o: | :heavy_check_mark: |
 
 ### exploit
 
