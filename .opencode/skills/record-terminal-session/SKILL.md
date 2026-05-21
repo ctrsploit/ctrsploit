@@ -45,6 +45,20 @@ vulnerability's `README.md` or `e2e.yml`.
 - Keep the README commands, the recording, and the verified manual run on the
   same logical path. Do not let the README show one installation or trigger
   method while the SVG shows another.
+- Design the demo around the normal operator flow before choosing recording
+  automation. A command sequence that is real but optimized for scripting is not
+  necessarily a good public demo if a user would naturally perform different
+  steps.
+- Do not redirect the primary exploit output or proof output into a temporary
+  log and then `cat` that log just to make recording easier. The main exploit
+  command should usually print its own result directly in the visible terminal.
+  Visible log files are appropriate only when reading a log is itself the
+  natural operator workflow, such as inspecting a background service.
+- Do not present retry or polling loops such as `for`, `seq`, or `until` as the
+  public reproduction path unless that loop is genuinely part of the normal user
+  workflow. If a loop or wrapper is needed just to make the recording pass,
+  first revisit the lab image, shell, dynamic libraries, entrypoint, mounts, and
+  trigger choice.
 - Do not assume a source-tree or locally built `ctrsploit` binary should be
   used just because the task originates from this repository. First verify
   whether the installation path documented in the target `README.md` is
@@ -64,6 +78,17 @@ vulnerability's `README.md` or `e2e.yml`.
   into that container and creating input files there. Do not mount host-side
   tools or source files into the container unless that is the realistic,
   documented setup being demonstrated.
+- For container-internal exploit demos, prefer showing the natural container
+  workflow when that is what a user would do: start or enter the container,
+  show the container prompt, prepare input inside the container, run
+  `ctrsploit` inside the container, then exit and verify from a fresh container
+  or the host as appropriate. Do not collapse those steps into a host-side
+  helper script or a long `sh -c` wrapper just because it is easier to record,
+  unless the README intentionally documents that wrapper as the user workflow.
+- Do not hide key exploit steps in temporary files such as `/tmp/*.sh` for the
+  visible demo. Temporary helpers are acceptable for local recording automation,
+  but the rendered terminal should show the commands a normal operator would
+  type and the real output those commands produced in the lab.
 - Do not use `make e2e` or test binaries as the main recorded content unless the
   user explicitly asks for an e2e/test demonstration. E2E is useful before or
   after recording to validate behavior, but it hides the exploit steps and is not
@@ -71,12 +96,26 @@ vulnerability's `README.md` or `e2e.yml`.
 - Prefer a concise exploit path that proves the vulnerability clearly and avoids
   unnecessary noise. If several exploit modes exist, pick the shortest
   understandable proof unless the user specifies a mode.
+- If the concise path is unreliable, fix the reproduction environment or
+  documented flow before considering product-code changes. Do not patch core
+  exploit or watcher logic only to make a demo easier unless the investigation
+  confirms an actual product bug.
 - For waiting or trigger-based exploits, record the full causal chain:
   setup, waiting state, trigger command, post-trigger exploit output, and final
   proof. Do not stop at a `Waiting...` message, and do not show the final
   validation before the primary exploit pane has visibly completed.
+- For trigger-based exploits, choose a trigger command that is understandable to
+  the target user, returns controllably, and avoids misleading failure noise. If
+  the first obvious trigger hangs or becomes noisy after the exploit changes the
+  runtime, find an equivalent direct trigger or adjust the documented flow; do
+  not hide the problem behind log redirection or a recording-only wrapper.
 - For destructive flows such as runc overwrite or host file modification, use
   only disposable lab VMs/containers and make the final proof line explicit.
+- For interactive shell exploits, especially local privilege escalation flows,
+  do not pipe scripted input into the exploit command as the visible demo, such
+  as `printf 'id\n...' | ctrsploit ...`. Record a real interactive session:
+  run the exploit, wait for the new shell, then visibly enter proof commands
+  such as `id` or `head -1 /etc/passwd`.
 
 ## Readability Rules
 
@@ -104,15 +143,23 @@ shell transcript.
   effect: trigger appears after the waiting state, post-trigger output remains
   visible long enough to read, and proof commands run after the exploit visibly
   completes.
+- Pace scripted or headless demos like a human demonstration. Leave about
+  `0.8s` to `1.2s` between visible commands, pause briefly after important
+  output before typing the next proof command, and avoid a burst of commands
+  landing in the same instant.
 - Leave enough dwell time on the final proof line and final prompt for a reader
   to understand the result.
 - Quantify the final-frame dwell time for generated SVGs instead of only
   checking the exported text. Parse the SVG `animation-duration` and final
   keyframe percentage, and require the last proof/prompt frame to remain visible
-  for at least 3 seconds, preferably around 4 seconds for proof output.
+  for at least 3 seconds, preferably around 4 to 5 seconds for proof output.
 - For headless or scripted recordings, do not let the command exit immediately
   after printing the final prompt. Add an explicit final wait or adjust the cast
   exit event, and ensure `idle_time_limit` does not compress that wait away.
+- When using `expect` to hide SSH banners in headless recordings, keep
+  `log_user 0` only until the first prompt is matched. Then enable `log_user 1`
+  and send an empty carriage return so the first visible frame contains a real
+  prompt before the demo commands start.
 - After rendering, inspect the SVG or a screenshot for wrapped words, split
   command lines, spinner/progress artifacts, local hostnames, and overlapping or
   visually garbled text. Re-record or edit the cast if the demo is hard to read.
@@ -179,6 +226,14 @@ shell transcript.
      referenced near the subsection it demonstrates.
    - The README, recording, and real verified command path agree on install
      location, input-file location, trigger command, and proof command.
+   - Every important visible command result was obtained by actually running the
+     same command in the target lab; do not synthesize proof output, copy it
+     from a different flow, or record a helper path while documenting a manual
+     path.
+   - The visible command order follows the target user's normal mental model.
+     For example, a container exploit demo should not hide container-internal
+     setup in a host-side helper script when a normal user would enter the
+     container shell and run the commands there.
    - If the recording used a local build instead of the documented release
      install path, the reason for the deviation was verified and the upload or
      install step is visible in the demo.
@@ -192,11 +247,34 @@ shell transcript.
      shown.
    - Visible command lines are not accidentally hard-wrapped or visually
      garbled.
+   - The visible cast events do not contain recording failures such as
+     `send: spawn id not open`, `Operation not permitted`,
+     `Bad owner or permissions`, unexpected expect debug output, or timeout
+     messages. If they do, re-record before rendering the SVG.
+   - Header-only text such as an `expect` script is not treated as visible
+     terminal output. Validate the actual output events and rendered SVG text
+     separately, including checks that unwanted demo shortcuts such as `printf`
+     do not appear.
+   - Scan the final `.cast` and SVG text for accidental shortcuts and failure
+     noise before finishing. For exploit demos, this usually includes negative
+     checks for retry loops (`for i in`, `seq`, `until`), hidden helper scripts
+     used as the visible flow (`/tmp/*.sh`), terminal detach/control artifacts,
+     log relay patterns such as `>/tmp/*.log` followed by `cat /tmp/*.log`, and
+     errors such as `No such file`, `docker: Error`, or dynamic loader failures.
+   - Review visible redirections to temporary logs. They should be part of the
+     user's natural diagnostic workflow, not a way to hide primary exploit
+     output, trigger output, or proof output from the terminal.
+   - Use distinct, causal names for any visible log redirections so readers can
+     tell which command produced which output. Avoid reusing one generic
+     `trigger.log` for unrelated trigger and proof steps.
    - The final frames visibly show the vulnerability result or proof and stay on
      screen long enough to read.
    - The final SVG frame dwell has been measured, not guessed. For SVGs generated
      by `svg-term`, compute dwell from `animation-duration` and the final
      keyframe percentage; fix any value under 3 seconds before finishing.
+   - Headless browser screenshots of `svg-term` animations can capture the
+     initial blank frame. Do not judge the SVG solely from that screenshot; also
+     inspect the SVG text, keyframes, dwell time, or open it interactively.
 
 ## Cleaning Casts
 
