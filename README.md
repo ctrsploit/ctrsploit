@@ -129,6 +129,7 @@ COMMANDS:
    cve-2020-15257, 15257                           abuse the containerd-shim's abstract unix socket in a container with host network namespace
    cve-2021-25741, 25741, kubelet-subpath-symlink  kubelet symlink exchange vulnerability allows mounting node filesystem inside a pod
    cve-2021-25748, 25748, ingress-nginx-path-leak  ingress-nginx path validation bypass vulnerability allows credential leakage through newline injection
+   cve-2021-3493, 3493, ubuntu-overlayfs-pe, CVE-2021-3493  local privilege escalation in Ubuntu OverlayFS that may lead to container escape when the kernel attack surface is exposed
    cve-2022-0492, 0492                             escape via cgroup's release agent without CAP_SYS_ADMIN if kernel is vulnerable to CVE-2022-0492
    cve-2022-39253, 39253                           read host file during docker build via git CVE-2022-39253
    cve-2024-0132, 0132                             gpu container escape via nvidia-container-toolkit CVE-2024-0132
@@ -324,7 +325,7 @@ OPTIONS:
 | vul | desc | check | exploit |
 |-----|------|-------|---------|
 | cve-2021-22555 |  | :x: | :heavy_check_mark: |
-| cve-2021-3493 |  | :x: | :heavy_check_mark: |
+| [cve-2021-3493](./vul/cve-2021-3493) | local privilege escalation in Ubuntu OverlayFS that may lead to container escape when the kernel attack surface is exposed | :x: | :x: |
 | [cve-2022-0492](./vul/cve-2022-0492) | escape via cgroup's release agent without CAP_SYS_ADMIN if kernel is vulnerable to CVE-2022-0492 | :heavy_check_mark: | :heavy_check_mark: |
 | cve-2022-0847 |  | :x: | :heavy_check_mark: |
 | [cve-2026-31431](./vul/cve-2026-31431) | local privilege escalation and container escape in Linux kernel AF_ALG AEAD interface | :o: | :heavy_check_mark: |
@@ -402,6 +403,7 @@ COMMANDS:
    cve-2020-15257, 15257                               abuse the containerd-shim's abstract unix socket in a container with host network namespace
    cve-2021-25741, 25741, kubelet-subpath-symlink      kubelet symlink exchange vulnerability allows mounting node filesystem inside a pod
    cve-2021-25748, 25748, ingress-nginx-path-leak      ingress-nginx path validation bypass vulnerability allows credential leakage through newline injection
+   cve-2021-3493, 3493, ubuntu-overlayfs-pe, CVE-2021-3493  local privilege escalation in Ubuntu OverlayFS that may lead to container escape when the kernel attack surface is exposed
    cve-2022-0492, 0492                                 escape via cgroup's release agent without CAP_SYS_ADMIN if kernel is vulnerable to CVE-2022-0492
    cve-2022-39253, 39253                               read host file during docker build via git CVE-2022-39253
    cve-2024-0132, 0132                                 gpu container escape via nvidia-container-toolkit CVE-2024-0132
@@ -429,10 +431,6 @@ COMMANDS:
 OPTIONS:
    --help, -h  show help
 ```
-
-### helper
-
-// TODO
 
 ## Progress of Development
 

@@ -1,6 +1,7 @@
 package module
 
 import (
+	cve_2021_3493 "github.com/ctrsploit/ctrsploit/vul/cve-2021-3493"
 	cve_2022_0492 "github.com/ctrsploit/ctrsploit/vul/cve-2022-0492"
 	cve_2022_0847 "github.com/ctrsploit/ctrsploit/vul/cve-2022-0847"
 	cve_2026_31431 "github.com/ctrsploit/ctrsploit/vul/cve-2026-31431"
@@ -17,6 +18,7 @@ var Kernel = &cli.Command{
 	Description: `Kernel related vulnerabilities, focused on kernel CVEs
 grouped as a logical module entrypoint.`,
 	Commands: []*cli.Command{
+		cve_2021_3493.VulCmd,
 		cve_2022_0492.VulCmd,
 		cve_2022_0847.VulCmd,
 		cve_2026_31431.VulCmd,
