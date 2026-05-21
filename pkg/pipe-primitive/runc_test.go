@@ -1,6 +1,13 @@
 package pipeprimitive
 
 import (
+	"bytes"
+	"debug/elf"
+	"os"
+	"os/exec"
+	"path/filepath"
+	"runtime"
+	"strings"
 	"testing"
 
 	"github.com/ctrsploit/ctrsploit/pkg/pipe-primitive/runcwatch"
@@ -11,6 +18,73 @@ func TestShellPayload(t *testing.T) {
 	want := "#!/bin/bash\ntouch /escaped\n"
 	if got != want {
 		t.Fatalf("payload = %q, want %q", got, want)
+	}
+}
+
+func TestStaticShellPayload(t *testing.T) {
+	payload, err := StaticShellPayload("touch /escaped")
+	if err != nil {
+		t.Fatalf("StaticShellPayload returned error: %v", err)
+	}
+	if !bytes.HasPrefix(payload, []byte("\x7fELF")) {
+		t.Fatalf("static shell payload does not start with ELF magic: % x", payload[:4])
+	}
+	for _, want := range []string{"/bin/bash", "-c", "touch /escaped"} {
+		if !bytes.Contains(payload, []byte(want)) {
+			t.Fatalf("static shell payload missing argv %q", want)
+		}
+	}
+}
+
+func TestStaticShellPayloadRejectsLongArg(t *testing.T) {
+	_, err := StaticShellPayload(strings.Repeat("A", staticShellArgBufSize))
+	if err == nil {
+		t.Fatal("expected oversized arg error")
+	}
+}
+
+func TestStaticShellPayloadAMD64IsSmallELF(t *testing.T) {
+	payload, err := StaticShellPayload("true")
+	if err != nil {
+		t.Fatalf("StaticShellPayload returned error: %v", err)
+	}
+	if len(payload) > 4096 {
+		t.Fatalf("static shell payload length = %d, want <= 4096", len(payload))
+	}
+
+	f, err := elf.NewFile(bytes.NewReader(payload))
+	if err != nil {
+		t.Fatalf("parse static shell payload ELF: %v", err)
+	}
+	defer f.Close()
+	if f.Type != elf.ET_EXEC {
+		t.Fatalf("static shell payload type = %s, want ET_EXEC", f.Type)
+	}
+	if f.Machine != elf.EM_X86_64 {
+		t.Fatalf("static shell payload machine = %s, want EM_X86_64", f.Machine)
+	}
+}
+
+func TestStaticShellPayloadExecutesCommand(t *testing.T) {
+	if runtime.GOOS != "linux" || runtime.GOARCH != "amd64" {
+		t.Skipf("static shell payload execution unsupported on %s/%s", runtime.GOOS, runtime.GOARCH)
+	}
+
+	dir := t.TempDir()
+	proof := filepath.Join(dir, "proof")
+	payload, err := StaticShellPayload("touch " + proof)
+	if err != nil {
+		t.Fatalf("StaticShellPayload returned error: %v", err)
+	}
+	path := filepath.Join(dir, "payload")
+	if err := os.WriteFile(path, payload, 0o755); err != nil {
+		t.Fatalf("write payload: %v", err)
+	}
+	if out, err := exec.Command(path).CombinedOutput(); err != nil {
+		t.Fatalf("execute static shell payload: %v\n%s", err, out)
+	}
+	if _, err := os.Stat(proof); err != nil {
+		t.Fatalf("payload did not create proof file: %v", err)
 	}
 }
 

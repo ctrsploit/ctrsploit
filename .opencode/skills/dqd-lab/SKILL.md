@@ -41,6 +41,15 @@ When using the native recorded dqd flow from inside the dqd checkout, `./ssh`
 is also acceptable because it is part of the dqd project interface. Do not
 replace a missing `dqd-` SSH alias with the raw unprefixed host name.
 
+For scripted or headless terminal recordings, prefer the dqd SSH config
+directly to avoid unrelated local or system SSH config noise:
+
+```bash
+ssh -tt -F /tmp/dqd/ssh_config/config -o LogLevel=ERROR dqd-cve-2026-31431
+```
+
+Adjust only the host name for the target lab.
+
 ## Native DQD Lifecycle
 
 For recorded demos and documentation reproduction, use the native commands from the dqd checkout:

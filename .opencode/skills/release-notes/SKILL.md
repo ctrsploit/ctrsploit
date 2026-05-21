@@ -14,7 +14,17 @@ version summaries.
    - Prefer explicit user input, for example `v0.26.0-beta.5` since
      `v0.25.1`.
    - If missing, inspect tags with `git tag --sort=version:refname`.
-   - Do not assume beta tags are the previous release for a stable release.
+   - Treat an existing tag's release notes as published. Do not backfill an
+     already-published `docs/release-notes/<version>.md` for later changes;
+     create or update the next target version instead.
+   - For beta/pre-release notes, use the previous stable release as the
+     comparison baseline, not the previous beta tag. For example,
+     `v0.26.0-beta.6` should say `Changes since v0.25.1`, not
+     `Changes since v0.26.0-beta.5`.
+   - Later beta notes are cumulative snapshots for users upgrading from the
+     previous stable release. Carry forward relevant previous beta notes,
+     update versioned `blob/<version>/...` links to the new target version,
+     then add the new changes since the prior beta.
 2. Inspect the release range.
    - `git log --oneline --no-merges <previous>..HEAD`
    - `git log --oneline --merges <previous>..HEAD`
@@ -40,6 +50,11 @@ version summaries.
 5. Validate.
    - Run `git diff --check -- docs/release-notes/<version>.md`.
    - Review that major commits in the range are represented.
+   - Verify an already-published previous notes file has no diff.
+   - Verify `Changes since ...` points to the previous stable release for beta
+     notes.
+   - Verify the new file does not retain stale versioned links from the prior
+     beta.
 
 ## Structure
 
