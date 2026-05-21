@@ -9,10 +9,10 @@ import (
 	"os"
 	"strings"
 
-	"github.com/ctrsploit/ctrsploit/hack/version_collect/runc_collector/pkg"
 	"github.com/ctrsploit/ctrsploit/pkg/version/libseccomp"
 	"github.com/ctrsploit/ctrsploit/pkg/version/runc"
 	"github.com/ctrsploit/ctrsploit/pkg/version/version"
+	"github.com/ctrsploit/ctrsploit/script/version_collect/runc_collector/pkg"
 	"github.com/google/uuid"
 	"github.com/ssst0n3/awesome_libs"
 	"github.com/ssst0n3/awesome_libs/awesome_error"

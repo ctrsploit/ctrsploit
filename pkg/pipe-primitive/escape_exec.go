@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/ctrsploit/ctrsploit/internal"
+	"github.com/ctrsploit/ctrsploit/pkg/proc"
 	"github.com/ctrsploit/sploit-spec/pkg/log"
 )
 
@@ -43,7 +43,7 @@ func WriteProcessEntrypoint(primitive Primitive, pid int, payload []byte) error 
 }
 
 func processEntrypointPath(pid int) (string, error) {
-	shebang, err := internal.IsSheBang(pid)
+	shebang, err := proc.IsSheBang(pid)
 	if err != nil {
 		return "", fmt.Errorf("detect whether /proc/%d uses shebang: %w", pid, err)
 	}

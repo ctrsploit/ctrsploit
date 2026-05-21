@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/ctrsploit/ctrsploit/internal"
+	"github.com/ctrsploit/ctrsploit/pkg/fileutil"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -53,7 +53,7 @@ func TestE2E_Exploit(t *testing.T) {
 		const pollInterval = 500 * time.Millisecond
 
 		condition := func() bool {
-			exists, _ := internal.CheckPathExists("/host/escaped")
+			exists, _ := fileutil.CheckPathExists("/host/escaped")
 			return exists
 		}
 

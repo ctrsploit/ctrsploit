@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/ctrsploit/ctrsploit/internal"
+	"github.com/ctrsploit/ctrsploit/pkg/fileutil"
 	"github.com/ctrsploit/ctrsploit/pkg/mountinfo"
 	"github.com/ctrsploit/sploit-spec/pkg/prerequisite"
 )
@@ -19,7 +19,7 @@ type Masked struct {
 // returns false if not masked or Path not exists.
 func (p *Masked) Check() (bool, error) {
 	return p.CheckTemplate(func() {
-		exists, _ := internal.CheckPathExists(p.Path)
+		exists, _ := fileutil.CheckPathExists(p.Path)
 		if !exists {
 			return
 		}

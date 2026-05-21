@@ -5,7 +5,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/ctrsploit/ctrsploit/internal"
+	"github.com/ctrsploit/ctrsploit/pkg/fileutil"
 	"github.com/ctrsploit/sploit-spec/pkg/log"
 )
 
@@ -29,7 +29,7 @@ func UnprivilegedUsernsCloneEnabled() (bool, error) {
 }
 
 func PidMax() (uint64, error) {
-	pid, err := internal.ReadUint64(PathPidMax)
+	pid, err := fileutil.ReadUint64(PathPidMax)
 	if err != nil {
 		return 0, fmt.Errorf("failed to read pid max: %w", err)
 	}
@@ -37,7 +37,7 @@ func PidMax() (uint64, error) {
 }
 
 func ThreadsMax() (uint64, error) {
-	threads, err := internal.ReadUint64(PathThreadsMax)
+	threads, err := fileutil.ReadUint64(PathThreadsMax)
 	if err != nil {
 		return 0, fmt.Errorf("failed to read threads max: %w", err)
 	}
