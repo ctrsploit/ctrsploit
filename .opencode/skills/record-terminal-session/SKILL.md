@@ -85,6 +85,10 @@ vulnerability's `README.md` or `e2e.yml`.
   or the host as appropriate. Do not collapse those steps into a host-side
   helper script or a long `sh -c` wrapper just because it is easier to record,
   unless the README intentionally documents that wrapper as the user workflow.
+- If setup steps are part of the proof's causal chain, make them visible. For
+  example, show the command that creates a polluted state before demonstrating a
+  cleanup command. Hide only pure environment preparation that a reader does not
+  need to understand the result.
 - Do not hide key exploit steps in temporary files such as `/tmp/*.sh` for the
   visible demo. Temporary helpers are acceptable for local recording automation,
   but the rendered terminal should show the commands a normal operator would
@@ -160,6 +164,15 @@ shell transcript.
   `log_user 0` only until the first prompt is matched. Then enable `log_user 1`
   and send an empty carriage return so the first visible frame contains a real
   prompt before the demo commands start.
+- Keep recording mechanics out of the visible transcript. When using `expect`
+  with SSH or container shells, perform connection setup, `TERM` changes, shell
+  startup flags, and `PS1` initialization while `log_user 0` is active. The
+  rendered demo should start at a clean prompt followed by the first user-facing
+  command, not `spawn ssh`, `PS1=...`, or similar automation details.
+- Suppress shell and terminal control noise before recording. If SSH or an
+  interactive shell emits title escapes, profile banners, or prompt decoration,
+  use a quiet shell setup such as `TERM=dumb`, `--noprofile --norc`, and a fixed
+  `PS1` before enabling visible output.
 - After rendering, inspect the SVG or a screenshot for wrapped words, split
   command lines, spinner/progress artifacts, local hostnames, and overlapping or
   visually garbled text. Re-record or edit the cast if the demo is hard to read.
@@ -251,6 +264,10 @@ shell transcript.
      `send: spawn id not open`, `Operation not permitted`,
      `Bad owner or permissions`, unexpected expect debug output, or timeout
      messages. If they do, re-record before rendering the SVG.
+   - The visible cast events and SVG do not leak recording setup such as
+     `spawn ssh`, `PS1=...`, `TERM=...`, shell startup flags, SSH banners, or
+     terminal-title escape sequences unless those are intentionally part of the
+     user-facing demo.
    - Header-only text such as an `expect` script is not treated as visible
      terminal output. Validate the actual output events and rendered SVG text
      separately, including checks that unwanted demo shortcuts such as `printf`
