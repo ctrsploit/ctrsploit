@@ -8,7 +8,7 @@ require (
 	github.com/Masterminds/semver/v3 v3.4.0
 	github.com/cilium/ebpf v0.19.0
 	github.com/containerd/cgroups v1.1.0
-	github.com/containerd/containerd v1.7.28
+	github.com/containerd/containerd v1.7.29
 	github.com/containerd/containerd/api v1.9.0
 	github.com/containerd/ttrpc v1.2.7
 	github.com/containerd/typeurl v1.0.2
