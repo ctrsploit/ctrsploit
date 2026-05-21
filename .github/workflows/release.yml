@@ -1,0 +1,108 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Git tag to release, for example v0.26.0-beta.6"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Build and publish release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Resolve release tag
+        id: release
+        shell: bash
+        run: |
+          if [[ "${GITHUB_EVENT_NAME}" == "workflow_dispatch" ]]; then
+            tag="${{ inputs.tag }}"
+          else
+            tag="${GITHUB_REF_NAME}"
+          fi
+
+          if [[ -z "${tag}" ]]; then
+            echo "release tag is empty" >&2
+            exit 1
+          fi
+
+          echo "tag=${tag}" >> "${GITHUB_OUTPUT}"
+          echo "release_dir=bin/release/${tag}" >> "${GITHUB_OUTPUT}"
+          echo "notes=docs/release-notes/${tag}.md" >> "${GITHUB_OUTPUT}"
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ steps.release.outputs.tag }}
+
+      - name: Validate release inputs
+        shell: bash
+        run: |
+          tag="${{ steps.release.outputs.tag }}"
+          notes="${{ steps.release.outputs.notes }}"
+
+          git rev-parse "${tag}^{commit}" >/dev/null
+
+          if [[ "$(git rev-parse HEAD)" != "$(git rev-parse "${tag}^{commit}")" ]]; then
+            echo "checked out HEAD does not match ${tag}" >&2
+            exit 1
+          fi
+
+          if [[ ! -f "${notes}" ]]; then
+            echo "missing release notes: ${notes}" >&2
+            exit 1
+          fi
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build release binaries
+        run: make binary
+
+      - name: Verify release assets
+        shell: bash
+        run: |
+          tag="${{ steps.release.outputs.tag }}"
+          release_dir="${{ steps.release.outputs.release_dir }}"
+
+          if [[ ! -d "${release_dir}" ]]; then
+            echo "missing release directory: ${release_dir}" >&2
+            find bin -maxdepth 4 -type f -print 2>/dev/null || true
+            exit 1
+          fi
+
+          for cmd in ctrsploit checksec env; do
+            for arch in amd64 arm64; do
+              asset="${release_dir}/${cmd}_linux_${arch}"
+              if [[ ! -s "${asset}" ]]; then
+                echo "missing release asset: ${asset}" >&2
+                exit 1
+              fi
+            done
+          done
+
+          sha256sum "${release_dir}"/* > "${release_dir}/sha256sums.txt"
+          echo "Release assets for ${tag}:"
+          ls -lh "${release_dir}"
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.release.outputs.tag }}
+          name: ${{ steps.release.outputs.tag }}
+          body_path: ${{ steps.release.outputs.notes }}
+          prerelease: ${{ contains(steps.release.outputs.tag, '-') }}
+          make_latest: ${{ contains(steps.release.outputs.tag, '-') && 'false' || 'true' }}
+          fail_on_unmatched_files: true
+          files: |
+            ${{ steps.release.outputs.release_dir }}/*
