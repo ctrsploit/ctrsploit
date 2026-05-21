@@ -131,6 +131,7 @@ COMMANDS:
    cve-2021-25748, 25748, ingress-nginx-path-leak  ingress-nginx path validation bypass vulnerability allows credential leakage through newline injection
    cve-2021-3493, 3493, ubuntu-overlayfs-pe, CVE-2021-3493  local privilege escalation in Ubuntu OverlayFS that may lead to container escape when the kernel attack surface is exposed
    cve-2022-0492, 0492                             escape via cgroup's release agent without CAP_SYS_ADMIN if kernel is vulnerable to CVE-2022-0492
+   cve-2022-0847, 0847, dirty-pipe, dirtypipe, dp, CVE-2022-0847  local privilege escalation and container escape in Linux kernel Dirty Pipe
    cve-2022-39253, 39253                           read host file during docker build via git CVE-2022-39253
    cve-2024-0132, 0132                             gpu container escape via nvidia-container-toolkit CVE-2024-0132
    cve-2024-23650, 23650                           dos buildkit via oci exporter by sending a crafted request
@@ -327,10 +328,10 @@ OPTIONS:
 | cve-2021-22555 |  | :x: | :heavy_check_mark: |
 | [cve-2021-3493](./vul/cve-2021-3493) | local privilege escalation in Ubuntu OverlayFS that may lead to container escape when the kernel attack surface is exposed | :x: | :x: |
 | [cve-2022-0492](./vul/cve-2022-0492) | escape via cgroup's release agent without CAP_SYS_ADMIN if kernel is vulnerable to CVE-2022-0492 | :heavy_check_mark: | :heavy_check_mark: |
-| cve-2022-0847 |  | :x: | :heavy_check_mark: |
+| [cve-2022-0847](./vul/cve-2022-0847) | local privilege escalation and container escape in Linux kernel Dirty Pipe | :o: | :heavy_check_mark: |
 | [cve-2026-31431](./vul/cve-2026-31431) | local privilege escalation and container escape in Linux kernel AF_ALG AEAD interface | :o: | :heavy_check_mark: |
 | [cve-2026-43284](./vul/cve-2026-43284) | local privilege escalation and container escape in Linux kernel xfrm ESP Dirty Frag path | :o: | :o: |
-| [cve-2026-43500](./vul/cve-2026-43500) | local privilege escalation in Linux kernel RxRPC/rxkad Dirty Frag path | :o: | :heavy_check_mark: |
+| [cve-2026-43500](./vul/cve-2026-43500) | local privilege escalation in Linux kernel RxRPC/rxkad Dirty Frag path | :o: | :o: |
 
 ### exploit
 
@@ -350,6 +351,7 @@ COMMANDS:
    cve-2021-25741, 25741, kubelet-subpath-symlink     kubelet symlink exchange vulnerability allows mounting node filesystem inside a pod
    cve-2021-25748, 25748, ingress-nginx-path-leak     ingress-nginx path validation bypass vulnerability allows credential leakage through newline injection
    cve-2022-0492, 0492                                escape via cgroup's release agent without CAP_SYS_ADMIN if kernel is vulnerable to CVE-2022-0492
+   cve-2022-0847, 0847, dirty-pipe, dirtypipe, dp, CVE-2022-0847  local privilege escalation and container escape in Linux kernel Dirty Pipe
    cve-2022-39253, 39253                              read host file during docker build via git CVE-2022-39253
    cve-2024-0132, 0132                                gpu container escape via nvidia-container-toolkit CVE-2024-0132
    cve-2024-23650, 23650                              dos buildkit via oci exporter by sending a crafted request
@@ -377,7 +379,6 @@ COMMANDS:
    CVE-2021-22555, 22555                              escape tech by using the CVE-2021-22555
    CVE-2020-8555, 8555                                k8s CVE-2020-8555 SSRF
    CVE-2017-1002101, subPath1, 1002101, 2017-1002101  CVE-2017-1002101
-   dirty-pipe, dp, CVE-2022-0847, 0847                dirty-pipe
    crash, c                                           make container crash
 
 OPTIONS:
@@ -405,6 +406,7 @@ COMMANDS:
    cve-2021-25748, 25748, ingress-nginx-path-leak      ingress-nginx path validation bypass vulnerability allows credential leakage through newline injection
    cve-2021-3493, 3493, ubuntu-overlayfs-pe, CVE-2021-3493  local privilege escalation in Ubuntu OverlayFS that may lead to container escape when the kernel attack surface is exposed
    cve-2022-0492, 0492                                 escape via cgroup's release agent without CAP_SYS_ADMIN if kernel is vulnerable to CVE-2022-0492
+   cve-2022-0847, 0847, dirty-pipe, dirtypipe, dp, CVE-2022-0847  local privilege escalation and container escape in Linux kernel Dirty Pipe
    cve-2022-39253, 39253                               read host file during docker build via git CVE-2022-39253
    cve-2024-0132, 0132                                 gpu container escape via nvidia-container-toolkit CVE-2024-0132
    cve-2024-23650, 23650                               dos buildkit via oci exporter by sending a crafted request
