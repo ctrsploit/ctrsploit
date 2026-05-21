@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/ctrsploit/ctrsploit/internal"
+	"github.com/ctrsploit/ctrsploit/pkg/fileutil"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -38,7 +38,7 @@ func TestE2E_Exploit(t *testing.T) {
 		}()
 		// 2. check escaped file exists
 		time.Sleep(time.Minute)
-		exists, err := internal.CheckPathExists("/host/escaped")
+		exists, err := fileutil.CheckPathExists("/host/escaped")
 		assert.NoError(t, err)
 		assert.Equal(t, test.exploitable, exists)
 		select {

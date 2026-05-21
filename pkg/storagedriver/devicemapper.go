@@ -6,7 +6,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/ctrsploit/ctrsploit/internal"
+	"github.com/ctrsploit/ctrsploit/pkg/fileutil"
 	"github.com/ctrsploit/ctrsploit/pkg/module"
 	"github.com/ctrsploit/ctrsploit/pkg/mountinfo"
 	"github.com/ctrsploit/sploit-spec/pkg/env/container/storagedriver"
@@ -33,7 +33,7 @@ func (d *DeviceMapper) Type() storagedriver.Type {
 // Enabled
 // https://tldp.org/HOWTO/LVM-HOWTO/builddmmod.html
 func (d *DeviceMapper) Enabled() (bool, error) {
-	exists, _ := internal.CheckPathExists(DirSysDeviceMapper)
+	exists, _ := fileutil.CheckPathExists(DirSysDeviceMapper)
 	if exists {
 		return true, nil
 	}

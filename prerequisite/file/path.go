@@ -1,7 +1,7 @@
 package file
 
 import (
-	"github.com/ctrsploit/ctrsploit/internal"
+	"github.com/ctrsploit/ctrsploit/pkg/fileutil"
 	"github.com/ctrsploit/sploit-spec/pkg/exeenv"
 	"github.com/ctrsploit/sploit-spec/pkg/prerequisite"
 )
@@ -13,7 +13,7 @@ type Exists struct {
 
 func (p *Exists) Check() (bool, error) {
 	return p.CheckTemplate(func() {
-		p.Satisfied, _ = internal.CheckPathExists(p.Path)
+		p.Satisfied, _ = fileutil.CheckPathExists(p.Path)
 	})
 }
 

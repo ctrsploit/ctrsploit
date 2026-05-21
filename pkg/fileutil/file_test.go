@@ -1,8 +1,9 @@
-package internal
+package fileutil
 
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -15,9 +16,10 @@ func TestReadIntFromFile(t *testing.T) {
 }
 
 func TestReplaceContent(t *testing.T) {
-	assert.NoError(t, os.WriteFile("/tmp/replace_test", []byte("source"), 0755))
-	assert.NoError(t, ReplaceContent("/tmp/replace_test", []byte("source"), []byte("dest")))
-	content, err := os.ReadFile("/tmp/replace_test")
+	path := filepath.Join(t.TempDir(), "replace_test")
+	assert.NoError(t, os.WriteFile(path, []byte("source"), 0o755))
+	assert.NoError(t, ReplaceContent(path, []byte("source"), []byte("dest")))
+	content, err := os.ReadFile(path)
 	assert.NoError(t, err)
 	assert.Equal(t, []byte("dest"), content)
 }
