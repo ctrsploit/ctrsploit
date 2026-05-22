@@ -1,3 +1,7 @@
+---
+maintainer:
+    - ssst0n3
+---
 # CAP_SYS_PTRACE escape with host pid namespace
 
 ## 1. Vulnerability Overview

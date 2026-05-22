@@ -1,3 +1,7 @@
+---
+maintainer:
+    - ssst0n3
+---
 # Crash
 
 `pkg/crash` provides restart-trigger strategies for code paths that need the

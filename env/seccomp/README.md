@@ -1,3 +1,7 @@
+---
+maintainer:
+    - ssst0n3
+---
 # seccomp
 ## usage
 ```

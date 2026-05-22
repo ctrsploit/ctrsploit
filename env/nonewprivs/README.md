@@ -1,3 +1,7 @@
+---
+maintainer:
+    - ssst0n3
+---
 # env/no-new-privs
 
 Show the current process `NoNewPrivs` status from `/proc/self/status`.

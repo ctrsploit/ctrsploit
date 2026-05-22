@@ -67,6 +67,7 @@ help:
 	@echo "  make doc              - Update README.md, vulnerability table, and modules.json"
 	@echo "  make update-vul-table - Update vulnerability table in README.md"
 	@echo "  make update-readme    - Update README.md (command help and vulnerability table)"
+	@echo "  make update-module-maintainers - Update module README maintainers from git history"
 	@echo "  make update-modules-json - Update modules.json from registered CLI commands"
 	@echo ""
 	@echo "Environment variables:"

@@ -1,12 +1,13 @@
 # Makefile.docs - Documentation and tool related tasks
 # Contains documentation generation, update and maintenance related tasks
 
-.PHONY: doc update-vul-table update-readme update-modules-json
+.PHONY: doc update-vul-table update-readme update-module-maintainers update-modules-json
 
 # High-level documentation entrypoint
 doc:
 	@echo "Updating project documentation (README.md, vulnerability table, and modules.json)..."
 	@$(MAKE) update-readme
+	@$(MAKE) update-module-maintainers
 	@$(MAKE) update-modules-json
 
 update-vul-table:
@@ -16,6 +17,10 @@ update-vul-table:
 update-readme:
 	@echo "Updating README.md (command help sections and vulnerability table)..."
 	@python3 script/update_readme.py
+
+update-module-maintainers:
+	@echo "Updating module README maintainers from git history..."
+	@python3 script/update_module_maintainers.py
 
 update-modules-json:
 	@echo "Updating modules.json from registered CLI commands..."

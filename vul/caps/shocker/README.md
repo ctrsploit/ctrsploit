@@ -2,6 +2,8 @@
 
 tags: sploit
 author: ssst0n3
+maintainer:
+    - ssst0n3
 spec_version: v0.1.0
 version: v0.1.1
 changelog:

@@ -1,3 +1,7 @@
+---
+maintainer:
+    - ssst0n3
+---
 # shared docker.sock
 
 ## 1. Vulnerability Overview

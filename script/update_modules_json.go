@@ -13,6 +13,7 @@ import (
 	exploitCmd "github.com/ctrsploit/ctrsploit/cmd/ctrsploit/exploit"
 	vulCmd "github.com/ctrsploit/ctrsploit/cmd/ctrsploit/vul"
 	"github.com/urfave/cli/v3"
+	"gopkg.in/yaml.v3"
 )
 
 type catalog struct {
@@ -31,9 +32,12 @@ type module struct {
 	Name        string   `json:"name"`
 	Aliases     []string `json:"aliases"`
 	Description string   `json:"description"`
+	Maintainer  []string `json:"maintainer"`
 	Doc         string   `json:"doc,omitempty"`
 	Children    []module `json:"children,omitempty"`
 }
+
+const defaultMaintainer = "ssst0n3"
 
 var docOverrides = map[string]string{
 	"env:storage-driver":      "./env/storagedriver/README.md",
@@ -64,7 +68,7 @@ func main() {
 	}
 
 	c := catalog{
-		SchemaVersion: "1.0",
+		SchemaVersion: "1.1",
 		Modules: modules{
 			Env:      modulesFromCommands(root, "env", envCmd.Command.Commands, false),
 			Checksec: modulesFromCommands(root, "checksec", checksecCmd.Command.Commands, false),
@@ -74,6 +78,9 @@ func main() {
 	}
 
 	if err := validateDocs(root, c); err != nil {
+		fatal(err)
+	}
+	if err := validateMaintainers(c); err != nil {
 		fatal(err)
 	}
 
@@ -103,11 +110,13 @@ func modulesFromCommands(root, kind string, commands []*cli.Command, includeChil
 
 func moduleFromCommand(root, kind string, cmd *cli.Command, includeChildren bool) module {
 	name, aliases, description := commandMetadata(kind, cmd)
+	doc := resolveDoc(root, kind, name)
 	m := module{
 		Name:        name,
 		Aliases:     aliases,
 		Description: description,
-		Doc:         resolveDoc(root, kind, name),
+		Maintainer:  resolveMaintainers(root, doc),
+		Doc:         doc,
 	}
 	if includeChildren {
 		for _, child := range cmd.Commands {
@@ -164,12 +173,106 @@ func resolveDoc(root, kind, name string) string {
 	return ""
 }
 
+type readmeFrontMatter struct {
+	Maintainer maintainerList `yaml:"maintainer"`
+}
+
+type maintainerList []string
+
+func (m *maintainerList) UnmarshalYAML(value *yaml.Node) error {
+	switch value.Kind {
+	case yaml.ScalarNode:
+		*m = maintainerList{value.Value}
+	case yaml.SequenceNode:
+		var maintainers []string
+		for _, item := range value.Content {
+			if item.Kind != yaml.ScalarNode {
+				continue
+			}
+			maintainers = append(maintainers, item.Value)
+		}
+		*m = maintainerList(maintainers)
+	}
+	return nil
+}
+
+func resolveMaintainers(root, doc string) []string {
+	if doc == "" {
+		return []string{defaultMaintainer}
+	}
+
+	maintainers, err := maintainersFromDoc(root, doc)
+	if err != nil || len(maintainers) == 0 {
+		return []string{defaultMaintainer}
+	}
+	return maintainers
+}
+
+func maintainersFromDoc(root, doc string) ([]string, error) {
+	content, err := os.ReadFile(docFilepath(root, doc))
+	if err != nil {
+		return nil, err
+	}
+	return maintainersFromReadme(content)
+}
+
+func maintainersFromReadme(content []byte) ([]string, error) {
+	frontMatter, ok := readFrontMatter(content)
+	if !ok {
+		return nil, nil
+	}
+
+	var meta readmeFrontMatter
+	if err := yaml.Unmarshal(frontMatter, &meta); err != nil {
+		return nil, err
+	}
+	return normalizeMaintainers([]string(meta.Maintainer)), nil
+}
+
+func readFrontMatter(content []byte) ([]byte, bool) {
+	text := string(content)
+	if !strings.HasPrefix(text, "---\n") && !strings.HasPrefix(text, "---\r\n") {
+		return nil, false
+	}
+
+	lines := strings.SplitAfter(text, "\n")
+	start := len(lines[0])
+	offset := start
+	for _, line := range lines[1:] {
+		if strings.TrimSpace(line) == "---" {
+			return []byte(text[start:offset]), true
+		}
+		offset += len(line)
+	}
+	return nil, false
+}
+
+func normalizeMaintainers(maintainers []string) []string {
+	result := make([]string, 0, len(maintainers))
+	for _, maintainer := range maintainers {
+		maintainer = strings.TrimSpace(maintainer)
+		if maintainer == "" {
+			continue
+		}
+		result = append(result, maintainer)
+	}
+	if len(result) == 0 {
+		return nil
+	}
+	return result
+}
+
+func docFilepath(root, doc string) string {
+	docPath := strings.SplitN(doc, "#", 2)[0]
+	return filepath.Join(root, filepath.FromSlash(strings.TrimPrefix(docPath, "./")))
+}
+
 func existingDoc(root, doc string) string {
 	docPath := strings.SplitN(doc, "#", 2)[0]
 	if docPath == "" {
 		return ""
 	}
-	if _, err := os.Stat(filepath.Join(root, filepath.FromSlash(strings.TrimPrefix(docPath, "./")))); err != nil {
+	if _, err := os.Stat(docFilepath(root, doc)); err != nil {
 		return ""
 	}
 	return doc
@@ -182,7 +285,7 @@ func validateDocs(root string, c catalog) error {
 		if docPath == "" {
 			continue
 		}
-		if _, err := os.Stat(filepath.Join(root, filepath.FromSlash(strings.TrimPrefix(docPath, "./")))); err != nil {
+		if _, err := os.Stat(docFilepath(root, mod.Doc)); err != nil {
 			if errors.Is(err, os.ErrNotExist) {
 				missing = append(missing, mod.Doc)
 				continue
@@ -192,6 +295,19 @@ func validateDocs(root string, c catalog) error {
 	}
 	if len(missing) > 0 {
 		return fmt.Errorf("missing doc paths: %s", strings.Join(missing, ", "))
+	}
+	return nil
+}
+
+func validateMaintainers(c catalog) error {
+	var missing []string
+	for _, mod := range allModules(c.Modules) {
+		if len(mod.Maintainer) == 0 {
+			missing = append(missing, mod.Name)
+		}
+	}
+	if len(missing) > 0 {
+		return fmt.Errorf("missing maintainers: %s", strings.Join(missing, ", "))
 	}
 	return nil
 }

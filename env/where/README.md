@@ -1,3 +1,7 @@
+---
+maintainer:
+    - ssst0n3
+---
 # env/where
 
 To see whether you are in the container, and in which type container
