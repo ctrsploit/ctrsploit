@@ -27,6 +27,7 @@ import (
 	cve_2026_31431 "github.com/ctrsploit/ctrsploit/vul/cve-2026-31431"
 	cve_2026_43284 "github.com/ctrsploit/ctrsploit/vul/cve-2026-43284"
 	cve_2026_43500 "github.com/ctrsploit/ctrsploit/vul/cve-2026-43500"
+	cve_2026_46300 "github.com/ctrsploit/ctrsploit/vul/cve-2026-46300"
 	fork_bomb "github.com/ctrsploit/ctrsploit/vul/fork-bomb"
 	"github.com/ctrsploit/ctrsploit/vul/naked"
 	"github.com/ctrsploit/ctrsploit/vul/namespace/net"
@@ -63,6 +64,7 @@ var Command = &cli.Command{
 		cve_2026_31431.CheckSecCmd,
 		cve_2026_43284.CheckSecCmd,
 		cve_2026_43500.CheckSecCmd,
+		cve_2026_46300.CheckSecCmd,
 		fork_bomb.CheckSecCmd,
 		shocker.CheckSecCmd,
 		sys_admin.CheckSecCmd,

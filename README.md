@@ -142,6 +142,7 @@ COMMANDS:
     cve-2026-31431, 31431, copy-fail                local privilege escalation and container escape in Linux kernel AF_ALG AEAD interface
     cve-2026-43284, 43284, dirty-frag, dirtyfrag    local privilege escalation and container escape in Linux kernel xfrm ESP Dirty Frag path
     cve-2026-43500, 43500, dirty-frag-rxrpc, dirtyfrag-rxrpc  local privilege escalation in Linux kernel RxRPC/rxkad Dirty Frag path
+    cve-2026-46300, 46300, fragnesia, CVE-2026-46300  local privilege escalation and container escape in Linux kernel xfrm ESP-in-TCP Fragnesia path
     fork-bomb                                       
    naked                                           we call containers running without seccomp, AppArmor, or SELinux enabled 'naked containers', which leaves them highly vulnerable to kernel exploits and potential container escapes
    capability, caps                                abuse dangerous capabilities in container
@@ -332,6 +333,7 @@ OPTIONS:
 | [cve-2026-31431](./vul/cve-2026-31431) | local privilege escalation and container escape in Linux kernel AF_ALG AEAD interface | :o: | :heavy_check_mark: |
 | [cve-2026-43284](./vul/cve-2026-43284) | local privilege escalation and container escape in Linux kernel xfrm ESP Dirty Frag path | :o: | :heavy_check_mark: |
 | [cve-2026-43500](./vul/cve-2026-43500) | local privilege escalation in Linux kernel RxRPC/rxkad Dirty Frag path | :o: | :heavy_check_mark: |
+| [cve-2026-46300](./vul/cve-2026-46300) | local privilege escalation and container escape in Linux kernel xfrm ESP-in-TCP Fragnesia path | :o: | :heavy_check_mark: |
 
 ### exploit
 
@@ -361,6 +363,7 @@ COMMANDS:
    cve-2026-31431, 31431, copy-fail                   local privilege escalation and container escape in Linux kernel AF_ALG AEAD interface
    cve-2026-43284, 43284, dirty-frag, dirtyfrag       local privilege escalation and container escape in Linux kernel xfrm ESP Dirty Frag path
    cve-2026-43500, 43500, dirty-frag-rxrpc, dirtyfrag-rxrpc  local privilege escalation in Linux kernel RxRPC/rxkad Dirty Frag path
+   cve-2026-46300, 46300, fragnesia, CVE-2026-46300   local privilege escalation and container escape in Linux kernel xfrm ESP-in-TCP Fragnesia path
    fork-bomb                                          
    shocker, cap_dac_read_search, open_by_handle_at    escape by CAP_DAC_READ_SEARCH, alias shocker, found by Sebastian Krahmer (stealth) in 2014
    cap_sys_admin, sys_admin                           abuse cap_sys_admin
@@ -417,6 +420,7 @@ COMMANDS:
     cve-2026-31431, 31431, copy-fail                    local privilege escalation and container escape in Linux kernel AF_ALG AEAD interface
     cve-2026-43284, 43284, dirty-frag, dirtyfrag        local privilege escalation and container escape in Linux kernel xfrm ESP Dirty Frag path
     cve-2026-43500, 43500, dirty-frag-rxrpc, dirtyfrag-rxrpc  local privilege escalation in Linux kernel RxRPC/rxkad Dirty Frag path
+    cve-2026-46300, 46300, fragnesia, CVE-2026-46300    local privilege escalation and container escape in Linux kernel xfrm ESP-in-TCP Fragnesia path
     fork-bomb                                           
     shocker, cap_dac_read_search, open_by_handle_at     escape by CAP_DAC_READ_SEARCH, alias shocker, found by Sebastian Krahmer (stealth) in 2014
    cap_sys_admin, sys_admin                            abuse cap_sys_admin

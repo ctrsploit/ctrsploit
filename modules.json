@@ -326,6 +326,16 @@
         "doc": "./vul/cve-2026-43500/README.md"
       },
       {
+        "name": "cve-2026-46300",
+        "aliases": [
+          "46300",
+          "fragnesia",
+          "CVE-2026-46300"
+        ],
+        "description": "local privilege escalation and container escape in Linux kernel xfrm ESP-in-TCP Fragnesia path",
+        "doc": "./vul/cve-2026-46300/README.md"
+      },
+      {
         "name": "fork-bomb",
         "aliases": [],
         "description": "fork bomb causes denial of service when resource limits or cgroup configs are unsafe",
@@ -582,6 +592,16 @@
         ],
         "description": "local privilege escalation in Linux kernel RxRPC/rxkad Dirty Frag path",
         "doc": "./vul/cve-2026-43500/README.md"
+      },
+      {
+        "name": "cve-2026-46300",
+        "aliases": [
+          "46300",
+          "fragnesia",
+          "CVE-2026-46300"
+        ],
+        "description": "local privilege escalation and container escape in Linux kernel xfrm ESP-in-TCP Fragnesia path",
+        "doc": "./vul/cve-2026-46300/README.md"
       },
       {
         "name": "fork-bomb",
@@ -860,6 +880,16 @@
         ],
         "description": "local privilege escalation in Linux kernel RxRPC/rxkad Dirty Frag path",
         "doc": "./vul/cve-2026-43500/README.md"
+      },
+      {
+        "name": "cve-2026-46300",
+        "aliases": [
+          "46300",
+          "fragnesia",
+          "CVE-2026-46300"
+        ],
+        "description": "local privilege escalation and container escape in Linux kernel xfrm ESP-in-TCP Fragnesia path",
+        "doc": "./vul/cve-2026-46300/README.md"
       },
       {
         "name": "fork-bomb",
