@@ -1,3 +1,7 @@
+---
+maintainer:
+    - ssst0n3
+---
 # host pid escape by /proc/[pid]/root
 
 ## 1. Vulnerability Overview

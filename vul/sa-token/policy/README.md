@@ -3,6 +3,9 @@
 tags: sploit
 author:
     - Hpd0ger
+maintainer:
+    - ssst0n3
+    - Hpd0ger
 version: v0.1.1
 changelog:
     - v0.1.1: add reproduce steps

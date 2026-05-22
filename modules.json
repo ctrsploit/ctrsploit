@@ -1,11 +1,14 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "modules": {
     "env": [
       {
         "name": "auto",
         "aliases": [],
         "description": "auto",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "doc": "./env/auto/README.md"
       },
       {
@@ -14,6 +17,9 @@
           "w"
         ],
         "description": "detect whether you are in the container, and which type of the container",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "doc": "./env/where/README.md"
       },
       {
@@ -21,7 +27,10 @@
         "aliases": [
           "m"
         ],
-        "description": "list mount points"
+        "description": "list mount points",
+        "maintainer": [
+          "ssst0n3"
+        ]
       },
       {
         "name": "storage-driver",
@@ -29,6 +38,9 @@
           "sd"
         ],
         "description": "detect storage driver type and extend information",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "doc": "./env/storagedriver/README.md"
       },
       {
@@ -37,6 +49,9 @@
           "c"
         ],
         "description": "gather cgroup information",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "doc": "./env/cgroups/README.md"
       },
       {
@@ -45,6 +60,10 @@
           "cap"
         ],
         "description": "show the capability of pid 1 and current process",
+        "maintainer": [
+          "ssst0n3",
+          "Axsl666"
+        ],
         "doc": "./env/capability/README.md"
       },
       {
@@ -53,6 +72,9 @@
           "sc"
         ],
         "description": "show the seccomp info",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "doc": "./env/seccomp/README.md"
       },
       {
@@ -61,6 +83,9 @@
           "a"
         ],
         "description": "show the apparmor info",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "doc": "./env/apparmor/README.md"
       },
       {
@@ -69,6 +94,9 @@
           "se"
         ],
         "description": "show the selinux info",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "doc": "./env/selinux/README.md"
       },
       {
@@ -76,24 +104,36 @@
         "aliases": [
           "f"
         ],
-        "description": "like linux command fdisk or lsblk // TODO"
+        "description": "like linux command fdisk or lsblk // TODO",
+        "maintainer": [
+          "ssst0n3"
+        ]
       },
       {
         "name": "kernel",
         "aliases": [
           "k"
         ],
-        "description": "collect kernel environment information"
+        "description": "collect kernel environment information",
+        "maintainer": [
+          "ssst0n3"
+        ]
       },
       {
         "name": "sysctl",
         "aliases": [],
-        "description": "display sysctl information"
+        "description": "display sysctl information",
+        "maintainer": [
+          "ssst0n3"
+        ]
       },
       {
         "name": "rlimit",
         "aliases": [],
-        "description": "get process resource limits"
+        "description": "get process resource limits",
+        "maintainer": [
+          "ssst0n3"
+        ]
       },
       {
         "name": "namespace",
@@ -102,6 +142,9 @@
           "ns"
         ],
         "description": "check namespace is host ns",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "doc": "./env/namespace/README.md"
       },
       {
@@ -112,6 +155,9 @@
           "no-new-privileges"
         ],
         "description": "show NoNewPrivs status for the current process",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "doc": "./env/nonewprivs/README.md"
       },
       {
@@ -120,6 +166,9 @@
           "setuid"
         ],
         "description": "find and list SUID files",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "doc": "./env/suid/README.md"
       },
       {
@@ -127,21 +176,31 @@
         "aliases": [
           "dv"
         ],
-        "description": "guess dockerd version range"
+        "description": "guess dockerd version range",
+        "maintainer": [
+          "ssst0n3"
+        ]
       },
       {
         "name": "services",
         "aliases": [
           "svc"
         ],
-        "description": "discover K8s cluster services and ports via env vars and DNS"
+        "description": "discover K8s cluster services and ports via env vars and DNS",
+        "maintainer": [
+          "Hpd0ger"
+        ],
+        "doc": "./env/services/README.md"
       },
       {
         "name": "upload",
         "aliases": [
           "up"
         ],
-        "description": "upload \u003cservicename\u003e \u003cfilename\u003e \u003cobs\u003e [host]"
+        "description": "upload \u003cservicename\u003e \u003cfilename\u003e \u003cobs\u003e [host]",
+        "maintainer": [
+          "ssst0n3"
+        ]
       }
     ],
     "checksec": [
@@ -150,14 +209,20 @@
         "aliases": [
           "a"
         ],
-        "description": "auto check security"
+        "description": "auto check security",
+        "maintainer": [
+          "ssst0n3"
+        ]
       },
       {
         "name": "env",
         "aliases": [
           "e"
         ],
-        "description": "gather information"
+        "description": "gather information",
+        "maintainer": [
+          "ssst0n3"
+        ]
       },
       {
         "name": "cve-2016-8867",
@@ -166,6 +231,9 @@
           "amb"
         ],
         "description": "Ambient Capabilities in the Linux kernel allow local users to gain privileges",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "doc": "./vul/cve-2016-8867/README.md"
       },
       {
@@ -174,6 +242,9 @@
           "5736"
         ],
         "description": "escape by overwrite runc executable file via /proc/self/exe",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "doc": "./vul/cve-2019-5736/README.md"
       },
       {
@@ -182,6 +253,9 @@
           "8558"
         ],
         "description": "access services bound to 127.0.0.1 from adjacent hosts",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "doc": "./vul/cve-2020-8558/README.md"
       },
       {
@@ -190,6 +264,9 @@
           "15257"
         ],
         "description": "abuse the containerd-shim's abstract unix socket in a container with host network namespace",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "doc": "./vul/cve-2020-15257/README.md"
       },
       {
@@ -199,6 +276,10 @@
           "kubelet-subpath-symlink"
         ],
         "description": "kubelet symlink exchange vulnerability allows mounting node filesystem inside a pod",
+        "maintainer": [
+          "ssst0n3",
+          "noirfate"
+        ],
         "doc": "./vul/cve-2021-25741/README.md"
       },
       {
@@ -208,6 +289,10 @@
           "ingress-nginx-path-leak"
         ],
         "description": "ingress-nginx path validation bypass vulnerability allows credential leakage through newline injection",
+        "maintainer": [
+          "ssst0n3",
+          "noirfate"
+        ],
         "doc": "./vul/cve-2021-25748/README.md"
       },
       {
@@ -218,6 +303,9 @@
           "CVE-2021-3493"
         ],
         "description": "local privilege escalation in Ubuntu OverlayFS that may lead to container escape when the kernel attack surface is exposed",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "doc": "./vul/cve-2021-3493/README.md"
       },
       {
@@ -226,6 +314,9 @@
           "0492"
         ],
         "description": "escape via cgroup's release agent without CAP_SYS_ADMIN if kernel is vulnerable to CVE-2022-0492",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "doc": "./vul/cve-2022-0492/README.md"
       },
       {
@@ -238,6 +329,9 @@
           "CVE-2022-0847"
         ],
         "description": "local privilege escalation and container escape in Linux kernel Dirty Pipe",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "doc": "./vul/cve-2022-0847/README.md"
       },
       {
@@ -246,6 +340,9 @@
           "39253"
         ],
         "description": "read host file during docker build via git CVE-2022-39253",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "doc": "./vul/cve-2022-39253/README.md"
       },
       {
@@ -254,6 +351,9 @@
           "0132"
         ],
         "description": "gpu container escape via nvidia-container-toolkit CVE-2024-0132",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "doc": "./vul/cve-2024-0132/README.md"
       },
       {
@@ -262,6 +362,9 @@
           "23650"
         ],
         "description": "dos buildkit via oci exporter by sending a crafted request",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "doc": "./vul/cve-2024-23650/README.md"
       },
       {
@@ -270,6 +373,10 @@
           "40635"
         ],
         "description": "bypass runAsNonRoot via integer overflow in User ID handling in containerd",
+        "maintainer": [
+          "ssst0n3",
+          "r0binak"
+        ],
         "doc": "./vul/cve-2024-40635/README.md"
       },
       {
@@ -278,6 +385,9 @@
           "23266"
         ],
         "description": "gpu container escape via nvidia-container-toolkit cve-2025-23266 by running a malicious container image",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "doc": "./vul/cve-2025-23266/README.md"
       },
       {
@@ -286,6 +396,9 @@
           "47290"
         ],
         "description": "modify host file via containerd cve-2025-47290 during pulling image",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "doc": "./vul/cve-2025-47290/README.md"
       },
       {
@@ -294,6 +407,10 @@
           "62725"
         ],
         "description": "path traversal in Docker Compose OCI artifacts allows arbitrary file write via malicious registry",
+        "maintainer": [
+          "ssst0n3",
+          "r0binak"
+        ],
         "doc": "./vul/cve-2025-62725/README.md"
       },
       {
@@ -303,6 +420,9 @@
           "copy-fail"
         ],
         "description": "local privilege escalation and container escape in Linux kernel AF_ALG AEAD interface",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "doc": "./vul/cve-2026-31431/README.md"
       },
       {
@@ -313,6 +433,9 @@
           "dirtyfrag"
         ],
         "description": "local privilege escalation and container escape in Linux kernel xfrm ESP Dirty Frag path",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "doc": "./vul/cve-2026-43284/README.md"
       },
       {
@@ -323,6 +446,9 @@
           "dirtyfrag-rxrpc"
         ],
         "description": "local privilege escalation in Linux kernel RxRPC/rxkad Dirty Frag path",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "doc": "./vul/cve-2026-43500/README.md"
       },
       {
@@ -333,12 +459,18 @@
           "CVE-2026-46300"
         ],
         "description": "local privilege escalation and container escape in Linux kernel xfrm ESP-in-TCP Fragnesia path",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "doc": "./vul/cve-2026-46300/README.md"
       },
       {
         "name": "fork-bomb",
         "aliases": [],
         "description": "fork bomb causes denial of service when resource limits or cgroup configs are unsafe",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "doc": "./vul/fork-bomb/README.md"
       },
       {
@@ -348,6 +480,9 @@
           "open_by_handle_at"
         ],
         "description": "escape by CAP_DAC_READ_SEARCH, alias shocker, found by Sebastian Krahmer (stealth) in 2014",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "doc": "./vul/caps/shocker/README.md"
       },
       {
@@ -355,14 +490,20 @@
         "aliases": [
           "sys_admin"
         ],
-        "description": "abuse cap_sys_admin"
+        "description": "abuse cap_sys_admin",
+        "maintainer": [
+          "ssst0n3"
+        ]
       },
       {
         "name": "cap_bpf",
         "aliases": [
           "bpf"
         ],
-        "description": "load evil bpf programs via cap_bpf"
+        "description": "load evil bpf programs via cap_bpf",
+        "maintainer": [
+          "ssst0n3"
+        ]
       },
       {
         "name": "cap_sys_ptrace",
@@ -370,7 +511,10 @@
           "sys_ptrace",
           "ptrace"
         ],
-        "description": "abuse cap_sys_ptrace"
+        "description": "abuse cap_sys_ptrace",
+        "maintainer": [
+          "ssst0n3"
+        ]
       },
       {
         "name": "ptrace-pid-host",
@@ -378,26 +522,38 @@
           "ptrace-pid"
         ],
         "description": "ptrace host processes in a container with cap_sys_ptrace and host pid namespace",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "doc": "./vul/caps/sys_ptrace/pid_host/README.md"
       },
       {
         "name": "naked",
         "aliases": [],
-        "description": "we call containers running without seccomp, AppArmor, or SELinux enabled 'naked containers', which leaves them highly vulnerable to kernel exploits and potential container escapes"
+        "description": "we call containers running without seccomp, AppArmor, or SELinux enabled 'naked containers', which leaves them highly vulnerable to kernel exploits and potential container escapes",
+        "maintainer": [
+          "ssst0n3"
+        ]
       },
       {
         "name": "host-net",
         "aliases": [
           "net"
         ],
-        "description": "shared host network namespace breaks the network isolation"
+        "description": "shared host network namespace breaks the network isolation",
+        "maintainer": [
+          "ssst0n3"
+        ]
       },
       {
         "name": "host-pid",
         "aliases": [
           "pid"
         ],
-        "description": "shared host pid namespace breaks process isolation"
+        "description": "shared host pid namespace breaks process isolation",
+        "maintainer": [
+          "ssst0n3"
+        ]
       },
       {
         "name": "sa-token-access-secrets",
@@ -405,6 +561,9 @@
           "secret"
         ],
         "description": "Check if service account token can access Kubernetes Secrets",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "doc": "./vul/sa-token/access-secrets/README.md"
       },
       {
@@ -415,6 +574,10 @@
           "dp"
         ],
         "description": "Check if service account token has dangerous permissions",
+        "maintainer": [
+          "ssst0n3",
+          "Hpd0ger"
+        ],
         "doc": "./vul/sa-token/policy/README.md"
       },
       {
@@ -423,6 +586,9 @@
           "docker"
         ],
         "description": "escape by shared docker.sock via running a privileged container",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "doc": "./vul/shared-socket/docker-sock/README.md"
       }
     ],
@@ -434,6 +600,9 @@
           "amb"
         ],
         "description": "Ambient Capabilities in the Linux kernel allow local users to gain privileges",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "doc": "./vul/cve-2016-8867/README.md"
       },
       {
@@ -442,6 +611,9 @@
           "5736"
         ],
         "description": "escape by overwrite runc executable file via /proc/self/exe",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "doc": "./vul/cve-2019-5736/README.md"
       },
       {
@@ -450,6 +622,9 @@
           "8558"
         ],
         "description": "access services bound to 127.0.0.1 from adjacent hosts",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "doc": "./vul/cve-2020-8558/README.md"
       },
       {
@@ -458,6 +633,9 @@
           "15257"
         ],
         "description": "abuse the containerd-shim's abstract unix socket in a container with host network namespace",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "doc": "./vul/cve-2020-15257/README.md"
       },
       {
@@ -467,6 +645,10 @@
           "kubelet-subpath-symlink"
         ],
         "description": "kubelet symlink exchange vulnerability allows mounting node filesystem inside a pod",
+        "maintainer": [
+          "ssst0n3",
+          "noirfate"
+        ],
         "doc": "./vul/cve-2021-25741/README.md"
       },
       {
@@ -476,6 +658,10 @@
           "ingress-nginx-path-leak"
         ],
         "description": "ingress-nginx path validation bypass vulnerability allows credential leakage through newline injection",
+        "maintainer": [
+          "ssst0n3",
+          "noirfate"
+        ],
         "doc": "./vul/cve-2021-25748/README.md"
       },
       {
@@ -486,6 +672,9 @@
           "CVE-2021-3493"
         ],
         "description": "local privilege escalation in Ubuntu OverlayFS that may lead to container escape when the kernel attack surface is exposed",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "doc": "./vul/cve-2021-3493/README.md"
       },
       {
@@ -494,6 +683,9 @@
           "0492"
         ],
         "description": "escape via cgroup's release agent without CAP_SYS_ADMIN if kernel is vulnerable to CVE-2022-0492",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "doc": "./vul/cve-2022-0492/README.md"
       },
       {
@@ -506,6 +698,9 @@
           "CVE-2022-0847"
         ],
         "description": "local privilege escalation and container escape in Linux kernel Dirty Pipe",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "doc": "./vul/cve-2022-0847/README.md"
       },
       {
@@ -514,6 +709,9 @@
           "39253"
         ],
         "description": "read host file during docker build via git CVE-2022-39253",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "doc": "./vul/cve-2022-39253/README.md"
       },
       {
@@ -522,6 +720,9 @@
           "0132"
         ],
         "description": "gpu container escape via nvidia-container-toolkit CVE-2024-0132",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "doc": "./vul/cve-2024-0132/README.md"
       },
       {
@@ -530,6 +731,9 @@
           "23650"
         ],
         "description": "dos buildkit via oci exporter by sending a crafted request",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "doc": "./vul/cve-2024-23650/README.md"
       },
       {
@@ -538,6 +742,10 @@
           "40635"
         ],
         "description": "bypass runAsNonRoot via integer overflow in User ID handling in containerd",
+        "maintainer": [
+          "ssst0n3",
+          "r0binak"
+        ],
         "doc": "./vul/cve-2024-40635/README.md"
       },
       {
@@ -546,6 +754,9 @@
           "23266"
         ],
         "description": "gpu container escape via nvidia-container-toolkit cve-2025-23266 by running a malicious container image",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "doc": "./vul/cve-2025-23266/README.md"
       },
       {
@@ -554,6 +765,9 @@
           "47290"
         ],
         "description": "modify host file via containerd cve-2025-47290 during pulling image",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "doc": "./vul/cve-2025-47290/README.md"
       },
       {
@@ -562,6 +776,10 @@
           "62725"
         ],
         "description": "path traversal in Docker Compose OCI artifacts allows arbitrary file write via malicious registry",
+        "maintainer": [
+          "ssst0n3",
+          "r0binak"
+        ],
         "doc": "./vul/cve-2025-62725/README.md"
       },
       {
@@ -571,6 +789,9 @@
           "copy-fail"
         ],
         "description": "local privilege escalation and container escape in Linux kernel AF_ALG AEAD interface",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "doc": "./vul/cve-2026-31431/README.md"
       },
       {
@@ -581,6 +802,9 @@
           "dirtyfrag"
         ],
         "description": "local privilege escalation and container escape in Linux kernel xfrm ESP Dirty Frag path",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "doc": "./vul/cve-2026-43284/README.md"
       },
       {
@@ -591,6 +815,9 @@
           "dirtyfrag-rxrpc"
         ],
         "description": "local privilege escalation in Linux kernel RxRPC/rxkad Dirty Frag path",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "doc": "./vul/cve-2026-43500/README.md"
       },
       {
@@ -601,18 +828,27 @@
           "CVE-2026-46300"
         ],
         "description": "local privilege escalation and container escape in Linux kernel xfrm ESP-in-TCP Fragnesia path",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "doc": "./vul/cve-2026-46300/README.md"
       },
       {
         "name": "fork-bomb",
         "aliases": [],
         "description": "fork bomb causes denial of service when resource limits or cgroup configs are unsafe",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "doc": "./vul/fork-bomb/README.md"
       },
       {
         "name": "naked",
         "aliases": [],
-        "description": "we call containers running without seccomp, AppArmor, or SELinux enabled 'naked containers', which leaves them highly vulnerable to kernel exploits and potential container escapes"
+        "description": "we call containers running without seccomp, AppArmor, or SELinux enabled 'naked containers', which leaves them highly vulnerable to kernel exploits and potential container escapes",
+        "maintainer": [
+          "ssst0n3"
+        ]
       },
       {
         "name": "capability",
@@ -620,20 +856,29 @@
           "caps"
         ],
         "description": "abuse dangerous capabilities in container",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "children": [
           {
             "name": "cap_bpf",
             "aliases": [
               "bpf"
             ],
-            "description": "load evil bpf programs via cap_bpf"
+            "description": "load evil bpf programs via cap_bpf",
+            "maintainer": [
+              "ssst0n3"
+            ]
           },
           {
             "name": "cap_sys_admin",
             "aliases": [
               "sys_admin"
             ],
-            "description": "abuse cap_sys_admin"
+            "description": "abuse cap_sys_admin",
+            "maintainer": [
+              "ssst0n3"
+            ]
           },
           {
             "name": "cap_sys_ptrace",
@@ -641,7 +886,10 @@
               "sys_ptrace",
               "ptrace"
             ],
-            "description": "abuse cap_sys_ptrace"
+            "description": "abuse cap_sys_ptrace",
+            "maintainer": [
+              "ssst0n3"
+            ]
           },
           {
             "name": "shocker",
@@ -650,6 +898,9 @@
               "open_by_handle_at"
             ],
             "description": "escape by CAP_DAC_READ_SEARCH, alias shocker, found by Sebastian Krahmer (stealth) in 2014",
+            "maintainer": [
+              "ssst0n3"
+            ],
             "doc": "./vul/caps/shocker/README.md"
           },
           {
@@ -659,6 +910,9 @@
               "amb"
             ],
             "description": "Ambient Capabilities in the Linux kernel allow local users to gain privileges",
+            "maintainer": [
+              "ssst0n3"
+            ],
             "doc": "./vul/cve-2016-8867/README.md"
           }
         ]
@@ -669,20 +923,29 @@
           "ns"
         ],
         "description": "host level namespaces break the isolations",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "children": [
           {
             "name": "host-pid",
             "aliases": [
               "pid"
             ],
-            "description": "shared host pid namespace breaks process isolation"
+            "description": "shared host pid namespace breaks process isolation",
+            "maintainer": [
+              "ssst0n3"
+            ]
           },
           {
             "name": "host-net",
             "aliases": [
               "net"
             ],
-            "description": "shared host network namespace breaks the network isolation"
+            "description": "shared host network namespace breaks the network isolation",
+            "maintainer": [
+              "ssst0n3"
+            ]
           }
         ]
       },
@@ -693,6 +956,9 @@
           "token"
         ],
         "description": "check service account token related vulnerabilities",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "children": [
           {
             "name": "sa-token-access-secrets",
@@ -700,6 +966,9 @@
               "secret"
             ],
             "description": "Check if service account token can access Kubernetes Secrets",
+            "maintainer": [
+              "ssst0n3"
+            ],
             "doc": "./vul/sa-token/access-secrets/README.md"
           },
           {
@@ -710,6 +979,10 @@
               "dp"
             ],
             "description": "Check if service account token has dangerous permissions",
+            "maintainer": [
+              "ssst0n3",
+              "Hpd0ger"
+            ],
             "doc": "./vul/sa-token/policy/README.md"
           }
         ]
@@ -720,6 +993,9 @@
           "sock"
         ],
         "description": "abuse runtime's api via shared socket",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "children": [
           {
             "name": "docker.sock",
@@ -727,6 +1003,9 @@
               "docker"
             ],
             "description": "escape by shared docker.sock via running a privileged container",
+            "maintainer": [
+              "ssst0n3"
+            ],
             "doc": "./vul/shared-socket/docker-sock/README.md"
           }
         ]
@@ -740,6 +1019,9 @@
           "amb"
         ],
         "description": "Ambient Capabilities in the Linux kernel allow local users to gain privileges",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "doc": "./vul/cve-2016-8867/README.md"
       },
       {
@@ -748,6 +1030,9 @@
           "5736"
         ],
         "description": "escape by overwrite runc executable file via /proc/self/exe",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "doc": "./vul/cve-2019-5736/README.md"
       },
       {
@@ -756,6 +1041,9 @@
           "8558"
         ],
         "description": "access services bound to 127.0.0.1 from adjacent hosts",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "doc": "./vul/cve-2020-8558/README.md"
       },
       {
@@ -764,6 +1052,9 @@
           "15257"
         ],
         "description": "abuse the containerd-shim's abstract unix socket in a container with host network namespace",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "doc": "./vul/cve-2020-15257/README.md"
       },
       {
@@ -773,6 +1064,10 @@
           "kubelet-subpath-symlink"
         ],
         "description": "kubelet symlink exchange vulnerability allows mounting node filesystem inside a pod",
+        "maintainer": [
+          "ssst0n3",
+          "noirfate"
+        ],
         "doc": "./vul/cve-2021-25741/README.md"
       },
       {
@@ -782,6 +1077,10 @@
           "ingress-nginx-path-leak"
         ],
         "description": "ingress-nginx path validation bypass vulnerability allows credential leakage through newline injection",
+        "maintainer": [
+          "ssst0n3",
+          "noirfate"
+        ],
         "doc": "./vul/cve-2021-25748/README.md"
       },
       {
@@ -790,6 +1089,9 @@
           "0492"
         ],
         "description": "escape via cgroup's release agent without CAP_SYS_ADMIN if kernel is vulnerable to CVE-2022-0492",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "doc": "./vul/cve-2022-0492/README.md"
       },
       {
@@ -802,6 +1104,9 @@
           "CVE-2022-0847"
         ],
         "description": "local privilege escalation and container escape in Linux kernel Dirty Pipe",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "doc": "./vul/cve-2022-0847/README.md"
       },
       {
@@ -810,6 +1115,9 @@
           "39253"
         ],
         "description": "read host file during docker build via git CVE-2022-39253",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "doc": "./vul/cve-2022-39253/README.md"
       },
       {
@@ -818,6 +1126,9 @@
           "0132"
         ],
         "description": "gpu container escape via nvidia-container-toolkit CVE-2024-0132",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "doc": "./vul/cve-2024-0132/README.md"
       },
       {
@@ -826,6 +1137,9 @@
           "23650"
         ],
         "description": "dos buildkit via oci exporter by sending a crafted request",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "doc": "./vul/cve-2024-23650/README.md"
       },
       {
@@ -834,6 +1148,10 @@
           "40635"
         ],
         "description": "bypass runAsNonRoot via integer overflow in User ID handling in containerd",
+        "maintainer": [
+          "ssst0n3",
+          "r0binak"
+        ],
         "doc": "./vul/cve-2024-40635/README.md"
       },
       {
@@ -842,6 +1160,9 @@
           "23266"
         ],
         "description": "gpu container escape via nvidia-container-toolkit cve-2025-23266 by running a malicious container image",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "doc": "./vul/cve-2025-23266/README.md"
       },
       {
@@ -850,6 +1171,9 @@
           "47290"
         ],
         "description": "modify host file via containerd cve-2025-47290 during pulling image",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "doc": "./vul/cve-2025-47290/README.md"
       },
       {
@@ -859,6 +1183,9 @@
           "copy-fail"
         ],
         "description": "local privilege escalation and container escape in Linux kernel AF_ALG AEAD interface",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "doc": "./vul/cve-2026-31431/README.md"
       },
       {
@@ -869,6 +1196,9 @@
           "dirtyfrag"
         ],
         "description": "local privilege escalation and container escape in Linux kernel xfrm ESP Dirty Frag path",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "doc": "./vul/cve-2026-43284/README.md"
       },
       {
@@ -879,6 +1209,9 @@
           "dirtyfrag-rxrpc"
         ],
         "description": "local privilege escalation in Linux kernel RxRPC/rxkad Dirty Frag path",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "doc": "./vul/cve-2026-43500/README.md"
       },
       {
@@ -889,12 +1222,18 @@
           "CVE-2026-46300"
         ],
         "description": "local privilege escalation and container escape in Linux kernel xfrm ESP-in-TCP Fragnesia path",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "doc": "./vul/cve-2026-46300/README.md"
       },
       {
         "name": "fork-bomb",
         "aliases": [],
         "description": "fork bomb causes denial of service when resource limits or cgroup configs are unsafe",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "doc": "./vul/fork-bomb/README.md"
       },
       {
@@ -904,6 +1243,9 @@
           "open_by_handle_at"
         ],
         "description": "escape by CAP_DAC_READ_SEARCH, alias shocker, found by Sebastian Krahmer (stealth) in 2014",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "doc": "./vul/caps/shocker/README.md"
       },
       {
@@ -911,7 +1253,10 @@
         "aliases": [
           "sys_admin"
         ],
-        "description": "abuse cap_sys_admin"
+        "description": "abuse cap_sys_admin",
+        "maintainer": [
+          "ssst0n3"
+        ]
       },
       {
         "name": "release_agent",
@@ -919,12 +1264,18 @@
           "ra"
         ],
         "description": "escape by cap_sys_admin via cgroups v1 release_agent",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "doc": "./vul/caps/sys_admin/release_agent/README.md"
       },
       {
         "name": "ebpf",
         "aliases": [],
-        "description": "escape by loading evil eBPF programs into the kernel"
+        "description": "escape by loading evil eBPF programs into the kernel",
+        "maintainer": [
+          "ssst0n3"
+        ]
       },
       {
         "name": "ebpf-bash",
@@ -932,6 +1283,9 @@
           "bash"
         ],
         "description": "abuse eBPF to inject malicious commands into bash processes running on host",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "doc": "./vul/caps/sys_admin/ebpf/bash/README.md"
       },
       {
@@ -940,6 +1294,9 @@
           "execve"
         ],
         "description": "abuse eBPF to hijack execve syscall to run arbitrary commands",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "doc": "./vul/caps/sys_admin/ebpf/execve/README.md"
       },
       {
@@ -948,6 +1305,9 @@
           "cron"
         ],
         "description": "abuse eBPF to inject malicious job into host's crontab",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "doc": "./vul/caps/sys_admin/ebpf/cron/README.md"
       },
       {
@@ -955,14 +1315,20 @@
         "aliases": [
           "kubelet"
         ],
-        "description": "abuse eBPF to leak services account token from kubelet"
+        "description": "abuse eBPF to leak services account token from kubelet",
+        "maintainer": [
+          "ssst0n3"
+        ]
       },
       {
         "name": "cap_bpf",
         "aliases": [
           "bpf"
         ],
-        "description": "load evil bpf programs via cap_bpf"
+        "description": "load evil bpf programs via cap_bpf",
+        "maintainer": [
+          "ssst0n3"
+        ]
       },
       {
         "name": "cap_sys_ptrace",
@@ -970,7 +1336,10 @@
           "sys_ptrace",
           "ptrace"
         ],
-        "description": "abuse cap_sys_ptrace"
+        "description": "abuse cap_sys_ptrace",
+        "maintainer": [
+          "ssst0n3"
+        ]
       },
       {
         "name": "ptrace-pid-host",
@@ -978,6 +1347,9 @@
           "ptrace-pid"
         ],
         "description": "ptrace host processes in a container with cap_sys_ptrace and host pid namespace",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "doc": "./vul/caps/sys_ptrace/pid_host/README.md"
       },
       {
@@ -985,7 +1357,10 @@
         "aliases": [
           "pid"
         ],
-        "description": "shared host pid namespace breaks process isolation"
+        "description": "shared host pid namespace breaks process isolation",
+        "maintainer": [
+          "ssst0n3"
+        ]
       },
       {
         "name": "host-pid-proc-root",
@@ -993,6 +1368,9 @@
           "proc"
         ],
         "description": "escape by abusing host pid ns via /proc/[pid]/root",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "doc": "./vul/namespace/pid/proc_root/README.md"
       },
       {
@@ -1001,6 +1379,9 @@
           "docker"
         ],
         "description": "escape by shared docker.sock via running a privileged container",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "doc": "./vul/shared-socket/docker-sock/README.md"
       },
       {
@@ -1009,6 +1390,9 @@
           "22555"
         ],
         "description": "escape tech by using the CVE-2021-22555",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "doc": "./exploit/CVE-2021-22555_ubuntu18.04/README.md"
       },
       {
@@ -1016,7 +1400,10 @@
         "aliases": [
           "8555"
         ],
-        "description": "k8s CVE-2020-8555 SSRF"
+        "description": "k8s CVE-2020-8555 SSRF",
+        "maintainer": [
+          "ssst0n3"
+        ]
       },
       {
         "name": "CVE-2017-1002101",
@@ -1025,7 +1412,10 @@
           "1002101",
           "2017-1002101"
         ],
-        "description": "CVE-2017-1002101"
+        "description": "CVE-2017-1002101",
+        "maintainer": [
+          "ssst0n3"
+        ]
       },
       {
         "name": "crash",
@@ -1033,6 +1423,9 @@
           "c"
         ],
         "description": "make container crash",
+        "maintainer": [
+          "ssst0n3"
+        ],
         "doc": "./pkg/crash/README.md"
       }
     ]

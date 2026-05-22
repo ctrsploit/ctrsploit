@@ -1,3 +1,7 @@
+---
+maintainer:
+    - ssst0n3
+---
 # env/suid
 
 Find and list SUID files visible to the current process. This is useful when

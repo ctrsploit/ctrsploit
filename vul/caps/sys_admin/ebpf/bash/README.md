@@ -1,3 +1,7 @@
+---
+maintainer:
+    - ssst0n3
+---
 # ebpf escape by hooking bash process
 
 ## 1. Vulnerability Introduction
