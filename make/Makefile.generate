@@ -1,0 +1,23 @@
+# Generate tasks
+
+.PHONY: generate generate-pipe-primitive generate-cve-2026-31431 generate-cve-2026-43284 generate-cve-2026-43500 generate-cve-2026-46300
+
+# eBPF generate tasks
+include vul/caps/sys_admin/ebpf/Makefile
+
+generate: generate-pipe-primitive generate-cve-2026-31431 generate-cve-2026-43284 generate-cve-2026-43500 generate-cve-2026-46300 generate-ebpf
+
+generate-pipe-primitive:
+	go generate ./pkg/pipe-primitive
+
+generate-cve-2026-31431:
+	go generate ./vul/cve-2026-31431
+
+generate-cve-2026-43284:
+	go generate ./vul/cve-2026-43284
+
+generate-cve-2026-43500:
+	go generate ./vul/cve-2026-43500
+
+generate-cve-2026-46300:
+	go generate ./vul/cve-2026-46300
