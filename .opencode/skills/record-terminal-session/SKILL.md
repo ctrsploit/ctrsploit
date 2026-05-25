@@ -42,6 +42,9 @@ vulnerability's `README.md` or `e2e.yml`.
   needed, running `ctrsploit ... check` or `checksec`, running the exploit
   command, and verifying a concrete proof such as modified file content,
   created proof file, root shell, or `[Y]` result.
+- Before recording, establish a known-good baseline with the documented manual
+  flow or the closest matching e2e target. If the baseline fails, treat the
+  failure as a reproduction problem to investigate before producing a demo.
 - Keep the README commands, the recording, and the verified manual run on the
   same logical path. Do not let the README show one installation or trigger
   method while the SVG shows another.
@@ -49,6 +52,11 @@ vulnerability's `README.md` or `e2e.yml`.
   automation. A command sequence that is real but optimized for scripting is not
   necessarily a good public demo if a user would naturally perform different
   steps.
+- Public demos must show the workflow a target operator would naturally perform.
+  Commands introduced only for recording automation, prompt normalization,
+  environment cleanup, synchronization, or retry convenience should stay outside
+  the visible transcript unless they are explicitly part of the documented
+  reproduction workflow.
 - Do not redirect the primary exploit output or proof output into a temporary
   log and then `cat` that log just to make recording easier. The main exploit
   command should usually print its own result directly in the visible terminal.
@@ -67,6 +75,10 @@ vulnerability's `README.md` or `e2e.yml`.
   installation path explicit in the recording: show the upload/copy into the VM
   or container and the `chmod +x`/install step. Do not imply a release download
   when the release binary would not contain the demonstrated module.
+- When using a locally built binary, verify that its execution shape matches the
+  intended distribution closely enough for the demo, including target platform,
+  runtime dependencies, and whether it relies on host dynamic libraries. Fix the
+  build or document the deviation before recording.
 - Prefer the installation command documented in the target README, such as a
   release `wget`, when it works for the demonstrated module. Use a local build
   upload only after explicitly verifying the release path is unsuitable. Record
@@ -104,6 +116,9 @@ vulnerability's `README.md` or `e2e.yml`.
   documented flow before considering product-code changes. Do not patch core
   exploit or watcher logic only to make a demo easier unless the investigation
   confirms an actual product bug.
+- If recording exposes a failure, triage the documented flow, lab state, binary
+  shape, input files, and trigger command before changing product code. After a
+  real product fix, rerun the baseline validation before recording again.
 - For waiting or trigger-based exploits, record the full causal chain:
   setup, waiting state, trigger command, post-trigger exploit output, and final
   proof. Do not stop at a `Waiting...` message, and do not show the final
@@ -114,7 +129,8 @@ vulnerability's `README.md` or `e2e.yml`.
   runtime, find an equivalent direct trigger or adjust the documented flow; do
   not hide the problem behind log redirection or a recording-only wrapper.
 - For destructive flows such as runc overwrite or host file modification, use
-  only disposable lab VMs/containers and make the final proof line explicit.
+  only disposable lab VMs/containers, reset persistent state between attempts,
+  and make the final proof line explicit.
 - For interactive shell exploits, especially local privilege escalation flows,
   do not pipe scripted input into the exploit command as the visible demo, such
   as `printf 'id\n...' | ctrsploit ...`. Record a real interactive session:
@@ -176,6 +192,10 @@ shell transcript.
 - After rendering, inspect the SVG or a screenshot for wrapped words, split
   command lines, spinner/progress artifacts, local hostnames, and overlapping or
   visually garbled text. Re-record or edit the cast if the demo is hard to read.
+- Before finalizing, compare the README reproduction commands, the visible cast
+  transcript, and the rendered SVG. Treat commands that exist mainly for
+  recording convenience, or workflow mismatches between those artifacts, as demo
+  quality issues to fix before finishing.
 
 ## Workflow
 
