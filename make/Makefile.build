@@ -3,9 +3,6 @@
 
 .PHONY: build binary image install
 
-# eBPF
-include vul/caps/sys_admin/ebpf/Makefile
-
 build:
 	LDFLAGS=$(LDFLAGS) ./script/release.sh
 
@@ -18,4 +15,3 @@ binary:
 image:
 	docker buildx build $(BUILD_OPTS) --load -t "$(DEV_IMAGE)" ${DEBUG_FLAGS} .
 	docker tag $(DEV_IMAGE) $(IMAGE_NAME):latest
-
