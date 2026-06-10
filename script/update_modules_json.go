@@ -50,6 +50,7 @@ var docOverrides = map[string]string{
 	"ebpf-cron":               "./vul/caps/sys_admin/ebpf/cron/README.md",
 	"ptrace-pid-host":         "./vul/caps/sys_ptrace/pid_host/README.md",
 	"host-pid-proc-root":      "./vul/namespace/pid/proc_root/README.md",
+	"kubeconfig-user-exec":    "./vul/kubeconfig/user-exec/README.md",
 	"sa-token-access-secrets": "./vul/sa-token/access-secrets/README.md",
 	"sa-token-policy":         "./vul/sa-token/policy/README.md",
 	"docker.sock":             "./vul/shared-socket/docker-sock/README.md",

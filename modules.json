@@ -474,6 +474,19 @@
         "doc": "./vul/fork-bomb/README.md"
       },
       {
+        "name": "kubeconfig-user-exec",
+        "aliases": [
+          "user-exec",
+          "user.exec",
+          "exec-plugin"
+        ],
+        "description": "loading an untrusted kubeconfig can execute arbitrary client-side commands via users[].user.exec",
+        "maintainer": [
+          "ssst0n3"
+        ],
+        "doc": "./vul/kubeconfig/user-exec/README.md"
+      },
+      {
         "name": "shocker",
         "aliases": [
           "cap_dac_read_search",
@@ -841,6 +854,31 @@
           "ssst0n3"
         ],
         "doc": "./vul/fork-bomb/README.md"
+      },
+      {
+        "name": "kubeconfig",
+        "aliases": [
+          "kubecfg"
+        ],
+        "description": "check kubeconfig related vulnerabilities",
+        "maintainer": [
+          "ssst0n3"
+        ],
+        "children": [
+          {
+            "name": "kubeconfig-user-exec",
+            "aliases": [
+              "user-exec",
+              "user.exec",
+              "exec-plugin"
+            ],
+            "description": "loading an untrusted kubeconfig can execute arbitrary client-side commands via users[].user.exec",
+            "maintainer": [
+              "ssst0n3"
+            ],
+            "doc": "./vul/kubeconfig/user-exec/README.md"
+          }
+        ]
       },
       {
         "name": "naked",

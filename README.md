@@ -144,6 +144,7 @@ COMMANDS:
     cve-2026-43500, 43500, dirty-frag-rxrpc, dirtyfrag-rxrpc  local privilege escalation in Linux kernel RxRPC/rxkad Dirty Frag path
     cve-2026-46300, 46300, fragnesia, CVE-2026-46300  local privilege escalation and container escape in Linux kernel xfrm ESP-in-TCP Fragnesia path
     fork-bomb                                       
+   kubeconfig, kubecfg                             check kubeconfig related vulnerabilities
    naked                                           we call containers running without seccomp, AppArmor, or SELinux enabled 'naked containers', which leaves them highly vulnerable to kernel exploits and potential container escapes
    capability, caps                                abuse dangerous capabilities in container
    namespace, ns                                   host level namespaces break the isolations
@@ -223,6 +224,8 @@ OPTIONS:
 | [shared-socket](./vul/shared-socket) | abuse runtime's api via shared socket | - | - |
 | └─[docker.sock](./vul/shared-socket/docker-sock) | escape by shared docker.sock via running a privileged container | :heavy_check_mark: | :heavy_check_mark: |
 | └─containerd.sock |  | :x: | :x: |
+| [kubeconfig](./vul/kubeconfig) | check kubeconfig related vulnerabilities | - | - |
+| └─[user-exec](./vul/kubeconfig/user-exec) | loading an untrusted kubeconfig can execute arbitrary client-side commands via users[].user.exec | :heavy_check_mark: | - |
 | [sa-token](./vul/sa-token) |  | - | - |
 | └─[secret](./vul/sa-token/access-secrets) | check if service account token can access Kubernetes Secrets | :heavy_check_mark: | - |
 | └─[policy](./vul/sa-token/policy) | check if service account token has dangerous permissions | :heavy_check_mark: | - |
@@ -422,6 +425,7 @@ COMMANDS:
     cve-2026-43500, 43500, dirty-frag-rxrpc, dirtyfrag-rxrpc  local privilege escalation in Linux kernel RxRPC/rxkad Dirty Frag path
     cve-2026-46300, 46300, fragnesia, CVE-2026-46300    local privilege escalation and container escape in Linux kernel xfrm ESP-in-TCP Fragnesia path
     fork-bomb                                           
+   kubeconfig-user-exec, user-exec, user.exec, exec-plugin        loading an untrusted kubeconfig can execute arbitrary client-side commands via users[].user.exec
     shocker, cap_dac_read_search, open_by_handle_at     escape by CAP_DAC_READ_SEARCH, alias shocker, found by Sebastian Krahmer (stealth) in 2014
    cap_sys_admin, sys_admin                            abuse cap_sys_admin
    cap_bpf, bpf                                        load evil bpf programs via cap_bpf
