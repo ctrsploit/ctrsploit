@@ -20,7 +20,7 @@ var (
 		&cli.StringFlag{
 			Name:    "output",
 			Aliases: []string{"o"},
-			Usage:   "Path for the generated malicious kubeconfig (default: ~/malicious-kubeconfig.yaml)",
+			Usage:   "Path for the generated malicious kubeconfig (default: ./malicious-kubeconfig.yaml)",
 		},
 	}
 

