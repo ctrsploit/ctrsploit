@@ -24,6 +24,7 @@ import (
 	cve_2026_43500 "github.com/ctrsploit/ctrsploit/vul/cve-2026-43500"
 	cve_2026_46300 "github.com/ctrsploit/ctrsploit/vul/cve-2026-46300"
 	fork_bomb "github.com/ctrsploit/ctrsploit/vul/fork-bomb"
+	"github.com/ctrsploit/ctrsploit/vul/kubeconfig"
 	"github.com/ctrsploit/ctrsploit/vul/naked"
 	"github.com/ctrsploit/ctrsploit/vul/namespace"
 	sa_token "github.com/ctrsploit/ctrsploit/vul/sa-token"
@@ -57,6 +58,7 @@ var Command = &cli.Command{
 		cve_2026_43500.VulCmd,
 		cve_2026_46300.VulCmd,
 		fork_bomb.VulCmd,
+		kubeconfig.VulCmd,
 		naked.VulCmd,
 		caps.VulCmd,
 		namespace.VulCmd,

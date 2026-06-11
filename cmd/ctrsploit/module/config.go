@@ -3,6 +3,7 @@ package module
 import (
 	caps "github.com/ctrsploit/ctrsploit/vul/caps"
 	fork_bomb "github.com/ctrsploit/ctrsploit/vul/fork-bomb"
+	"github.com/ctrsploit/ctrsploit/vul/kubeconfig"
 	"github.com/ctrsploit/ctrsploit/vul/naked"
 	namespace "github.com/ctrsploit/ctrsploit/vul/namespace"
 	sa_token "github.com/ctrsploit/ctrsploit/vul/sa-token"
@@ -22,6 +23,7 @@ var Config = &cli.Command{
 	Commands: []*cli.Command{
 		fork_bomb.VulCmd,
 		caps.VulCmd,
+		kubeconfig.VulCmd,
 		naked.VulCmd,
 		namespace.VulCmd,
 		sa_token.VulCmd,

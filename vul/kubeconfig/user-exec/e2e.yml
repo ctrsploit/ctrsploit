@@ -1,0 +1,7 @@
+name: kubeconfig-user-exec
+test_envs:
+  - name: kubernetes-v1.35.1
+    kind: dqd
+    dqd_dir: kubernetes/v1.35.1/containerd/v2.2.1/calico/default
+    pkg: github.com/ctrsploit/ctrsploit/vul/kubeconfig/user-exec
+    cmd: /ctrsploit.test -test.v -test.run "^TestE2E_Exploit$"
