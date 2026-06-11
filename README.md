@@ -104,10 +104,10 @@ support `checksec` (detection) and/or `exploit`.
 | [cve-2021-3493](./vul/cve-2021-3493) | local privilege escalation in Ubuntu OverlayFS | :x: | :x: |
 | [cve-2022-0492](./vul/cve-2022-0492) | escape via cgroup release_agent without CAP_SYS_ADMIN | :heavy_check_mark: | :heavy_check_mark: |
 | [cve-2022-0847](./vul/cve-2022-0847) | local privilege escalation and container escape via Dirty Pipe | :o: | :heavy_check_mark: |
-| [cve-2026-31431](./vul/cve-2026-31431) | privilege escalation via AF_ALG AEAD | :o: | :heavy_check_mark: |
-| [cve-2026-43284](./vul/cve-2026-43284) | privilege escalation via xfrm ESP Dirty Frag | :o: | :heavy_check_mark: |
-| [cve-2026-43500](./vul/cve-2026-43500) | privilege escalation via RxRPC/rxkad Dirty Frag | :o: | :heavy_check_mark: |
-| [cve-2026-46300](./vul/cve-2026-46300) | privilege escalation via xfrm ESP-in-TCP Fragnesia | :o: | :heavy_check_mark: |
+| [cve-2026-31431](./vul/cve-2026-31431) | local privilege escalation and container escape via AF_ALG AEAD | :o: | :heavy_check_mark: |
+| [cve-2026-43284](./vul/cve-2026-43284) | local privilege escalation and container escape via xfrm ESP Dirty Frag | :o: | :heavy_check_mark: |
+| [cve-2026-43500](./vul/cve-2026-43500) | local privilege escalation and container escape via RxRPC/rxkad Dirty Frag | :o: | :heavy_check_mark: |
+| [cve-2026-46300](./vul/cve-2026-46300) | local privilege escalation and container escape via xfrm ESP-in-TCP Fragnesia | :o: | :heavy_check_mark: |
 
 ### kubernetes
 
@@ -118,16 +118,38 @@ support `checksec` (detection) and/or `exploit`.
 | [cve-2020-8558](./vul/cve-2020-8558) | access 127.0.0.1 services from adjacent hosts | :heavy_check_mark: | :heavy_check_mark: |
 | [cve-2021-25741](./vul/cve-2021-25741) | kubelet symlink exchange | :heavy_check_mark: | :heavy_check_mark: |
 
-### others
+### nvidia-container-toolkit
 
 | vul | desc | check | exploit |
 |-----|------|-------|---------|
-| [cve-2021-25748](./vul/cve-2021-25748) (ingress-nginx) | path validation bypass | :heavy_check_mark: | :heavy_check_mark: |
-| [cve-2022-39253](./vul/cve-2022-39253) (git) | read host file during docker build | :o: | :heavy_check_mark: |
-| [cve-2024-0132](./vul/cve-2024-0132) (nvidia) | gpu container escape | :o: | :heavy_check_mark: |
-| [cve-2024-23650](./vul/cve-2024-23650) (buildkit) | dos buildkit via OCI exporter | :heavy_check_mark: | :heavy_check_mark: |
-| [cve-2025-23266](./vul/cve-2025-23266) (nvidia) | gpu container escape via malicious image | :o: | :heavy_check_mark: |
-| [cve-2025-62725](./vul/cve-2025-62725) (docker-compose) | path traversal via OCI artifacts | :heavy_check_mark: | :heavy_check_mark: |
+| [cve-2024-0132](./vul/cve-2024-0132) | gpu container escape via nvidia-container-toolkit CVE-2024-0132 | :o: | :heavy_check_mark: |
+| [cve-2025-23266](./vul/cve-2025-23266) | gpu container escape via nvidia-container-toolkit CVE-2025-23266 by running a malicious container image | :o: | :heavy_check_mark: |
+| cve-2025-23267 |  | :x: | :x: |
+| cve-2025-23359 |  | :x: | :x: |
+
+### docker-compose
+
+| vul | desc | check | exploit |
+|-----|------|-------|---------|
+| [cve-2025-62725](./vul/cve-2025-62725) | path traversal in Docker Compose OCI artifacts allows arbitrary file write via malicious registry | :heavy_check_mark: | :heavy_check_mark: |
+
+### buildkit
+
+| vul | desc | check | exploit |
+|-----|------|-------|---------|
+| [cve-2024-23650](./vul/cve-2024-23650) | dos buildkit via OCI exporter by sending a crafted request | :heavy_check_mark: | :heavy_check_mark: |
+
+### ingress-nginx
+
+| vul | desc | check | exploit |
+|-----|------|-------|---------|
+| [cve-2021-25748](./vul/cve-2021-25748) | ingress-nginx path validation bypass vulnerability allows credential leakage through newline injection | :heavy_check_mark: | :heavy_check_mark: |
+
+### git
+
+| vul | desc | check | exploit |
+|-----|------|-------|---------|
+| [cve-2022-39253](./vul/cve-2022-39253) | read host file during docker build via git CVE-2022-39253 | :o: | :heavy_check_mark: |
 
 ## env — Environment Gathering
 
