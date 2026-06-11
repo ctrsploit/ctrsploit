@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/ctrsploit/ctrsploit/pkg/crash"
+	"github.com/ctrsploit/ctrsploit/pkg/image"
 	"github.com/urfave/cli/v3"
 )
 
@@ -14,40 +15,6 @@ func Command(primitive Primitive, aliases []string, usage string) *cli.Command {
 		Aliases: aliases,
 		Usage:   usage,
 		Commands: []*cli.Command{
-			{
-				Name:    "privilege-escalate",
-				Aliases: []string{"p"},
-				Usage:   fmt.Sprintf("local privilege escalate by using %s", primitive.GetExpName()),
-				Action: func(ctx context.Context, cmd *cli.Command) error {
-					return EscalateWithIO(primitive, cmd.Reader, cmd.Writer, cmd.ErrWriter)
-				},
-			},
-			{
-				Name:    "image-pollution",
-				Aliases: []string{"i"},
-				Usage:   fmt.Sprintf("image pollution using %s", primitive.GetExpName()),
-				Flags: []cli.Flag{
-					&cli.StringFlag{Name: "source", Aliases: []string{"s"}, Required: true,
-						Usage: "the path of file with evil content"},
-					&cli.StringFlag{Name: "destination", Aliases: []string{"d"}, Required: true,
-						Usage: "the path of file you want to pollute"},
-				},
-				Action: func(ctx context.Context, cmd *cli.Command) error {
-					return ImagePollution(primitive, cmd.String("source"), cmd.String("destination"))
-				},
-			},
-			{
-				Name:    "clean",
-				Aliases: []string{"c"},
-				Usage:   "drop host page cache to clear page-cache-only primitive effects",
-				Flags: []cli.Flag{
-					&cli.BoolFlag{Name: "sync",
-						Usage: "call sync before dropping page cache"},
-				},
-				Action: func(ctx context.Context, cmd *cli.Command) error {
-					return Clean(cmd.Bool("sync"))
-				},
-			},
 			{
 				Name:    "escape",
 				Aliases: []string{"e"},
@@ -129,6 +96,57 @@ func Command(primitive Primitive, aliases []string, usage string) *cli.Command {
 							return EscapeRestart(primitive, cmd.Int("pid"), payload, cmd.Duration("timeout"), methods...)
 						},
 					},
+				},
+			},
+			{
+				Name:    "privilege-escalate",
+				Aliases: []string{"p"},
+				Usage:   fmt.Sprintf("local privilege escalate by using %s", primitive.GetExpName()),
+				Action: func(ctx context.Context, cmd *cli.Command) error {
+					return EscalateWithIO(primitive, cmd.Reader, cmd.Writer, cmd.ErrWriter)
+				},
+			},
+			{
+				Name:    "layers",
+				Aliases: []string{"l"},
+				Usage:   "analyze shared layers across multiple images to identify cross-container pollution targets",
+				Flags: []cli.Flag{
+					&cli.StringSliceFlag{Name: "image", Aliases: []string{"i"}, Required: true,
+						Usage: "image reference (can be repeated)"},
+				},
+				Action: func(ctx context.Context, cmd *cli.Command) error {
+					report, err := image.Analyze(cmd.StringSlice("image"))
+					if err != nil {
+						return err
+					}
+					report.Print()
+					return nil
+				},
+			},
+			{
+				Name:    "image-pollution",
+				Aliases: []string{"i"},
+				Usage:   fmt.Sprintf("image pollution using %s", primitive.GetExpName()),
+				Flags: []cli.Flag{
+					&cli.StringFlag{Name: "source", Aliases: []string{"s"}, Required: true,
+						Usage: "the path of file with evil content"},
+					&cli.StringFlag{Name: "destination", Aliases: []string{"d"}, Required: true,
+						Usage: "the path of file you want to pollute"},
+				},
+				Action: func(ctx context.Context, cmd *cli.Command) error {
+					return ImagePollution(primitive, cmd.String("source"), cmd.String("destination"))
+				},
+			},
+			{
+				Name:    "clean",
+				Aliases: []string{"c"},
+				Usage:   "drop host page cache to clear page-cache-only primitive effects",
+				Flags: []cli.Flag{
+					&cli.BoolFlag{Name: "sync",
+						Usage: "call sync before dropping page cache"},
+				},
+				Action: func(ctx context.Context, cmd *cli.Command) error {
+					return Clean(cmd.Bool("sync"))
 				},
 			},
 		},
