@@ -368,6 +368,7 @@ COMMANDS:
    cve-2026-43500, 43500, dirty-frag-rxrpc, dirtyfrag-rxrpc  local privilege escalation in Linux kernel RxRPC/rxkad Dirty Frag path
    cve-2026-46300, 46300, fragnesia, CVE-2026-46300   local privilege escalation and container escape in Linux kernel xfrm ESP-in-TCP Fragnesia path
    fork-bomb                                          
+   kubeconfig-user-exec, user-exec, user.exec, exec-plugin        loading an untrusted kubeconfig can execute arbitrary client-side commands via users[].user.exec
    shocker, cap_dac_read_search, open_by_handle_at    escape by CAP_DAC_READ_SEARCH, alias shocker, found by Sebastian Krahmer (stealth) in 2014
    cap_sys_admin, sys_admin                           abuse cap_sys_admin
    release_agent, ra                                  escape by cap_sys_admin via cgroups v1 release_agent
@@ -425,7 +426,6 @@ COMMANDS:
     cve-2026-43500, 43500, dirty-frag-rxrpc, dirtyfrag-rxrpc  local privilege escalation in Linux kernel RxRPC/rxkad Dirty Frag path
     cve-2026-46300, 46300, fragnesia, CVE-2026-46300    local privilege escalation and container escape in Linux kernel xfrm ESP-in-TCP Fragnesia path
     fork-bomb                                           
-   kubeconfig-user-exec, user-exec, user.exec, exec-plugin        loading an untrusted kubeconfig can execute arbitrary client-side commands via users[].user.exec
     shocker, cap_dac_read_search, open_by_handle_at     escape by CAP_DAC_READ_SEARCH, alias shocker, found by Sebastian Krahmer (stealth) in 2014
    cap_sys_admin, sys_admin                            abuse cap_sys_admin
    cap_bpf, bpf                                        load evil bpf programs via cap_bpf
