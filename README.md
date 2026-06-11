@@ -163,12 +163,6 @@ ctrsploit env services   # discover cluster services without API access
 
 For full `env` subcommands and flags, run `ctrsploit env --help`.
 
-## Build
+## Contributing
 
-```bash
-make binary     # build in container
-```
-
-## Progress of Development
-
-* [vul](./vul/README.md)
+See [CONTRIBUTING.md](./CONTRIBUTING.md).

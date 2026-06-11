@@ -60,3 +60,7 @@ apt install docker-buildx-plugin
 If it still doesn't work, try:
 1. Reinstall Docker by following the [official docker documentation](https://docs.docker.com/engine/install/)
 2. Check if there is a file at `~/.docker/cli-plugins/docker-buildx`, (if there is, remove it)
+
+## 3. Progress of Development
+
+See [vul/README.md](./vul/README.md) for the full vulnerability module status.
