@@ -46,7 +46,7 @@ func TestE2E_Exploit(t *testing.T) {
 			go func() {
 				defer inWriter.Close()
 				defer outReader.Close()
-				err := Exploit(2, "/etc/hosts", inReader, outWriter, outWriter)
+				err := Exploit(2, "/etc/hosts", "", inReader, outWriter, outWriter)
 				assert.NoError(t, err)
 			}()
 			for _, command := range testcase.commands {
