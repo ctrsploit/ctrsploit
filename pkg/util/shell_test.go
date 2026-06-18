@@ -127,3 +127,27 @@ func TestInvokeRootShellBySuReturnsContextWhenAllCandidatesFail(t *testing.T) {
 		}
 	}
 }
+
+func TestInvokeCommandUnderDirRunsCommandInDir(t *testing.T) {
+	dir := t.TempDir()
+	var stdout, stderr bytes.Buffer
+	err := InvokeCommandUnderDir(dir, "pwd", strings.NewReader(""), &stdout, &stderr)
+	if err != nil {
+		t.Fatalf("InvokeCommandUnderDir returned error: %v", err)
+	}
+	if got := strings.TrimSpace(stdout.String()); got != dir {
+		t.Fatalf("stdout = %q, want %q", got, dir)
+	}
+}
+
+func TestInvokeCommandUnderDirUsesShell(t *testing.T) {
+	// shell features (pipes/redirections) must work, since the command runs via /bin/sh -c
+	var stdout, stderr bytes.Buffer
+	err := InvokeCommandUnderDir(t.TempDir(), "echo hello | tr a-z A-Z", strings.NewReader(""), &stdout, &stderr)
+	if err != nil {
+		t.Fatalf("InvokeCommandUnderDir returned error: %v", err)
+	}
+	if got := strings.TrimSpace(stdout.String()); got != "HELLO" {
+		t.Fatalf("stdout = %q, want HELLO", got)
+	}
+}

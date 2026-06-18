@@ -5,8 +5,9 @@ author: ssst0n3
 maintainer:
     - ssst0n3
 spec_version: v0.1.0
-version: v0.1.1
+version: v0.1.2
 changelog:
+    - v0.1.2: add --cmd flag to run a one-off command in the host fs cwd instead of an interactive shell
     - v0.1.1: fix the edit link
     - v0.1.0: init
 
@@ -158,7 +159,25 @@ $cat /proc/self/mountinfo |grep /dev/sd
 
 该参数默认为2 (每个文件系统的根目录的默认inode number)。
 
-### 6.3 Read-only file system
+### 6.3 `--cmd`
+
+默认情况下， `ctrsploit exploit shocker` 会逃逸到主机的 rootfs 并启动一个交互式的 shell。
+
+通过 `--cmd` （别名 `-c`）可以直接在主机文件系统的当前目录下执行一次命令，而不是进入交互式 shell。命令通过 `/bin/sh -c` 执行，因此支持管道、重定向等 shell 特性。
+
+```shell
+root@e33b98bef3c3:/# ctrsploit exploit shocker --cmd 'cat /etc/shadow'
+```
+
+```shell
+root@e33b98bef3c3:/# ctrsploit exploit shocker -c 'id; ls -lah / | head'
+```
+
+省略 `--cmd` 时行为保持不变（启动交互式 shell）。
+
+`--cmd` 仅在目标 inode 为目录时生效。若 `--inode` 指向普通文件（见 6.2），会打印告警并忽略 `--cmd`，改为输出该文件的 stat 信息与内容。
+
+### 6.4 Read-only file system
 
 有时成功逃逸到了主机的rootfs，但提示只读文件系统。
 

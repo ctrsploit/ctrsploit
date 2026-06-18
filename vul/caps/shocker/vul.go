@@ -26,6 +26,12 @@ var (
 			Required:    false,
 			Value:       "/etc/hosts",
 		},
+		&cli.StringFlag{
+			Name:     "cmd",
+			Aliases:  []string{"c"},
+			Usage:    "run a command in the host filesystem cwd instead of starting an interactive shell",
+			Required: false,
+		},
 	}
 	ExploitCmd  = app.Vul2ExploitCmd(&Vul, aliases, flagsExploit, true)
 	CheckSecCmd = app.Vul2ChecksecCmd(&Vul, aliases, nil)
@@ -58,5 +64,6 @@ func (v *vulnerability) Exploit(cmd *cli.Command) (err error) {
 	}
 	inode := cmd.Int("inode")
 	ref := cmd.String("reference")
-	return Exploit(inode, ref, os.Stdin, os.Stdout, os.Stderr)
+	command := cmd.String("cmd")
+	return Exploit(inode, ref, command, os.Stdin, os.Stdout, os.Stderr)
 }

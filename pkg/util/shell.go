@@ -365,3 +365,18 @@ func InvokeShellUnderDir(dir string, i io.Reader, o, e io.Writer) (err error) {
 	awesome_error.CheckFatal(cmd.Start())
 	return cmd.Wait()
 }
+
+// InvokeCommandUnderDir runs a single command (via /bin/sh -c) with its working
+// directory set to dir, instead of starting an interactive shell like
+// InvokeShellUnderDir. It is used to run a one-off command against an escaped
+// host filesystem without dropping into a shell.
+func InvokeCommandUnderDir(dir, command string, i io.Reader, o, e io.Writer) (err error) {
+	shell := "/bin/sh"
+	cmd := exec.Command(shell, "-c", command)
+	cmd.Dir = dir
+	cmd.Stdin = i
+	cmd.Stdout = o
+	cmd.Stderr = e
+	awesome_error.CheckFatal(cmd.Start())
+	return cmd.Wait()
+}
