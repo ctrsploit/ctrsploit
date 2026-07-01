@@ -108,6 +108,7 @@ support `checksec` (detection) and/or `exploit`.
 | [cve-2026-43284](./vul/cve-2026-43284) | local privilege escalation and container escape via xfrm ESP Dirty Frag | :o: | :heavy_check_mark: |
 | [cve-2026-43500](./vul/cve-2026-43500) | local privilege escalation and container escape via RxRPC/rxkad Dirty Frag | :o: | :heavy_check_mark: |
 | [cve-2026-46300](./vul/cve-2026-46300) | local privilege escalation and container escape via xfrm ESP-in-TCP Fragnesia | :o: | :heavy_check_mark: |
+| [cve-2026-23111](./vul/cve-2026-23111) | local privilege escalation via nf_tables use-after-free (inverted check in nft_map_catchall_activate) | :heavy_check_mark: | :o: |
 
 ### kubernetes
 
