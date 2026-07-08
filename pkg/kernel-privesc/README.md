@@ -68,8 +68,9 @@ Both also `MemsetKmem(selinux_state, 0, 4)` to make SELinux permissive
 (best-effort; skipped if the symbol is unknown).
 
 `DefaultMethods()` returns `[ModprobePathMethod, CorePatternMethod]`.
-`SelectMethod(name)` picks one by name (used by the `--method` flag, bridged
-to the worker via `CTRSPLOIT_23111_METHOD`).
+`SelectMethod(name)` picks one by name (used by a consuming CVE's `--method`
+flag, which the CVE bridges to its namespace worker via an env var of its own
+choosing).
 
 There is deliberately **no `Escalate` entry point** that runs `Prepare` and
 `TriggerAndWait` back-to-back. With this package's deferred-write primitive
@@ -119,7 +120,7 @@ Kernel LPEs frequently run inside a user namespace (`CLONE_NEWUSER`) to gain
    `proc.Wait()` never returns. The parent cannot wait for worker exit before
    dropping the shell.
 
-The proven pattern: the worker emits a success marker (`cve-…-lpe-ok <rootbash>`)
+The proven pattern: the worker emits a success marker (`<expname>-lpe-ok <rootbash>`)
 on a pipe; the parent streams that pipe, parses the rootbash path off the marker
 line, drops the shell, and best-effort kills the stuck worker. Parsing the path
 (not globbing `/tmp`) ensures the parent drops the exact method's shell even when

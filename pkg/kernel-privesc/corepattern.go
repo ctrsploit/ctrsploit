@@ -69,7 +69,7 @@ func (m CorePatternMethod) TriggerAndWait(p KernelWritePrimitive, a ShellArtifac
 	// a real core.* file in the child's cwd. To avoid littering the caller's
 	// cwd (and the repo, when tests run here) with core dumps in that case,
 	// run the child in a private scratch dir and clean it up after.
-	scratch, err := os.MkdirTemp("", "cve-corepattern-")
+	scratch, err := os.MkdirTemp("", "kernelprivesc-corepattern-")
 	if err != nil {
 		return fmt.Errorf("core_pattern: mkdtemp: %w", err)
 	}

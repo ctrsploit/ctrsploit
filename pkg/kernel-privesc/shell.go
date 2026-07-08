@@ -23,7 +23,7 @@ type ShellArtifact struct {
 }
 
 // NewShellArtifact returns a PID-suffixed ShellArtifact under /tmp. The prefix
-// scopes paths to the calling CVE (e.g. "cve2026_23111").
+// scopes paths to the calling CVE (e.g. its ExpName()).
 func NewShellArtifact(prefix string) ShellArtifact {
 	pid := strconv.Itoa(os.Getpid())
 	return ShellArtifact{

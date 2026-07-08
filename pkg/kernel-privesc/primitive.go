@@ -7,7 +7,7 @@ package kernelprivesc
 // Implementations append a memcpy/memset ROP segment that executes when the
 // pivot fires. The content to be written must live in a controlled,
 // kernel-readable buffer whose absolute address the implementation knows
-// (e.g. the msg_msg body in CVE-2026-23111). WriteKmem/MemsetKmem return
+// (e.g. a msg_msg body). WriteKmem/MemsetKmem return
 // immediately after arranging the segment; the actual write happens when the
 // pivot thread runs the ROP.
 type KernelWritePrimitive interface {
