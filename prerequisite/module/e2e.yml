@@ -1,0 +1,11 @@
+name: module
+test_envs:
+  - name: docker-v28.3.2
+    kind: dqd
+    dqd_dir: docker/v28.3.2
+    pkg: github.com/ctrsploit/ctrsploit/prerequisite/module
+    cmd: docker run --rm
+      -v /ctrsploit.test:/ctrsploit.test
+      --env TEST_ENV=docker-v28.3.2
+      busybox:latest
+      /ctrsploit.test -test.v -test.run '^TestE2E_ModulePrerequisites$'

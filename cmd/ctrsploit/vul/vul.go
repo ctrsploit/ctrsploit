@@ -19,6 +19,7 @@ import (
 	cve_2025_23266 "github.com/ctrsploit/ctrsploit/vul/cve-2025-23266"
 	cve_2025_47290 "github.com/ctrsploit/ctrsploit/vul/cve-2025-47290"
 	cve_2025_62725 "github.com/ctrsploit/ctrsploit/vul/cve-2025-62725"
+	cve_2026_23111 "github.com/ctrsploit/ctrsploit/vul/cve-2026-23111"
 	cve_2026_31431 "github.com/ctrsploit/ctrsploit/vul/cve-2026-31431"
 	cve_2026_43284 "github.com/ctrsploit/ctrsploit/vul/cve-2026-43284"
 	cve_2026_43500 "github.com/ctrsploit/ctrsploit/vul/cve-2026-43500"
@@ -53,6 +54,7 @@ var Command = &cli.Command{
 		cve_2025_23266.VulCmd,
 		cve_2025_47290.VulCmd,
 		cve_2025_62725.VulCmd,
+		cve_2026_23111.VulCmd,
 		cve_2026_31431.VulCmd,
 		cve_2026_43284.VulCmd,
 		cve_2026_43500.VulCmd,
