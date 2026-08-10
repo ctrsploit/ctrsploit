@@ -21,6 +21,7 @@ var Command = &cli.Command{
 		Selinux,
 		Fdisk,
 		Kernel,
+		Cpusec,
 		Sysctl,
 		Rlimit,
 		Namespace,

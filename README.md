@@ -160,6 +160,7 @@ ctrsploit env where      # check if in container and what type
 ctrsploit env capability # show capabilities
 ctrsploit env seccomp    # show seccomp status
 ctrsploit env services   # discover cluster services without API access
+ctrsploit env cpusec     # show CPU/kernel security mitigations (SMEP/SMAP/KPTI/IBT/KCFI/FG-KASLR on x86; PAC/BTI/KPTI/PAN/MTE on arm64)
 ```
 
 For full `env` subcommands and flags, run `ctrsploit env --help`.
