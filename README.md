@@ -165,6 +165,10 @@ ctrsploit env cpusec     # show CPU/kernel security mitigations (SMEP/SMAP/KPTI/
 
 For full `env` subcommands and flags, run `ctrsploit env --help`.
 
+## tool — Convenience Tools
+
+Small convenience tools used during penetration testing. No subcommands yet.
+
 ## Contributing
 
 See [CONTRIBUTING.md](./CONTRIBUTING.md).
