@@ -2,6 +2,7 @@ package pid_host
 
 import (
 	"context"
+	"github.com/ctrsploit/ctrsploit/pkg/ptraceinject"
 	"github.com/ctrsploit/ctrsploit/prerequisite/apparmor"
 	"github.com/ctrsploit/ctrsploit/prerequisite/capability"
 	"github.com/ctrsploit/ctrsploit/prerequisite/namespace"
@@ -80,7 +81,7 @@ func (v *vulnerability) Exploit(cmd *cli.Command) (err error) {
 	}
 	ip := cmd.String("ip")
 	if ip == "" {
-		ip, err = getIp()
+		ip, err = ptraceinject.GetIp()
 		if err != nil {
 			return err
 		}

@@ -1,0 +1,12 @@
+name: ptraceinject
+test_envs:
+  - name: docker-v28.3.2
+    kind: dqd
+    dqd_dir: docker/v28.3.2
+    pkg: github.com/ctrsploit/ctrsploit/pkg/ptraceinject
+    cmd: docker run -v /ctrsploit.test:/ctrsploit.test
+      --env TEST_ENV=exploitable
+      --cap-add CAP_SYS_PTRACE
+      --security-opt apparmor=unconfined
+      busybox:latest
+      /ctrsploit.test -test.v -test.run '^TestE2E'

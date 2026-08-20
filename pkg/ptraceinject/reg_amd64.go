@@ -1,4 +1,4 @@
-package pid_host
+package ptraceinject
 
 import "syscall"
 
