@@ -84,6 +84,24 @@ func Inject(pid int, shellcode []byte) (err error) {
 	}
 	log.Logger.Infof("Injected shellcode at RIP (0x%x)", getPC(oldRegs))
 
+	// From here the target's code at RIP has been overwritten. Any early return
+	// below must restore originalCode and oldRegs so the target resumes
+	// unaffected. The normal path sets restored=true after step 14 to skip
+	// this. This defer runs before the PtraceDetach defer (LIFO), so the
+	// target is still attached when we restore — which ptrace requires.
+	restored := false
+	defer func() {
+		if restored {
+			return
+		}
+		if _, e := syscall.PtracePokeData(pid, uintptr(getPC(oldRegs)), originalCode); e != nil {
+			log.Logger.Errorf("failed to restore original code on error path: %v", e)
+		}
+		if e := syscall.PtraceSetRegs(pid, &oldRegs); e != nil {
+			log.Logger.Errorf("failed to restore registers on error path: %v", e)
+		}
+	}()
+
 	// 5. Continue process to execute shellcode (fork)
 	err = syscall.PtraceCont(pid, 0)
 	if err != nil {
@@ -175,6 +193,7 @@ func Inject(pid int, shellcode []byte) (err error) {
 		return
 	}
 	log.Logger.Info("Restored original registers.")
+	restored = true
 	return
 }
 
