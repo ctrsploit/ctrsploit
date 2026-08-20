@@ -19,6 +19,34 @@ import (
 // container's mount namespace, so the file is visible to the test.
 const markerFile = "/tmp/pi"
 
+// startVictim re-execs the test binary in "victim mode" (see TestMain in
+// ptraceinject_test.go): a pure user-space spin loop with GOMAXPROCS=1 and GC
+// disabled. This guarantees RIP is always a user instruction when a tracer
+// attaches, making ptrace code-injection deterministic. It waits for a
+// readiness file so the victim has fully entered the loop before returning.
+func startVictim(t *testing.T) *exec.Cmd {
+	exe, err := os.Executable()
+	if err != nil {
+		t.Fatalf("os.Executable: %v", err)
+	}
+	cmd := exec.Command(exe)
+	cmd.Env = append(os.Environ(), "PTRACEINJECT_VICTIM=1")
+	if err := cmd.Start(); err != nil {
+		t.Fatalf("failed to start victim: %v", err)
+	}
+	// Wait for the victim to signal it has entered the spin loop.
+	readyFile := fmt.Sprintf("/tmp/ptraceinject_victim_ready_%d", cmd.Process.Pid)
+	deadline := time.Now().Add(5 * time.Second)
+	for time.Now().Before(deadline) {
+		if _, err := os.Stat(readyFile); err == nil {
+			break
+		}
+		time.Sleep(time.Millisecond)
+	}
+	os.Remove(readyFile)
+	return cmd
+}
+
 // forkCreatExit is amd64 shellcode that follows the Inject convention:
 //
 //	fork(); if (child) { creat("/tmp/pi", 07); exit(0); } else { int3; }
@@ -66,14 +94,10 @@ func TestE2E_Inject(t *testing.T) {
 	// Clean up any stale marker from a previous run.
 	os.Remove(markerFile)
 
-	// Start a victim that spins in user space (no syscalls per iteration), so
-	// its RIP is a user instruction and PtraceCont immediately executes the
-	// injected shellcode. A blocking-syscall victim (e.g. sleep) would resume
-	// the syscall instead and never reach the poked code.
-	victim := exec.Command("sh", "-c", "while true; do :; done")
-	if err := victim.Start(); err != nil {
-		t.Fatalf("failed to start victim: %v", err)
-	}
+	// Start a deterministic victim: a pure user-space spin loop (re-exec'd
+	// test binary via startVictim). RIP is always a user instruction, so
+	// PTRACE_CONT immediately executes the injected shellcode.
+	victim := startVictim(t)
 	victimPid := victim.Process.Pid
 	t.Logf("victim pid: %d", victimPid)
 
@@ -116,10 +140,7 @@ func TestE2E_Inject_ErrorRestoresTarget(t *testing.T) {
 		t.Skipf("Skipping e2e test; set TEST_ENV=exploitable (requires cap_sys_ptrace)")
 	}
 
-	victim := exec.Command("sh", "-c", "while true; do :; done")
-	if err := victim.Start(); err != nil {
-		t.Fatalf("failed to start victim: %v", err)
-	}
+	victim := startVictim(t)
 	victimPid := victim.Process.Pid
 	t.Logf("victim pid: %d", victimPid)
 
