@@ -153,20 +153,34 @@ func Inject(pid int, shellcode []byte) (err error) {
 		return
 	}
 
-	// 9. Wait for the int3 trap from the parent
-	_, err = syscall.Wait4(pid, &ws, 0, nil)
-	if err != nil {
-		awesome_error.CheckErr(err)
-		return
+	// 9. Wait for the int3 trap from the parent. The detached child's exit
+	// generates a SIGCHLD to the parent (tracee) which can arrive as a
+	// signal-delivery-stop before the int3 SIGTRAP — loop past any such
+	// intervening stops, re-injecting the signal, until we get the int3.
+	for {
+		_, err = syscall.Wait4(pid, &ws, 0, nil)
+		if err != nil {
+			awesome_error.CheckErr(err)
+			return
+		}
+		if !ws.Stopped() {
+			err = fmt.Errorf("parent process exited unexpectedly: %v", ws)
+			awesome_error.CheckErr(err)
+			return
+		}
+		if ws.StopSignal() == syscall.SIGTRAP && ws.TrapCause() == 0 {
+			break // int3 trap
+		}
+		// Some other signal-delivery-stop (e.g. SIGCHLD from the exited
+		// child) — resume, re-injecting the signal so the kernel's signal
+		// semantics are preserved, and wait again for the int3.
+		if e := syscall.PtraceCont(pid, int(ws.StopSignal())); e != nil {
+			err = fmt.Errorf("PtraceCont while waiting for int3 trap: %v", e)
+			awesome_error.CheckErr(err)
+			return
+		}
 	}
 	log.Logger.Infof("Parent process trapped. WaitStatus: %v", ws)
-
-	// Verify we stopped because of the trap (SIGTRAP)
-	if !ws.Stopped() || ws.StopSignal() != syscall.SIGTRAP {
-		err = fmt.Errorf("parent process did not stop with SIGTRAP, but with: %v", ws)
-		awesome_error.CheckErr(err)
-		return
-	}
 
 	// 10. Restore original memory
 	// We need to get the registers again because RIP has changed
