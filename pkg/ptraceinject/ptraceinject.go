@@ -182,15 +182,7 @@ func Inject(pid int, shellcode []byte) (err error) {
 	}
 	log.Logger.Infof("Parent process trapped. WaitStatus: %v", ws)
 
-	// 10. Restore original memory
-	// We need to get the registers again because RIP has changed
-	var trappedRegs syscall.PtraceRegs
-	err = syscall.PtraceGetRegs(pid, &trappedRegs)
-	if err != nil {
-		err = fmt.Errorf("failed to get registers at trap: %v", err)
-		awesome_error.CheckErr(err)
-		return
-	}
+	// 10. Restore original memory at the original RIP (where we poked shellcode).
 	_, err = syscall.PtracePokeData(pid, uintptr(getPC(oldRegs)), originalCode)
 	if err != nil {
 		err = fmt.Errorf("failed to restore original code: %v", err)
