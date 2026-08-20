@@ -3,8 +3,10 @@
 package ptraceinject
 
 import (
+	"fmt"
 	"os"
 	"os/exec"
+	"strings"
 	"syscall"
 	"testing"
 	"time"
@@ -100,4 +102,75 @@ func TestE2E_Inject(t *testing.T) {
 	// Verify the victim is still alive and running normally.
 	err = victim.Process.Signal(syscall.Signal(0))
 	assert.NoError(t, err, "victim process should still be alive after injection")
+}
+
+// TestE2E_Inject_ErrorRestoresTarget is the regression test for mid-injection
+// error restoration (review issue #1). It injects a non-conforming shellcode
+// (bare int3, no fork) that forces Inject to fail at the PTRACE_EVENT_FORK
+// check. The target must be restored to its original code so it survives;
+// without error-path restoration the victim resumes with 0xcc at RIP,
+// re-executes int3 with no tracer attached, and is killed by the default
+// SIGTRAP action.
+func TestE2E_Inject_ErrorRestoresTarget(t *testing.T) {
+	if os.Getenv("TEST_ENV") != "exploitable" {
+		t.Skipf("Skipping e2e test; set TEST_ENV=exploitable (requires cap_sys_ptrace)")
+	}
+
+	victim := exec.Command("sh", "-c", "while true; do :; done")
+	if err := victim.Start(); err != nil {
+		t.Fatalf("failed to start victim: %v", err)
+	}
+	victimPid := victim.Process.Pid
+	t.Logf("victim pid: %d", victimPid)
+
+	defer func() {
+		victim.Process.Signal(syscall.SIGKILL)
+		victim.Wait()
+	}()
+
+	// Two int3 bytes, no fork — violates the Inject shellcode convention, so
+	// Inject must fail at the PTRACE_EVENT_FORK check and return an error.
+	//
+	// Why two bytes, not one: after the first int3 traps, RIP advances to the
+	// second injected 0xcc. On the (unfixed) error path, Inject detaches
+	// without restoring the original code, so the victim resumes by executing
+	// the second 0xcc — an int3 with no tracer attached — and is killed by the
+	// default SIGTRAP action. With error-path restoration, the original code is
+	// poked back before detach, so the victim survives. A single 0xcc would
+	// not catch the bug: RIP would advance past it into original code
+	// regardless of restoration.
+	err := Inject(victimPid, []byte{0xcc, 0xcc})
+	assert.Error(t, err, "Inject should fail for non-conforming shellcode")
+
+	// Give the detached victim time to re-execute the byte at RIP. If the code
+	// was not restored, RIP still holds 0xcc → int3 → default SIGTRAP → death.
+	time.Sleep(300 * time.Millisecond)
+
+	// The victim must still be alive AND running (not a zombie). Signal(0)
+	// succeeds on a zombie (unreaped child), so check /proc/<pid>/status
+	// State field directly: "R" = running, "Z" = zombie, absent = gone.
+	// Inject's error path must have restored the original code before
+	// detaching, so the victim continues its busy loop.
+	state := procState(victimPid)
+	assert.Contains(t, []string{"R", "S", "D"}, state,
+		"victim should still be running after a failed Inject (error path must restore original code); got state %q", state)
+}
+
+// procState reads the State field from /proc/<pid>/status. Returns "gone" if
+// the process no longer exists (reaped/exited), or the single-letter state
+// code (R=running, S=sleeping, Z=zombie, …) otherwise.
+func procState(pid int) string {
+	data, err := os.ReadFile(fmt.Sprintf("/proc/%d/status", pid))
+	if err != nil {
+		return "gone"
+	}
+	for _, line := range strings.Split(string(data), "\n") {
+		if strings.HasPrefix(line, "State:") {
+			fields := strings.Fields(strings.TrimPrefix(line, "State:"))
+			if len(fields) > 0 {
+				return fields[0]
+			}
+		}
+	}
+	return "?"
 }
