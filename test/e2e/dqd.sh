@@ -87,6 +87,7 @@ upload_test_bin() {
   local pkg="$2"
   TEST_BINARY_NAME="${pkg//\//_}.test"
   pushd "${DIR_PROJECT}" > /dev/null
+  ssh "${remote_host}" "rm -rf /ctrsploit.test"
   scp "bin/test/${TEST_BINARY_NAME}" "${remote_host}:/ctrsploit.test"
   popd > /dev/null
 }
