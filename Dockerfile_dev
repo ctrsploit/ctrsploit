@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 
 ARG GO_VERSION=1.24
-ARG BASE_DEBIAN_DISTRO="bullseye"
+ARG BASE_DEBIAN_DISTRO="bookworm"
 ARG GOLANG_IMAGE="golang:${GO_VERSION}-${BASE_DEBIAN_DISTRO}"
 
 FROM ${GOLANG_IMAGE} AS base
@@ -9,10 +9,15 @@ ARG APT_MIRROR
 ARG GOPROXY
 ARG SLIM_LDFLAGS
 WORKDIR /root/app
-RUN sed -ri "s/(httpredir|deb).debian.org/${APT_MIRROR:-deb.debian.org}/g" /etc/apt/sources.list \
- && sed -ri "s/(security).debian.org/${APT_MIRROR:-security.debian.org}/g" /etc/apt/sources.list \
- && sed -ri "s/(snapshot).debian.org/${APT_MIRROR:-snapshot.debian.org}/g" /etc/apt/sources.list \
- && cat /etc/apt/sources.list
+RUN if [ -f /etc/apt/sources.list ]; then \
+      S=/etc/apt/sources.list; \
+    else \
+      S=/etc/apt/sources.list.d/debian.sources; \
+    fi \
+ && sed -ri "s/(httpredir|deb).debian.org/${APT_MIRROR:-deb.debian.org}/g" "$S" \
+ && sed -ri "s/(security).debian.org/${APT_MIRROR:-security.debian.org}/g" "$S" \
+ && sed -ri "s/(snapshot).debian.org/${APT_MIRROR:-snapshot.debian.org}/g" "$S" \
+ && cat "$S"
 RUN git config --global --add safe.directory /root/app
 
 FROM base AS build-env
