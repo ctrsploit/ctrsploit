@@ -126,14 +126,33 @@ do_test() {
       fifo="/tmp/command_fifo.$$"
       mkfifo "$fifo"
       test_cmd "${remote_host}" "${test_env}" "${cmd}" < /dev/null > "$fifo" &
+      test_pid=$!
+      matched=false
       # stop until the stop_flag
       while IFS= read -r line; do
         echo "$line"
         if [[ "$line" == *${stop_flag}* ]]; then
+          matched=true
           break
         fi
       done < "$fifo"
-      rm $fifo
+      rm -f "$fifo"
+      if [[ "${matched}" == true ]]; then
+        # The remote command printed its success line: the guest may be wedged
+        # from there on (a parked D-state worker can take sshd with it), so a
+        # dirty session exit does not invalidate the result that was already
+        # printed and verified. Stop the session and report success.
+        kill "${test_pid}" 2>/dev/null || true
+        wait "${test_pid}" 2>/dev/null || true
+        return 0
+      fi
+      # The flag never appeared — this is a real failure. Return the remote
+      # command's status: the reader loop ends at EOF when the session dies
+      # (timeout, guest wedge) and would otherwise report rm's exit status 0,
+      # turning a failure into a false green.
+      local rc=0
+      wait "${test_pid}" || rc=$?
+      return "${rc}"
     fi
 }
 
