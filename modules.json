@@ -120,6 +120,16 @@
         ]
       },
       {
+        "name": "cpusec",
+        "aliases": [
+          "cs"
+        ],
+        "description": "show CPU/kernel security mitigations (SMEP/SMAP/KPTI/IBT/KCFI/FG-KASLR on x86; PAC/BTI/KPTI/PAN/MTE on arm64)",
+        "maintainer": [
+          "ssst0n3"
+        ]
+      },
+      {
         "name": "sysctl",
         "aliases": [],
         "description": "display sysctl information",
@@ -414,6 +424,17 @@
         "doc": "./vul/cve-2025-62725/README.md"
       },
       {
+        "name": "cve-2026-23111",
+        "aliases": [
+          "23111"
+        ],
+        "description": "local privilege escalation in Linux kernel nf_tables via inverted check in nft_map_catchall_activate()",
+        "maintainer": [
+          "ssst0n3"
+        ],
+        "doc": "./vul/cve-2026-23111/README.md"
+      },
+      {
         "name": "cve-2026-31431",
         "aliases": [
           "31431",
@@ -472,19 +493,6 @@
           "ssst0n3"
         ],
         "doc": "./vul/fork-bomb/README.md"
-      },
-      {
-        "name": "kubeconfig-user-exec",
-        "aliases": [
-          "user-exec",
-          "user.exec",
-          "exec-plugin"
-        ],
-        "description": "loading an untrusted kubeconfig can execute arbitrary client-side commands via users[].user.exec",
-        "maintainer": [
-          "ssst0n3"
-        ],
-        "doc": "./vul/kubeconfig/user-exec/README.md"
       },
       {
         "name": "shocker",
@@ -794,6 +802,17 @@
           "r0binak"
         ],
         "doc": "./vul/cve-2025-62725/README.md"
+      },
+      {
+        "name": "cve-2026-23111",
+        "aliases": [
+          "23111"
+        ],
+        "description": "local privilege escalation in Linux kernel nf_tables via inverted check in nft_map_catchall_activate()",
+        "maintainer": [
+          "ssst0n3"
+        ],
+        "doc": "./vul/cve-2026-23111/README.md"
       },
       {
         "name": "cve-2026-31431",
@@ -1215,6 +1234,17 @@
         "doc": "./vul/cve-2025-47290/README.md"
       },
       {
+        "name": "cve-2026-23111",
+        "aliases": [
+          "23111"
+        ],
+        "description": "local privilege escalation in Linux kernel nf_tables via inverted check in nft_map_catchall_activate()",
+        "maintainer": [
+          "ssst0n3"
+        ],
+        "doc": "./vul/cve-2026-23111/README.md"
+      },
+      {
         "name": "cve-2026-31431",
         "aliases": [
           "31431",
@@ -1273,6 +1303,19 @@
           "ssst0n3"
         ],
         "doc": "./vul/fork-bomb/README.md"
+      },
+      {
+        "name": "kubeconfig-user-exec",
+        "aliases": [
+          "user-exec",
+          "user.exec",
+          "exec-plugin"
+        ],
+        "description": "loading an untrusted kubeconfig can execute arbitrary client-side commands via users[].user.exec",
+        "maintainer": [
+          "ssst0n3"
+        ],
+        "doc": "./vul/kubeconfig/user-exec/README.md"
       },
       {
         "name": "shocker",
