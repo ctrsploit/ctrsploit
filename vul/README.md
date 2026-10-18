@@ -68,6 +68,8 @@
 | [cve-2019-5736](cve-2019-5736) | escape by overwrite runc executable file via /proc/self/exe | :heavy_check_mark: | - | - | :heavy_check_mark: | - | :x: |
 | └─[exec](cve-2019-5736/exec) | cve-2019-5736 exploit via runc exec process | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | - | :heavy_check_mark: | :x: |
 | └─[image](cve-2019-5736/image) | cve-2019-5736 exploit via a malicious image | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | - | :heavy_check_mark: | :x: |
+| [cve-2021-30465](cve-2021-30465) | escape via runc mount destination TOCTOU (symlink exchange) | :heavy_check_mark: | - | - | :heavy_check_mark: | - | :x: |
+| └─[docker](cve-2021-30465/docker) | cve-2021-30465 exploit against docker | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | - | :x: | :x: |
 | cve-2019-16884 |  | :x: | :heavy_check_mark: | :x: | :x: | :x: | :x: |
 | cve-2023-28642 |  | :x: | :x: | :x: | :x: | :x: | :x: |
 | cve-2024-21626 |  | :x: | :x: | :x: | :x: | :x: | :x: |

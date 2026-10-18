@@ -46,4 +46,27 @@ var (
 	// MayBeVulnerableTo5736ByVersion is a necessary condition but not sufficient condition,
 	// because downstream vendor may backport the patch to an older version.
 	MayBeVulnerableTo5736ByVersion = prerequisite.Not(NotVulnerableTo5736ByVersion())
+
+	// NotVulnerableTo30465ByVersion is a sufficient condition
+	NotVulnerableTo30465ByVersion = func() *Version {
+		cons, err := semver.NewConstraint(">= v1.0.0-rc95")
+		if err != nil {
+			panic(err)
+		}
+		return &Version{
+			BasePrerequisite: prerequisite.BasePrerequisite{
+				Name: "runc not vulnerable to CVE-2021-30465",
+				// https://github.com/opencontainers/runc/commit/0ca91f44f1664da834bc61115a849b56d22f595f
+				Info:   "runc >= v1.0.0-rc95 is not vulnerable to CVE-2021-30465",
+				ExeEnv: exeenv.InHost,
+			},
+			Constraint: cons,
+		}
+	}
+	// MayBeVulnerableTo30465ByVersion is a necessary condition but not sufficient condition,
+	// because downstream vendor may backport the patch to an older version, and because
+	// exploitability additionally requires a mount configuration the attacker can influence
+	// (a nested bind mount whose destination is attacker-writable, plus a later mount sourcing
+	// a subpath of the mounted-over host path).
+	MayBeVulnerableTo30465ByVersion = prerequisite.Not(NotVulnerableTo30465ByVersion())
 )

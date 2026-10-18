@@ -306,6 +306,17 @@
         "doc": "./vul/cve-2021-25748/README.md"
       },
       {
+        "name": "cve-2021-30465",
+        "aliases": [
+          "30465"
+        ],
+        "description": "escape via runc mount destination TOCTOU (symlink exchange)",
+        "maintainer": [
+          "ssst0n3"
+        ],
+        "doc": "./vul/cve-2021-30465/README.md"
+      },
+      {
         "name": "cve-2021-3493",
         "aliases": [
           "3493",
@@ -684,6 +695,17 @@
           "noirfate"
         ],
         "doc": "./vul/cve-2021-25748/README.md"
+      },
+      {
+        "name": "cve-2021-30465",
+        "aliases": [
+          "30465"
+        ],
+        "description": "escape via runc mount destination TOCTOU (symlink exchange)",
+        "maintainer": [
+          "ssst0n3"
+        ],
+        "doc": "./vul/cve-2021-30465/README.md"
       },
       {
         "name": "cve-2021-3493",
@@ -1139,6 +1161,17 @@
           "noirfate"
         ],
         "doc": "./vul/cve-2021-25748/README.md"
+      },
+      {
+        "name": "cve-2021-30465",
+        "aliases": [
+          "30465"
+        ],
+        "description": "escape via runc mount destination TOCTOU (symlink exchange)",
+        "maintainer": [
+          "ssst0n3"
+        ],
+        "doc": "./vul/cve-2021-30465/README.md"
       },
       {
         "name": "cve-2022-0492",
