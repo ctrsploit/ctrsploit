@@ -125,60 +125,63 @@ def convert_table_row(row):
 
 
 def update_readme_table(main_readme_path, module_tables):
-    """根据 vul/README.md 的模块划分，更新 README.md 中的 `### module` 章节"""
+    """Regenerate the module tables inside the `## Vul` section of README.md.
+
+    The table CONTENT follows vul/README.md (the source of truth); the display
+    ORDER of existing module subsections is preserved as curated in README.md,
+    and modules that are new in vul/README.md are appended. Non-module content
+    before the first subsection (intro text, legend table) is preserved.
+    """
     with open(main_readme_path, 'r', encoding='utf-8') as f:
         lines = f.readlines()
-    
-    # Find the "### module" section and its end (next "###" header)
-    module_header_idx = None
-    next_header_idx = None
+
+    # Find the "## Vul" section and its end (next level-2 header).
+    section_start = None
+    section_end = len(lines)
 
     for i, line in enumerate(lines):
-        if module_header_idx is None and line.startswith('### module'):
-            module_header_idx = i
+        if section_start is None and line.startswith('## Vul'):
+            section_start = i
             continue
-        if module_header_idx is not None and line.startswith('### ') and not line.startswith('### module'):
-            next_header_idx = i
+        if section_start is not None and i > section_start and line.startswith('## '):
+            section_end = i
             break
 
-    if module_header_idx is None:
-        raise ValueError('Could not find "### module" section in README.md')
+    if section_start is None:
+        raise ValueError('Could not find a "## Vul" section in README.md')
 
-    if next_header_idx is None:
-        # If there's no following section header, treat end of file as section end
-        next_header_idx = len(lines)
+    # Split the section body into the preamble (intro text, legend) and the
+    # existing `### <module>` subsections, whose bodies are regenerated.
+    preamble = []
+    existing_order = []
+    for line in lines[section_start + 1:section_end]:
+        if line.startswith('### '):
+            existing_order.append(line.strip()[4:].strip())
+        elif not existing_order:
+            preamble.append(line)
 
-    # Preserve existing content inside module section *before* any auto-generated
-    # content (旧表格 / 旧模块小节)，方便多次运行脚本。
-    module_block = lines[module_header_idx + 1:next_header_idx]
-    preserved_block = []
-    auto_section_started = False
+    module_map = {name: table_lines for name, table_lines in module_tables}
+    dropped = [name for name in existing_order if name not in module_map]
+    if dropped:
+        print(
+            f"Warning: dropping README modules absent from vul/README.md: "
+            f"{', '.join(dropped)}",
+            file=sys.stderr,
+        )
 
-    for line in module_block:
-        stripped = line.strip()
-        # 旧的自动生成内容可能以表格头或 "#### 模块名" 开始
-        if not auto_section_started and (
-            stripped.startswith('| vul') and 'desc' in stripped
-            or line.startswith('#### ')
-        ):
-            auto_section_started = True
-            continue
-        if auto_section_started:
-            # 丢弃旧的自动生成部分
-            continue
-        preserved_block.append(line)
+    # Preserve the curated order for known modules; append new ones in source
+    # order so a fresh module always lands in the generated section.
+    order = [name for name in existing_order if name in module_map]
+    order += [name for name in module_map if name not in order]
 
-    # 构建新的模块章节内容：按模块拆分，每个模块一个子标题 + 4 列表
     new_module_blocks = []
-
-    for module_name, table_lines in module_tables:
-        # 使用 "####" 作为 README 中 module 章节下的子标题
-        new_module_blocks.append(f'#### {module_name}\n\n')
+    for module_name in order:
+        new_module_blocks.append(f'### {module_name}\n\n')
         new_module_blocks.append('| vul | desc | check | exploit |\n')
         new_module_blocks.append('|-----|------|-------|---------|\n')
 
-        for line in table_lines:
-            if line.strip().startswith('| vul') and 'desc' in line:
+        for line in module_map[module_name]:
+            if line.startswith('| vul') and 'desc' in line:
                 continue  # 跳过表头
             if '---' in line:
                 continue  # 跳过分隔线
@@ -187,19 +190,16 @@ def update_readme_table(main_readme_path, module_tables):
 
         new_module_blocks.append('\n')
 
-    # Replace the content inside the "module" section between the preserved
-    # description (if any) and the next "###" header with the new module blocks.
-    new_content = (
-        ''.join(lines[:module_header_idx + 1]) +
-        ''.join(preserved_block) +
-        ''.join(new_module_blocks) +
-        ''.join(lines[next_header_idx:])
-    )
-    
+    preamble_text = ''.join(preamble).rstrip('\n')
+    new_content = ''.join(lines[:section_start + 1])
+    new_content += preamble_text + '\n\n' if preamble_text else '\n'
+    new_content += ''.join(new_module_blocks)
+    new_content += ''.join(lines[section_end:])
+
     # Write back
     with open(main_readme_path, 'w', encoding='utf-8') as f:
         f.write(new_content)
-    
+
     print(f"Successfully updated table in {main_readme_path}")
 
 
