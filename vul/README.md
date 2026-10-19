@@ -70,6 +70,8 @@
 | └─[image](cve-2019-5736/image) | cve-2019-5736 exploit via a malicious image | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | - | :heavy_check_mark: | :x: |
 | [cve-2021-30465](cve-2021-30465) | escape via runc mount destination TOCTOU (symlink exchange) | :heavy_check_mark: | - | - | :heavy_check_mark: | - | :x: |
 | └─[docker](cve-2021-30465/docker) | cve-2021-30465 exploit against docker | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | - | :x: | :x: |
+| └─[kubernetes](cve-2021-30465/kubernetes) | cve-2021-30465 exploit against kubernetes (kubelet emptyDir mounts) | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | - | :x: | :x: |
+| └─[podman](cve-2021-30465/podman) | cve-2021-30465 exploit against podman (tmpcopyup) | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | - | :x: | :x: |
 | cve-2019-16884 |  | :x: | :heavy_check_mark: | :x: | :x: | :x: | :x: |
 | cve-2023-28642 |  | :x: | :x: | :x: | :x: | :x: | :x: |
 | cve-2024-21626 |  | :x: | :x: | :x: | :x: | :x: | :x: |
