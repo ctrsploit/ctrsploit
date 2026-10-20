@@ -97,6 +97,7 @@ support `checksec` (detection) and/or `exploit`.
 | └─[docker](./vul/cve-2021-30465/docker) | cve-2021-30465 exploit against docker | :heavy_check_mark: | :heavy_check_mark: |
 | └─[kubernetes](./vul/cve-2021-30465/kubernetes) | cve-2021-30465 exploit against kubernetes (kubelet emptyDir mounts) | :heavy_check_mark: | :heavy_check_mark: |
 | └─[podman](./vul/cve-2021-30465/podman) | cve-2021-30465 exploit against podman (tmpcopyup) | :heavy_check_mark: | :heavy_check_mark: |
+| └─[crio](./vul/cve-2021-30465/crio) | cve-2021-30465 exploit against cri-o (bind mount TOCTOU) | :heavy_check_mark: | :heavy_check_mark: |
 | cve-2019-16884 |  | :x: | :heavy_check_mark: |
 | cve-2023-28642 |  | :x: | :x: |
 | cve-2024-21626 |  | :x: | :x: |
