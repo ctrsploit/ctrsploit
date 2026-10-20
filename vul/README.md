@@ -37,7 +37,7 @@
 | └─containerd.sock |  | :x: | :x: | :x: | :x: | :x: | :x: |
 | [kubeconfig](kubeconfig) | check kubeconfig related vulnerabilities | - | - | - | - | - | - |
 | └─[user-exec](kubeconfig/user-exec) | loading an untrusted kubeconfig can execute arbitrary client-side commands via users[].user.exec | :heavy_check_mark: | - | :heavy_check_mark: | :heavy_check_mark: | :x: | :x: |
-| [sa-token](sa-token) |  | - | - | - | - | - | - |
+| [sa-token](sa-token) | check service account token related vulnerabilities | - | - | - | - | - | - |
 | └─[secret](sa-token/access-secrets) | check if service account token can access Kubernetes Secrets | :heavy_check_mark: | - | :x: | :heavy_check_mark: | :heavy_check_mark: | :x: |
 | └─[policy](sa-token/policy) | check if service account token has dangerous permissions | :heavy_check_mark: | - | :x: | :heavy_check_mark: | :x: | :x: |
 | [namespace](namespace) | shared host namespaces break the isolations | - | - | - | - | - | - |
@@ -68,6 +68,11 @@
 | [cve-2019-5736](cve-2019-5736) | escape by overwrite runc executable file via /proc/self/exe | :heavy_check_mark: | - | - | :heavy_check_mark: | - | :x: |
 | └─[exec](cve-2019-5736/exec) | cve-2019-5736 exploit via runc exec process | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | - | :heavy_check_mark: | :x: |
 | └─[image](cve-2019-5736/image) | cve-2019-5736 exploit via a malicious image | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | - | :heavy_check_mark: | :x: |
+| [cve-2021-30465](cve-2021-30465) | escape via runc mount destination TOCTOU (symlink exchange) | :heavy_check_mark: | - | - | :heavy_check_mark: | - | :x: |
+| └─[docker](cve-2021-30465/docker) | cve-2021-30465 exploit against docker | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | - | :x: | :x: |
+| └─[kubernetes](cve-2021-30465/kubernetes) | cve-2021-30465 exploit against kubernetes (kubelet emptyDir mounts) | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | - | :x: | :x: |
+| └─[podman](cve-2021-30465/podman) | cve-2021-30465 exploit against podman (tmpcopyup) | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | - | :x: | :x: |
+| └─[crio](cve-2021-30465/crio) | cve-2021-30465 exploit against cri-o (bind mount TOCTOU) | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | - | :x: | :x: |
 | cve-2019-16884 |  | :x: | :heavy_check_mark: | :x: | :x: | :x: | :x: |
 | cve-2023-28642 |  | :x: | :x: | :x: | :x: | :x: | :x: |
 | cve-2024-21626 |  | :x: | :x: | :x: | :x: | :x: | :x: |
