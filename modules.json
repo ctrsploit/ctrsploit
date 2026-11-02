@@ -568,6 +568,23 @@
         ]
       },
       {
+        "name": "nvidia-dma-pagecache-write",
+        "aliases": [
+          "47591",
+          "47595",
+          "47599",
+          "CVE-2026-47591",
+          "CVE-2026-47595",
+          "CVE-2026-47599",
+          "nvidia-driver-escape"
+        ],
+        "description": "container escape by poisoning the host NVIDIA driver page cache through a GPU DMA write to a read-only file page (CVE-2026-47591/47595/47599)",
+        "maintainer": [
+          "Hpd0ger"
+        ],
+        "doc": "./vul/nvidia-dma-pagecache-write/README.md"
+      },
+      {
         "name": "host-net",
         "aliases": [
           "net"
@@ -928,6 +945,23 @@
         "maintainer": [
           "ssst0n3"
         ]
+      },
+      {
+        "name": "nvidia-dma-pagecache-write",
+        "aliases": [
+          "47591",
+          "47595",
+          "47599",
+          "CVE-2026-47591",
+          "CVE-2026-47595",
+          "CVE-2026-47599",
+          "nvidia-driver-escape"
+        ],
+        "description": "container escape by poisoning the host NVIDIA driver page cache through a GPU DMA write to a read-only file page (CVE-2026-47591/47595/47599)",
+        "maintainer": [
+          "Hpd0ger"
+        ],
+        "doc": "./vul/nvidia-dma-pagecache-write/README.md"
       },
       {
         "name": "capability",

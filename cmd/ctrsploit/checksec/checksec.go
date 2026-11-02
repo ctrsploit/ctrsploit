@@ -34,6 +34,7 @@ import (
 	"github.com/ctrsploit/ctrsploit/vul/naked"
 	"github.com/ctrsploit/ctrsploit/vul/namespace/net"
 	"github.com/ctrsploit/ctrsploit/vul/namespace/pid"
+	nvidia_dma_pagecache_write "github.com/ctrsploit/ctrsploit/vul/nvidia-dma-pagecache-write"
 	access_secrets "github.com/ctrsploit/ctrsploit/vul/sa-token/access-secrets"
 	sa_token_policy "github.com/ctrsploit/ctrsploit/vul/sa-token/policy"
 	docker_sock "github.com/ctrsploit/ctrsploit/vul/shared-socket/docker-sock"
@@ -76,6 +77,7 @@ var Command = &cli.Command{
 		sys_ptrace.CheckSecCmd,
 		pid_host.CheckSecCmd,
 		naked.CheckSecCmd,
+		nvidia_dma_pagecache_write.CheckSecCmd,
 		net.CheckSecCmd,
 		pid.CheckSecCmd,
 		access_secrets.CheckSecCmd,

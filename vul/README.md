@@ -108,6 +108,12 @@
 | cve-2025-23267 |  | :x: | :x: | :x: | :x: | :x: | :x: |
 | cve-2025-23359 |  | :x: | :x: | :x: | :x: | :x: | :x: |
 
+### nvidia-driver
+
+| vul | desc | check | exploit | test | doc | video | case |
+|-----|------|-------|---------|------|-----|-------|------|
+| [nvidia-dma-pagecache-write](nvidia-dma-pagecache-write) | container escape by poisoning the host NVIDIA driver page cache through a GPU DMA write to a read-only file page (CVE-2026-47591/47595/47599) | :heavy_check_mark: | :x: | :heavy_check_mark: | :heavy_check_mark: | :x: | :x: |
+
 ### docker-compose
 
 | vul | desc | check | exploit | test | doc | video | case |

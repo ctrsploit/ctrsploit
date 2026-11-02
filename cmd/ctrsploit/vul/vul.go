@@ -29,6 +29,7 @@ import (
 	"github.com/ctrsploit/ctrsploit/vul/kubeconfig"
 	"github.com/ctrsploit/ctrsploit/vul/naked"
 	"github.com/ctrsploit/ctrsploit/vul/namespace"
+	nvidia_dma_pagecache_write "github.com/ctrsploit/ctrsploit/vul/nvidia-dma-pagecache-write"
 	sa_token "github.com/ctrsploit/ctrsploit/vul/sa-token"
 	shared_socket "github.com/ctrsploit/ctrsploit/vul/shared-socket"
 	"github.com/urfave/cli/v3"
@@ -64,6 +65,7 @@ var Command = &cli.Command{
 		fork_bomb.VulCmd,
 		kubeconfig.VulCmd,
 		naked.VulCmd,
+		nvidia_dma_pagecache_write.VulCmd,
 		caps.VulCmd,
 		namespace.VulCmd,
 		sa_token.VulCmd,
