@@ -156,6 +156,12 @@ support `checksec` (detection) and/or `exploit`.
 | cve-2025-23267 |  | :x: | :x: |
 | cve-2025-23359 |  | :x: | :x: |
 
+### nvidia-driver
+
+| vul | desc | check | exploit |
+|-----|------|-------|---------|
+| [nvidia-dma-pagecache-write](./vul/nvidia-dma-pagecache-write) | container escape by poisoning the host NVIDIA driver page cache through a GPU DMA write to a read-only file page (CVE-2026-47591/47595/47599) | :heavy_check_mark: | :x: |
+
 ### docker-compose
 
 | vul | desc | check | exploit |
